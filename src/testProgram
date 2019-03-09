@@ -1,0 +1,25 @@
+// Define signals
+#define Signal toggle: On = 1, Off = 0, on2 = 2;
+#define Signal celsius: 10..60;
+
+// Define device types
+#define Device Bulb input: toggle;
+#define Device Window input: open;
+// Define sensors
+#define Device MovementSensor output: toggle & input: celsius;
+#define Device Thermometer output: celsius;
+
+// Variable definitions of every device in the house
+Bulb frontDoorLight = 129.67.198.1:12565;
+
+Window bedRoomWindow = 129.67.198.65:12565;
+
+MovementSensor frontDoorSensor = 129.67.198.65:12565;
+
+Thermometer mainThermometer = 129.67.198.65:12565;
+
+// Init function
+init;
+
+// Functions
+func;
