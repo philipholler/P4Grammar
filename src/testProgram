@@ -20,8 +20,15 @@ Thermometer mainThermometer = 129.67.198.65:12565;
 
 // Init function
 void init(){
-a = b + 3 * 3;
-b = (3+3) * a;
+a = 5;
+if(a == 5 && (b == 5 || c == 3)){
+     a = 7;
+}
+
+while (true){
+    b = 5;
+}
+
 }
 
 // Functions

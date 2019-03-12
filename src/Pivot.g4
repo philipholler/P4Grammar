@@ -13,13 +13,13 @@ decls : define* inst* init (func | event)*;
 
     inst : deviceID varID EQUALS ip END;
 
-    init : initReturnValue INITFUNCKW PARANBEG PARANEND '{' block '}'; // Placeholder init main method
+    init : initReturnValue INITFUNCKW PARANBEG PARANEND block; // Placeholder init main method
 
     func : 'func' END; // Placeholder functions
 
     event: 'event' END; // Placeholder events
 
-initReturnValue : 'void' ;
+initReturnValue : VOID ;
 
 inputs: INPUTKW ':' input (LISTSEP input)*;
 
@@ -35,9 +35,13 @@ ip : IP;
 
 varID : ID;
 
-block: stat*;
+block: BLCKBEG stat BLCKEND;
 
-stat: assignment+;
+ifstmt: IF PARANBEG logical_expr PARANEND block;
+
+stat: assignment* ifstmt* whilestmt*;
+
+whilestmt: WHILE PARANBEG logical_expr PARANEND block;
 
 assignment : ID EQUALS expr END;
 
@@ -47,6 +51,29 @@ expr
     | PARANBEG expr PARANEND          #paranexpr
     | atom                            #atomexpr
     ;
+
+
+logical_expr
+ : logical_expr AND logical_expr # LogicalExpressionAnd
+ | logical_expr OR logical_expr  # LogicalExpressionOr
+ | comparison_expr               # ComparisonExpression
+ | PARANBEG logical_expr PARANEND   # LogicalExpressionInParen
+ | (TRUE | FALSE)                  # LogicalLiterals
+ ;
+
+comparison_expr : comparison_operand comp_operator comparison_operand  #ComparisonExpressionWithOperator
+                | PARANBEG comparison_expr PARANEND                        #ComparisonExpressionParens
+                ;
+
+comparison_operand : expr
+                   ;
+
+comp_operator : GT
+              | GE
+              | LT
+              | LE
+              | EQ
+              ;
 
 atom : (ID | SINTEGER);
 
@@ -60,7 +87,7 @@ upperBound : SINTEGER;
 togglevalues : togglevalue (LISTSEP togglevalue)*;
 togglevalue : toggleID EQUALS toggleVal;
 toggleID : ID;
-toggleVal : (STRING | SINTEGER);
+toggleVal : ( STRING | SINTEGER);
 
 
 
@@ -81,25 +108,44 @@ fragment NUMBER     : [0-9] ;
  * Terminal tokens
  */
 
+TRUE : 'true';
+FALSE : 'false';
+AND : '&&';
+OR : '||';
+GT : '>' ;
+GE : '>=' ;
+LT : '<' ;
+LE : '<=' ;
+EQ : '==' ;
+
+// Keywords
 SIGNALKW : 'Signal';
 INPUTKW : 'input';
 OUTPUTKW : 'output';
 DEVICE : 'Device';
 DEFINEKW : '#define';
+IF : 'if';
+WHILE : 'while';
 INITFUNCKW : 'init';
+VOID : 'void';
+
+// Signs
 PARANBEG : '(';
 PARANEND : ')';
+BLCKBEG : '{';
+BLCKEND : '}';
 EQUALS : '=';
 PLUS : '+';
 MINUS : '-';
 DIV : '/';
 MULT : '*';
+RANGESEP: '..';
+END : ';';
+LISTSEP : ',';
+QUOT : '"';
 
 
 SINTEGER: '-'? NUMBER+;
-RANGESEP: '..';
 ID: (LOWERCASE | UPPERCASE) STRING*;
 STRING : (LOWERCASE | UPPERCASE | NUMBER)+ ;
-END : ';';
-LISTSEP : ',';
 IP:  ((NUMBER)+ '.' NUMBER+)+ ':' NUMBER+; // Had to make it a bit wonky, otherwise is was equivalent to the REANGESEP.
