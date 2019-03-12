@@ -17,7 +17,11 @@ decls : define* inst* init (func | event)*;
 
     func : 'func' END; // Placeholder functions
 
-    event: 'event' END; // Placeholder events
+    event: (atomEvent | repeatEvent); // Placeholder events
+
+atomEvent : 'atom';
+
+repeatEvent : WHEN ID ID ':' toggleID block;
 
 initReturnValue : VOID ;
 
@@ -128,6 +132,8 @@ IF : 'if';
 WHILE : 'while';
 INITFUNCKW : 'init';
 VOID : 'void';
+WHEN : 'when';
+EVERY : 'every';
 
 // Signs
 PARANBEG : '(';
