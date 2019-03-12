@@ -19,7 +19,12 @@ MovementSensor frontDoorSensor = 129.67.198.65:12565;
 Thermometer mainThermometer = 129.67.198.65:12565;
 
 // Init function
-init;
+void init(){
+a = b + 3 * 3;
+b = (3+3) * a;
+}
 
 // Functions
 func;
+
+event;
