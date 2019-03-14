@@ -1,11 +1,11 @@
 grammar Pivot;
 program : decls;
 
-decls : define* inst* init (func | event)*;
+decls : define* inst* init? (func | event)*;
 
     define : DEFINEKW (signal | device) SEMCOL;
 
-    signal: SIGNALKW signalID ':' (range | togglevalues) ;
+    signal: SIGNALKW signalID COL (range | togglevalues) ;
 
         signalID: ID;
 
@@ -15,23 +15,25 @@ decls : define* inst* init (func | event)*;
 
     init : initReturnValue INITFUNCKW PARANBEG PARANEND block; // Placeholder init main method
 
-    func : (STRINGKW | INTEGERKW | FLOATKW | VOID) ID PARANBEG param? (LISTSEP param)* PARANEND block; // Placeholder functions
+    func : (STRINGKW | INTEGERKW | FLOATKW | VOID) ID PARANBEG fParams PARANEND block; // Placeholder functions
+
+    fParams : param? (LISTSEP param)*;
 
     param : (STRINGKW | INTEGERKW | FLOATKW | VOID) ID;
 
     event: (atomEvent | repeatEvent); // Placeholder events
 
-atomEvent : WHEN ID ID ':' toggleID block;
+atomEvent : WHEN ID ID COL (toggleID | EXCEEDS INTEGER| DECEEDS INTEGER) block;
 
-repeatEvent : EVERY ID ID ':' toggleID block;
+repeatEvent : EVERY timeVal (DAYS | HOURS | MINUTES | SECONDS) block;
 
 initReturnValue : VOID ;
 
-inputs: INPUTKW ':' input (LISTSEP input)*;
+inputs: INPUTKW COL input (LISTSEP input)*;
 
     input: ID;
 
-outputs: OUTPUTKW ':' output (LISTSEP output)*;
+outputs: OUTPUTKW COL output (LISTSEP output)*;
 
     output: ID;
 
@@ -45,7 +47,14 @@ block: BLCKBEG stmts BLCKEND;
 
 ifstmt: IF PARANBEG logical_expr PARANEND block;
 
-stmts: (wait | assignment | ifstmt | whilestmt | everystmt)* ; // Not finished
+stmts: (wait | assignment | ifstmt | whilestmt | everystmt | funcCall SEMCOL )* ; // Not finished
+
+funcCall: ID PARANBEG inputParam PARANEND
+        | SET deviceID signalID COL toggleID
+        | GET deviceID signalID
+        ;
+
+inputParam: (ID | INTEGER)? (LISTSEP (ID | INTEGER))*;
 
 wait: WAIT timeVal (DAYS | HOURS | MINUTES | SECONDS) SEMCOL;
 
@@ -62,32 +71,39 @@ expr
     | expr (PLUS | MINUS) expr        #addexpr
     | PARANBEG expr PARANEND          #paranexpr
     | atom                            #atomexpr
+    | funcCall                        #funcexpr
     ;
 
 
 logical_expr
- : logical_expr AND logical_expr # LogicalExpressionAnd
- | logical_expr OR logical_expr  # LogicalExpressionOr
- | comparison_expr               # ComparisonExpression
- | PARANBEG logical_expr PARANEND   # LogicalExpressionInParen
- | (TRUE | FALSE)                  # LogicalLiterals
+ : logical_expr AND logical_expr # logicalExpressionAnd
+ | logical_expr OR logical_expr  # logicalExpressionOr
+ | comparison_expr               # comparisonExpression
+ | PARANBEG logical_expr PARANEND   # logicalExpressionInParen
+ | (TRUE | FALSE)                  # logicalLiterals
  ;
 
 comparison_expr : comparison_operand comp_operator comparison_operand  #ComparisonExpressionWithOperator
                 | PARANBEG comparison_expr PARANEND                        #ComparisonExpressionParens
                 ;
 
-comparison_operand : expr
+comparison_operand : time
+                   | expr
                    ;
+
+time : TIME;
 
 comp_operator : GT
               | GE
               | LT
               | LE
               | EQ
+              | NE
               ;
 
-atom : (ID | INTEGER);
+atom : ( ID | INTEGER );
+
+type: (STRINGKW | INTEGERKW | FLOATKW | VOID);
 
 /*
  * Signal values
@@ -129,6 +145,7 @@ GE : '>=' ;
 LT : '<' ;
 LE : '<=' ;
 EQ : '==' ;
+NE : '!=' ;
 
 // Keywords
 SIGNALKW : 'Signal';
@@ -150,6 +167,10 @@ WAIT : 'wait';
 STRINGKW : 'string';
 INTEGERKW : 'int';
 FLOATKW : 'float';
+SET : 'set';
+GET : 'get';
+EXCEEDS : 'exceeds';
+DECEEDS : 'deceeds';
 
 // Signs
 PARANBEG : '(';
@@ -165,7 +186,9 @@ RANGESEP: '..';
 SEMCOL : ';';
 LISTSEP : ',';
 QUOT : '"';
+COL: ':';
 
+TIME: DIGIT DIGIT COL DIGIT DIGIT;
 INTEGER: DIGIT+;
 ID: (LOWERCASE | UPPERCASE) (LOWERCASE| UPPERCASE| DIGIT)*;
 IP:  ((DIGIT)+ '.' DIGIT+)+ ':' DIGIT+; // Had to make it a bit wonky, otherwise is was equivalent to the REANGESEP.

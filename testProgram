@@ -1,6 +1,6 @@
 // Define signals
-#define Signal toggle: On = 1, Off = 0, on2 = 2;
-#define Signal celsius: 10..60;
+#define Signal toggle: On = 1, Off = 0;
+#define Signal celsius:  1..60;
 
 // Define device types
 #define Device Bulb input: toggle;
@@ -11,37 +11,40 @@
 
 // Variable definitions of every device in the house
 Bulb frontDoorLight = 129.67.198.1:12565;
-
 Window bedRoomWindow = 129.67.198.65:12565;
 
 MovementSensor frontDoorSensor = 129.67.198.65:12565;
 
 Thermometer mainThermometer = 129.67.198.65:12565;
 
-// Init function
 void init(){
-a = 5;
-if(a == 5 && (b == 5 || c == 3)){
-     a = 7;
+    // Optional code for initialization
+    // Automatically run when the program is run for the first time
 }
 
-b = 5;
-
-while (true){
-    b = 5;
-}
-
-wait 30 seconds;
-
-every 5 seconds{
-    b = a;
-}
-}
-// Functions
-func;
-
+// Events
 when frontDoorSensor toggle: on {
-    if(a == b){
-
+    if(now > 17:00 && now < 21:00){
+        set frontDoorLight toggle: on;
     }
+    wait 30 seconds;
+
+    while(get frontDoorSensor toggle != on){
+        set frontDoorLight toggle: off;
+    }
+
+}
+
+when mainThermometer celsius: exceeds 22{
+    setBedroomWindowsOpen(50); // Calling function defined further down
+}
+
+// Function
+void setBedroomWindowsOpen(int percentage){
+    set bedRoomWindow open: percentage;
+}
+
+// Repeating event
+every 2 hours{
+    // Do something
 }
