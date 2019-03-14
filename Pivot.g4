@@ -47,7 +47,9 @@ block: BLCKBEG stmts BLCKEND;
 
 ifstmt: IF PARANBEG logical_expr PARANEND block;
 
-stmts: (wait | assignment | ifstmt | whilestmt | everystmt | funcCall SEMCOL )* ; // Not finished
+stmts: (wait | assignment | ifstmt | whilestmt | everystmt | funcCall SEMCOL | declVar)* ; // Not finished
+
+declVar: type ID EQUALS ((ID | INTEGER) | expr) SEMCOL;
 
 funcCall: ID PARANBEG inputParam PARANEND
         | SET deviceID signalID COL toggleID
