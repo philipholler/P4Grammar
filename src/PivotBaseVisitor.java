@@ -17,7 +17,8 @@ public class PivotBaseVisitor<T> extends AbstractParseTreeVisitor<T> implements 
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
 	@Override public T visitProgram(PivotParser.ProgramContext ctx) {
-		System.out.println("Success!");
+
+		System.out.println(ctx.children.get(0).getChild(1).getText());
 		return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}

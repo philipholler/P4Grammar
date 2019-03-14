@@ -12,6 +12,7 @@ public class Launch {
             PivotLexer lexer = new PivotLexer(cs);
             CommonTokenStream token = new CommonTokenStream(lexer);
             PivotParser parser = new PivotParser(token);
+
             ParseTree tree = parser.program();
 
             PivotBaseVisitor<Object> visitor = new PivotBaseVisitor<>();

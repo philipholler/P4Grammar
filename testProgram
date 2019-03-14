@@ -25,17 +25,23 @@ if(a == 5 && (b == 5 || c == 3)){
      a = 7;
 }
 
+b = 5;
+
 while (true){
     b = 5;
 }
 
-}
+wait 30 seconds;
 
+every 5 seconds{
+    b = a;
+}
+}
 // Functions
 func;
 
 when frontDoorSensor toggle: on {
-    if(a ==b){
+    if(a == b){
 
     }
 }

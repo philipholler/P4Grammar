@@ -3,7 +3,7 @@ program : decls;
 
 decls : define* inst* init (func | event)*;
 
-    define : DEFINEKW (signal | device) END;
+    define : DEFINEKW (signal | device) SEMCOL;
 
     signal: SIGNALKW signalID ':' (range | togglevalues) ;
 
@@ -11,17 +11,19 @@ decls : define* inst* init (func | event)*;
 
     device: DEVICE deviceID ((inputs? ('&' outputs?)?) | (outputs? ('&' inputs?)?)); // The order of output and input can be switched around. That doesn't matter.
 
-    inst : deviceID varID EQUALS ip END;
+    inst : deviceID varID EQUALS ip SEMCOL;
 
     init : initReturnValue INITFUNCKW PARANBEG PARANEND block; // Placeholder init main method
 
-    func : 'func' END; // Placeholder functions
+    func : (STRINGKW | INTEGERKW | FLOATKW | VOID) ID PARANBEG param? (LISTSEP param)* PARANEND block; // Placeholder functions
+
+    param : (STRINGKW | INTEGERKW | FLOATKW | VOID) ID;
 
     event: (atomEvent | repeatEvent); // Placeholder events
 
-atomEvent : 'atom';
+atomEvent : WHEN ID ID ':' toggleID block;
 
-repeatEvent : WHEN ID ID ':' toggleID block;
+repeatEvent : EVERY ID ID ':' toggleID block;
 
 initReturnValue : VOID ;
 
@@ -39,15 +41,21 @@ ip : IP;
 
 varID : ID;
 
-block: BLCKBEG stat BLCKEND;
+block: BLCKBEG stmts BLCKEND;
 
 ifstmt: IF PARANBEG logical_expr PARANEND block;
 
-stat: assignment* ifstmt* whilestmt*;
+stmts: (wait | assignment | ifstmt | whilestmt | everystmt)* ; // Not finished
+
+wait: WAIT timeVal (DAYS | HOURS | MINUTES | SECONDS) SEMCOL;
+
+everystmt: EVERY timeVal (DAYS | HOURS | MINUTES | SECONDS) block;
+
+timeVal: INTEGER;
 
 whilestmt: WHILE PARANBEG logical_expr PARANEND block;
 
-assignment : ID EQUALS expr END;
+assignment : ID EQUALS expr SEMCOL;
 
 expr
     : expr (DIV | MULT) expr          #multiexpr // Div & mult precendences before plus & minus
@@ -79,19 +87,19 @@ comp_operator : GT
               | EQ
               ;
 
-atom : (ID | SINTEGER);
+atom : (ID | INTEGER);
 
 /*
  * Signal values
  */
 range : lowerBound RANGESEP upperBound;
-lowerBound : SINTEGER;
-upperBound : SINTEGER;
+lowerBound : INTEGER;
+upperBound : INTEGER;
 
 togglevalues : togglevalue (LISTSEP togglevalue)*;
 togglevalue : toggleID EQUALS toggleVal;
 toggleID : ID;
-toggleVal : ( STRING | SINTEGER);
+toggleVal : ( STRING | INTEGER);
 
 
 
@@ -106,7 +114,7 @@ LINE_COMMENT : '//' ~[\r\n]* -> skip ; // Skip comments
 fragment NEWLINE:  ('\r'?'\n'|'\r');
 fragment LOWERCASE  : [a-z] ;
 fragment UPPERCASE  : [A-Z] ;
-fragment NUMBER     : [0-9] ;
+fragment DIGIT     : [0-9] ;
 
 /*
  * Terminal tokens
@@ -134,6 +142,14 @@ INITFUNCKW : 'init';
 VOID : 'void';
 WHEN : 'when';
 EVERY : 'every';
+SECONDS : 'seconds';
+MINUTES : 'minutes';
+HOURS : 'hours';
+DAYS : 'days';
+WAIT : 'wait';
+STRINGKW : 'string';
+INTEGERKW : 'int';
+FLOATKW : 'float';
 
 // Signs
 PARANBEG : '(';
@@ -146,12 +162,10 @@ MINUS : '-';
 DIV : '/';
 MULT : '*';
 RANGESEP: '..';
-END : ';';
+SEMCOL : ';';
 LISTSEP : ',';
 QUOT : '"';
 
-
-SINTEGER: '-'? NUMBER+;
-ID: (LOWERCASE | UPPERCASE) STRING*;
-STRING : (LOWERCASE | UPPERCASE | NUMBER)+ ;
-IP:  ((NUMBER)+ '.' NUMBER+)+ ':' NUMBER+; // Had to make it a bit wonky, otherwise is was equivalent to the REANGESEP.
+INTEGER: DIGIT+;
+ID: (LOWERCASE | UPPERCASE) (LOWERCASE| UPPERCASE| DIGIT)*;
+IP:  ((DIGIT)+ '.' DIGIT+)+ ':' DIGIT+; // Had to make it a bit wonky, otherwise is was equivalent to the REANGESEP.
