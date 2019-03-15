@@ -49,7 +49,7 @@ ifstmt: IF PARANBEG logical_expr PARANEND block;
 
 stmts: (wait | assignment | ifstmt | whilestmt | everystmt | funcCall SEMCOL | declVar)* ; // Not finished
 
-declVar: type ID EQUALS ((ID | INTEGER) | expr) SEMCOL;
+declVar: type ID EQUALS ((FLOAT |ID | INTEGER ) | expr) SEMCOL;
 
 funcCall: ID PARANBEG inputParam PARANEND
         | SET deviceID signalID COL toggleID
@@ -103,7 +103,7 @@ comp_operator : GT
               | NE
               ;
 
-atom : ( ID | INTEGER );
+atom : ( ID | INTEGER | FLOAT);
 
 type: (STRINGKW | INTEGERKW | FLOATKW | VOID);
 
@@ -190,7 +190,8 @@ LISTSEP : ',';
 QUOT : '"';
 COL: ':';
 
+FLOAT: DIGIT+ '.' DIGIT+;
 TIME: DIGIT DIGIT COL DIGIT DIGIT;
+IP: DIGIT+ ('.' DIGIT+)+ ':' DIGIT+; // Had to make it a bit wonky, otherwise is was equivalent to the REANGESEP.
 INTEGER: DIGIT+;
 ID: (LOWERCASE | UPPERCASE) (LOWERCASE| UPPERCASE| DIGIT)*;
-IP:  ((DIGIT)+ '.' DIGIT+)+ ':' DIGIT+; // Had to make it a bit wonky, otherwise is was equivalent to the REANGESEP.
