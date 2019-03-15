@@ -103,7 +103,12 @@ comp_operator : GT
               | NE
               ;
 
-atom : ( ID | INTEGER | FLOAT);
+atom :INTEGER #intAtom
+    | FLOAT   #floatAtom
+    | STRING #stringAtom
+    | ID     #varidAtom
+    | NOW    #nowAtom
+    ;
 
 type: (STRINGKW | INTEGERKW | FLOATKW | VOID);
 
@@ -117,7 +122,10 @@ upperBound : INTEGER;
 togglevalues : togglevalue (LISTSEP togglevalue)*;
 togglevalue : toggleID EQUALS toggleVal;
 toggleID : ID;
-toggleVal : ( STRING | INTEGER);
+toggleVal : STRING  #stringVal
+          | INTEGER #integerVal
+          | FLOAT   #floatVal
+          ;
 
 
 
@@ -173,6 +181,7 @@ SET : 'set';
 GET : 'get';
 EXCEEDS : 'exceeds';
 DECEEDS : 'deceeds';
+NOW : 'now';
 
 // Signs
 PARANBEG : '(';
@@ -194,4 +203,5 @@ FLOAT: DIGIT+ '.' DIGIT+;
 TIME: DIGIT DIGIT COL DIGIT DIGIT;
 IP: DIGIT+ ('.' DIGIT+)+ ':' DIGIT+; // Had to make it a bit wonky, otherwise is was equivalent to the REANGESEP.
 INTEGER: DIGIT+;
+STRING: '"' ID '"';
 ID: (LOWERCASE | UPPERCASE) (LOWERCASE| UPPERCASE| DIGIT)*;
