@@ -203,5 +203,6 @@ FLOAT: DIGIT+ '.' DIGIT+;
 TIME: DIGIT DIGIT COL DIGIT DIGIT;
 IP: DIGIT+ ('.' DIGIT+)+ ':' DIGIT+; // Had to make it a bit wonky, otherwise is was equivalent to the REANGESEP.
 INTEGER: DIGIT+;
-STRING: '"' ID '"';
+STRING: '"' (LOWERCASE | UPPERCASE | SIGN | DIGIT)+ '"';
 ID: (LOWERCASE | UPPERCASE) (LOWERCASE| UPPERCASE| DIGIT)*;
+SIGN: ('_' | '-' | '!' | ' ');
