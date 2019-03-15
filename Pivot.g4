@@ -1,7 +1,7 @@
 grammar Pivot;
 program : decls;
 
-decls : define* inst* init? (func | event)* EOF;
+decls : define* (inst | declVar)* init? (func | event)* EOF;
 
     define : DEFINEKW (signal | device) SEMCOL;
 
@@ -23,7 +23,7 @@ decls : define* inst* init? (func | event)* EOF;
 
     event: (atomEvent | repeatEvent); // Placeholder events
 
-atomEvent : WHEN ID ID COL (toggleID | EXCEEDS INTEGER| DECEEDS INTEGER) block;
+atomEvent : WHEN deviceID signalID COL (toggleID | EXCEEDS INTEGER| DECEEDS INTEGER) block;
 
 repeatEvent : EVERY timeVal (DAYS | HOURS | MINUTES | SECONDS) block;
 
