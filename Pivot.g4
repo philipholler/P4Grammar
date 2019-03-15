@@ -1,7 +1,7 @@
 grammar Pivot;
 program : decls;
 
-decls : define* inst* init? (func | event)*;
+decls : define* inst* init? (func | event)* EOF;
 
     define : DEFINEKW (signal | device) SEMCOL;
 
