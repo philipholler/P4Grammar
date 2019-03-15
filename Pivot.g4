@@ -9,7 +9,7 @@ decls : define* inst* init? (func | event)*;
 
         signalID: ID;
 
-    device: DEVICE deviceID ((inputs? ('&' outputs?)?) | (outputs? ('&' inputs?)?)); // The order of output and input can be switched around. That doesn't matter.
+    device: DEVICE deviceID ((inputs? ('&' outputs)?) | (outputs? ('&' inputs)?)); // The order of output and input can be switched around. That doesn't matter.
 
     inst : deviceID varID EQUALS ip SEMCOL;
 
@@ -17,7 +17,7 @@ decls : define* inst* init? (func | event)*;
 
     func : (STRINGKW | INTEGERKW | FLOATKW | VOID) ID PARANBEG fParams PARANEND block; // Placeholder functions
 
-    fParams : param? (LISTSEP param)*;
+    fParams : (param (LISTSEP param)*)?;
 
     param : (STRINGKW | INTEGERKW | FLOATKW | VOID) ID;
 
