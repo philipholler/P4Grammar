@@ -1,5 +1,5 @@
 // Define signals
-#define Signal toggle: On = 1, Off = 0;
+#define Signal toggle: On = 1, Off = 0, on = "hej";
 #define Signal celsius:  1..60;
 
 // Define device types
@@ -10,7 +10,7 @@
 #define Device Thermometer output: celsius;
 
 // Variable definitions of every device in the house
-Bulb frontDoorLight = 129.67.198.1:12565;
+Bulb frontDoorLight = 129.6.18.1:12565;
 Window bedRoomWindow = 129.67.198.65:12565;
 
 MovementSensor frontDoorSensor = 129.67.198.65:12565;
@@ -29,7 +29,7 @@ when frontDoorSensor toggle: on {
     }
     wait 30 seconds;
 
-    while(get frontDoorSensor toggle != on){
+    while(get frontDoorSensor toggle != "on"){
         set frontDoorLight toggle: off;
     }
 
@@ -46,5 +46,9 @@ void setBedroomWindowsOpen(int percentage){
 
 // Repeating event
 every 2 hours{
-    // Do something
+    int a = a;
+    a = b;
+    float a = 1.2;
+    b = 1.2;
+    string c = "Magnus";
 }
