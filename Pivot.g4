@@ -1,7 +1,7 @@
 grammar Pivot;
 program : decls;
 
-decls : define* (declVar)* init? (func | event)* EOF;
+decls : define* declVar* init? (func | event)* EOF;
 
     define : DEFINEKW (signal | device) SEMCOL;
 
@@ -17,7 +17,7 @@ decls : define* (declVar)* init? (func | event)* EOF;
 
     fParams : (param (LISTSEP param)*)?;
 
-    param : (STRINGKW | INTEGERKW | FLOATKW | VOID) ID;
+    param : type ID;
 
     event: (atomEvent | repeatEvent); // Placeholder events
 
@@ -27,11 +27,15 @@ repeatEvent : EVERY timeVal (DAYS | HOURS | MINUTES | SECONDS) block;
 
 inputs: INPUTKW COL input (LISTSEP input)*;
 
-    input: ID;
+    input: inputID;
+
+    inputID: ID;
 
 outputs: OUTPUTKW COL output (LISTSEP output)*;
 
-    output: ID;
+    output: outputID;
+
+    outputID: ID;
 
 deviceID : ID;
 
@@ -45,10 +49,10 @@ ifstmt: IF PARANBEG logical_expr PARANEND block;
 
 stmts: (wait | assignment | ifstmt | whilestmt | funcCall SEMCOL | declVar)* ; // Not finished
 
-declVar: (type ID EQUALS ((FLOAT |ID | INTEGER ) | expr) | deviceID varID EQUALS ip) SEMCOL;
+declVar: (type varID EQUALS ((FLOAT | STRING | INTEGER) | expr) | deviceID varID EQUALS ip) SEMCOL;
 
 funcCall: ID PARANBEG inputParam PARANEND
-        | SET deviceID signalID COL toggleID
+        | SET deviceID signalID COL (toggleID | INTEGER | FLOAT | STRING)
         | GET deviceID signalID
         ;
 
