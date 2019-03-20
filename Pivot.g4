@@ -15,7 +15,7 @@ decls : define* (inst | declVar)* init? (func | event)* EOF;
 
     init : initReturnValue INITFUNCKW PARANBEG PARANEND block; // Placeholder init main method
 
-    func : (STRINGKW | INTEGERKW | FLOATKW | VOID) ID PARANBEG fParams PARANEND block; // Placeholder functions
+    func : (type | VOID) ID PARANBEG fParams PARANEND block; // Placeholder functions
 
     fParams : (param (LISTSEP param)*)?;
 
@@ -108,7 +108,7 @@ atom :INTEGER #intAtom
     | NOW    #nowAtom
     ;
 
-type: (STRINGKW | INTEGERKW | FLOATKW | VOID);
+type: (STRINGKW | INTEGERKW | FLOATKW );
 
 /*
  * Signal values
