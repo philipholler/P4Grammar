@@ -47,7 +47,7 @@ block: BLCKBEG stmts BLCKEND;
 
 ifstmt: IF PARANBEG logical_expr PARANEND block;
 
-stmts: (wait | assignment | ifstmt | whilestmt | everystmt | funcCall SEMCOL | declVar)* ; // Not finished
+stmts: (wait | assignment | ifstmt | whilestmt | funcCall SEMCOL | declVar)* ; // Not finished
 
 declVar: type ID EQUALS ((FLOAT |ID | INTEGER ) | expr) SEMCOL;
 
@@ -59,8 +59,6 @@ funcCall: ID PARANBEG inputParam PARANEND
 inputParam: (ID | INTEGER)? (LISTSEP (ID | INTEGER))*;
 
 wait: WAIT timeVal (DAYS | HOURS | MINUTES | SECONDS) SEMCOL;
-
-everystmt: EVERY timeVal (DAYS | HOURS | MINUTES | SECONDS) block;
 
 timeVal: INTEGER;
 
