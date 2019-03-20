@@ -13,7 +13,7 @@ decls : define* (inst | declVar)* init? (func | event)* EOF;
 
     inst : deviceID varID EQUALS ip SEMCOL;
 
-    init : initReturnValue INITFUNCKW PARANBEG PARANEND block; // Placeholder init main method
+    init : INITFUNCKW PARANBEG PARANEND block; // Placeholder init main method
 
     func : (type | VOID) ID PARANBEG fParams PARANEND block; // Placeholder functions
 
@@ -26,8 +26,6 @@ decls : define* (inst | declVar)* init? (func | event)* EOF;
 atomEvent : WHEN deviceID signalID COL (toggleID | EXCEEDS INTEGER| DECEEDS INTEGER) block;
 
 repeatEvent : EVERY timeVal (DAYS | HOURS | MINUTES | SECONDS) block;
-
-initReturnValue : VOID ;
 
 inputs: INPUTKW COL input (LISTSEP input)*;
 
