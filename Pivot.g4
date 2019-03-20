@@ -156,7 +156,7 @@ SIGNALKW : 'Signal';
 INPUTKW : 'input';
 OUTPUTKW : 'output';
 DEVICE : 'Device';
-DEFINEKW : '#define';
+DEFINEKW : 'define';
 IF : 'if';
 WHILE : 'while';
 INITFUNCKW : 'init';

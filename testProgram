@@ -1,13 +1,13 @@
 // Define signals
-#define Signal toggle: On = 1, Off = 0, on = "hej";
-#define Signal celsius:  1..60;
+define Signal toggle: On = 1, Off = 0, on = "hej";
+define Signal celsius:  1..60;
 
 // Define device types
-#define Device Bulb input: toggle;
-#define Device Window input: open;
+define Device Bulb input: toggle;
+define Device Window input: open;
 // Define sensors
-#define Device MovementSensor output: toggle & input: celsius;
-#define Device Thermometer output: celsius;
+define Device MovementSensor output: toggle & input: celsius;
+define Device Thermometer output: celsius;
 
 // Variable definitions of every device in the house
 Bulb frontDoorLight = 129.6.18.1:12565;
@@ -19,7 +19,7 @@ Thermometer mainThermometer = 129.67.198.65:12565;
 
 string a = "Hej";
 
-void init(){
+init(){
     // Optional code for initialization
     // Automatically run when the program is run for the first time
 }
