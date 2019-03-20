@@ -9,9 +9,7 @@ decls : define* (declVar)* init? (func | event)* EOF;
 
         signalID: ID;
 
-    device: DEVICE deviceID ((inputs? ('&' outputs)?) | (outputs? ('&' inputs)?)); // The order of output and input can be switched around. That doesn't matter.
-
-   // inst : ;
+    device: DEVICE deviceID ((inputs? (AMP outputs)?) | (outputs? (AMP inputs)?)); // The order of output and input can be switched around. That doesn't matter.
 
     init : INITFUNCKW PARANBEG PARANEND block; // Placeholder init main method
 
@@ -194,6 +192,7 @@ SEMCOL : ';';
 LISTSEP : ',';
 QUOT : '"';
 COL: ':';
+AMP : '&';
 
 FLOAT: DIGIT+ '.' DIGIT+;
 TIME: DIGIT DIGIT COL DIGIT DIGIT;
