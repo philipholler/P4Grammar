@@ -1,7 +1,7 @@
 grammar Pivot;
 program : decls;
 
-decls : define* (inst | declVar)* init? (func | event)* EOF;
+decls : define* (declVar)* init? (func | event)* EOF;
 
     define : DEFINEKW (signal | device) SEMCOL;
 
@@ -11,7 +11,7 @@ decls : define* (inst | declVar)* init? (func | event)* EOF;
 
     device: DEVICE deviceID ((inputs? ('&' outputs)?) | (outputs? ('&' inputs)?)); // The order of output and input can be switched around. That doesn't matter.
 
-    inst : deviceID varID EQUALS ip SEMCOL;
+   // inst : ;
 
     init : INITFUNCKW PARANBEG PARANEND block; // Placeholder init main method
 
@@ -47,7 +47,7 @@ ifstmt: IF PARANBEG logical_expr PARANEND block;
 
 stmts: (wait | assignment | ifstmt | whilestmt | funcCall SEMCOL | declVar)* ; // Not finished
 
-declVar: type ID EQUALS ((FLOAT |ID | INTEGER ) | expr) SEMCOL;
+declVar: (type ID EQUALS ((FLOAT |ID | INTEGER ) | expr) | deviceID varID EQUALS ip) SEMCOL;
 
 funcCall: ID PARANBEG inputParam PARANEND
         | SET deviceID signalID COL toggleID
