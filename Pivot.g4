@@ -43,17 +43,21 @@ ip : IP;
 
 varID : ID;
 
-block: BLCKBEG stmts (RETURN (varID | INTEGER | FLOAT | STRING )? SEMCOL)? BLCKEND;
+block: BLCKBEG stmts BLCKEND;
+
+return : (RETURN (varID | INTEGER | FLOAT | STRING )? SEMCOL);
 
 ifstmt: IF PARANBEG logical_expr PARANEND block (ELSE block)?;
 
-stmts: (wait | assignment | ifstmt | whilestmt | funcCall SEMCOL | declVar)* ; // Not finished
+stmts: (wait | assignment | ifstmt | whilestmt | funcCall  | declVar | return | break)*; // Not finished
+
+break: BREAK SEMCOL;
 
 declVar: (type varID EQUALS ((FLOAT | STRING | INTEGER) | expr) | deviceID varID EQUALS ip) SEMCOL;
 
-funcCall: ID PARANBEG inputParam PARANEND
-        | SET deviceID signalID COL (toggleID | INTEGER | FLOAT | STRING)
-        | GET deviceID signalID
+funcCall: ID PARANBEG inputParam PARANEND SEMCOL
+        | SET deviceID signalID COL (toggleID | INTEGER | FLOAT | STRING) SEMCOL
+        | GET deviceID signalID SEMCOL
         ;
 
 inputParam: (ID | INTEGER)? (LISTSEP (ID | INTEGER))*;
@@ -182,6 +186,7 @@ DECEEDS : 'deceeds';
 NOW : 'now';
 ELSE : 'else';
 RETURN : 'return';
+BREAK : 'break';
 
 // Signs
 PARANBEG : '(';

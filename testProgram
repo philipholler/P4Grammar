@@ -45,6 +45,14 @@ when mainThermometer celsius: exceeds 22{
 string setBedroomWindowsOpen(int percentage){
     set bedRoomWindow open: percentage;
 
+    while(true){
+        return;
+    }
+
+    while(false){
+        break;
+    }
+
     return "hej";
 }
 
