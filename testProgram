@@ -1,6 +1,7 @@
 // Define signals
 define Signal toggle: On = 1, Off = 0, on = "hej";
 define Signal celsius:  1..60;
+define Signal percentage:  0.0..100.0;
 
 // Define device types
 define Device Bulb input: toggle;
@@ -10,12 +11,12 @@ define Device MovementSensor output: toggle & input: celsius;
 define Device Thermometer output: celsius;
 
 // Variable definitions of every device in the house
-Bulb frontDoorLight = 129.6.18.1:12565;
-Window bedRoomWindow = 129.67.198.65:12565;
+Bulb frontDoorLight = "129.6.18.1:12565";
+Window bedRoomWindow = "129.67.198.65:12565";
 
-MovementSensor frontDoorSensor = 129.67.198.65:12565;
+MovementSensor frontDoorSensor = "Google.com";
 
-Thermometer mainThermometer = 129.67.198.65:12565;
+Thermometer mainThermometer = "129.67.198.65:12565";
 
 string a = "Hej";
 
@@ -57,7 +58,7 @@ string setBedroomWindowsOpen(int percentage){
 }
 
 // Function
-string setBedroomWindowsOpen(int percentage){
+string setBedroomWindowsOpen(int percentage, float f, string s){
     set bedRoomWindow open: percentage;
 
     return;

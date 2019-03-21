@@ -39,7 +39,7 @@ outputs: OUTPUTKW COL output (LISTSEP output)*;
 
 deviceID : ID;
 
-ip : IP;
+ip : STRING;
 
 varID : ID;
 
@@ -49,15 +49,15 @@ return : (RETURN (varID | INTEGER | FLOAT | STRING )? SEMCOL);
 
 ifstmt: IF PARANBEG logical_expr PARANEND block (ELSE block)?;
 
-stmts: (wait | assignment | ifstmt | whilestmt | funcCall  | declVar | return | break)*; // Not finished
+stmts: (wait | assignment | ifstmt | whilestmt | funcCall SEMCOL | declVar | return | break)*; // Not finished
 
 break: BREAK SEMCOL;
 
 declVar: (type varID EQUALS ((FLOAT | STRING | INTEGER) | expr) | deviceID varID EQUALS ip) SEMCOL;
 
-funcCall: ID PARANBEG inputParam PARANEND SEMCOL
-        | SET deviceID signalID COL (toggleID | INTEGER | FLOAT | STRING) SEMCOL
-        | GET deviceID signalID SEMCOL
+funcCall: ID PARANBEG inputParam PARANEND
+        | SET deviceID signalID COL (toggleID | INTEGER | FLOAT | STRING)
+        | GET deviceID signalID
         ;
 
 inputParam: (ID | INTEGER)? (LISTSEP (ID | INTEGER))*;
@@ -118,8 +118,12 @@ type: (STRINGKW | INTEGERKW | FLOATKW );
  * Signal values
  */
 range : lowerBound RANGESEP upperBound;
-lowerBound : INTEGER;
-upperBound : INTEGER;
+lowerBound : INTEGER  #intLB
+           | FLOAT  #floatLB
+           ;
+upperBound : INTEGER #intUP
+           | FLOAT #floatUP
+           ;
 
 togglevalues : togglevalue (LISTSEP togglevalue)*;
 togglevalue : toggleID EQUALS toggleVal;
@@ -212,4 +216,4 @@ IP: DIGIT+ ('.' DIGIT+)+ ':' DIGIT+; // Had to make it a bit wonky, otherwise is
 INTEGER: DIGIT+;
 STRING: '"' (LOWERCASE | UPPERCASE | SIGN | DIGIT)+ '"';
 ID: (LOWERCASE | UPPERCASE) (LOWERCASE| UPPERCASE| DIGIT)*;
-SIGN: ('_' | '-' | '!' | ' ');
+SIGN: ('_' | '-' | '!' | ' ' | '.' | ':');
