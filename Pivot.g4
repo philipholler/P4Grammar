@@ -45,13 +45,13 @@ varID : ID;
 
 block: BLCKBEG stmts BLCKEND;
 
-return : (RETURN (varID | INTEGER | FLOAT | STRING )? SEMCOL);
+rtn : (RETURN (varID | INTEGER | FLOAT | STRING )? SEMCOL);
 
 ifstmt: IF PARANBEG logical_expr PARANEND block (ELSE block)?;
 
-stmts: (wait | assignment | ifstmt | whilestmt | funcCall SEMCOL | declVar | return | break)*; // Not finished
+stmts: (wait | assignment | ifstmt | whilestmt | funcCall SEMCOL | declVar | rtn | brk)*; // Not finished
 
-break: BREAK SEMCOL;
+brk: BREAK SEMCOL;
 
 declVar: (type varID EQUALS ((FLOAT | STRING | INTEGER) | expr) | deviceID varID EQUALS ip) SEMCOL;
 
