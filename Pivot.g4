@@ -62,7 +62,7 @@ funcCall: ID PARANBEG inputParam PARANEND SEMCOL
 
 inputParam: (ID | INTEGER)? (LISTSEP (ID | INTEGER))*;
 
-wait: WAIT timeVal (DAYS | HOURS | MINUTES | SECONDS) SEMCOL;
+wait: WAIT timeVal (DAYS | HOURS | MINUTES | SECONDS | MS) SEMCOL;
 
 timeVal: INTEGER;
 
@@ -171,6 +171,7 @@ INITFUNCKW : 'init';
 VOID : 'void';
 WHEN : 'when';
 EVERY : 'every';
+MS : 'ms';
 SECONDS : 'seconds';
 MINUTES : 'minutes';
 HOURS : 'hours';
