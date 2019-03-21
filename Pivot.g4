@@ -21,9 +21,14 @@ decls : define* declVar* init? (func | event)* EOF;
 
     event: (atomEvent | repeatEvent); // Placeholder events
 
-atomEvent : WHEN deviceID signalID COL (toggleID | EXCEEDS INTEGER| DECEEDS INTEGER) block;
+atomEvent : WHEN deviceID signalID COL (toggleID | EXCEEDS INTEGER| DECEEDS INTEGER) block
+          | WHEN DATE AT TIME block
+          | WHEN TIME block
+          ;
 
-repeatEvent : EVERY timeVal (DAYS | HOURS | MINUTES | SECONDS) block;
+repeatEvent : EVERY timeVal (MONTHS | WEEKS | DAYS | HOURS | MINUTES | SECONDS) block
+            | EVERY timeVal (MONTHS | WEEKS | DAYS | HOURS | MINUTES | SECONDS) AT time (STARTING DATE)? block
+            ;
 
 inputs: INPUTKW COL input (LISTSEP input)*;
 
@@ -62,7 +67,9 @@ funcCall: ID PARANBEG inputParam PARANEND
 
 inputParam: (ID | INTEGER)? (LISTSEP (ID | INTEGER))*;
 
-wait: WAIT timeVal (DAYS | HOURS | MINUTES | SECONDS | MS) SEMCOL;
+wait: WAIT timeVal (DAYS | HOURS | MINUTES | SECONDS | MS) SEMCOL
+    | WAIT varID (DAYS | HOURS | MINUTES | SECONDS | MS) SEMCOL
+    ;
 
 timeVal: INTEGER;
 
@@ -78,7 +85,6 @@ expr
     | funcCall                        #funcexpr
     ;
 
-
 logical_expr
  : logical_expr AND logical_expr # logicalExpressionAnd
  | logical_expr OR logical_expr  # logicalExpressionOr
@@ -92,10 +98,14 @@ comparison_expr : comparison_operand comp_operator comparison_operand  #Comparis
                 ;
 
 comparison_operand : time
+                   | date
                    | expr
                    ;
 
 time : TIME;
+date : DATE
+     | DATEnoYEAR
+     ;
 
 comp_operator : GT
               | GE
@@ -180,6 +190,8 @@ SECONDS : 'seconds';
 MINUTES : 'minutes';
 HOURS : 'hours';
 DAYS : 'days';
+WEEKS : 'weeks';
+MONTHS : 'months';
 WAIT : 'wait';
 STRINGKW : 'string';
 INTEGERKW : 'int';
@@ -192,6 +204,7 @@ NOW : 'now';
 ELSE : 'else';
 RETURN : 'return';
 BREAK : 'break';
+AT : 'at';
 
 // Signs
 PARANBEG : '(';
@@ -209,11 +222,14 @@ LISTSEP : ',';
 QUOT : '"';
 COL: ':';
 AMP : '&';
+STARTING: 'starting';
 
-FLOAT: DIGIT+ '.' DIGIT+;
+DATE: DIGIT DIGIT 'd' DIGIT DIGIT 'm' DIGIT DIGIT DIGIT DIGIT 'y';
+DATEnoYEAR: DIGIT DIGIT 'd' DIGIT DIGIT 'm';
+FLOAT: '-'? DIGIT+ '.' DIGIT+;
 TIME: DIGIT DIGIT COL DIGIT DIGIT;
 IP: DIGIT+ ('.' DIGIT+)+ ':' DIGIT+; // Had to make it a bit wonky, otherwise is was equivalent to the REANGESEP.
-INTEGER: DIGIT+;
+INTEGER: '-'? DIGIT+;
 STRING: '"' (LOWERCASE | UPPERCASE | SIGN | DIGIT)+ '"';
 ID: (LOWERCASE | UPPERCASE) (LOWERCASE| UPPERCASE| DIGIT)*;
 SIGN: ('_' | '-' | '!' | ' ' | '.' | ':');

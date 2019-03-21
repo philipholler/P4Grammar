@@ -511,6 +511,16 @@ public interface PivotListener extends ParseTreeListener {
 	 */
 	void exitTime(PivotParser.TimeContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link PivotParser#date}.
+	 * @param ctx the parse tree
+	 */
+	void enterDate(PivotParser.DateContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link PivotParser#date}.
+	 * @param ctx the parse tree
+	 */
+	void exitDate(PivotParser.DateContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link PivotParser#comp_operator}.
 	 * @param ctx the parse tree
 	 */
