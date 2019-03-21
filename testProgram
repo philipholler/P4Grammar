@@ -42,8 +42,17 @@ when mainThermometer celsius: exceeds 22{
 }
 
 // Function
-void setBedroomWindowsOpen(int percentage){
+string setBedroomWindowsOpen(int percentage){
     set bedRoomWindow open: percentage;
+
+    return "hej";
+}
+
+// Function
+string setBedroomWindowsOpen(int percentage){
+    set bedRoomWindow open: percentage;
+
+    return;
 }
 
 // Repeating event
@@ -53,4 +62,10 @@ every 2 hours{
     float a = 1.2;
     b = 1.2;
     string c = "Magnus";
+
+    if(a == 3){
+        mads = faggot;
+    } else {
+        magnus = faggot;
+    }
 }

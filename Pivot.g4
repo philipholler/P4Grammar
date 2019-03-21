@@ -43,9 +43,9 @@ ip : IP;
 
 varID : ID;
 
-block: BLCKBEG stmts BLCKEND;
+block: BLCKBEG stmts (RETURN (varID | INTEGER | FLOAT | STRING )? SEMCOL)? BLCKEND;
 
-ifstmt: IF PARANBEG logical_expr PARANEND block;
+ifstmt: IF PARANBEG logical_expr PARANEND block (ELSE block)?;
 
 stmts: (wait | assignment | ifstmt | whilestmt | funcCall SEMCOL | declVar)* ; // Not finished
 
@@ -180,6 +180,8 @@ GET : 'get';
 EXCEEDS : 'exceeds';
 DECEEDS : 'deceeds';
 NOW : 'now';
+ELSE : 'else';
+RETURN : 'return';
 
 // Signs
 PARANBEG : '(';
