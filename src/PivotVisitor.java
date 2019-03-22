@@ -190,26 +190,26 @@ public interface PivotVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitInputParam(PivotParser.InputParamContext ctx);
 	/**
-	 * Visit a parse tree produced by the {@code intLitVal}
+	 * Visit a parse tree produced by the {@code intVal}
 	 * labeled alternative in {@link PivotParser#litVal}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitIntLitVal(PivotParser.IntLitValContext ctx);
+	T visitIntVal(PivotParser.IntValContext ctx);
 	/**
-	 * Visit a parse tree produced by the {@code floatLitVal}
+	 * Visit a parse tree produced by the {@code floatVal}
 	 * labeled alternative in {@link PivotParser#litVal}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitFloatLitVal(PivotParser.FloatLitValContext ctx);
+	T visitFloatVal(PivotParser.FloatValContext ctx);
 	/**
-	 * Visit a parse tree produced by the {@code stringLitVal}
+	 * Visit a parse tree produced by the {@code stringVal}
 	 * labeled alternative in {@link PivotParser#litVal}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitStringLitVal(PivotParser.StringLitValContext ctx);
+	T visitStringVal(PivotParser.StringValContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link PivotParser#wait}.
 	 * @param ctx the parse tree
@@ -305,25 +305,40 @@ public interface PivotVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitLogicalExpressionInParen(PivotParser.LogicalExpressionInParenContext ctx);
 	/**
-	 * Visit a parse tree produced by the {@code ComparisonExpressionWithOperator}
+	 * Visit a parse tree produced by the {@code comparisonExpressionWithOperator}
 	 * labeled alternative in {@link PivotParser#comparison_expr}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
 	T visitComparisonExpressionWithOperator(PivotParser.ComparisonExpressionWithOperatorContext ctx);
 	/**
-	 * Visit a parse tree produced by the {@code ComparisonExpressionParens}
+	 * Visit a parse tree produced by the {@code comparisonExpressionParens}
 	 * labeled alternative in {@link PivotParser#comparison_expr}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
 	T visitComparisonExpressionParens(PivotParser.ComparisonExpressionParensContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link PivotParser#comparison_operand}.
+	 * Visit a parse tree produced by the {@code timeOp}
+	 * labeled alternative in {@link PivotParser#comparison_operand}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitComparison_operand(PivotParser.Comparison_operandContext ctx);
+	T visitTimeOp(PivotParser.TimeOpContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code dateOp}
+	 * labeled alternative in {@link PivotParser#comparison_operand}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitDateOp(PivotParser.DateOpContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code exprOP}
+	 * labeled alternative in {@link PivotParser#comparison_operand}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitExprOP(PivotParser.ExprOPContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link PivotParser#time}.
 	 * @param ctx the parse tree
@@ -343,26 +358,12 @@ public interface PivotVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitComp_operator(PivotParser.Comp_operatorContext ctx);
 	/**
-	 * Visit a parse tree produced by the {@code intAtom}
+	 * Visit a parse tree produced by the {@code litValue}
 	 * labeled alternative in {@link PivotParser#atom}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitIntAtom(PivotParser.IntAtomContext ctx);
-	/**
-	 * Visit a parse tree produced by the {@code floatAtom}
-	 * labeled alternative in {@link PivotParser#atom}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitFloatAtom(PivotParser.FloatAtomContext ctx);
-	/**
-	 * Visit a parse tree produced by the {@code stringAtom}
-	 * labeled alternative in {@link PivotParser#atom}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitStringAtom(PivotParser.StringAtomContext ctx);
+	T visitLitValue(PivotParser.LitValueContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code varidAtom}
 	 * labeled alternative in {@link PivotParser#atom}.
@@ -436,24 +437,9 @@ public interface PivotVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitToggleID(PivotParser.ToggleIDContext ctx);
 	/**
-	 * Visit a parse tree produced by the {@code stringVal}
-	 * labeled alternative in {@link PivotParser#toggleVal}.
+	 * Visit a parse tree produced by {@link PivotParser#toggleVal}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitStringVal(PivotParser.StringValContext ctx);
-	/**
-	 * Visit a parse tree produced by the {@code integerVal}
-	 * labeled alternative in {@link PivotParser#toggleVal}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitIntegerVal(PivotParser.IntegerValContext ctx);
-	/**
-	 * Visit a parse tree produced by the {@code floatVal}
-	 * labeled alternative in {@link PivotParser#toggleVal}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitFloatVal(PivotParser.FloatValContext ctx);
+	T visitToggleVal(PivotParser.ToggleValContext ctx);
 }

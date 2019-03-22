@@ -67,9 +67,9 @@ funcCall: ID PARANBEG inputParam PARANEND
 
 inputParam: (ID | litVal)? (LISTSEP (ID | litVal))*;
 
-litVal: INTEGER #intLitVal
-      | FLOAT #floatLitVal
-      | STRING #stringLitVal
+litVal: INTEGER #intVal
+      | FLOAT #floatVal
+      | STRING #stringVal
       ;
 
 wait: WAIT timeVal (DAYS | HOURS | MINUTES | SECONDS | MS) SEMCOL
@@ -98,13 +98,13 @@ logical_expr
  | (TRUE | FALSE)                  # logicalLiterals
  ;
 
-comparison_expr : comparison_operand comp_operator comparison_operand  #ComparisonExpressionWithOperator
-                | PARANBEG comparison_expr PARANEND                        #ComparisonExpressionParens
+comparison_expr : comparison_operand comp_operator comparison_operand  #comparisonExpressionWithOperator
+                | PARANBEG comparison_expr PARANEND                    #comparisonExpressionParens
                 ;
 
-comparison_operand : time
-                   | date
-                   | expr
+comparison_operand : time #timeOp
+                   | date #dateOp
+                   | expr #exprOP
                    ;
 
 time : TIME;
@@ -120,9 +120,7 @@ comp_operator : GT
               | NE
               ;
 
-atom :INTEGER #intAtom
-    | FLOAT   #floatAtom
-    | STRING #stringAtom
+atom :litVal #litValue
     | ID     #varidAtom
     | NOW    #nowAtom
     ;
@@ -143,9 +141,7 @@ upperBound : INTEGER #intUP
 togglevalues : togglevalue (LISTSEP togglevalue)*;
 togglevalue : toggleID EQUALS toggleVal;
 toggleID : ID;
-toggleVal : STRING  #stringVal
-          | INTEGER #integerVal
-          | FLOAT   #floatVal
+toggleVal : litVal
           ;
 
 

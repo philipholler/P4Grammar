@@ -61,6 +61,7 @@ string setBedroomWindowsOpen(int percentage){
 string setBedroomWindowsOpen(int percentage, float f, string s){
     set bedRoomWindow open: percentage;
 
+    setBedroomWindowsOpen(1, 2.0, "hej");
     return;
 }
 
@@ -83,5 +84,8 @@ every 2 hours{
 every 2 weeks at 11:00 starting 01d04m2019y{
     if(01.04 < now && now < 30d09m){
         set GardenMower toggle: on;
+    }
+
+    if(5 == 5 && (b == a || a == b)){
     }
 }

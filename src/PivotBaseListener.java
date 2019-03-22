@@ -375,37 +375,37 @@ public class PivotBaseListener implements PivotListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterIntLitVal(PivotParser.IntLitValContext ctx) { }
+	@Override public void enterIntVal(PivotParser.IntValContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitIntLitVal(PivotParser.IntLitValContext ctx) { }
+	@Override public void exitIntVal(PivotParser.IntValContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterFloatLitVal(PivotParser.FloatLitValContext ctx) { }
+	@Override public void enterFloatVal(PivotParser.FloatValContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitFloatLitVal(PivotParser.FloatLitValContext ctx) { }
+	@Override public void exitFloatVal(PivotParser.FloatValContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterStringLitVal(PivotParser.StringLitValContext ctx) { }
+	@Override public void enterStringVal(PivotParser.StringValContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitStringLitVal(PivotParser.StringLitValContext ctx) { }
+	@Override public void exitStringVal(PivotParser.StringValContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -603,13 +603,37 @@ public class PivotBaseListener implements PivotListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterComparison_operand(PivotParser.Comparison_operandContext ctx) { }
+	@Override public void enterTimeOp(PivotParser.TimeOpContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitComparison_operand(PivotParser.Comparison_operandContext ctx) { }
+	@Override public void exitTimeOp(PivotParser.TimeOpContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterDateOp(PivotParser.DateOpContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitDateOp(PivotParser.DateOpContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterExprOP(PivotParser.ExprOPContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitExprOP(PivotParser.ExprOPContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -651,37 +675,13 @@ public class PivotBaseListener implements PivotListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterIntAtom(PivotParser.IntAtomContext ctx) { }
+	@Override public void enterLitValue(PivotParser.LitValueContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitIntAtom(PivotParser.IntAtomContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterFloatAtom(PivotParser.FloatAtomContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitFloatAtom(PivotParser.FloatAtomContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterStringAtom(PivotParser.StringAtomContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitStringAtom(PivotParser.StringAtomContext ctx) { }
+	@Override public void exitLitValue(PivotParser.LitValueContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -819,37 +819,13 @@ public class PivotBaseListener implements PivotListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterStringVal(PivotParser.StringValContext ctx) { }
+	@Override public void enterToggleVal(PivotParser.ToggleValContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitStringVal(PivotParser.StringValContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterIntegerVal(PivotParser.IntegerValContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitIntegerVal(PivotParser.IntegerValContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterFloatVal(PivotParser.FloatValContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitFloatVal(PivotParser.FloatValContext ctx) { }
+	@Override public void exitToggleVal(PivotParser.ToggleValContext ctx) { }
 
 	/**
 	 * {@inheritDoc}
