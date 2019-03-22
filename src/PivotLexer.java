@@ -16,8 +16,8 @@ public class PivotLexer extends Lexer {
 	protected static final PredictionContextCache _sharedContextCache =
 		new PredictionContextCache();
 	public static final int
-		WhiteSpace=1, NewLine=2, LINE_COMMENT=3, TRUE=4, FALSE=5, AND=6, OR=7, 
-		GT=8, GE=9, LT=10, LE=11, EQ=12, NE=13, SIGNALKW=14, INPUTKW=15, OUTPUTKW=16, 
+		WhiteSpace=1, NewLine=2, LINE_COMMENT=3, AND=4, OR=5, GT=6, GE=7, LT=8, 
+		LE=9, EQ=10, NE=11, TRUE=12, FALSE=13, SIGNALKW=14, INPUTKW=15, OUTPUTKW=16, 
 		DEVICE=17, DEFINEKW=18, IF=19, WHILE=20, INITFUNCKW=21, VOID=22, WHEN=23, 
 		EVERY=24, MS=25, SECONDS=26, MINUTES=27, HOURS=28, DAYS=29, WEEKS=30, 
 		MONTHS=31, WAIT=32, STRINGKW=33, INTEGERKW=34, FLOATKW=35, SET=36, GET=37, 
@@ -37,36 +37,36 @@ public class PivotLexer extends Lexer {
 	private static String[] makeRuleNames() {
 		return new String[] {
 			"WhiteSpace", "NewLine", "LINE_COMMENT", "NEWLINE", "LOWERCASE", "UPPERCASE", 
-			"DIGIT", "TRUE", "FALSE", "AND", "OR", "GT", "GE", "LT", "LE", "EQ", 
-			"NE", "SIGNALKW", "INPUTKW", "OUTPUTKW", "DEVICE", "DEFINEKW", "IF", 
-			"WHILE", "INITFUNCKW", "VOID", "WHEN", "EVERY", "MS", "SECONDS", "MINUTES", 
-			"HOURS", "DAYS", "WEEKS", "MONTHS", "WAIT", "STRINGKW", "INTEGERKW", 
-			"FLOATKW", "SET", "GET", "EXCEEDS", "DECEEDS", "NOW", "ELSE", "RETURN", 
-			"BREAK", "AT", "PARANBEG", "PARANEND", "BLCKBEG", "BLCKEND", "EQUALS", 
-			"PLUS", "MINUS", "DIV", "MULT", "RANGESEP", "SEMCOL", "LISTSEP", "QUOT", 
-			"COL", "AMP", "STARTING", "DATE", "DATEnoYEAR", "FLOAT", "TIME", "IP", 
-			"INTEGER", "STRING", "ID", "SIGN"
+			"DIGIT", "AND", "OR", "GT", "GE", "LT", "LE", "EQ", "NE", "TRUE", "FALSE", 
+			"SIGNALKW", "INPUTKW", "OUTPUTKW", "DEVICE", "DEFINEKW", "IF", "WHILE", 
+			"INITFUNCKW", "VOID", "WHEN", "EVERY", "MS", "SECONDS", "MINUTES", "HOURS", 
+			"DAYS", "WEEKS", "MONTHS", "WAIT", "STRINGKW", "INTEGERKW", "FLOATKW", 
+			"SET", "GET", "EXCEEDS", "DECEEDS", "NOW", "ELSE", "RETURN", "BREAK", 
+			"AT", "PARANBEG", "PARANEND", "BLCKBEG", "BLCKEND", "EQUALS", "PLUS", 
+			"MINUS", "DIV", "MULT", "RANGESEP", "SEMCOL", "LISTSEP", "QUOT", "COL", 
+			"AMP", "STARTING", "DATE", "DATEnoYEAR", "FLOAT", "TIME", "IP", "INTEGER", 
+			"STRING", "ID", "SIGN"
 		};
 	}
 	public static final String[] ruleNames = makeRuleNames();
 
 	private static String[] makeLiteralNames() {
 		return new String[] {
-			null, null, null, null, "'true'", "'false'", "'&&'", "'||'", "'>'", "'>='", 
-			"'<'", "'<='", "'=='", "'!='", "'Signal'", "'input'", "'output'", "'Device'", 
-			"'define'", "'if'", "'while'", "'init'", "'void'", "'when'", "'every'", 
-			"'ms'", "'seconds'", "'minutes'", "'hours'", "'days'", "'weeks'", "'months'", 
-			"'wait'", "'string'", "'int'", "'float'", "'set'", "'get'", "'exceeds'", 
-			"'deceeds'", "'now'", "'else'", "'return'", "'break'", "'at'", "'('", 
-			"')'", "'{'", "'}'", "'='", "'+'", "'-'", "'/'", "'*'", "'..'", "';'", 
-			"','", "'\"'", "':'", "'&'", "'starting'"
+			null, null, null, null, "'&&'", "'||'", "'>'", "'>='", "'<'", "'<='", 
+			"'=='", "'!='", "'true'", "'false'", "'Signal'", "'input'", "'output'", 
+			"'Device'", "'define'", "'if'", "'while'", "'init'", "'void'", "'when'", 
+			"'every'", "'ms'", "'seconds'", "'minutes'", "'hours'", "'days'", "'weeks'", 
+			"'months'", "'wait'", "'string'", "'int'", "'float'", "'set'", "'get'", 
+			"'exceeds'", "'deceeds'", "'now'", "'else'", "'return'", "'break'", "'at'", 
+			"'('", "')'", "'{'", "'}'", "'='", "'+'", "'-'", "'/'", "'*'", "'..'", 
+			"';'", "','", "'\"'", "':'", "'&'", "'starting'"
 		};
 	}
 	private static final String[] _LITERAL_NAMES = makeLiteralNames();
 	private static String[] makeSymbolicNames() {
 		return new String[] {
-			null, "WhiteSpace", "NewLine", "LINE_COMMENT", "TRUE", "FALSE", "AND", 
-			"OR", "GT", "GE", "LT", "LE", "EQ", "NE", "SIGNALKW", "INPUTKW", "OUTPUTKW", 
+			null, "WhiteSpace", "NewLine", "LINE_COMMENT", "AND", "OR", "GT", "GE", 
+			"LT", "LE", "EQ", "NE", "TRUE", "FALSE", "SIGNALKW", "INPUTKW", "OUTPUTKW", 
 			"DEVICE", "DEFINEKW", "IF", "WHILE", "INITFUNCKW", "VOID", "WHEN", "EVERY", 
 			"MS", "SECONDS", "MINUTES", "HOURS", "DAYS", "WEEKS", "MONTHS", "WAIT", 
 			"STRINGKW", "INTEGERKW", "FLOATKW", "SET", "GET", "EXCEEDS", "DECEEDS", 
@@ -146,22 +146,22 @@ public class PivotLexer extends Lexer {
 		"\4>\t>\4?\t?\4@\t@\4A\tA\4B\tB\4C\tC\4D\tD\4E\tE\4F\tF\4G\tG\4H\tH\4I"+
 		"\tI\4J\tJ\3\2\3\2\3\2\3\2\3\3\3\3\3\3\3\3\3\4\3\4\3\4\3\4\7\4\u00a2\n"+
 		"\4\f\4\16\4\u00a5\13\4\3\4\3\4\3\5\5\5\u00aa\n\5\3\5\3\5\5\5\u00ae\n\5"+
-		"\3\6\3\6\3\7\3\7\3\b\3\b\3\t\3\t\3\t\3\t\3\t\3\n\3\n\3\n\3\n\3\n\3\n\3"+
-		"\13\3\13\3\13\3\f\3\f\3\f\3\r\3\r\3\16\3\16\3\16\3\17\3\17\3\20\3\20\3"+
-		"\20\3\21\3\21\3\21\3\22\3\22\3\22\3\23\3\23\3\23\3\23\3\23\3\23\3\23\3"+
-		"\24\3\24\3\24\3\24\3\24\3\24\3\25\3\25\3\25\3\25\3\25\3\25\3\25\3\26\3"+
-		"\26\3\26\3\26\3\26\3\26\3\26\3\27\3\27\3\27\3\27\3\27\3\27\3\27\3\30\3"+
-		"\30\3\30\3\31\3\31\3\31\3\31\3\31\3\31\3\32\3\32\3\32\3\32\3\32\3\33\3"+
-		"\33\3\33\3\33\3\33\3\34\3\34\3\34\3\34\3\34\3\35\3\35\3\35\3\35\3\35\3"+
-		"\35\3\36\3\36\3\36\3\37\3\37\3\37\3\37\3\37\3\37\3\37\3\37\3 \3 \3 \3"+
-		" \3 \3 \3 \3 \3!\3!\3!\3!\3!\3!\3\"\3\"\3\"\3\"\3\"\3#\3#\3#\3#\3#\3#"+
-		"\3$\3$\3$\3$\3$\3$\3$\3%\3%\3%\3%\3%\3&\3&\3&\3&\3&\3&\3&\3\'\3\'\3\'"+
-		"\3\'\3(\3(\3(\3(\3(\3(\3)\3)\3)\3)\3*\3*\3*\3*\3+\3+\3+\3+\3+\3+\3+\3"+
-		"+\3,\3,\3,\3,\3,\3,\3,\3,\3-\3-\3-\3-\3.\3.\3.\3.\3.\3/\3/\3/\3/\3/\3"+
-		"/\3/\3\60\3\60\3\60\3\60\3\60\3\60\3\61\3\61\3\61\3\62\3\62\3\63\3\63"+
-		"\3\64\3\64\3\65\3\65\3\66\3\66\3\67\3\67\38\38\39\39\3:\3:\3;\3;\3;\3"+
-		"<\3<\3=\3=\3>\3>\3?\3?\3@\3@\3A\3A\3A\3A\3A\3A\3A\3A\3A\3B\3B\3B\3B\3"+
-		"B\3B\3B\3B\3B\3B\3B\3B\3C\3C\3C\3C\3C\3C\3C\3D\5D\u01c5\nD\3D\6D\u01c8"+
+		"\3\6\3\6\3\7\3\7\3\b\3\b\3\t\3\t\3\t\3\n\3\n\3\n\3\13\3\13\3\f\3\f\3\f"+
+		"\3\r\3\r\3\16\3\16\3\16\3\17\3\17\3\17\3\20\3\20\3\20\3\21\3\21\3\21\3"+
+		"\21\3\21\3\22\3\22\3\22\3\22\3\22\3\22\3\23\3\23\3\23\3\23\3\23\3\23\3"+
+		"\23\3\24\3\24\3\24\3\24\3\24\3\24\3\25\3\25\3\25\3\25\3\25\3\25\3\25\3"+
+		"\26\3\26\3\26\3\26\3\26\3\26\3\26\3\27\3\27\3\27\3\27\3\27\3\27\3\27\3"+
+		"\30\3\30\3\30\3\31\3\31\3\31\3\31\3\31\3\31\3\32\3\32\3\32\3\32\3\32\3"+
+		"\33\3\33\3\33\3\33\3\33\3\34\3\34\3\34\3\34\3\34\3\35\3\35\3\35\3\35\3"+
+		"\35\3\35\3\36\3\36\3\36\3\37\3\37\3\37\3\37\3\37\3\37\3\37\3\37\3 \3 "+
+		"\3 \3 \3 \3 \3 \3 \3!\3!\3!\3!\3!\3!\3\"\3\"\3\"\3\"\3\"\3#\3#\3#\3#\3"+
+		"#\3#\3$\3$\3$\3$\3$\3$\3$\3%\3%\3%\3%\3%\3&\3&\3&\3&\3&\3&\3&\3\'\3\'"+
+		"\3\'\3\'\3(\3(\3(\3(\3(\3(\3)\3)\3)\3)\3*\3*\3*\3*\3+\3+\3+\3+\3+\3+\3"+
+		"+\3+\3,\3,\3,\3,\3,\3,\3,\3,\3-\3-\3-\3-\3.\3.\3.\3.\3.\3/\3/\3/\3/\3"+
+		"/\3/\3/\3\60\3\60\3\60\3\60\3\60\3\60\3\61\3\61\3\61\3\62\3\62\3\63\3"+
+		"\63\3\64\3\64\3\65\3\65\3\66\3\66\3\67\3\67\38\38\39\39\3:\3:\3;\3;\3"+
+		";\3<\3<\3=\3=\3>\3>\3?\3?\3@\3@\3A\3A\3A\3A\3A\3A\3A\3A\3A\3B\3B\3B\3"+
+		"B\3B\3B\3B\3B\3B\3B\3B\3B\3C\3C\3C\3C\3C\3C\3C\3D\5D\u01c5\nD\3D\6D\u01c8"+
 		"\nD\rD\16D\u01c9\3D\3D\6D\u01ce\nD\rD\16D\u01cf\3E\3E\3E\3E\3E\3E\3F\6"+
 		"F\u01d9\nF\rF\16F\u01da\3F\3F\6F\u01df\nF\rF\16F\u01e0\6F\u01e3\nF\rF"+
 		"\16F\u01e4\3F\3F\6F\u01e9\nF\rF\16F\u01ea\3G\5G\u01ee\nG\3G\6G\u01f1\n"+
@@ -186,9 +186,9 @@ public class PivotLexer extends Lexer {
 		"\3\2\2\2\2\u008b\3\2\2\2\2\u008d\3\2\2\2\2\u008f\3\2\2\2\2\u0091\3\2\2"+
 		"\2\2\u0093\3\2\2\2\3\u0095\3\2\2\2\5\u0099\3\2\2\2\7\u009d\3\2\2\2\t\u00ad"+
 		"\3\2\2\2\13\u00af\3\2\2\2\r\u00b1\3\2\2\2\17\u00b3\3\2\2\2\21\u00b5\3"+
-		"\2\2\2\23\u00ba\3\2\2\2\25\u00c0\3\2\2\2\27\u00c3\3\2\2\2\31\u00c6\3\2"+
-		"\2\2\33\u00c8\3\2\2\2\35\u00cb\3\2\2\2\37\u00cd\3\2\2\2!\u00d0\3\2\2\2"+
-		"#\u00d3\3\2\2\2%\u00d6\3\2\2\2\'\u00dd\3\2\2\2)\u00e3\3\2\2\2+\u00ea\3"+
+		"\2\2\2\23\u00b8\3\2\2\2\25\u00bb\3\2\2\2\27\u00bd\3\2\2\2\31\u00c0\3\2"+
+		"\2\2\33\u00c2\3\2\2\2\35\u00c5\3\2\2\2\37\u00c8\3\2\2\2!\u00cb\3\2\2\2"+
+		"#\u00d0\3\2\2\2%\u00d6\3\2\2\2\'\u00dd\3\2\2\2)\u00e3\3\2\2\2+\u00ea\3"+
 		"\2\2\2-\u00f1\3\2\2\2/\u00f8\3\2\2\2\61\u00fb\3\2\2\2\63\u0101\3\2\2\2"+
 		"\65\u0106\3\2\2\2\67\u010b\3\2\2\29\u0110\3\2\2\2;\u0116\3\2\2\2=\u0119"+
 		"\3\2\2\2?\u0121\3\2\2\2A\u0129\3\2\2\2C\u012f\3\2\2\2E\u0134\3\2\2\2G"+
@@ -210,15 +210,15 @@ public class PivotLexer extends Lexer {
 		"\3\2\2\2\u00a9\u00aa\3\2\2\2\u00aa\u00ab\3\2\2\2\u00ab\u00ae\7\f\2\2\u00ac"+
 		"\u00ae\7\17\2\2\u00ad\u00a9\3\2\2\2\u00ad\u00ac\3\2\2\2\u00ae\n\3\2\2"+
 		"\2\u00af\u00b0\t\4\2\2\u00b0\f\3\2\2\2\u00b1\u00b2\t\5\2\2\u00b2\16\3"+
-		"\2\2\2\u00b3\u00b4\t\6\2\2\u00b4\20\3\2\2\2\u00b5\u00b6\7v\2\2\u00b6\u00b7"+
-		"\7t\2\2\u00b7\u00b8\7w\2\2\u00b8\u00b9\7g\2\2\u00b9\22\3\2\2\2\u00ba\u00bb"+
-		"\7h\2\2\u00bb\u00bc\7c\2\2\u00bc\u00bd\7n\2\2\u00bd\u00be\7u\2\2\u00be"+
-		"\u00bf\7g\2\2\u00bf\24\3\2\2\2\u00c0\u00c1\7(\2\2\u00c1\u00c2\7(\2\2\u00c2"+
-		"\26\3\2\2\2\u00c3\u00c4\7~\2\2\u00c4\u00c5\7~\2\2\u00c5\30\3\2\2\2\u00c6"+
-		"\u00c7\7@\2\2\u00c7\32\3\2\2\2\u00c8\u00c9\7@\2\2\u00c9\u00ca\7?\2\2\u00ca"+
-		"\34\3\2\2\2\u00cb\u00cc\7>\2\2\u00cc\36\3\2\2\2\u00cd\u00ce\7>\2\2\u00ce"+
-		"\u00cf\7?\2\2\u00cf \3\2\2\2\u00d0\u00d1\7?\2\2\u00d1\u00d2\7?\2\2\u00d2"+
-		"\"\3\2\2\2\u00d3\u00d4\7#\2\2\u00d4\u00d5\7?\2\2\u00d5$\3\2\2\2\u00d6"+
+		"\2\2\2\u00b3\u00b4\t\6\2\2\u00b4\20\3\2\2\2\u00b5\u00b6\7(\2\2\u00b6\u00b7"+
+		"\7(\2\2\u00b7\22\3\2\2\2\u00b8\u00b9\7~\2\2\u00b9\u00ba\7~\2\2\u00ba\24"+
+		"\3\2\2\2\u00bb\u00bc\7@\2\2\u00bc\26\3\2\2\2\u00bd\u00be\7@\2\2\u00be"+
+		"\u00bf\7?\2\2\u00bf\30\3\2\2\2\u00c0\u00c1\7>\2\2\u00c1\32\3\2\2\2\u00c2"+
+		"\u00c3\7>\2\2\u00c3\u00c4\7?\2\2\u00c4\34\3\2\2\2\u00c5\u00c6\7?\2\2\u00c6"+
+		"\u00c7\7?\2\2\u00c7\36\3\2\2\2\u00c8\u00c9\7#\2\2\u00c9\u00ca\7?\2\2\u00ca"+
+		" \3\2\2\2\u00cb\u00cc\7v\2\2\u00cc\u00cd\7t\2\2\u00cd\u00ce\7w\2\2\u00ce"+
+		"\u00cf\7g\2\2\u00cf\"\3\2\2\2\u00d0\u00d1\7h\2\2\u00d1\u00d2\7c\2\2\u00d2"+
+		"\u00d3\7n\2\2\u00d3\u00d4\7u\2\2\u00d4\u00d5\7g\2\2\u00d5$\3\2\2\2\u00d6"+
 		"\u00d7\7U\2\2\u00d7\u00d8\7k\2\2\u00d8\u00d9\7i\2\2\u00d9\u00da\7p\2\2"+
 		"\u00da\u00db\7c\2\2\u00db\u00dc\7n\2\2\u00dc&\3\2\2\2\u00dd\u00de\7k\2"+
 		"\2\u00de\u00df\7p\2\2\u00df\u00e0\7r\2\2\u00e0\u00e1\7w\2\2\u00e1\u00e2"+

@@ -65,7 +65,7 @@ funcCall: ID PARANBEG inputParam PARANEND
         | GET deviceID signalID
         ;
 
-inputParam: (ID | INTEGER)? (LISTSEP (ID | INTEGER))*;
+inputParam: (ID | INTEGER | FLOAT | STRING)? (LISTSEP (ID | INTEGER | FLOAT | STRING))*;
 
 wait: WAIT timeVal (DAYS | HOURS | MINUTES | SECONDS | MS) SEMCOL
     | WAIT varID (DAYS | HOURS | MINUTES | SECONDS | MS) SEMCOL
@@ -162,8 +162,6 @@ fragment DIGIT     : [0-9] ;
  * Terminal tokens
  */
 
-TRUE : 'true';
-FALSE : 'false';
 AND : '&&';
 OR : '||';
 GT : '>' ;
@@ -174,6 +172,8 @@ EQ : '==' ;
 NE : '!=' ;
 
 // Keywords
+TRUE : 'true';
+FALSE : 'false';
 SIGNALKW : 'Signal';
 INPUTKW : 'input';
 OUTPUTKW : 'output';

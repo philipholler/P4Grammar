@@ -16,8 +16,8 @@ public class PivotParser extends Parser {
 	protected static final PredictionContextCache _sharedContextCache =
 		new PredictionContextCache();
 	public static final int
-		WhiteSpace=1, NewLine=2, LINE_COMMENT=3, TRUE=4, FALSE=5, AND=6, OR=7, 
-		GT=8, GE=9, LT=10, LE=11, EQ=12, NE=13, SIGNALKW=14, INPUTKW=15, OUTPUTKW=16, 
+		WhiteSpace=1, NewLine=2, LINE_COMMENT=3, AND=4, OR=5, GT=6, GE=7, LT=8, 
+		LE=9, EQ=10, NE=11, TRUE=12, FALSE=13, SIGNALKW=14, INPUTKW=15, OUTPUTKW=16, 
 		DEVICE=17, DEFINEKW=18, IF=19, WHILE=20, INITFUNCKW=21, VOID=22, WHEN=23, 
 		EVERY=24, MS=25, SECONDS=26, MINUTES=27, HOURS=28, DAYS=29, WEEKS=30, 
 		MONTHS=31, WAIT=32, STRINGKW=33, INTEGERKW=34, FLOATKW=35, SET=36, GET=37, 
@@ -55,21 +55,21 @@ public class PivotParser extends Parser {
 
 	private static String[] makeLiteralNames() {
 		return new String[] {
-			null, null, null, null, "'true'", "'false'", "'&&'", "'||'", "'>'", "'>='", 
-			"'<'", "'<='", "'=='", "'!='", "'Signal'", "'input'", "'output'", "'Device'", 
-			"'define'", "'if'", "'while'", "'init'", "'void'", "'when'", "'every'", 
-			"'ms'", "'seconds'", "'minutes'", "'hours'", "'days'", "'weeks'", "'months'", 
-			"'wait'", "'string'", "'int'", "'float'", "'set'", "'get'", "'exceeds'", 
-			"'deceeds'", "'now'", "'else'", "'return'", "'break'", "'at'", "'('", 
-			"')'", "'{'", "'}'", "'='", "'+'", "'-'", "'/'", "'*'", "'..'", "';'", 
-			"','", "'\"'", "':'", "'&'", "'starting'"
+			null, null, null, null, "'&&'", "'||'", "'>'", "'>='", "'<'", "'<='", 
+			"'=='", "'!='", "'true'", "'false'", "'Signal'", "'input'", "'output'", 
+			"'Device'", "'define'", "'if'", "'while'", "'init'", "'void'", "'when'", 
+			"'every'", "'ms'", "'seconds'", "'minutes'", "'hours'", "'days'", "'weeks'", 
+			"'months'", "'wait'", "'string'", "'int'", "'float'", "'set'", "'get'", 
+			"'exceeds'", "'deceeds'", "'now'", "'else'", "'return'", "'break'", "'at'", 
+			"'('", "')'", "'{'", "'}'", "'='", "'+'", "'-'", "'/'", "'*'", "'..'", 
+			"';'", "','", "'\"'", "':'", "'&'", "'starting'"
 		};
 	}
 	private static final String[] _LITERAL_NAMES = makeLiteralNames();
 	private static String[] makeSymbolicNames() {
 		return new String[] {
-			null, "WhiteSpace", "NewLine", "LINE_COMMENT", "TRUE", "FALSE", "AND", 
-			"OR", "GT", "GE", "LT", "LE", "EQ", "NE", "SIGNALKW", "INPUTKW", "OUTPUTKW", 
+			null, "WhiteSpace", "NewLine", "LINE_COMMENT", "AND", "OR", "GT", "GE", 
+			"LT", "LE", "EQ", "NE", "TRUE", "FALSE", "SIGNALKW", "INPUTKW", "OUTPUTKW", 
 			"DEVICE", "DEFINEKW", "IF", "WHILE", "INITFUNCKW", "VOID", "WHEN", "EVERY", 
 			"MS", "SECONDS", "MINUTES", "HOURS", "DAYS", "WEEKS", "MONTHS", "WAIT", 
 			"STRINGKW", "INTEGERKW", "FLOATKW", "SET", "GET", "EXCEEDS", "DECEEDS", 
@@ -2302,6 +2302,14 @@ public class PivotParser extends Parser {
 		public TerminalNode INTEGER(int i) {
 			return getToken(PivotParser.INTEGER, i);
 		}
+		public List<TerminalNode> FLOAT() { return getTokens(PivotParser.FLOAT); }
+		public TerminalNode FLOAT(int i) {
+			return getToken(PivotParser.FLOAT, i);
+		}
+		public List<TerminalNode> STRING() { return getTokens(PivotParser.STRING); }
+		public TerminalNode STRING(int i) {
+			return getToken(PivotParser.STRING, i);
+		}
 		public InputParamContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
@@ -2331,11 +2339,11 @@ public class PivotParser extends Parser {
 			setState(345);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
-			if (_la==INTEGER || _la==ID) {
+			if (((((_la - 63)) & ~0x3f) == 0 && ((1L << (_la - 63)) & ((1L << (FLOAT - 63)) | (1L << (INTEGER - 63)) | (1L << (STRING - 63)) | (1L << (ID - 63)))) != 0)) {
 				{
 				setState(344);
 				_la = _input.LA(1);
-				if ( !(_la==INTEGER || _la==ID) ) {
+				if ( !(((((_la - 63)) & ~0x3f) == 0 && ((1L << (_la - 63)) & ((1L << (FLOAT - 63)) | (1L << (INTEGER - 63)) | (1L << (STRING - 63)) | (1L << (ID - 63)))) != 0)) ) {
 				_errHandler.recoverInline(this);
 				}
 				else {
@@ -2356,7 +2364,7 @@ public class PivotParser extends Parser {
 				match(LISTSEP);
 				setState(348);
 				_la = _input.LA(1);
-				if ( !(_la==INTEGER || _la==ID) ) {
+				if ( !(((((_la - 63)) & ~0x3f) == 0 && ((1L << (_la - 63)) & ((1L << (FLOAT - 63)) | (1L << (INTEGER - 63)) | (1L << (STRING - 63)) | (1L << (ID - 63)))) != 0)) ) {
 				_errHandler.recoverInline(this);
 				}
 				else {
@@ -4206,8 +4214,8 @@ public class PivotParser extends Parser {
 		"/\5/\u01ce\n/\3\60\3\60\3\60\7\60\u01d3\n\60\f\60\16\60\u01d6\13\60\3"+
 		"\61\3\61\3\61\3\61\3\62\3\62\3\63\3\63\3\63\5\63\u01e1\n\63\3\63\2\4F"+
 		"H\64\2\4\6\b\n\f\16\20\22\24\26\30\32\34\36 \"$&(*,.\60\62\64\668:<>@"+
-		"BDFHJLNPRTVXZ\\^`bd\2\f\3\2\34!\4\2AADE\4\2DDFF\3\2\33\37\3\2\66\67\3"+
-		"\2\64\65\3\2\6\7\3\2?@\3\2\n\17\3\2#%\2\u01f3\2f\3\2\2\2\4k\3\2\2\2\6"+
+		"BDFHJLNPRTVXZ\\^`bd\2\f\3\2\34!\4\2AADE\4\2AADF\3\2\33\37\3\2\66\67\3"+
+		"\2\64\65\3\2\16\17\3\2?@\3\2\b\r\3\2#%\2\u01f3\2f\3\2\2\2\4k\3\2\2\2\6"+
 		"\u0080\3\2\2\2\b\u0087\3\2\2\2\n\u008e\3\2\2\2\f\u0090\3\2\2\2\16\u00a2"+
 		"\3\2\2\2\20\u00a9\3\2\2\2\22\u00b9\3\2\2\2\24\u00bb\3\2\2\2\26\u00c0\3"+
 		"\2\2\2\30\u00d7\3\2\2\2\32\u00e9\3\2\2\2\34\u00eb\3\2\2\2\36\u00f5\3\2"+
@@ -4314,7 +4322,7 @@ public class PivotParser extends Parser {
 		"\5J&\2\u0193\u0194\7/\2\2\u0194\u0195\5H%\2\u0195\u0196\7\60\2\2\u0196"+
 		"\u0199\3\2\2\2\u0197\u0199\t\b\2\2\u0198\u0191\3\2\2\2\u0198\u0193\3\2"+
 		"\2\2\u0198\u0197\3\2\2\2\u0199\u01a2\3\2\2\2\u019a\u019b\f\7\2\2\u019b"+
-		"\u019c\7\b\2\2\u019c\u01a1\5H%\b\u019d\u019e\f\6\2\2\u019e\u019f\7\t\2"+
+		"\u019c\7\6\2\2\u019c\u01a1\5H%\b\u019d\u019e\f\6\2\2\u019e\u019f\7\7\2"+
 		"\2\u019f\u01a1\5H%\7\u01a0\u019a\3\2\2\2\u01a0\u019d\3\2\2\2\u01a1\u01a4"+
 		"\3\2\2\2\u01a2\u01a0\3\2\2\2\u01a2\u01a3\3\2\2\2\u01a3I\3\2\2\2\u01a4"+
 		"\u01a2\3\2\2\2\u01a5\u01a6\5L\'\2\u01a6\u01a7\5R*\2\u01a7\u01a8\5L\'\2"+
