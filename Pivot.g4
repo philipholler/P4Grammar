@@ -114,8 +114,8 @@ date : DATE
 
 comp_operator : GT
               | GE
-              | LT
-              | LE
+              | ST
+              | SE
               | EQ
               | NE
               ;
@@ -167,8 +167,8 @@ AND : '&&';
 OR : '||';
 GT : '>' ;
 GE : '>=' ;
-LT : '<' ;
-LE : '<=' ;
+ST : '<' ;
+SE : '<=' ;
 EQ : '==' ;
 NE : '!=' ;
 
