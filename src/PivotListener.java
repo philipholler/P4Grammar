@@ -307,6 +307,42 @@ public interface PivotListener extends ParseTreeListener {
 	 */
 	void exitInputParam(PivotParser.InputParamContext ctx);
 	/**
+	 * Enter a parse tree produced by the {@code intLitVal}
+	 * labeled alternative in {@link PivotParser#litVal}.
+	 * @param ctx the parse tree
+	 */
+	void enterIntLitVal(PivotParser.IntLitValContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code intLitVal}
+	 * labeled alternative in {@link PivotParser#litVal}.
+	 * @param ctx the parse tree
+	 */
+	void exitIntLitVal(PivotParser.IntLitValContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code floatLitVal}
+	 * labeled alternative in {@link PivotParser#litVal}.
+	 * @param ctx the parse tree
+	 */
+	void enterFloatLitVal(PivotParser.FloatLitValContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code floatLitVal}
+	 * labeled alternative in {@link PivotParser#litVal}.
+	 * @param ctx the parse tree
+	 */
+	void exitFloatLitVal(PivotParser.FloatLitValContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code stringLitVal}
+	 * labeled alternative in {@link PivotParser#litVal}.
+	 * @param ctx the parse tree
+	 */
+	void enterStringLitVal(PivotParser.StringLitValContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code stringLitVal}
+	 * labeled alternative in {@link PivotParser#litVal}.
+	 * @param ctx the parse tree
+	 */
+	void exitStringLitVal(PivotParser.StringLitValContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link PivotParser#wait}.
 	 * @param ctx the parse tree
 	 */

@@ -190,6 +190,27 @@ public interface PivotVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitInputParam(PivotParser.InputParamContext ctx);
 	/**
+	 * Visit a parse tree produced by the {@code intLitVal}
+	 * labeled alternative in {@link PivotParser#litVal}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitIntLitVal(PivotParser.IntLitValContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code floatLitVal}
+	 * labeled alternative in {@link PivotParser#litVal}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitFloatLitVal(PivotParser.FloatLitValContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code stringLitVal}
+	 * labeled alternative in {@link PivotParser#litVal}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitStringLitVal(PivotParser.StringLitValContext ctx);
+	/**
 	 * Visit a parse tree produced by {@link PivotParser#wait}.
 	 * @param ctx the parse tree
 	 * @return the visitor result

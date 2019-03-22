@@ -50,7 +50,7 @@ varID : ID;
 
 block: BLCKBEG stmts BLCKEND;
 
-rtn : (RETURN (varID | INTEGER | FLOAT | STRING )? SEMCOL);
+rtn : (RETURN (varID | litVal)? SEMCOL);
 
 ifstmt: IF PARANBEG logical_expr PARANEND block (ELSE block)?;
 
@@ -58,14 +58,19 @@ stmts: (wait | assignment | ifstmt | whilestmt | funcCall SEMCOL | declVar | rtn
 
 brk: BREAK SEMCOL;
 
-declVar: (type varID EQUALS ((FLOAT | STRING | INTEGER) | expr) | deviceID varID EQUALS ip) SEMCOL;
+declVar: (type varID EQUALS (litVal | expr) | deviceID varID EQUALS ip) SEMCOL;
 
 funcCall: ID PARANBEG inputParam PARANEND
-        | SET deviceID signalID COL (toggleID | INTEGER | FLOAT | STRING)
+        | SET deviceID signalID COL (toggleID | litVal)
         | GET deviceID signalID
         ;
 
-inputParam: (ID | INTEGER | FLOAT | STRING)? (LISTSEP (ID | INTEGER | FLOAT | STRING))*;
+inputParam: (ID | litVal)? (LISTSEP (ID | litVal))*;
+
+litVal: INTEGER #intLitVal
+      | FLOAT #floatLitVal
+      | STRING #stringLitVal
+      ;
 
 wait: WAIT timeVal (DAYS | HOURS | MINUTES | SECONDS | MS) SEMCOL
     | WAIT varID (DAYS | HOURS | MINUTES | SECONDS | MS) SEMCOL
