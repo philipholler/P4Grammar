@@ -411,13 +411,13 @@ public class PivotBaseListener implements PivotListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterWait(PivotParser.WaitContext ctx) { }
+	@Override public void enterWaitStmt(PivotParser.WaitStmtContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitWait(PivotParser.WaitContext ctx) { }
+	@Override public void exitWaitStmt(PivotParser.WaitStmtContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

@@ -16,14 +16,17 @@ public class PivotBaseVisitor<T> extends AbstractParseTreeVisitor<T> implements 
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitProgram(PivotParser.ProgramContext ctx) { return visitChildren(ctx); }
+	@Override public T visitProgram(PivotParser.ProgramContext ctx) {
+		return visitChildren(ctx);
+	}
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitDecls(PivotParser.DeclsContext ctx) { return visitChildren(ctx); }
+	@Override public T visitDecls(PivotParser.DeclsContext ctx) {
+		return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -247,7 +250,7 @@ public class PivotBaseVisitor<T> extends AbstractParseTreeVisitor<T> implements 
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitWait(PivotParser.WaitContext ctx) { return visitChildren(ctx); }
+	@Override public T visitWaitStmt(PivotParser.WaitStmtContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *

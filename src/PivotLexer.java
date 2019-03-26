@@ -16,8 +16,8 @@ public class PivotLexer extends Lexer {
 	protected static final PredictionContextCache _sharedContextCache =
 		new PredictionContextCache();
 	public static final int
-		WhiteSpace=1, NewLine=2, LINE_COMMENT=3, AND=4, OR=5, GT=6, GE=7, LT=8, 
-		LE=9, EQ=10, NE=11, TRUE=12, FALSE=13, SIGNALKW=14, INPUTKW=15, OUTPUTKW=16, 
+		WhiteSpace=1, NewLine=2, LINE_COMMENT=3, AND=4, OR=5, GT=6, GE=7, ST=8, 
+		SE=9, EQ=10, NE=11, TRUE=12, FALSE=13, SIGNALKW=14, INPUTKW=15, OUTPUTKW=16, 
 		DEVICE=17, DEFINEKW=18, IF=19, WHILE=20, INITFUNCKW=21, VOID=22, WHEN=23, 
 		EVERY=24, MS=25, SECONDS=26, MINUTES=27, HOURS=28, DAYS=29, WEEKS=30, 
 		MONTHS=31, WAIT=32, STRINGKW=33, INTEGERKW=34, FLOATKW=35, SET=36, GET=37, 
@@ -37,7 +37,7 @@ public class PivotLexer extends Lexer {
 	private static String[] makeRuleNames() {
 		return new String[] {
 			"WhiteSpace", "NewLine", "LINE_COMMENT", "NEWLINE", "LOWERCASE", "UPPERCASE", 
-			"DIGIT", "AND", "OR", "GT", "GE", "LT", "LE", "EQ", "NE", "TRUE", "FALSE", 
+			"DIGIT", "AND", "OR", "GT", "GE", "ST", "SE", "EQ", "NE", "TRUE", "FALSE", 
 			"SIGNALKW", "INPUTKW", "OUTPUTKW", "DEVICE", "DEFINEKW", "IF", "WHILE", 
 			"INITFUNCKW", "VOID", "WHEN", "EVERY", "MS", "SECONDS", "MINUTES", "HOURS", 
 			"DAYS", "WEEKS", "MONTHS", "WAIT", "STRINGKW", "INTEGERKW", "FLOATKW", 
@@ -66,7 +66,7 @@ public class PivotLexer extends Lexer {
 	private static String[] makeSymbolicNames() {
 		return new String[] {
 			null, "WhiteSpace", "NewLine", "LINE_COMMENT", "AND", "OR", "GT", "GE", 
-			"LT", "LE", "EQ", "NE", "TRUE", "FALSE", "SIGNALKW", "INPUTKW", "OUTPUTKW", 
+			"ST", "SE", "EQ", "NE", "TRUE", "FALSE", "SIGNALKW", "INPUTKW", "OUTPUTKW", 
 			"DEVICE", "DEFINEKW", "IF", "WHILE", "INITFUNCKW", "VOID", "WHEN", "EVERY", 
 			"MS", "SECONDS", "MINUTES", "HOURS", "DAYS", "WEEKS", "MONTHS", "WAIT", 
 			"STRINGKW", "INTEGERKW", "FLOATKW", "SET", "GET", "EXCEEDS", "DECEEDS", 

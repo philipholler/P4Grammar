@@ -13,11 +13,16 @@ public class Launch {
             PivotLexer lexer = new PivotLexer(cs);
             CommonTokenStream token = new CommonTokenStream(lexer);
             PivotParser parser = new PivotParser(token);
+            TreePrinter treePrinter = new TreePrinter();
+
+            treePrinter.print(parser.program());
+
 
             ParseTree tree = parser.program();
 
             PivotBaseVisitor<Object> visitor = new PivotBaseVisitor<>();
             visitor.visit(tree);
+
 
 
         } catch (IOException e) {

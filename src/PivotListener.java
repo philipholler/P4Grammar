@@ -343,15 +343,15 @@ public interface PivotListener extends ParseTreeListener {
 	 */
 	void exitStringVal(PivotParser.StringValContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link PivotParser#wait}.
+	 * Enter a parse tree produced by {@link PivotParser#waitStmt}.
 	 * @param ctx the parse tree
 	 */
-	void enterWait(PivotParser.WaitContext ctx);
+	void enterWaitStmt(PivotParser.WaitStmtContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link PivotParser#wait}.
+	 * Exit a parse tree produced by {@link PivotParser#waitStmt}.
 	 * @param ctx the parse tree
 	 */
-	void exitWait(PivotParser.WaitContext ctx);
+	void exitWaitStmt(PivotParser.WaitStmtContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link PivotParser#timeVal}.
 	 * @param ctx the parse tree

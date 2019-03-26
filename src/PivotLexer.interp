@@ -79,8 +79,8 @@ AND
 OR
 GT
 GE
-LT
-LE
+ST
+SE
 EQ
 NE
 TRUE
@@ -154,8 +154,8 @@ AND
 OR
 GT
 GE
-LT
-LE
+ST
+SE
 EQ
 NE
 TRUE

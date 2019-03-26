@@ -211,11 +211,11 @@ public interface PivotVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitStringVal(PivotParser.StringValContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link PivotParser#wait}.
+	 * Visit a parse tree produced by {@link PivotParser#waitStmt}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitWait(PivotParser.WaitContext ctx);
+	T visitWaitStmt(PivotParser.WaitStmtContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link PivotParser#timeVal}.
 	 * @param ctx the parse tree

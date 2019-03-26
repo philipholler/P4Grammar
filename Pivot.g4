@@ -54,7 +54,7 @@ rtn : (RETURN (varID | litVal)? SEMCOL);
 
 ifstmt: IF PARANBEG logical_expr PARANEND block (ELSE block)?;
 
-stmts: (wait | assignment | ifstmt | whilestmt | funcCall SEMCOL | declVar | rtn | brk)*; // Not finished
+stmts: (waitStmt | assignment | ifstmt | whilestmt | funcCall SEMCOL | declVar | rtn | brk)*; // Not finished
 
 brk: BREAK SEMCOL;
 
@@ -72,7 +72,7 @@ litVal: INTEGER #intVal
       | STRING #stringVal
       ;
 
-wait: WAIT timeVal (DAYS | HOURS | MINUTES | SECONDS | MS) SEMCOL
+waitStmt: WAIT timeVal (DAYS | HOURS | MINUTES | SECONDS | MS) SEMCOL
     | WAIT varID (DAYS | HOURS | MINUTES | SECONDS | MS) SEMCOL
     ;
 

@@ -16,8 +16,8 @@ public class PivotParser extends Parser {
 	protected static final PredictionContextCache _sharedContextCache =
 		new PredictionContextCache();
 	public static final int
-		WhiteSpace=1, NewLine=2, LINE_COMMENT=3, AND=4, OR=5, GT=6, GE=7, LT=8, 
-		LE=9, EQ=10, NE=11, TRUE=12, FALSE=13, SIGNALKW=14, INPUTKW=15, OUTPUTKW=16, 
+		WhiteSpace=1, NewLine=2, LINE_COMMENT=3, AND=4, OR=5, GT=6, GE=7, ST=8, 
+		SE=9, EQ=10, NE=11, TRUE=12, FALSE=13, SIGNALKW=14, INPUTKW=15, OUTPUTKW=16, 
 		DEVICE=17, DEFINEKW=18, IF=19, WHILE=20, INITFUNCKW=21, VOID=22, WHEN=23, 
 		EVERY=24, MS=25, SECONDS=26, MINUTES=27, HOURS=28, DAYS=29, WEEKS=30, 
 		MONTHS=31, WAIT=32, STRINGKW=33, INTEGERKW=34, FLOATKW=35, SET=36, GET=37, 
@@ -34,7 +34,7 @@ public class PivotParser extends Parser {
 		RULE_outputID = 18, RULE_deviceID = 19, RULE_ip = 20, RULE_varID = 21, 
 		RULE_block = 22, RULE_rtn = 23, RULE_ifstmt = 24, RULE_stmts = 25, RULE_brk = 26, 
 		RULE_declVar = 27, RULE_funcCall = 28, RULE_inputParam = 29, RULE_litVal = 30, 
-		RULE_wait = 31, RULE_timeVal = 32, RULE_whilestmt = 33, RULE_assignment = 34, 
+		RULE_waitStmt = 31, RULE_timeVal = 32, RULE_whilestmt = 33, RULE_assignment = 34, 
 		RULE_expr = 35, RULE_logical_expr = 36, RULE_comparison_expr = 37, RULE_comparison_operand = 38, 
 		RULE_time = 39, RULE_date = 40, RULE_comp_operator = 41, RULE_atom = 42, 
 		RULE_type = 43, RULE_range = 44, RULE_lowerBound = 45, RULE_upperBound = 46, 
@@ -45,7 +45,7 @@ public class PivotParser extends Parser {
 			"func", "fParams", "param", "event", "atomEvent", "repeatEvent", "inputs", 
 			"input", "inputID", "outputs", "output", "outputID", "deviceID", "ip", 
 			"varID", "block", "rtn", "ifstmt", "stmts", "brk", "declVar", "funcCall", 
-			"inputParam", "litVal", "wait", "timeVal", "whilestmt", "assignment", 
+			"inputParam", "litVal", "waitStmt", "timeVal", "whilestmt", "assignment", 
 			"expr", "logical_expr", "comparison_expr", "comparison_operand", "time", 
 			"date", "comp_operator", "atom", "type", "range", "lowerBound", "upperBound", 
 			"togglevalues", "togglevalue", "toggleID", "toggleVal"
@@ -69,7 +69,7 @@ public class PivotParser extends Parser {
 	private static String[] makeSymbolicNames() {
 		return new String[] {
 			null, "WhiteSpace", "NewLine", "LINE_COMMENT", "AND", "OR", "GT", "GE", 
-			"LT", "LE", "EQ", "NE", "TRUE", "FALSE", "SIGNALKW", "INPUTKW", "OUTPUTKW", 
+			"ST", "SE", "EQ", "NE", "TRUE", "FALSE", "SIGNALKW", "INPUTKW", "OUTPUTKW", 
 			"DEVICE", "DEFINEKW", "IF", "WHILE", "INITFUNCKW", "VOID", "WHEN", "EVERY", 
 			"MS", "SECONDS", "MINUTES", "HOURS", "DAYS", "WEEKS", "MONTHS", "WAIT", 
 			"STRINGKW", "INTEGERKW", "FLOATKW", "SET", "GET", "EXCEEDS", "DECEEDS", 
@@ -1833,11 +1833,11 @@ public class PivotParser extends Parser {
 	}
 
 	public static class StmtsContext extends ParserRuleContext {
-		public List<WaitContext> wait() {
-			return getRuleContexts(WaitContext.class);
+		public List<WaitStmtContext> waitStmt() {
+			return getRuleContexts(WaitStmtContext.class);
 		}
-		public WaitContext wait(int i) {
-			return getRuleContext(WaitContext.class,i);
+		public WaitStmtContext waitStmt(int i) {
+			return getRuleContext(WaitStmtContext.class,i);
 		}
 		public List<AssignmentContext> assignment() {
 			return getRuleContexts(AssignmentContext.class);
@@ -1922,7 +1922,7 @@ public class PivotParser extends Parser {
 				case 1:
 					{
 					setState(289);
-					wait();
+					waitStmt();
 					}
 					break;
 				case 2:
@@ -2480,7 +2480,7 @@ public class PivotParser extends Parser {
 		return _localctx;
 	}
 
-	public static class WaitContext extends ParserRuleContext {
+	public static class WaitStmtContext extends ParserRuleContext {
 		public TerminalNode WAIT() { return getToken(PivotParser.WAIT, 0); }
 		public TimeValContext timeVal() {
 			return getRuleContext(TimeValContext.class,0);
@@ -2494,28 +2494,28 @@ public class PivotParser extends Parser {
 		public VarIDContext varID() {
 			return getRuleContext(VarIDContext.class,0);
 		}
-		public WaitContext(ParserRuleContext parent, int invokingState) {
+		public WaitStmtContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
-		@Override public int getRuleIndex() { return RULE_wait; }
+		@Override public int getRuleIndex() { return RULE_waitStmt; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof PivotListener ) ((PivotListener)listener).enterWait(this);
+			if ( listener instanceof PivotListener ) ((PivotListener)listener).enterWaitStmt(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof PivotListener ) ((PivotListener)listener).exitWait(this);
+			if ( listener instanceof PivotListener ) ((PivotListener)listener).exitWaitStmt(this);
 		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof PivotVisitor ) return ((PivotVisitor<? extends T>)visitor).visitWait(this);
+			if ( visitor instanceof PivotVisitor ) return ((PivotVisitor<? extends T>)visitor).visitWaitStmt(this);
 			else return visitor.visitChildren(this);
 		}
 	}
 
-	public final WaitContext wait() throws RecognitionException {
-		WaitContext _localctx = new WaitContext(_ctx, getState());
-		enterRule(_localctx, 62, RULE_wait);
+	public final WaitStmtContext waitStmt() throws RecognitionException {
+		WaitStmtContext _localctx = new WaitStmtContext(_ctx, getState());
+		enterRule(_localctx, 62, RULE_waitStmt);
 		int _la;
 		try {
 			setState(371);
@@ -3526,8 +3526,8 @@ public class PivotParser extends Parser {
 	public static class Comp_operatorContext extends ParserRuleContext {
 		public TerminalNode GT() { return getToken(PivotParser.GT, 0); }
 		public TerminalNode GE() { return getToken(PivotParser.GE, 0); }
-		public TerminalNode LT() { return getToken(PivotParser.LT, 0); }
-		public TerminalNode LE() { return getToken(PivotParser.LE, 0); }
+		public TerminalNode ST() { return getToken(PivotParser.ST, 0); }
+		public TerminalNode SE() { return getToken(PivotParser.SE, 0); }
 		public TerminalNode EQ() { return getToken(PivotParser.EQ, 0); }
 		public TerminalNode NE() { return getToken(PivotParser.NE, 0); }
 		public Comp_operatorContext(ParserRuleContext parent, int invokingState) {
@@ -3558,7 +3558,7 @@ public class PivotParser extends Parser {
 			{
 			setState(445);
 			_la = _input.LA(1);
-			if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << GT) | (1L << GE) | (1L << LT) | (1L << LE) | (1L << EQ) | (1L << NE))) != 0)) ) {
+			if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << GT) | (1L << GE) | (1L << ST) | (1L << SE) | (1L << EQ) | (1L << NE))) != 0)) ) {
 			_errHandler.recoverInline(this);
 			}
 			else {
