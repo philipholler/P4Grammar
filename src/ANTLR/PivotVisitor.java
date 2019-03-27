@@ -1,4 +1,4 @@
-// Generated from /Users/philip/Library/Mobile Documents/com~apple~CloudDocs/Cloud dokumenter/Java projects/P4Grammar/Pivot.g4 by ANTLR 4.7.2
+package ANTLR;// Generated from /Users/philip/Library/Mobile Documents/com~apple~CloudDocs/Cloud dokumenter/Java projects/P4Grammar/Pivot.g4 by ANTLR 4.7.2
 import org.antlr.v4.runtime.tree.ParseTreeVisitor;
 
 /**
@@ -34,11 +34,51 @@ public interface PivotVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitSignal(PivotParser.SignalContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link PivotParser#signalID}.
+	 * Visit a parse tree produced by {@link PivotParser#enumerations}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitSignalID(PivotParser.SignalIDContext ctx);
+	T visitEnumerations(PivotParser.EnumerationsContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link PivotParser#enumeration}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitEnumeration(PivotParser.EnumerationContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link PivotParser#range}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitRange(PivotParser.RangeContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code intLB}
+	 * labeled alternative in {@link PivotParser#lowerBound}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitIntLB(PivotParser.IntLBContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code floatLB}
+	 * labeled alternative in {@link PivotParser#lowerBound}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitFloatLB(PivotParser.FloatLBContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code intUP}
+	 * labeled alternative in {@link PivotParser#upperBound}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitIntUP(PivotParser.IntUPContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code floatUP}
+	 * labeled alternative in {@link PivotParser#upperBound}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitFloatUP(PivotParser.FloatUPContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link PivotParser#device}.
 	 * @param ctx the parse tree
@@ -46,17 +86,29 @@ public interface PivotVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitDevice(PivotParser.DeviceContext ctx);
 	/**
+	 * Visit a parse tree produced by {@link PivotParser#inputs}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitInputs(PivotParser.InputsContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link PivotParser#outputs}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitOutputs(PivotParser.OutputsContext ctx);
+	/**
 	 * Visit a parse tree produced by {@link PivotParser#init}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
 	T visitInit(PivotParser.InitContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link PivotParser#func}.
+	 * Visit a parse tree produced by {@link PivotParser#funcDecl}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitFunc(PivotParser.FuncContext ctx);
+	T visitFuncDecl(PivotParser.FuncDeclContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link PivotParser#fParams}.
 	 * @param ctx the parse tree
@@ -88,59 +140,11 @@ public interface PivotVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitRepeatEvent(PivotParser.RepeatEventContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link PivotParser#inputs}.
+	 * Visit a parse tree produced by {@link PivotParser#timeFrame}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitInputs(PivotParser.InputsContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link PivotParser#input}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitInput(PivotParser.InputContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link PivotParser#inputID}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitInputID(PivotParser.InputIDContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link PivotParser#outputs}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitOutputs(PivotParser.OutputsContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link PivotParser#output}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitOutput(PivotParser.OutputContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link PivotParser#outputID}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitOutputID(PivotParser.OutputIDContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link PivotParser#deviceID}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitDeviceID(PivotParser.DeviceIDContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link PivotParser#ip}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitIp(PivotParser.IpContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link PivotParser#varID}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitVarID(PivotParser.VarIDContext ctx);
+	T visitTimeFrame(PivotParser.TimeFrameContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link PivotParser#block}.
 	 * @param ctx the parse tree
@@ -148,11 +152,23 @@ public interface PivotVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitBlock(PivotParser.BlockContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link PivotParser#rtn}.
+	 * Visit a parse tree produced by {@link PivotParser#stmts}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitRtn(PivotParser.RtnContext ctx);
+	T visitStmts(PivotParser.StmtsContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link PivotParser#waitStmt}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitWaitStmt(PivotParser.WaitStmtContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link PivotParser#assignment}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitAssignment(PivotParser.AssignmentContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link PivotParser#ifstmt}.
 	 * @param ctx the parse tree
@@ -160,23 +176,11 @@ public interface PivotVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitIfstmt(PivotParser.IfstmtContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link PivotParser#stmts}.
+	 * Visit a parse tree produced by {@link PivotParser#whilestmt}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitStmts(PivotParser.StmtsContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link PivotParser#brk}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitBrk(PivotParser.BrkContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link PivotParser#declVar}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitDeclVar(PivotParser.DeclVarContext ctx);
+	T visitWhilestmt(PivotParser.WhilestmtContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link PivotParser#funcCall}.
 	 * @param ctx the parse tree
@@ -189,6 +193,24 @@ public interface PivotVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitInputParam(PivotParser.InputParamContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link PivotParser#declVar}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitDeclVar(PivotParser.DeclVarContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link PivotParser#brk}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitBrk(PivotParser.BrkContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link PivotParser#rtn}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitRtn(PivotParser.RtnContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code intVal}
 	 * labeled alternative in {@link PivotParser#litVal}.
@@ -210,30 +232,6 @@ public interface PivotVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitStringVal(PivotParser.StringValContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link PivotParser#waitStmt}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitWaitStmt(PivotParser.WaitStmtContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link PivotParser#timeVal}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitTimeVal(PivotParser.TimeValContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link PivotParser#whilestmt}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitWhilestmt(PivotParser.WhilestmtContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link PivotParser#assignment}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitAssignment(PivotParser.AssignmentContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code funcexpr}
 	 * labeled alternative in {@link PivotParser#expr}.
@@ -340,18 +338,6 @@ public interface PivotVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitExprOP(PivotParser.ExprOPContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link PivotParser#time}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitTime(PivotParser.TimeContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link PivotParser#date}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitDate(PivotParser.DateContext ctx);
-	/**
 	 * Visit a parse tree produced by {@link PivotParser#comp_operator}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
@@ -384,62 +370,4 @@ public interface PivotVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitType(PivotParser.TypeContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link PivotParser#range}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitRange(PivotParser.RangeContext ctx);
-	/**
-	 * Visit a parse tree produced by the {@code intLB}
-	 * labeled alternative in {@link PivotParser#lowerBound}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitIntLB(PivotParser.IntLBContext ctx);
-	/**
-	 * Visit a parse tree produced by the {@code floatLB}
-	 * labeled alternative in {@link PivotParser#lowerBound}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitFloatLB(PivotParser.FloatLBContext ctx);
-	/**
-	 * Visit a parse tree produced by the {@code intUP}
-	 * labeled alternative in {@link PivotParser#upperBound}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitIntUP(PivotParser.IntUPContext ctx);
-	/**
-	 * Visit a parse tree produced by the {@code floatUP}
-	 * labeled alternative in {@link PivotParser#upperBound}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitFloatUP(PivotParser.FloatUPContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link PivotParser#togglevalues}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitTogglevalues(PivotParser.TogglevaluesContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link PivotParser#togglevalue}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitTogglevalue(PivotParser.TogglevalueContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link PivotParser#toggleID}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitToggleID(PivotParser.ToggleIDContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link PivotParser#toggleVal}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitToggleVal(PivotParser.ToggleValContext ctx);
 }

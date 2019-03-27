@@ -1,87 +1,85 @@
 grammar Pivot;
 program : decls;
 
-decls : define* declVar* init? (func | event)* EOF;
+decls : define* declVar* init? (funcDecl | event)* EOF;
 
-    define : DEFINEKW (signal | device) SEMCOL;
+define : DEFINEKW (signal | device) SEMCOL;
 
-    signal: SIGNALKW signalID COL (range | togglevalues) ;
+signal: SIGNAL ID COL (range | enumerations);
 
-        signalID: ID;
+    enumerations : enumeration (LISTSEP enumeration)*;
+    enumeration  : ID EQUALS enumVal=litVal;
 
-    device: DEVICE deviceID ((inputs? (AMP outputs)?) | (outputs? (AMP inputs)?)); // The order of output and input can be switched around. That doesn't matter.
+    // Signal values
+    range : lowerBound RANGESEP upperBound;
 
-    init : INITFUNCKW PARANBEG PARANEND block; // Placeholder init main method
+    lowerBound : INTEGER    #intLB
+               | FLOAT      #floatLB
+               ;
+    upperBound : INTEGER    #intUP
+               | FLOAT      #floatUP
+               ;
 
-    func : (type | VOID) ID PARANBEG fParams PARANEND block; // Placeholder functions
+device: DEVICE ID ((inputs? (AMP outputs)?) | (outputs? (AMP inputs)?)); // The order of output and input can be switched around. That doesn't matter.
+
+    // Inputs and outputs
+    inputs : INPUT COL input=ID (LISTSEP input=ID)*;
+
+    outputs: OUTPUT COL output=ID (LISTSEP output=ID)*;
+
+init : INITFUNCKW PARANBEG PARANEND block;
+
+funcDecl : (type | VOID) ID PARANBEG fParams PARANEND block; // Function declaration
 
     fParams : (param (LISTSEP param)*)?;
+    param   : type localID=ID;
 
-    param : type ID;
+event: (atomEvent | repeatEvent);
 
-    event: (atomEvent | repeatEvent); // Placeholder events
-
-atomEvent : WHEN deviceID signalID COL (toggleID | EXCEEDS INTEGER| DECEEDS INTEGER) block
+atomEvent : WHEN deviceID=ID signalID=ID COL (enumID=ID | EXCEEDS INTEGER| DECEEDS INTEGER) block
           | WHEN DATE AT TIME block
           | WHEN TIME block
           ;
 
-repeatEvent : EVERY timeVal (MONTHS | WEEKS | DAYS | HOURS | MINUTES | SECONDS) block
-            | EVERY timeVal (MONTHS | WEEKS | DAYS | HOURS | MINUTES | SECONDS) AT time (STARTING DATE)? block
+repeatEvent : EVERY INTEGER timeFrame block
+            | EVERY INTEGER timeFrame AT TIME (STARTING DATE)? block
             ;
 
-inputs: INPUTKW COL input (LISTSEP input)*;
-
-    input: inputID;
-
-    inputID: ID;
-
-outputs: OUTPUTKW COL output (LISTSEP output)*;
-
-    output: outputID;
-
-    outputID: ID;
-
-deviceID : ID;
-
-ip : STRING;
-
-varID : ID;
+timeFrame: (MONTHS | WEEKS | DAYS | HOURS | MINUTES | SECONDS | MS);
 
 block: BLCKBEG stmts BLCKEND;
 
-rtn : (RETURN (varID | litVal)? SEMCOL);
+stmts: (waitStmt | assignment | ifstmt | whilestmt | funcCall SEMCOL | declVar | brk | rtn)*; // Not finished
+
+waitStmt: WAIT INTEGER timeFrame SEMCOL
+        | WAIT varID=ID timeFrame SEMCOL
+        ;
+
+assignment : varID=ID EQUALS expr SEMCOL;
 
 ifstmt: IF PARANBEG logical_expr PARANEND block (ELSE block)?;
 
-stmts: (waitStmt | assignment | ifstmt | whilestmt | funcCall SEMCOL | declVar | rtn | brk)*; // Not finished
+whilestmt: WHILE PARANBEG logical_expr PARANEND block;
+
+funcCall: ID PARANBEG inputParam PARANEND
+        | SET deviceID=ID signalID=ID COL (enumID=ID | litVal)
+        | GET deviceID=ID signalID=ID
+        ;
+
+    inputParam: (ID | litVal)? (LISTSEP (varID=ID | litVal))*;
+
+declVar: (type varID=ID EQUALS (litVal | expr) | deviceid=ID varID=ID EQUALS val=STRING) SEMCOL;
 
 brk: BREAK SEMCOL;
 
-declVar: (type varID EQUALS (litVal | expr) | deviceID varID EQUALS ip) SEMCOL;
-
-funcCall: ID PARANBEG inputParam PARANEND
-        | SET deviceID signalID COL (toggleID | litVal)
-        | GET deviceID signalID
-        ;
-
-inputParam: (ID | litVal)? (LISTSEP (ID | litVal))*;
+rtn : (RETURN (varID=ID | litVal)? SEMCOL);
 
 litVal: INTEGER #intVal
-      | FLOAT #floatVal
-      | STRING #stringVal
+      | FLOAT   #floatVal
+      | STRING  #stringVal
       ;
 
-waitStmt: WAIT timeVal (DAYS | HOURS | MINUTES | SECONDS | MS) SEMCOL
-    | WAIT varID (DAYS | HOURS | MINUTES | SECONDS | MS) SEMCOL
-    ;
-
-timeVal: INTEGER;
-
-whilestmt: WHILE PARANBEG logical_expr PARANEND block;
-
-assignment : ID EQUALS expr SEMCOL;
-
+// Expressions
 expr
     : expr (DIV | MULT) expr          #multiexpr // Div & mult precendences before plus & minus
     | expr (PLUS | MINUS) expr        #addexpr
@@ -91,60 +89,36 @@ expr
     ;
 
 logical_expr
- : logical_expr AND logical_expr # logicalExpressionAnd
- | logical_expr OR logical_expr  # logicalExpressionOr
- | comparison_expr               # comparisonExpression
- | PARANBEG logical_expr PARANEND   # logicalExpressionInParen
- | (TRUE | FALSE)                  # logicalLiterals
- ;
+            : logical_expr AND logical_expr     # logicalExpressionAnd
+            | logical_expr OR logical_expr      # logicalExpressionOr
+            | comparison_expr                   # comparisonExpression
+            | PARANBEG logical_expr PARANEND    # logicalExpressionInParen
+            | (TRUE | FALSE)                    # logicalLiterals
+            ;
 
 comparison_expr : comparison_operand comp_operator comparison_operand  #comparisonExpressionWithOperator
                 | PARANBEG comparison_expr PARANEND                    #comparisonExpressionParens
                 ;
 
-comparison_operand : time #timeOp
-                   | date #dateOp
-                   | expr #exprOP
+comparison_operand : TIME                #timeOp
+                   | (DATE | DATEnoYEAR) #dateOp
+                   | expr                #exprOP
                    ;
 
-time : TIME;
-date : DATE
-     | DATEnoYEAR
-     ;
-
-comp_operator : GT
-              | GE
-              | ST
-              | SE
-              | EQ
-              | NE
+comp_operator : GT // Greater than
+              | GE // Greater than or equal to
+              | ST // Smaller than
+              | SE // Smaller than or equal to
+              | EQ // Equal to
+              | NE // Not equal
               ;
 
-atom :litVal #litValue
-    | ID     #varidAtom
-    | NOW    #nowAtom
-    ;
+atom :litVal       #litValue
+     | varID=ID     #varidAtom
+     | NOW          #nowAtom
+     ;
 
 type: (STRINGKW | INTEGERKW | FLOATKW );
-
-/*
- * Signal values
- */
-range : lowerBound RANGESEP upperBound;
-lowerBound : INTEGER  #intLB
-           | FLOAT  #floatLB
-           ;
-upperBound : INTEGER #intUP
-           | FLOAT #floatUP
-           ;
-
-togglevalues : togglevalue (LISTSEP togglevalue)*;
-togglevalue : toggleID EQUALS toggleVal;
-toggleID : ID;
-toggleVal : litVal
-          ;
-
-
 
 /*
  * Lexer Rules
@@ -175,9 +149,9 @@ NE : '!=' ;
 // Keywords
 TRUE : 'true';
 FALSE : 'false';
-SIGNALKW : 'Signal';
-INPUTKW : 'input';
-OUTPUTKW : 'output';
+SIGNAL : 'Signal';
+INPUT : 'input';
+OUTPUT : 'output';
 DEVICE : 'Device';
 DEFINEKW : 'define';
 IF : 'if';
@@ -206,6 +180,7 @@ ELSE : 'else';
 RETURN : 'return';
 BREAK : 'break';
 AT : 'at';
+STARTING: 'starting';
 
 // Signs
 PARANBEG : '(';
@@ -223,13 +198,12 @@ LISTSEP : ',';
 QUOT : '"';
 COL: ':';
 AMP : '&';
-STARTING: 'starting';
 
+// Primitives
 DATE: DIGIT DIGIT 'd' DIGIT DIGIT 'm' DIGIT DIGIT DIGIT DIGIT 'y';
 DATEnoYEAR: DIGIT DIGIT 'd' DIGIT DIGIT 'm';
 FLOAT: '-'? DIGIT+ '.' DIGIT+;
 TIME: DIGIT DIGIT COL DIGIT DIGIT;
-IP: DIGIT+ ('.' DIGIT+)+ ':' DIGIT+; // Had to make it a bit wonky, otherwise is was equivalent to the REANGESEP.
 INTEGER: '-'? DIGIT+;
 STRING: '"' (LOWERCASE | UPPERCASE | SIGN | DIGIT)+ '"';
 ID: (LOWERCASE | UPPERCASE) (LOWERCASE| UPPERCASE| DIGIT)*;
