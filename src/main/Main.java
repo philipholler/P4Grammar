@@ -5,6 +5,7 @@ import ANTLR.PivotParser;
 import Nodes.Base.Node;
 import Visitors.AstBuilderVisitor;
 import exceptions.CompileErrorException;
+import Visitors.PrintVisitor;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.tree.ParseTree;
@@ -37,7 +38,10 @@ public class Main {
             AstBuilderVisitor astVisitor = new AstBuilderVisitor();
             Node ast = astVisitor.visit(tree);
 
-            System.out.println(ast);
+            // Print the AST
+            PrintVisitor pv = new PrintVisitor();
+            System.out.println(ast.accept(pv));
+
         } catch (IOException e) {
             e.printStackTrace();
         }

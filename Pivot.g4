@@ -1,7 +1,7 @@
 grammar Pivot;
 program : decls;
 
-decls : define* declVar* init? (funcDecl | event)* EOF;
+decls : defs=define* (vars=declVar | devVars=declDevice)* inFunc=init? (funcDecl | event)* EOF;
 
 define : DEFINEKW (signal | device) SEMCOL;
 
@@ -27,12 +27,14 @@ device: DEVICE ID ((inputs? (AMP outputs)?) | (outputs? (AMP inputs)?)); // The 
 
     outputs: OUTPUT COL output=ID (LISTSEP output=ID)*;
 
+declDevice: devType=ID varID=ID EQUALS val=STRING SEMCOL;
+
 init : INITFUNCKW PARANBEG PARANEND block;
 
-funcDecl : (type | VOID) ID PARANBEG fParams PARANEND block; // Function declaration
+funcDecl : (varType | VOID) ID PARANBEG fParams PARANEND block; // Function declaration
 
     fParams : (param (LISTSEP param)*)?;
-    param   : type localID=ID;
+    param   : varType localID=ID;
 
 event: (atomEvent | repeatEvent);
 
@@ -68,7 +70,7 @@ funcCall: ID PARANBEG inputParam PARANEND
 
     inputParam: (ID | litVal)? (LISTSEP (varID=ID | litVal))*;
 
-declVar: (type varID=ID EQUALS (litVal | expr) | deviceid=ID varID=ID EQUALS val=STRING) SEMCOL;
+declVar: varType varID=ID EQUALS (litVal | expr) SEMCOL;
 
 brk: BREAK SEMCOL;
 
@@ -118,7 +120,7 @@ atom :litVal       #litValue
      | NOW          #nowAtom
      ;
 
-type: (STRINGKW | INTEGERKW | FLOATKW );
+varType: (STRINGKW | INTEGERKW | FLOATKW );
 
 /*
  * Lexer Rules

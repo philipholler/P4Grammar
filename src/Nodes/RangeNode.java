@@ -1,14 +1,13 @@
 package Nodes;
 
-import Nodes.Base.ListNode;
+import Nodes.Base.BinaryNode;
 import Nodes.Base.Node;
-import Nodes.Base.UnaryNode;
 import Visitors.AbstractVisitor;
 
-public class programNode extends UnaryNode {
+public class RangeNode extends BinaryNode {
 
-    public programNode(Node child) {
-        super(child);
+    public RangeNode(Node leftChild, Node rightChild) {
+        super(leftChild, rightChild);
     }
 
     @Override
