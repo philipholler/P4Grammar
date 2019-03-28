@@ -2,8 +2,12 @@ package Visitors;
 
 import ANTLR.PivotBaseVisitor;
 import ANTLR.PivotParser;
+import Nodes.*;
 import Nodes.Base.Node;
-import Nodes.programNode;
+import Nodes.DefineNodes.DefDeviceNode;
+import Nodes.DefineNodes.DefNode;
+import Nodes.DefineNodes.DefSignalNode;
+import Nodes.Enums.VarType;
 import org.antlr.v4.runtime.ParserRuleContext;
 
 public class AstBuilderVisitor extends PivotBaseVisitor<Node> {
@@ -20,17 +24,61 @@ public class AstBuilderVisitor extends PivotBaseVisitor<Node> {
 
     @Override
     public Node visitProgram(PivotParser.ProgramContext ctx) {
-        return new programNode(visit(ctx.decls()));
+        return new ProgramNode(visit(ctx.decls()));
     }
 
     @Override
     public Node visitDecls(PivotParser.DeclsContext ctx) {
-        return super.visitDecls(ctx);
+        DeclsNode node = new DeclsNode();
+
+        // Add all defines
+        for (PivotParser.DefineContext context: ctx.define()) {
+            node.addChild(visit(context));
+        }
+        // Add all var decl
+        for (PivotParser.DeclVarContext context: ctx.declVar()) {
+            node.addChild(visit(context));
+        }
+        // Add all device decl
+        for(PivotParser.DeclDeviceContext context: ctx.declDevice()){
+            node.addChild(visit(context));
+        }
+        // todo add funcs and events.
+
+        return node;
     }
 
     @Override
     public Node visitDefine(PivotParser.DefineContext ctx) {
-        return super.visitDefine(ctx);
+        if(ctx.signal() != null){
+            return new DefSignalNode();
+        }
+        if(ctx.device() != null){
+            return new DefDeviceNode(ctx.device().ID().getText(), null, null);
+        }
+
+        // todo Error handling.
+        System.out.println("Error in visitDefine");
+        return null;
+    }
+
+    @Override
+    public Node visitDeclVar(PivotParser.DeclVarContext ctx) {
+        if(ctx.varType().getText().equals("string")){
+            return new VarDeclNode(VarType.STRING, ctx.varID.getText(), ctx.litVal().getText());
+        } else if(ctx.varType().getText().equals("int")){
+            return new VarDeclNode(VarType.INT, ctx.varID.getText(), ctx.litVal().getText());
+        } else if(ctx.varType().getText().equals("float")){
+            return new VarDeclNode(VarType.FLOAT, ctx.varID.getText(), ctx.litVal().getText());
+        } else {
+            System.out.println("ERROR IN VisitDeclVar");
+            return new VarDeclNode(VarType.FLOAT, ctx.varID.getText(), ctx.litVal().getText());
+        }
+    }
+
+    @Override
+    public Node visitDeclDevice(PivotParser.DeclDeviceContext ctx) {
+        return new DevDeclNode(ctx.devType.getText(), ctx.varID.getText(), ctx.val.getText());
     }
 
     @Override
@@ -169,11 +217,6 @@ public class AstBuilderVisitor extends PivotBaseVisitor<Node> {
     }
 
     @Override
-    public Node visitDeclVar(PivotParser.DeclVarContext ctx) {
-        return super.visitDeclVar(ctx);
-    }
-
-    @Override
     public Node visitBrk(PivotParser.BrkContext ctx) {
         return super.visitBrk(ctx);
     }
@@ -294,7 +337,9 @@ public class AstBuilderVisitor extends PivotBaseVisitor<Node> {
     }
 
     @Override
-    public Node visitType(PivotParser.TypeContext ctx) {
-        return super.visitType(ctx);
+    public Node visitVarType(PivotParser.VarTypeContext ctx) {
+        return super.visitVarType(ctx);
     }
+
+
 }
