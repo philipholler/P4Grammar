@@ -1,0 +1,1 @@
+define Signal toggle: On = 1, Off = 0, on = "hej";

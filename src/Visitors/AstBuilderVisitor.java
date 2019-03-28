@@ -2,13 +2,25 @@ package Visitors;
 
 import ANTLR.PivotBaseVisitor;
 import ANTLR.PivotParser;
-import Nodes.Node;
+import Nodes.Base.Node;
+import Nodes.programNode;
+import org.antlr.v4.runtime.ParserRuleContext;
 
-public class AstVisitor extends PivotBaseVisitor<Node> {
+public class AstBuilderVisitor extends PivotBaseVisitor<Node> {
+
+    private static int currentLineNumber = 0;
+
+    public static int getCurrentLineNumber() {
+        return currentLineNumber;
+    }
+
+    private static void updateLineNumber(ParserRuleContext fromCtx) {
+        AstBuilderVisitor.currentLineNumber = fromCtx.getStart().getLine();
+    }
 
     @Override
     public Node visitProgram(PivotParser.ProgramContext ctx) {
-        return super.visitProgram(ctx);
+        return new programNode(visit(ctx.decls()));
     }
 
     @Override

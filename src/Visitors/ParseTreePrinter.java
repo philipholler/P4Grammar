@@ -4,7 +4,7 @@ import ANTLR.PivotParser;
 import org.antlr.v4.runtime.RuleContext;
 import org.antlr.v4.runtime.tree.ParseTree;
 
-public class TreePrinter {
+public class ParseTreePrinter {
 
     public void print(RuleContext ctx) {
         explore(ctx, 0);
