@@ -1,1 +1,21 @@
+// Define signals
 define Signal toggle: On = 1, Off = 0, on = "hej";
+define Signal celsius:  1..60;
+define Signal percentage:  0.0..100.0;
+
+// Define device types
+define Device Bulb input: toggle;
+define Device Window input: open;
+// Define sensors
+define Device MovementSensor output: toggle & input: celsius;
+define Device Thermometer output: celsius;
+
+// Variable definitions of every device in the house
+Bulb frontDoorLight = "129.6.18.1:12565";
+Window bedRoomWindow = "129.67.198.65:12565";
+
+MovementSensor frontDoorSensor = "Google.com";
+
+Thermometer mainThermometer = "129.67.198.65:12565";
+
+string a = "Hej";

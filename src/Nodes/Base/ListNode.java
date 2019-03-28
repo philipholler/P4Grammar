@@ -3,7 +3,10 @@ package Nodes.Base;
 import java.util.ArrayList;
 
 public abstract class ListNode extends Node{
-    ArrayList<Node> children;
+    ArrayList<Node> children = new ArrayList<>();
+
+    public ListNode() {
+    }
 
     public ListNode(ArrayList<Node> children) {
         this.children = children;
