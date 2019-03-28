@@ -1,13 +1,13 @@
 package Visitors;
 
-import ANTLR.PivotBaseVisitor;
-import ANTLR.PivotParser;
 import Nodes.*;
 import Nodes.Base.Node;
 import Nodes.DefineNodes.DefDeviceNode;
 import Nodes.DefineNodes.DefNode;
 import Nodes.DefineNodes.DefSignalNode;
 import Nodes.Enums.VarType;
+import antlr.PivotBaseVisitor;
+import antlr.PivotParser;
 import org.antlr.v4.runtime.ParserRuleContext;
 
 public class AstBuilderVisitor extends PivotBaseVisitor<Node> {
