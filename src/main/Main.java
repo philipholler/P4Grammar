@@ -1,13 +1,14 @@
 package main;
 
-import ANTLR.PivotLexer;
-import ANTLR.PivotParser;
 import Nodes.Base.Node;
 import Visitors.AstBuilderVisitor;
+import antlr.PivotLexer;
+import antlr.PivotParser;
 import exceptions.CompileErrorException;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.tree.ParseTree;
+
 import java.io.IOException;
 import static org.antlr.v4.runtime.CharStreams.fromFileName;
 
@@ -16,8 +17,6 @@ public class Main {
     public static final String sourceFile = "declSignal";
 
     public static void main(String[] args) {
-
-        if(true) throw new CompileErrorException("Variable k already declared", 5);
 
         try{
             // Input test file name. The rest creates the lexer and parser.
