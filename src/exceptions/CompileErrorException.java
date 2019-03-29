@@ -24,12 +24,14 @@ public class CompileErrorException extends RuntimeException {
 
     @Override
     public void printStackTrace(PrintStream s) {
-        System.err.println("\nat " + "Pivot.("+ Main.sourceFile + ":" + lineNumber + ")");
+        System.err.println("\n" + msg);
+        System.err.println("at " + "Pivot.("+ Main.sourceFile + ":" + lineNumber + ")");
 
     }
 
     @Override
     public void printStackTrace(PrintWriter s) {
+        System.err.println("\n" + msg);
         s.println("at " + "Pivot.("+ Main.sourceFile + ":" + lineNumber + ")");
     }
 }

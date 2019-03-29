@@ -18,6 +18,7 @@ public class Main {
 
     public static void main(String[] args) {
 
+        if(true)throw new CompileErrorException("Variable already in use",5);
         try{
             // Input test file name. The rest creates the lexer and parser.
             CharStream cs = fromFileName(sourceFile);
