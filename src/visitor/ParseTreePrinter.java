@@ -1,4 +1,4 @@
-package Visitors;
+package visitor;
 
 
 import antlr.PivotParser;

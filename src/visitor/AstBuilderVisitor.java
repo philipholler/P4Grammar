@@ -1,11 +1,10 @@
-package Visitors;
+package visitor;
 
-import Nodes.*;
-import Nodes.Base.Node;
-import Nodes.DefineNodes.DefDeviceNode;
-import Nodes.DefineNodes.DefNode;
-import Nodes.DefineNodes.DefSignalNode;
-import Nodes.Enums.VarType;
+import node.*;
+import node.base.Node;
+import node.define_nodes.DefDeviceNode;
+import node.define_nodes.DefSignalNode;
+import semantics.VarType;
 import antlr.PivotBaseVisitor;
 import antlr.PivotParser;
 import org.antlr.v4.runtime.ParserRuleContext;

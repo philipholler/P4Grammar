@@ -1,10 +1,8 @@
-package Visitors;
+package visitor;
 
-import Nodes.Base.LeafNode;
-import Nodes.Base.ListNode;
-import Nodes.Base.Node;
-import Nodes.Base.UnaryNode;
-import Nodes.VarDeclNode;
+import node.base.ListNode;
+import node.base.Node;
+import node.base.UnaryNode;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -21,6 +19,7 @@ public abstract class VisitorBase extends AbstractVisitor{
             new Exception().printStackTrace(); // Print stack trace for debugging purposes
             return null;
         }
+
 
         // Get best method for this object
         Method method = getMethodFor(node);

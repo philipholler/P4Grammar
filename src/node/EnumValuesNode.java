@@ -1,8 +1,8 @@
-package Nodes;
+package node;
 
-import Nodes.Base.ListNode;
-import Nodes.Base.Node;
-import Visitors.AbstractVisitor;
+import node.base.ListNode;
+import node.base.Node;
+import visitor.AbstractVisitor;
 
 import java.util.ArrayList;
 

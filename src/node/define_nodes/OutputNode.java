@@ -1,7 +1,7 @@
-package Nodes.DefineNodes;
+package node.define_nodes;
 
-import Nodes.Base.LeafNode;
-import Visitors.AbstractVisitor;
+import node.base.LeafNode;
+import visitor.AbstractVisitor;
 
 public class OutputNode extends LeafNode {
 

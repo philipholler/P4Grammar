@@ -1,8 +1,8 @@
-package Nodes;
+package node;
 
-import Nodes.Base.BinaryNode;
-import Nodes.Base.Node;
-import Visitors.AbstractVisitor;
+import node.base.BinaryNode;
+import node.base.Node;
+import visitor.AbstractVisitor;
 
 public class RangeNode extends BinaryNode {
 

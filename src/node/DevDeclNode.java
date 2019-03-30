@@ -1,7 +1,7 @@
-package Nodes;
+package node;
 
-import Nodes.Base.LeafNode;
-import Visitors.AbstractVisitor;
+import node.base.LeafNode;
+import visitor.AbstractVisitor;
 
 public class DevDeclNode extends LeafNode {
     String type;

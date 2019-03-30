@@ -1,8 +1,8 @@
-package Visitors;
+package visitor;
 
-import Nodes.*;
-import Nodes.Base.Node;
-import Nodes.DefineNodes.*;
+import node.*;
+import node.base.Node;
+import node.define_nodes.*;
 
 public class PrintVisitor extends VisitorBase {
 
