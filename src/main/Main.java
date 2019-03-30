@@ -1,11 +1,10 @@
 package main;
 
-import Nodes.Base.Node;
-import Visitors.AstBuilderVisitor;
+import node.base.Node;
+import visitor.AstBuilderVisitor;
 import antlr.PivotLexer;
 import antlr.PivotParser;
-import exceptions.CompileErrorException;
-import Visitors.PrintVisitor;
+import visitor.PrintVisitor;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.tree.ParseTree;
@@ -19,7 +18,6 @@ public class Main {
 
     public static void main(String[] args) {
 
-        if(true)throw new CompileErrorException("Variable already in use",5);
         try{
             // Input test file name. The rest creates the lexer and parser.
             CharStream cs = fromFileName(sourceFile);
@@ -38,9 +36,8 @@ public class Main {
             AstBuilderVisitor astVisitor = new AstBuilderVisitor();
             Node ast = astVisitor.visit(tree);
 
-            // Print the AST
-            PrintVisitor pv = new PrintVisitor();
-            System.out.println(ast.accept(pv));
+            System.out.println(ast.getTreeString(0));
+
 
         } catch (IOException e) {
             e.printStackTrace();

@@ -1,9 +1,9 @@
-package Nodes.DefineNodes;
+package node.define_nodes;
 
-import Nodes.Base.Node;
-import Nodes.EnumValuesNode;
-import Nodes.RangeNode;
-import Visitors.AbstractVisitor;
+import node.base.Node;
+import node.EnumValuesNode;
+import node.RangeNode;
+import visitor.AbstractVisitor;
 
 import java.util.ArrayList;
 

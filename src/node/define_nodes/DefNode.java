@@ -1,8 +1,9 @@
-package Nodes.DefineNodes;
+package node.define_nodes;
 
-import Nodes.Base.ListNode;
-import Nodes.Base.Node;
-import Visitors.AbstractVisitor;
+import node.base.ListNode;
+import node.base.Node;
+import utils.StringUtils;
+import visitor.AbstractVisitor;
 
 import java.util.ArrayList;
 
@@ -23,5 +24,7 @@ public abstract class DefNode extends ListNode {
     public Object accept(AbstractVisitor visitor) {
         return visitor.visit(this);
     }
+
+
 }
 

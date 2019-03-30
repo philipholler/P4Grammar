@@ -1,8 +1,8 @@
-package Nodes;
+package node;
 
-import Nodes.Base.LeafNode;
-import Nodes.Enums.VarType;
-import Visitors.AbstractVisitor;
+import node.base.LeafNode;
+import semantics.VarType;
+import visitor.AbstractVisitor;
 
 public class VarDeclNode extends LeafNode {
     VarType varType;

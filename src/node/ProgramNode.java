@@ -1,10 +1,8 @@
-package Nodes;
+package node;
 
-import Nodes.Base.ListNode;
-import Nodes.Base.Node;
-import Nodes.Base.UnaryNode;
-import Visitors.AbstractVisitor;
-import Visitors.PrintVisitor;
+import node.base.Node;
+import node.base.UnaryNode;
+import visitor.AbstractVisitor;
 
 public class ProgramNode extends UnaryNode {
 

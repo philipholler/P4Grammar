@@ -1,9 +1,9 @@
-package Visitors;
+package visitor;
 
-import Nodes.*;
-import Nodes.DefineNodes.DefNode;
-import Nodes.DefineNodes.InputNode;
-import Nodes.DefineNodes.OutputNode;
+import node.*;
+import node.define_nodes.DefNode;
+import node.define_nodes.InputNode;
+import node.define_nodes.OutputNode;
 
 public abstract class AbstractVisitor {
 
