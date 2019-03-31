@@ -1,10 +1,18 @@
-package visitor;
+package visitor.PrintVisitors;
 
 import node.*;
 import node.base.Node;
 import node.define_nodes.*;
+import visitor.ASTBaseVisitor;
 
-public class PrintVisitor extends VisitorBase {
+/**
+ * Philip, 31.03.2019
+ * This visitor is meant for printing the AST. It is, however, not used currently. The AST is printed using the
+ * node.getTreeString(). This could, however, still be used in case a different print is needed for specific nodes,
+ * instead of the current approach which can only differ nodes by type, i.e. binaryNode, leafNode, etc.
+ */
+
+public class PrintASTVisitor extends ASTBaseVisitor {
 
     @Override
     public Object defaultVisit(Node node) {

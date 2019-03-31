@@ -1,5 +1,7 @@
 package visitor;
 
+import ANTLR.PivotBaseVisitor;
+import ANTLR.PivotParser;
 import node.*;
 import node.base.Node;
 import node.define_nodes.DefDeviceNode;
@@ -11,8 +13,6 @@ import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.TerminalNode;
 import org.antlr.v4.runtime.tree.TerminalNodeImpl;
 import semantics.VarType;
-import antlr.PivotBaseVisitor;
-import antlr.PivotParser;
 import org.antlr.v4.runtime.ParserRuleContext;
 
 import java.awt.im.InputContext;
