@@ -1,7 +1,7 @@
 package main;
 
-import ANTLR.PivotLexer;
-import ANTLR.PivotParser;
+import antlr.PivotLexer;
+import antlr.PivotParser;
 import node.base.Node;
 import visitor.AstBuilderVisitor;
 import org.antlr.v4.runtime.CommonTokenStream;
