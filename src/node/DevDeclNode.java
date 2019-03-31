@@ -31,4 +31,12 @@ public class DevDeclNode extends LeafNode {
         return val;
     }
 
+    @Override
+    public String toString() {
+        return "DevDeclNode(" +
+                "type='" + type + '\'' +
+                ", ID='" + ID + '\'' +
+                ", val='" + val + '\'' +
+                ')';
+    }
 }

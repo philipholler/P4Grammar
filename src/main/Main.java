@@ -1,10 +1,9 @@
 package main;
 
+import ANTLR.PivotLexer;
+import ANTLR.PivotParser;
 import node.base.Node;
 import visitor.AstBuilderVisitor;
-import antlr.PivotLexer;
-import antlr.PivotParser;
-import visitor.PrintVisitor;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.tree.ParseTree;
@@ -36,6 +35,11 @@ public class Main {
             AstBuilderVisitor astVisitor = new AstBuilderVisitor();
             Node ast = astVisitor.visit(tree);
 
+            // Print the AST using the printVisitor (NOT PRETTY)
+            //PrintASTVisitor printVisitor = new PrintASTVisitor();
+            //System.out.println(ast.accept(printVisitor));
+
+            // Use the Node.getTreeString() to pretty-print the AST.
             System.out.println(ast.getTreeString(0));
 
         } catch (IOException e) {

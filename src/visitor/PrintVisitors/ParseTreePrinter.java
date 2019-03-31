@@ -1,7 +1,7 @@
-package visitor;
+package visitor.PrintVisitors;
 
 
-import antlr.PivotParser;
+import ANTLR.PivotParser;
 import org.antlr.v4.runtime.RuleContext;
 import org.antlr.v4.runtime.tree.ParseTree;
 

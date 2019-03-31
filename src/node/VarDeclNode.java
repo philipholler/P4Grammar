@@ -31,4 +31,13 @@ public class VarDeclNode extends LeafNode {
     public String getVal() {
         return val;
     }
+
+    @Override
+    public String toString() {
+        return "VarDeclNode(" +
+                "varType=" + varType +
+                ", ID='" + ID + '\'' +
+                ", val='" + val + '\'' +
+                '}';
+    }
 }
