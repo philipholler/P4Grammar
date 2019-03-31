@@ -8,10 +8,24 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.List;
 
-public abstract class VisitorBase extends AbstractVisitor{
+/**
+ * Philip 31.03.2019
+ * This visitor is meant as a default abstract class to visit the AST. It has methods for visiting by finding
+ * the best method for all nodes. This approach is called (i believe) a reflective visitor, since it visits
+ * all the super classes, if the sub class does not contain the correct visit method.
+ */
+
+public abstract class ASTBaseVisitor extends AbstractVisitor{
 
     public abstract Object defaultVisit(Node node);
 
+
+    /**
+     * Philip 31.03.2019
+     * This method takes all kinds of nodes and finds the best visit method for it in the node itself as well
+     * as in all super classes.
+     * @param node A node from the AST
+     */
     public Object visit(Object node) {
         if (node == null)
         {
@@ -56,6 +70,11 @@ public abstract class VisitorBase extends AbstractVisitor{
         }
     }
 
+    /**
+     * Philip 31.03.2019
+     * This method is meant to find the visit method that matches the class of the node passed as argument.
+     * @return The visit method for the given node class.
+     */
     private Method getMethodFor(Object node) {
         Method ans = null;
 
