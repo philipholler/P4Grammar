@@ -37,4 +37,11 @@ public class DefDeviceNode extends DefNode {
     public ArrayList<InputNode> getInputs() {
         return inputs;
     }
+
+    @Override
+    public String toString() {
+        return "DefDeviceNode(" +
+                "ID='" + ID + '\'' +
+                ')';
+    }
 }

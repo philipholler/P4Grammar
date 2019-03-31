@@ -4,10 +4,19 @@ import node.*;
 import node.base.Node;
 import node.define_nodes.DefDeviceNode;
 import node.define_nodes.DefSignalNode;
+import node.define_nodes.InputNode;
+import node.define_nodes.OutputNode;
+import org.antlr.v4.runtime.RuleContext;
+import org.antlr.v4.runtime.tree.ParseTree;
+import org.antlr.v4.runtime.tree.TerminalNode;
+import org.antlr.v4.runtime.tree.TerminalNodeImpl;
 import semantics.VarType;
 import antlr.PivotBaseVisitor;
 import antlr.PivotParser;
 import org.antlr.v4.runtime.ParserRuleContext;
+
+import java.awt.im.InputContext;
+import java.util.ArrayList;
 
 public class AstBuilderVisitor extends PivotBaseVisitor<Node> {
 
@@ -53,7 +62,7 @@ public class AstBuilderVisitor extends PivotBaseVisitor<Node> {
             return new DefSignalNode();
         }
         if(ctx.device() != null){
-            return new DefDeviceNode(ctx.device().ID().getText(), null, null);
+            return (DefDeviceNode) visit(ctx.device());
         }
 
         // todo Error handling.
@@ -122,8 +131,37 @@ public class AstBuilderVisitor extends PivotBaseVisitor<Node> {
 
     @Override
     public Node visitDevice(PivotParser.DeviceContext ctx) {
-        return super.visitDevice(ctx);
+        ArrayList<InputNode> inputs = new ArrayList<>();
+        ArrayList<OutputNode> outputs = new ArrayList<>();
+
+        if(ctx.inputs() != null){
+            // Start at index 2 to skip initial 'input' and ':' tokens
+            for(int i = 1; i < ctx.inputs().children.size(); i++){
+                ParseTree childCtx = ctx.inputs().getChild(i);
+                if(isSeperatorSymbol(childCtx)) continue;
+                inputs.add(new InputNode((ctx.inputs().children.get(i)).getText()));
+            }
+        }
+
+        if(ctx.outputs() != null){
+            // Start at index 2 to skip initial 'output' and ':' keyword tokens
+            for(int i = 1; i < ctx.outputs().getChildCount(); i++){
+                ParseTree childCtx = ctx.outputs().getChild(i);
+                if(isSeperatorSymbol(childCtx)) continue;
+                outputs.add(new OutputNode((ctx.outputs().children.get(i)).getText()));
+            }
+        }
+
+        return new DefDeviceNode(ctx.ID().getText(), outputs, inputs);
     }
+
+    private boolean isSeperatorSymbol(ParseTree ctx){
+        return (ctx instanceof TerminalNode) &&
+                (ctx.getText().equals(";") ||
+                 ctx.getText().equals(",") ||
+                 ctx.getText().equals(":"));
+    }
+
 
     @Override
     public Node visitInputs(PivotParser.InputsContext ctx) {
