@@ -19,6 +19,6 @@ public class InputNode extends LeafNode {
 
     @Override
     public String toString() {
-        return super.toString() + "(ID : " + ID + ")";
+        return super.toString() + "(ID='" + ID + "')";
     }
 }
