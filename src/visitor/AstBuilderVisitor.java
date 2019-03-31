@@ -1,7 +1,7 @@
 package visitor;
 
-import ANTLR.PivotBaseVisitor;
-import ANTLR.PivotParser;
+import antlr.PivotBaseVisitor;
+import antlr.PivotParser;
 import node.*;
 import node.base.Node;
 import node.define_nodes.DefDeviceNode;
