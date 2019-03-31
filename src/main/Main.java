@@ -38,7 +38,6 @@ public class Main {
 
             System.out.println(ast.getTreeString(0));
 
-
         } catch (IOException e) {
             e.printStackTrace();
         }

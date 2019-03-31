@@ -4,10 +4,10 @@ define Signal celsius:  1..60;
 define Signal percentage:  0.0..100.0;
 
 // Define device types
-define Device Bulb input: toggle;
+define Device Bulb input: toggle, celsius;
 define Device Window input: open;
 // Define sensors
-define Device MovementSensor output: toggle & input: celsius;
+define Device MovementSensor output: toggle & input: celsius, toggle;
 define Device Thermometer output: celsius;
 
 // Variable definitions of every device in the house
