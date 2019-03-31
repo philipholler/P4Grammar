@@ -18,7 +18,7 @@ public class OutputNode extends LeafNode {
 
     @Override
     public String toString() {
-        return super.toString() + "(ID : " + ID + ")";
+        return super.toString() + "(ID='" + ID + "')";
     }
 
 }
