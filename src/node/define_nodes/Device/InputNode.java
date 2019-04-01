@@ -1,13 +1,13 @@
-package node.define_nodes;
+package node.define_nodes.Device;
 
 import node.base.LeafNode;
 import visitor.AbstractVisitor;
 
-public class OutputNode extends LeafNode {
+public class InputNode extends LeafNode {
 
     public final String ID;
 
-    public OutputNode(String ID) {
+    public InputNode(String ID) {
         this.ID = ID;
     }
 
@@ -16,9 +16,9 @@ public class OutputNode extends LeafNode {
         return visitor.visit(this);
     }
 
+
     @Override
     public String toString() {
         return super.toString() + "(ID='" + ID + "')";
     }
-
 }

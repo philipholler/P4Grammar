@@ -1,9 +1,7 @@
-package node.define_nodes;
+package node.define_nodes.Signal;
 
 import node.base.ListNode;
 import node.base.Node;
-import node.EnumValuesNode;
-import node.RangeNode;
 import utils.StringUtils;
 import visitor.AbstractVisitor;
 
