@@ -5,7 +5,7 @@ import utils.StringUtils;
 import java.util.ArrayList;
 
 public abstract class ListNode extends Node{
-    ArrayList<Node> children = new ArrayList<>();
+    private ArrayList<Node> children = new ArrayList<>();
 
     public ListNode() {
     }
@@ -23,7 +23,7 @@ public abstract class ListNode extends Node{
     }
 
     public void addChildren(ArrayList<Node> children){
-        children.addAll(children);
+        this.children.addAll(children);
     }
 
     @Override

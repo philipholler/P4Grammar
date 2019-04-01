@@ -21,6 +21,7 @@ Thermometer mainThermometer = "129.67.198.65:12565";
 string a = "Hej";
 
 init(){
+    int a = 10;
     // Optional code for initialization
     // Automatically run when the program is run for the first time
 }

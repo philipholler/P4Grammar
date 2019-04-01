@@ -3,8 +3,11 @@ package visitor;
 import antlr.PivotBaseVisitor;
 import antlr.PivotParser;
 import node.*;
+import node.Statements.TimeFrame;
+import node.Statements.WaitNode;
 import node.base.Node;
 import node.define_nodes.Device.DefDeviceNode;
+import node.define_nodes.InitNode;
 import node.define_nodes.Signal.DefSignalNode;
 import node.define_nodes.Device.InputNode;
 import node.define_nodes.Device.OutputNode;
@@ -50,6 +53,7 @@ public class AstBuilderVisitor extends PivotBaseVisitor<Node> {
         for(PivotParser.DeclDeviceContext context: ctx.declDevice()){
             node.addChild(visit(context));
         }
+        node.addChild(visit(ctx.init()));
         // todo add funcs and events.
 
         return node;
@@ -193,7 +197,7 @@ public class AstBuilderVisitor extends PivotBaseVisitor<Node> {
 
     @Override
     public Node visitInit(PivotParser.InitContext ctx) {
-        return super.visitInit(ctx);
+        return new InitNode(visit(ctx.block()));
     }
 
     @Override
@@ -233,17 +237,52 @@ public class AstBuilderVisitor extends PivotBaseVisitor<Node> {
 
     @Override
     public Node visitBlock(PivotParser.BlockContext ctx) {
-        return super.visitBlock(ctx);
+        return new BlockNode(findNodes(ctx.stmts()));
     }
 
-    @Override
-    public Node visitStmts(PivotParser.StmtsContext ctx) {
-        return super.visitStmts(ctx);
+    private ArrayList<Node> findNodes(PivotParser.StmtsContext ctx){
+        ArrayList<Node> stmts = new ArrayList<>();
+
+        for (PivotParser.WaitStmtContext context: ctx.waitStmt()) {
+            stmts.add(visit(context));
+        }
+
+
+        return stmts;
     }
 
     @Override
     public Node visitWaitStmt(PivotParser.WaitStmtContext ctx) {
-        return super.visitWaitStmt(ctx);
+        TimeFrame timeframe = getTimeFrame(ctx);
+        if(ctx.varID != null){
+            return new WaitNode(timeframe, ctx.varID.getText());
+        } else if (ctx.INTEGER() != null){
+            return new WaitNode(ctx.INTEGER().getText(), timeframe);
+        }
+        // todo: error handling
+        System.out.println("Something went wrong in AST visitorbuilder wait statement");
+        return null;
+    }
+
+    private TimeFrame getTimeFrame(PivotParser.WaitStmtContext ctx){
+        if(ctx.timeFrame() != null){
+            if(ctx.timeFrame().MONTHS() != null){
+                return TimeFrame.MONTH;
+            } else if (ctx.timeFrame().WEEKS() != null){
+                return TimeFrame.WEEK;
+            } else if (ctx.timeFrame().DAYS() != null){
+                return TimeFrame.DAY;
+            } else if (ctx.timeFrame().MINUTES() != null){
+                return TimeFrame.MINUTES;
+            } else if (ctx.timeFrame().SECONDS() != null){
+                return TimeFrame.SECOND;
+            } else if (ctx.timeFrame().MS() != null){
+                return TimeFrame.MILLISECONDS;
+            }
+        }
+        // todo error handling
+        System.out.println("Something went wrong when finding TimeFrame");
+        return null;
     }
 
     @Override
