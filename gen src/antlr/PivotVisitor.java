@@ -324,26 +324,11 @@ public interface PivotVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitComparisonExpressionParens(PivotParser.ComparisonExpressionParensContext ctx);
 	/**
-	 * Visit a parse tree produced by the {@code timeOp}
-	 * labeled alternative in {@link PivotParser#comparison_operand}.
+	 * Visit a parse tree produced by {@link PivotParser#comparison_operand}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitTimeOp(PivotParser.TimeOpContext ctx);
-	/**
-	 * Visit a parse tree produced by the {@code dateOp}
-	 * labeled alternative in {@link PivotParser#comparison_operand}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitDateOp(PivotParser.DateOpContext ctx);
-	/**
-	 * Visit a parse tree produced by the {@code exprOP}
-	 * labeled alternative in {@link PivotParser#comparison_operand}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitExprOP(PivotParser.ExprOPContext ctx);
+	T visitComparison_operand(PivotParser.Comparison_operandContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link PivotParser#comp_operator}.
 	 * @param ctx the parse tree

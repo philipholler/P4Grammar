@@ -1,0 +1,4 @@
+package node.Statements.LogicalExpression.TimeNodes;
+
+public class DateNode {
+}
