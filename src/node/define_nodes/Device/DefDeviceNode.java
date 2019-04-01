@@ -1,11 +1,9 @@
-package node.define_nodes;
+package node.define_nodes.Device;
 
 import node.base.Node;
+import node.define_nodes.DefNode;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public class DefDeviceNode extends DefNode {
     // define Device MovementSensor output: toggle & input: celsius;

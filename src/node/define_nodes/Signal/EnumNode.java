@@ -1,4 +1,4 @@
-package node;
+package node.define_nodes.Signal;
 
 import node.base.LeafNode;
 import semantics.VarType;

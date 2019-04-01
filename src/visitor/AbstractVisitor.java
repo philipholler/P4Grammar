@@ -2,8 +2,9 @@ package visitor;
 
 import node.*;
 import node.define_nodes.DefNode;
-import node.define_nodes.InputNode;
-import node.define_nodes.OutputNode;
+import node.define_nodes.Device.InputNode;
+import node.define_nodes.Device.OutputNode;
+import node.define_nodes.Signal.RangeNode;
 
 /**
  * Philip 31.03.2019
@@ -14,7 +15,6 @@ import node.define_nodes.OutputNode;
 public abstract class AbstractVisitor {
 
     public abstract Object visit(ProgramNode node);
-    public abstract Object visit(EnumValuesNode node);
     public abstract Object visit(DeclsNode node);
     public abstract Object visit(DefNode node);
     public abstract Object visit(VarDeclNode node);

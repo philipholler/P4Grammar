@@ -2,13 +2,11 @@ package visitor;
 
 import node.DeclsNode;
 import node.DevDeclNode;
-import node.EnumValuesNode;
-import node.ProgramNode;
 import node.base.Node;
-import node.define_nodes.DefDeviceNode;
-import node.define_nodes.DefSignalNode;
-import node.define_nodes.InputNode;
-import node.define_nodes.OutputNode;
+import node.define_nodes.Device.DefDeviceNode;
+import node.define_nodes.Signal.DefSignalNode;
+import node.define_nodes.Device.InputNode;
+import node.define_nodes.Device.OutputNode;
 
 
 /**
@@ -24,5 +22,4 @@ public interface ASTVisitor <T> {
     T visit(OutputNode n);
     T visit(DeclsNode n);
     T visit(DevDeclNode n);
-    T visit(EnumValuesNode n);
 }
