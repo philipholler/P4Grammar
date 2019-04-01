@@ -1,6 +1,5 @@
 package semantics;
 
-import javafx.css.Declaration;
 import node.base.Node;
 
 import java.util.Objects;
