@@ -12,6 +12,11 @@ import node.Statements.Expression.LiteralValues.IntegerNode;
 import node.Statements.Expression.LiteralValues.StringNode;
 import node.Statements.Expression.MultiExprNode;
 import node.Statements.Expression.Operator;
+import node.Statements.IfStmtNode;
+import node.Statements.LogicalExpression.ComparisonExprNode;
+import node.Statements.LogicalExpression.ComparisonOperator;
+import node.Statements.LogicalExpression.LogicalAndExprNode;
+import node.Statements.LogicalExpression.LogicalOrExprNode;
 import node.Statements.ReturnNode;
 import node.Statements.Wait.TimeFrame;
 import node.Statements.Wait.WaitNode;
@@ -286,8 +291,10 @@ public class AstBuilderVisitor extends PivotBaseVisitor<Node> {
     private ArrayList<Node> findNodes(PivotParser.StmtsContext ctx){
         ArrayList<Node> stmts = new ArrayList<>();
 
-        for (ParseTree tree: ctx.children) {
-            stmts.add(visit(tree));
+        if(!ctx.children.isEmpty()){
+            for (ParseTree tree: ctx.children) {
+                stmts.add(visit(tree));
+            }
         }
 
         return stmts;
@@ -336,7 +343,7 @@ public class AstBuilderVisitor extends PivotBaseVisitor<Node> {
 
     @Override
     public Node visitIfstmt(PivotParser.IfstmtContext ctx) {
-        return super.visitIfstmt(ctx);
+        return new IfStmtNode(visit(ctx.logical_expr()), visit(ctx.blck));
     }
 
     @Override
@@ -367,7 +374,7 @@ public class AstBuilderVisitor extends PivotBaseVisitor<Node> {
 
     @Override
     public Node visitLogicalExpressionOr(PivotParser.LogicalExpressionOrContext ctx) {
-        return super.visitLogicalExpressionOr(ctx);
+        return new LogicalOrExprNode(visit(ctx.left), visit(ctx.right));
     }
 
     @Override
@@ -382,7 +389,7 @@ public class AstBuilderVisitor extends PivotBaseVisitor<Node> {
 
     @Override
     public Node visitLogicalExpressionAnd(PivotParser.LogicalExpressionAndContext ctx) {
-        return super.visitLogicalExpressionAnd(ctx);
+        return new LogicalAndExprNode(visit(ctx.left), visit(ctx.right));
     }
 
     @Override
@@ -392,27 +399,28 @@ public class AstBuilderVisitor extends PivotBaseVisitor<Node> {
 
     @Override
     public Node visitComparisonExpressionWithOperator(PivotParser.ComparisonExpressionWithOperatorContext ctx) {
-        return super.visitComparisonExpressionWithOperator(ctx);
+        ComparisonOperator op = null;
+
+        if(ctx.op.GE() != null){
+            op = ComparisonOperator.GREANTHANEQUAL;
+        } else if(ctx.op.EQ() != null){
+            op = ComparisonOperator.EQUALTO;
+        } else if (ctx.op.GT() != null){
+            op = ComparisonOperator.GREATERTHAN;
+        } else if (ctx.op.NE() != null){
+            op = ComparisonOperator.NOTEQUAL;
+        } else if (ctx.op.SE() != null){
+            op = ComparisonOperator.SMALLERTHANEQUAL;
+        } else if (ctx.op.ST() != null){
+            op = ComparisonOperator.SMALLERTHAN;
+        }
+
+        return new ComparisonExprNode(visit(ctx.left), visit(ctx.right), op);
     }
 
     @Override
     public Node visitComparisonExpressionParens(PivotParser.ComparisonExpressionParensContext ctx) {
         return super.visitComparisonExpressionParens(ctx);
-    }
-
-    @Override
-    public Node visitTimeOp(PivotParser.TimeOpContext ctx) {
-        return super.visitTimeOp(ctx);
-    }
-
-    @Override
-    public Node visitDateOp(PivotParser.DateOpContext ctx) {
-        return super.visitDateOp(ctx);
-    }
-
-    @Override
-    public Node visitExprOP(PivotParser.ExprOPContext ctx) {
-        return super.visitExprOP(ctx);
     }
 
     @Override

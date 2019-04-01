@@ -604,37 +604,13 @@ public class PivotBaseListener implements PivotListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterTimeOp(PivotParser.TimeOpContext ctx) { }
+	@Override public void enterComparison_operand(PivotParser.Comparison_operandContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitTimeOp(PivotParser.TimeOpContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterDateOp(PivotParser.DateOpContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitDateOp(PivotParser.DateOpContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterExprOP(PivotParser.ExprOPContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitExprOP(PivotParser.ExprOPContext ctx) { }
+	@Override public void exitComparison_operand(PivotParser.Comparison_operandContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

@@ -2076,6 +2076,8 @@ public class PivotParser extends Parser {
 	}
 
 	public static class IfstmtContext extends ParserRuleContext {
+		public BlockContext blck;
+		public BlockContext elseblck;
 		public TerminalNode IF() { return getToken(PivotParser.IF, 0); }
 		public TerminalNode PARANBEG() { return getToken(PivotParser.PARANBEG, 0); }
 		public Logical_exprContext logical_expr() {
@@ -2124,7 +2126,7 @@ public class PivotParser extends Parser {
 			setState(301);
 			match(PARANEND);
 			setState(302);
-			block();
+			((IfstmtContext)_localctx).blck = block();
 			setState(305);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
@@ -2133,7 +2135,7 @@ public class PivotParser extends Parser {
 				setState(303);
 				match(ELSE);
 				setState(304);
-				block();
+				((IfstmtContext)_localctx).elseblck = block();
 				}
 			}
 
@@ -2975,13 +2977,15 @@ public class PivotParser extends Parser {
 		}
 	}
 	public static class LogicalExpressionOrContext extends Logical_exprContext {
+		public Logical_exprContext left;
+		public Logical_exprContext right;
+		public TerminalNode OR() { return getToken(PivotParser.OR, 0); }
 		public List<Logical_exprContext> logical_expr() {
 			return getRuleContexts(Logical_exprContext.class);
 		}
 		public Logical_exprContext logical_expr(int i) {
 			return getRuleContext(Logical_exprContext.class,i);
 		}
-		public TerminalNode OR() { return getToken(PivotParser.OR, 0); }
 		public LogicalExpressionOrContext(Logical_exprContext ctx) { copyFrom(ctx); }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
@@ -3035,13 +3039,15 @@ public class PivotParser extends Parser {
 		}
 	}
 	public static class LogicalExpressionAndContext extends Logical_exprContext {
+		public Logical_exprContext left;
+		public Logical_exprContext right;
+		public TerminalNode AND() { return getToken(PivotParser.AND, 0); }
 		public List<Logical_exprContext> logical_expr() {
 			return getRuleContexts(Logical_exprContext.class);
 		}
 		public Logical_exprContext logical_expr(int i) {
 			return getRuleContext(Logical_exprContext.class,i);
 		}
-		public TerminalNode AND() { return getToken(PivotParser.AND, 0); }
 		public LogicalExpressionAndContext(Logical_exprContext ctx) { copyFrom(ctx); }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
@@ -3154,25 +3160,27 @@ public class PivotParser extends Parser {
 					case 1:
 						{
 						_localctx = new LogicalExpressionAndContext(new Logical_exprContext(_parentctx, _parentState));
+						((LogicalExpressionAndContext)_localctx).left = _prevctx;
 						pushNewRecursionContext(_localctx, _startState, RULE_logical_expr);
 						setState(394);
 						if (!(precpred(_ctx, 5))) throw new FailedPredicateException(this, "precpred(_ctx, 5)");
 						setState(395);
 						match(AND);
 						setState(396);
-						logical_expr(6);
+						((LogicalExpressionAndContext)_localctx).right = logical_expr(6);
 						}
 						break;
 					case 2:
 						{
 						_localctx = new LogicalExpressionOrContext(new Logical_exprContext(_parentctx, _parentState));
+						((LogicalExpressionOrContext)_localctx).left = _prevctx;
 						pushNewRecursionContext(_localctx, _startState, RULE_logical_expr);
 						setState(397);
 						if (!(precpred(_ctx, 4))) throw new FailedPredicateException(this, "precpred(_ctx, 4)");
 						setState(398);
 						match(OR);
 						setState(399);
-						logical_expr(5);
+						((LogicalExpressionOrContext)_localctx).right = logical_expr(5);
 						}
 						break;
 					}
@@ -3207,6 +3215,9 @@ public class PivotParser extends Parser {
 		}
 	}
 	public static class ComparisonExpressionWithOperatorContext extends Comparison_exprContext {
+		public Comparison_operandContext left;
+		public Comp_operatorContext op;
+		public Comparison_operandContext right;
 		public List<Comparison_operandContext> comparison_operand() {
 			return getRuleContexts(Comparison_operandContext.class);
 		}
@@ -3265,11 +3276,11 @@ public class PivotParser extends Parser {
 				enterOuterAlt(_localctx, 1);
 				{
 				setState(405);
-				comparison_operand();
+				((ComparisonExpressionWithOperatorContext)_localctx).left = comparison_operand();
 				setState(406);
-				comp_operator();
+				((ComparisonExpressionWithOperatorContext)_localctx).op = comp_operator();
 				setState(407);
-				comparison_operand();
+				((ComparisonExpressionWithOperatorContext)_localctx).right = comparison_operand();
 				}
 				break;
 			case 2:
@@ -3298,67 +3309,27 @@ public class PivotParser extends Parser {
 	}
 
 	public static class Comparison_operandContext extends ParserRuleContext {
+		public TerminalNode TIME() { return getToken(PivotParser.TIME, 0); }
+		public TerminalNode DATE() { return getToken(PivotParser.DATE, 0); }
+		public TerminalNode DATEnoYEAR() { return getToken(PivotParser.DATEnoYEAR, 0); }
+		public ExprContext expr() {
+			return getRuleContext(ExprContext.class,0);
+		}
 		public Comparison_operandContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_comparison_operand; }
-	 
-		public Comparison_operandContext() { }
-		public void copyFrom(Comparison_operandContext ctx) {
-			super.copyFrom(ctx);
-		}
-	}
-	public static class TimeOpContext extends Comparison_operandContext {
-		public TerminalNode TIME() { return getToken(PivotParser.TIME, 0); }
-		public TimeOpContext(Comparison_operandContext ctx) { copyFrom(ctx); }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof PivotListener ) ((PivotListener)listener).enterTimeOp(this);
+			if ( listener instanceof PivotListener ) ((PivotListener)listener).enterComparison_operand(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof PivotListener ) ((PivotListener)listener).exitTimeOp(this);
+			if ( listener instanceof PivotListener ) ((PivotListener)listener).exitComparison_operand(this);
 		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof PivotVisitor ) return ((PivotVisitor<? extends T>)visitor).visitTimeOp(this);
-			else return visitor.visitChildren(this);
-		}
-	}
-	public static class DateOpContext extends Comparison_operandContext {
-		public TerminalNode DATE() { return getToken(PivotParser.DATE, 0); }
-		public TerminalNode DATEnoYEAR() { return getToken(PivotParser.DATEnoYEAR, 0); }
-		public DateOpContext(Comparison_operandContext ctx) { copyFrom(ctx); }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof PivotListener ) ((PivotListener)listener).enterDateOp(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof PivotListener ) ((PivotListener)listener).exitDateOp(this);
-		}
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof PivotVisitor ) return ((PivotVisitor<? extends T>)visitor).visitDateOp(this);
-			else return visitor.visitChildren(this);
-		}
-	}
-	public static class ExprOPContext extends Comparison_operandContext {
-		public ExprContext expr() {
-			return getRuleContext(ExprContext.class,0);
-		}
-		public ExprOPContext(Comparison_operandContext ctx) { copyFrom(ctx); }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof PivotListener ) ((PivotListener)listener).enterExprOP(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof PivotListener ) ((PivotListener)listener).exitExprOP(this);
-		}
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof PivotVisitor ) return ((PivotVisitor<? extends T>)visitor).visitExprOP(this);
+			if ( visitor instanceof PivotVisitor ) return ((PivotVisitor<? extends T>)visitor).visitComparison_operand(this);
 			else return visitor.visitChildren(this);
 		}
 	}
@@ -3372,7 +3343,6 @@ public class PivotParser extends Parser {
 			_errHandler.sync(this);
 			switch (_input.LA(1)) {
 			case TIME:
-				_localctx = new TimeOpContext(_localctx);
 				enterOuterAlt(_localctx, 1);
 				{
 				setState(415);
@@ -3381,7 +3351,6 @@ public class PivotParser extends Parser {
 				break;
 			case DATE:
 			case DATEnoYEAR:
-				_localctx = new DateOpContext(_localctx);
 				enterOuterAlt(_localctx, 2);
 				{
 				setState(416);
@@ -3404,7 +3373,6 @@ public class PivotParser extends Parser {
 			case INTEGER:
 			case STRING:
 			case ID:
-				_localctx = new ExprOPContext(_localctx);
 				enterOuterAlt(_localctx, 3);
 				{
 				setState(417);

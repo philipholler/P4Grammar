@@ -536,41 +536,15 @@ public interface PivotListener extends ParseTreeListener {
 	 */
 	void exitComparisonExpressionParens(PivotParser.ComparisonExpressionParensContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code timeOp}
-	 * labeled alternative in {@link PivotParser#comparison_operand}.
+	 * Enter a parse tree produced by {@link PivotParser#comparison_operand}.
 	 * @param ctx the parse tree
 	 */
-	void enterTimeOp(PivotParser.TimeOpContext ctx);
+	void enterComparison_operand(PivotParser.Comparison_operandContext ctx);
 	/**
-	 * Exit a parse tree produced by the {@code timeOp}
-	 * labeled alternative in {@link PivotParser#comparison_operand}.
+	 * Exit a parse tree produced by {@link PivotParser#comparison_operand}.
 	 * @param ctx the parse tree
 	 */
-	void exitTimeOp(PivotParser.TimeOpContext ctx);
-	/**
-	 * Enter a parse tree produced by the {@code dateOp}
-	 * labeled alternative in {@link PivotParser#comparison_operand}.
-	 * @param ctx the parse tree
-	 */
-	void enterDateOp(PivotParser.DateOpContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code dateOp}
-	 * labeled alternative in {@link PivotParser#comparison_operand}.
-	 * @param ctx the parse tree
-	 */
-	void exitDateOp(PivotParser.DateOpContext ctx);
-	/**
-	 * Enter a parse tree produced by the {@code exprOP}
-	 * labeled alternative in {@link PivotParser#comparison_operand}.
-	 * @param ctx the parse tree
-	 */
-	void enterExprOP(PivotParser.ExprOPContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code exprOP}
-	 * labeled alternative in {@link PivotParser#comparison_operand}.
-	 * @param ctx the parse tree
-	 */
-	void exitExprOP(PivotParser.ExprOPContext ctx);
+	void exitComparison_operand(PivotParser.Comparison_operandContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link PivotParser#comp_operator}.
 	 * @param ctx the parse tree

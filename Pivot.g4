@@ -59,7 +59,7 @@ waitStmt: WAIT INTEGER timeFrame SEMCOL
 
 assignment : varID=ID EQUALS expr SEMCOL;
 
-ifstmt: IF PARANBEG logical_expr PARANEND block (ELSE block)?;
+ifstmt: IF PARANBEG logical_expr PARANEND blck=block (ELSE elseblck=block)?;
 
 whilestmt: WHILE PARANBEG logical_expr PARANEND block;
 
@@ -84,26 +84,26 @@ litVal: INTEGER #intVal
 // Expressions
 expr: leftChild=expr op=(DIV | MULT) rightChild=expr     #multiExpr
     | leftChild=expr op=(PLUS | MINUS) rightChild=expr   #plusExpr
-    | PARANBEG expr PARANEND                #paranExpr
-    | atom                                  #atomExpr
-    | funcCall                              #funCall
+    | PARANBEG expr PARANEND                             #paranExpr
+    | atom                                               #atomExpr
+    | funcCall                                           #funCall
     ;
 
 logical_expr
-            : logical_expr AND logical_expr     # logicalExpressionAnd
-            | logical_expr OR logical_expr      # logicalExpressionOr
-            | comparison_expr                   # comparisonExpression
-            | PARANBEG logical_expr PARANEND    # logicalExpressionInParen
-            | (TRUE | FALSE)                    # logicalLiterals
+            : left=logical_expr AND right=logical_expr     #logicalExpressionAnd
+            | left=logical_expr OR right=logical_expr      #logicalExpressionOr
+            | comparison_expr                              #comparisonExpression
+            | PARANBEG logical_expr PARANEND               #logicalExpressionInParen
+            | (TRUE | FALSE)                               #logicalLiterals
             ;
 
-comparison_expr : comparison_operand comp_operator comparison_operand  #comparisonExpressionWithOperator
-                | PARANBEG comparison_expr PARANEND                    #comparisonExpressionParens
+comparison_expr : left=comparison_operand op=comp_operator right=comparison_operand  #comparisonExpressionWithOperator
+                | PARANBEG comparison_expr PARANEND                                  #comparisonExpressionParens
                 ;
 
-comparison_operand : TIME                #timeOp
-                   | (DATE | DATEnoYEAR) #dateOp
-                   | expr                #exprOP
+comparison_operand : TIME
+                   | (DATE | DATEnoYEAR)
+                   | expr
                    ;
 
 comp_operator : GT // Greater than
