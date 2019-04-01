@@ -1,6 +1,6 @@
 package node.base;
 
-public abstract class Node implements Visitable {
+public abstract class Node {
 
     /**
      * Philip, 31.03.2019

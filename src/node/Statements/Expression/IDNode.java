@@ -23,11 +23,6 @@ public class IDNode extends ExpressionNode {
     }
 
     @Override
-    public Object accept(AbstractVisitor visitor) {
-        return null;
-    }
-
-    @Override
     public String toString() {
         return "IDNode(" +
                 "ID='" + ID + '\'' +

@@ -26,9 +26,4 @@ public class EnumNode extends UnaryNode {
                 "ID='" + ID + '\'' +
                 ')';
     }
-
-    @Override
-    public Object accept(AbstractVisitor visitor) {
-        return null;
-    }
 }

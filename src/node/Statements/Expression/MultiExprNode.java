@@ -29,11 +29,6 @@ public class MultiExprNode extends Node {
     }
 
     @Override
-    public Object accept(AbstractVisitor visitor) {
-        return null;
-    }
-
-    @Override
     public String toString() {
         return "MultiExprNode(op=" + op +
                 ')';

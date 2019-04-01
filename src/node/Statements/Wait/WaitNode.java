@@ -19,11 +19,6 @@ public class WaitNode extends LeafNode {
     }
 
     @Override
-    public Object accept(AbstractVisitor visitor) {
-        return null;
-    }
-
-    @Override
     public String toString() {
         if(val == null){
             return "WaitNode(" +

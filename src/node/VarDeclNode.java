@@ -16,11 +16,6 @@ public class VarDeclNode extends UnaryNode {
         this.ID = ID;
     }
 
-    @Override
-    public Object accept(AbstractVisitor visitor) {
-        return visitor.visit(this);
-    }
-
     public VarType getVarType() {
         return varType;
     }

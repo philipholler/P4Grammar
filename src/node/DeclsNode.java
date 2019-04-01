@@ -15,8 +15,4 @@ public class DeclsNode extends ListNode {
         super(children);
     }
 
-    @Override
-    public Object accept(AbstractVisitor visitor) {
-        return visitor.visit(this);
-    }
 }

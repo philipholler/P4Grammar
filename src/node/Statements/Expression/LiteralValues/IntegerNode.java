@@ -23,11 +23,6 @@ public class IntegerNode extends LiteralValueNode {
     }
 
     @Override
-    public Object accept(AbstractVisitor visitor) {
-        return null;
-    }
-
-    @Override
     public String toString() {
         return "IntegerNode(" +
                 "val=" + val +

@@ -57,11 +57,6 @@ public class DefSignalNode extends ListNode {
     }
 
     @Override
-    public Object accept(AbstractVisitor visitor) {
-        return null;
-    }
-
-    @Override
     public String getTreeString(int indentation) {
         if(rangeNode == null){
             return super.getTreeString(indentation);

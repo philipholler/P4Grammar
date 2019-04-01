@@ -12,11 +12,6 @@ public class OutputNode extends LeafNode {
     }
 
     @Override
-    public Object accept(AbstractVisitor visitor) {
-        return visitor.visit(this);
-    }
-
-    @Override
     public String toString() {
         return super.toString() + "(ID='" + ID + "')";
     }
