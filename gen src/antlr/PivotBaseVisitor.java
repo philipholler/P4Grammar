@@ -1,5 +1,5 @@
 // Generated from /Users/philip/Library/Mobile Documents/com~apple~CloudDocs/Cloud dokumenter/Java projects/P4Grammar/Pivot.g4 by ANTLR 4.7.2
-package	antlr;
+package antlr;
 
 import org.antlr.v4.runtime.tree.AbstractParseTreeVisitor;
 
@@ -67,14 +67,28 @@ public class PivotBaseVisitor<T> extends AbstractParseTreeVisitor<T> implements 
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitLowerBound(PivotParser.LowerBoundContext ctx) { return visitChildren(ctx); }
+	@Override public T visitIntlwRange(PivotParser.IntlwRangeContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitUpperBound(PivotParser.UpperBoundContext ctx) { return visitChildren(ctx); }
+	@Override public T visitFloatlwRange(PivotParser.FloatlwRangeContext ctx) { return visitChildren(ctx); }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation returns the result of calling
+	 * {@link #visitChildren} on {@code ctx}.</p>
+	 */
+	@Override public T visitIntupRange(PivotParser.IntupRangeContext ctx) { return visitChildren(ctx); }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation returns the result of calling
+	 * {@link #visitChildren} on {@code ctx}.</p>
+	 */
+	@Override public T visitFloatupRange(PivotParser.FloatupRangeContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -242,42 +256,56 @@ public class PivotBaseVisitor<T> extends AbstractParseTreeVisitor<T> implements 
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitLitVal(PivotParser.LitValContext ctx) { return visitChildren(ctx); }
+	@Override public T visitIntVal(PivotParser.IntValContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitFuncexpr(PivotParser.FuncexprContext ctx) { return visitChildren(ctx); }
+	@Override public T visitFloatVal(PivotParser.FloatValContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitAddexpr(PivotParser.AddexprContext ctx) { return visitChildren(ctx); }
+	@Override public T visitStringVal(PivotParser.StringValContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitAtomexpr(PivotParser.AtomexprContext ctx) { return visitChildren(ctx); }
+	@Override public T visitMultiExpr(PivotParser.MultiExprContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitMultiexpr(PivotParser.MultiexprContext ctx) { return visitChildren(ctx); }
+	@Override public T visitAtomExpr(PivotParser.AtomExprContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitParanexpr(PivotParser.ParanexprContext ctx) { return visitChildren(ctx); }
+	@Override public T visitParanExpr(PivotParser.ParanExprContext ctx) { return visitChildren(ctx); }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation returns the result of calling
+	 * {@link #visitChildren} on {@code ctx}.</p>
+	 */
+	@Override public T visitFunCall(PivotParser.FunCallContext ctx) { return visitChildren(ctx); }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation returns the result of calling
+	 * {@link #visitChildren} on {@code ctx}.</p>
+	 */
+	@Override public T visitPlusExpr(PivotParser.PlusExprContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -361,21 +389,7 @@ public class PivotBaseVisitor<T> extends AbstractParseTreeVisitor<T> implements 
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitLitValue(PivotParser.LitValueContext ctx) { return visitChildren(ctx); }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation returns the result of calling
-	 * {@link #visitChildren} on {@code ctx}.</p>
-	 */
-	@Override public T visitVaridAtom(PivotParser.VaridAtomContext ctx) { return visitChildren(ctx); }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation returns the result of calling
-	 * {@link #visitChildren} on {@code ctx}.</p>
-	 */
-	@Override public T visitNowAtom(PivotParser.NowAtomContext ctx) { return visitChildren(ctx); }
+	@Override public T visitAtom(PivotParser.AtomContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *

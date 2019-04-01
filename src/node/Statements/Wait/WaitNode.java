@@ -1,8 +1,6 @@
-package node.Statements;
+package node.Statements.Wait;
 
-import node.base.BinaryNode;
 import node.base.LeafNode;
-import node.base.Node;
 import visitor.AbstractVisitor;
 
 public class WaitNode extends LeafNode {

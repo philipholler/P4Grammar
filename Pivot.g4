@@ -1,7 +1,7 @@
 grammar Pivot;
-program : decls;
+program : decls EOF;
 
-decls : defs=define* (vars=declVar | devVars=declDevice)* inFunc=init? (funcDecl | event)* EOF;
+decls : defs=define* (vars=declVar | devVars=declDevice)* inFunc=init? (funcDecl | event)*;
 
 define : DEFINEKW (signal | device) SEMCOL;
 
@@ -13,11 +13,11 @@ signal: SIGNAL ID COL (range | enumerations);
     // Signal values
     range : lowerBound RANGESEP upperBound;
 
-    lowerBound : INTEGER
-               | FLOAT
+    lowerBound : INTEGER #intlwRange
+               | FLOAT   #floatlwRange
                ;
-    upperBound : INTEGER
-               | FLOAT
+    upperBound : INTEGER #intupRange
+               | FLOAT   #floatupRange
                ;
 
 device: DEVICE ID ((inputs? (AMP outputs)?) | (outputs? (AMP inputs)?)); // The order of output and input can be switched around. That doesn't matter.
@@ -70,24 +70,23 @@ funcCall: ID PARANBEG inputParam PARANEND
 
     inputParam: (ID | litVal)? (LISTSEP (varID=ID | litVal))*;
 
-declVar: varType varID=ID EQUALS (litVal | expr) SEMCOL;
+declVar: varType ID EQUALS (STRING | expr) SEMCOL;
 
 brk: BREAK SEMCOL;
 
 rtn : (RETURN (varID=ID | litVal)? SEMCOL);
 
-litVal: INTEGER
-      | FLOAT
-      | STRING
+litVal: INTEGER #intVal
+      | FLOAT   #floatVal
+      | STRING  #stringVal
       ;
 
 // Expressions
-expr
-    : expr (DIV | MULT) expr          #multiexpr // Div & mult precendences before plus & minus
-    | expr (PLUS | MINUS) expr        #addexpr
-    | PARANBEG expr PARANEND          #paranexpr
-    | atom                            #atomexpr
-    | funcCall                        #funcexpr
+expr: leftChild=expr op=(DIV | MULT) rightChild=expr     #multiExpr
+    | leftChild=expr op=(PLUS | MINUS) rightChild=expr   #plusExpr
+    | PARANBEG expr PARANEND                #paranExpr
+    | atom                                  #atomExpr
+    | funcCall                              #funCall
     ;
 
 logical_expr
@@ -115,9 +114,9 @@ comp_operator : GT // Greater than
               | NE // Not equal
               ;
 
-atom :litVal       #litValue
-     | varID=ID     #varidAtom
-     | NOW          #nowAtom
+atom : litVal
+     | varID=ID
+     | NOW
      ;
 
 varType: (STRINGKW | INTEGERKW | FLOATKW );

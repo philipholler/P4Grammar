@@ -1,5 +1,5 @@
 // Generated from /Users/philip/Library/Mobile Documents/com~apple~CloudDocs/Cloud dokumenter/Java projects/P4Grammar/Pivot.g4 by ANTLR 4.7.2
-package	antlr;
+package antlr;
 
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.tree.ErrorNode;
@@ -100,25 +100,49 @@ public class PivotBaseListener implements PivotListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterLowerBound(PivotParser.LowerBoundContext ctx) { }
+	@Override public void enterIntlwRange(PivotParser.IntlwRangeContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitLowerBound(PivotParser.LowerBoundContext ctx) { }
+	@Override public void exitIntlwRange(PivotParser.IntlwRangeContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterUpperBound(PivotParser.UpperBoundContext ctx) { }
+	@Override public void enterFloatlwRange(PivotParser.FloatlwRangeContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitUpperBound(PivotParser.UpperBoundContext ctx) { }
+	@Override public void exitFloatlwRange(PivotParser.FloatlwRangeContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterIntupRange(PivotParser.IntupRangeContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitIntupRange(PivotParser.IntupRangeContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterFloatupRange(PivotParser.FloatupRangeContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitFloatupRange(PivotParser.FloatupRangeContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -400,73 +424,97 @@ public class PivotBaseListener implements PivotListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterLitVal(PivotParser.LitValContext ctx) { }
+	@Override public void enterIntVal(PivotParser.IntValContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitLitVal(PivotParser.LitValContext ctx) { }
+	@Override public void exitIntVal(PivotParser.IntValContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterFuncexpr(PivotParser.FuncexprContext ctx) { }
+	@Override public void enterFloatVal(PivotParser.FloatValContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitFuncexpr(PivotParser.FuncexprContext ctx) { }
+	@Override public void exitFloatVal(PivotParser.FloatValContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterAddexpr(PivotParser.AddexprContext ctx) { }
+	@Override public void enterStringVal(PivotParser.StringValContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitAddexpr(PivotParser.AddexprContext ctx) { }
+	@Override public void exitStringVal(PivotParser.StringValContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterAtomexpr(PivotParser.AtomexprContext ctx) { }
+	@Override public void enterMultiExpr(PivotParser.MultiExprContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitAtomexpr(PivotParser.AtomexprContext ctx) { }
+	@Override public void exitMultiExpr(PivotParser.MultiExprContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterMultiexpr(PivotParser.MultiexprContext ctx) { }
+	@Override public void enterAtomExpr(PivotParser.AtomExprContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitMultiexpr(PivotParser.MultiexprContext ctx) { }
+	@Override public void exitAtomExpr(PivotParser.AtomExprContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterParanexpr(PivotParser.ParanexprContext ctx) { }
+	@Override public void enterParanExpr(PivotParser.ParanExprContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitParanexpr(PivotParser.ParanexprContext ctx) { }
+	@Override public void exitParanExpr(PivotParser.ParanExprContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterFunCall(PivotParser.FunCallContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitFunCall(PivotParser.FunCallContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterPlusExpr(PivotParser.PlusExprContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitPlusExpr(PivotParser.PlusExprContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -604,37 +652,13 @@ public class PivotBaseListener implements PivotListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterLitValue(PivotParser.LitValueContext ctx) { }
+	@Override public void enterAtom(PivotParser.AtomContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitLitValue(PivotParser.LitValueContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterVaridAtom(PivotParser.VaridAtomContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitVaridAtom(PivotParser.VaridAtomContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterNowAtom(PivotParser.NowAtomContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitNowAtom(PivotParser.NowAtomContext ctx) { }
+	@Override public void exitAtom(PivotParser.AtomContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
