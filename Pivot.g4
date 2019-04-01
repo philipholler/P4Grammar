@@ -13,11 +13,11 @@ signal: SIGNAL ID COL (range | enumerations);
     // Signal values
     range : lowerBound RANGESEP upperBound;
 
-    lowerBound : INTEGER    #intLB
-               | FLOAT      #floatLB
+    lowerBound : INTEGER
+               | FLOAT
                ;
-    upperBound : INTEGER    #intUP
-               | FLOAT      #floatUP
+    upperBound : INTEGER
+               | FLOAT
                ;
 
 device: DEVICE ID ((inputs? (AMP outputs)?) | (outputs? (AMP inputs)?)); // The order of output and input can be switched around. That doesn't matter.
@@ -76,9 +76,9 @@ brk: BREAK SEMCOL;
 
 rtn : (RETURN (varID=ID | litVal)? SEMCOL);
 
-litVal: INTEGER #intVal
-      | FLOAT   #floatVal
-      | STRING  #stringVal
+litVal: INTEGER
+      | FLOAT
+      | STRING
       ;
 
 // Expressions

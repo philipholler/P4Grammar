@@ -56,10 +56,10 @@ public class AstBuilderVisitor extends PivotBaseVisitor<Node> {
     @Override
     public Node visitDefine(PivotParser.DefineContext ctx) {
         if(ctx.signal() != null){
-            return new DefSignalNode();
+            return visit(ctx.signal());
         }
         if(ctx.device() != null){
-            return (DefDeviceNode) visit(ctx.device());
+            return visit(ctx.device());
         }
 
         // todo Error handling.
@@ -69,15 +69,16 @@ public class AstBuilderVisitor extends PivotBaseVisitor<Node> {
 
     @Override
     public Node visitDeclVar(PivotParser.DeclVarContext ctx) {
-        if(ctx.varType().getText().equals("string")){
-            return new VarDeclNode(VarType.STRING, ctx.varID.getText(), ctx.litVal().getText());
-        } else if(ctx.varType().getText().equals("int")){
-            return new VarDeclNode(VarType.INT, ctx.varID.getText(), ctx.litVal().getText());
-        } else if(ctx.varType().getText().equals("float")){
-            return new VarDeclNode(VarType.FLOAT, ctx.varID.getText(), ctx.litVal().getText());
-        } else {
-            System.out.println("ERROR IN VisitDeclVar");
-            return new VarDeclNode(VarType.FLOAT, ctx.varID.getText(), ctx.litVal().getText());
+        switch (ctx.varType().getText()) {
+            case "string":
+                return new VarDeclNode(VarType.STRING, ctx.varID.getText(), ctx.litVal().STRING().getText());
+            case "int":
+                return new VarDeclNode(VarType.INT, ctx.varID.getText(), ctx.litVal().INTEGER().getText());
+            case "float":
+                return new VarDeclNode(VarType.FLOAT, ctx.varID.getText(), ctx.litVal().FLOAT().getText());
+            default:
+                System.out.println("ERROR IN VisitDeclVar");
+                return new VarDeclNode(VarType.FLOAT, ctx.varID.getText(), ctx.litVal().getText());
         }
     }
 
@@ -88,42 +89,55 @@ public class AstBuilderVisitor extends PivotBaseVisitor<Node> {
 
     @Override
     public Node visitSignal(PivotParser.SignalContext ctx) {
-        return super.visitSignal(ctx);
+        if(ctx.range() != null){
+            return new DefSignalNode(ctx.ID().getText(), (RangeNode) visit(ctx.range()));
+        } else if(ctx.enumerations() != null){
+            ArrayList<Node> enums = visitEnums(ctx.enumerations());
+            return new DefSignalNode(enums, ctx.ID().getText());
+        } else{
+            System.out.println("Something went wrong in visitSignal");
+        }
+
+        return null;
     }
 
-    @Override
-    public Node visitEnumerations(PivotParser.EnumerationsContext ctx) {
-        return super.visitEnumerations(ctx);
+    // Alternative to visitEnumerations that can return more than one node.
+    private ArrayList<Node> visitEnums(PivotParser.EnumerationsContext ctx){
+        ArrayList<Node> enums = new ArrayList<>();
+        for(PivotParser.EnumerationContext context: ctx.enumeration()){
+            enums.add(visit(context));
+        }
+        return enums;
     }
 
     @Override
     public Node visitEnumeration(PivotParser.EnumerationContext ctx) {
-        return super.visitEnumeration(ctx);
+        if(ctx.enumVal.INTEGER() != null){
+            return new EnumNode(ctx.ID().getText(), VarType.INT, ctx.enumVal.getText());
+        } else if(ctx.enumVal.FLOAT() != null){
+            return new EnumNode(ctx.ID().getText(), VarType.FLOAT, ctx.enumVal.getText());
+        } else if (ctx.enumVal.STRING() != null){
+            return new EnumNode(ctx.ID().getText(), VarType.STRING, ctx.enumVal.getText());
+        } else{
+            // todo exception handling
+            System.out.println("Something went wrong in AST-builder visitEnumeration");
+            return null;
+        }
     }
 
     @Override
     public Node visitRange(PivotParser.RangeContext ctx) {
-        return super.visitRange(ctx);
-    }
-
-    @Override
-    public Node visitIntLB(PivotParser.IntLBContext ctx) {
-        return super.visitIntLB(ctx);
-    }
-
-    @Override
-    public Node visitFloatLB(PivotParser.FloatLBContext ctx) {
-        return super.visitFloatLB(ctx);
-    }
-
-    @Override
-    public Node visitIntUP(PivotParser.IntUPContext ctx) {
-        return super.visitIntUP(ctx);
-    }
-
-    @Override
-    public Node visitFloatUP(PivotParser.FloatUPContext ctx) {
-        return super.visitFloatUP(ctx);
+        // If both have the type integer.
+        if(ctx.lowerBound().INTEGER() != null && ctx.upperBound().INTEGER() != null){
+            return new RangeNode(ctx.lowerBound().getText(), ctx.upperBound().getText(), VarType.INT);
+        }
+        // If both are of the type float
+        else if(ctx.lowerBound().FLOAT() != null && ctx.upperBound().FLOAT() != null){
+            return new RangeNode(ctx.lowerBound().getText(), ctx.upperBound().getText(), VarType.FLOAT);
+        } else{
+            System.out.println("Something went wrong in ASTBuilderVisitor visitRange");
+            return null;
+        }
     }
 
     @Override
@@ -266,18 +280,8 @@ public class AstBuilderVisitor extends PivotBaseVisitor<Node> {
     }
 
     @Override
-    public Node visitIntVal(PivotParser.IntValContext ctx) {
-        return super.visitIntVal(ctx);
-    }
-
-    @Override
-    public Node visitFloatVal(PivotParser.FloatValContext ctx) {
-        return super.visitFloatVal(ctx);
-    }
-
-    @Override
-    public Node visitStringVal(PivotParser.StringValContext ctx) {
-        return super.visitStringVal(ctx);
+    public Node visitLitVal(PivotParser.LitValContext ctx) {
+        return super.visitLitVal(ctx);
     }
 
     @Override
@@ -358,11 +362,6 @@ public class AstBuilderVisitor extends PivotBaseVisitor<Node> {
     @Override
     public Node visitComp_operator(PivotParser.Comp_operatorContext ctx) {
         return super.visitComp_operator(ctx);
-    }
-
-    @Override
-    public Node visitLitValue(PivotParser.LitValueContext ctx) {
-        return super.visitLitValue(ctx);
     }
 
     @Override

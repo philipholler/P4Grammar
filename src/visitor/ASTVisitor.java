@@ -25,5 +25,4 @@ public interface ASTVisitor <T> {
     T visit(DeclsNode n);
     T visit(DevDeclNode n);
     T visit(EnumValuesNode n);
-
 }

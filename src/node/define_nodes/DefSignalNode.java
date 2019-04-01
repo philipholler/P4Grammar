@@ -1,8 +1,10 @@
 package node.define_nodes;
 
+import node.base.ListNode;
 import node.base.Node;
 import node.EnumValuesNode;
 import node.RangeNode;
+import utils.StringUtils;
 import visitor.AbstractVisitor;
 
 import java.util.ArrayList;
@@ -11,10 +13,9 @@ import java.util.ArrayList;
  * TODO ERROR HANDLING I CONSTRUCTORS
  */
 
-public class DefSignalNode extends DefNode {
+public class DefSignalNode extends ListNode {
     // define Signal toggle: On = 1, Off = 0, on = "hej";
     private String ID;
-    private EnumValuesNode enumValues;
     private RangeNode rangeNode;
 
 
@@ -23,22 +24,11 @@ public class DefSignalNode extends DefNode {
         this.ID = ID;
         this.rangeNode = rangeNode;
     }
-    public DefSignalNode(ArrayList<Node> children, String ID, RangeNode rangeNode) {
-        super(children);
-        this.ID = ID;
-        this.rangeNode = rangeNode;
-    }
 
     // Constructors for defining Signals with enumvalues:
-    public DefSignalNode(String ID, EnumValuesNode enumValues) {
-
+    public DefSignalNode(ArrayList<Node> enums, String ID) {
+        super(enums);
         this.ID = ID;
-        this.enumValues = enumValues;
-    }
-    public DefSignalNode(ArrayList<Node> children, String ID, EnumValuesNode enumValues) {
-        super(children);
-        this.ID = ID;
-        this.enumValues = enumValues;
     }
 
     public DefSignalNode() {
@@ -48,21 +38,40 @@ public class DefSignalNode extends DefNode {
         super(children);
     }
 
-    @Override
-    public Object accept(AbstractVisitor visitor) {
-        return visitor.visit(this);
-    }
-
     public String getID() {
         return ID;
     }
 
-    public EnumValuesNode getEnumValues() {
-        return enumValues;
-    }
-
     public RangeNode getRangeNode() {
         return rangeNode;
+    }
+
+    @Override
+    public String toString() {
+        if(rangeNode != null){
+            return "DefSignalNode(" +
+                    "ID='" + ID + '\'' +
+                    ')';
+        } else {
+            return "DefSignalNode(" +
+                    "ID='" + ID + ')' + '\'';
+        }
+    }
+
+    @Override
+    public Object accept(AbstractVisitor visitor) {
+        return null;
+    }
+
+    @Override
+    public String getTreeString(int indentation) {
+        if(rangeNode == null){
+            return super.getTreeString(indentation);
+        }
+        else {
+            return StringUtils.getIndentedString(indentation) +
+                    this.toString() + "\n" + rangeNode.getTreeString(indentation + 1);
+        }
     }
 }
 
