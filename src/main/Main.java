@@ -2,6 +2,7 @@ package main;
 
 import antlr.PivotLexer;
 import antlr.PivotParser;
+import exceptions.CompileErrorException;
 import node.base.Node;
 import visitor.AstBuilderVisitor;
 import org.antlr.v4.runtime.CommonTokenStream;

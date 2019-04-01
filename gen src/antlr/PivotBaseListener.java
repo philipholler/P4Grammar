@@ -1,4 +1,5 @@
-package antlr;// Generated from C:/Users/Magnus/Desktop/Uni - P3/Royal Greenland/Java/P4Grammar\Pivot.g4 by ANTLR 4.7.2
+// Generated from /Users/philip/Library/Mobile Documents/com~apple~CloudDocs/Cloud dokumenter/Java projects/P4Grammar/Pivot.g4 by ANTLR 4.7.2
+package	antlr;
 
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.tree.ErrorNode;
@@ -99,49 +100,25 @@ public class PivotBaseListener implements PivotListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterIntLB(PivotParser.IntLBContext ctx) { }
+	@Override public void enterLowerBound(PivotParser.LowerBoundContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitIntLB(PivotParser.IntLBContext ctx) { }
+	@Override public void exitLowerBound(PivotParser.LowerBoundContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterFloatLB(PivotParser.FloatLBContext ctx) { }
+	@Override public void enterUpperBound(PivotParser.UpperBoundContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitFloatLB(PivotParser.FloatLBContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterIntUP(PivotParser.IntUPContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitIntUP(PivotParser.IntUPContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterFloatUP(PivotParser.FloatUPContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitFloatUP(PivotParser.FloatUPContext ctx) { }
+	@Override public void exitUpperBound(PivotParser.UpperBoundContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -423,37 +400,13 @@ public class PivotBaseListener implements PivotListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterIntVal(PivotParser.IntValContext ctx) { }
+	@Override public void enterLitVal(PivotParser.LitValContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitIntVal(PivotParser.IntValContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterFloatVal(PivotParser.FloatValContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitFloatVal(PivotParser.FloatValContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterStringVal(PivotParser.StringValContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitStringVal(PivotParser.StringValContext ctx) { }
+	@Override public void exitLitVal(PivotParser.LitValContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
