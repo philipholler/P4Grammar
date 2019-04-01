@@ -7,13 +7,8 @@ import visitor.AbstractVisitor;
 public class StringNode extends LiteralValueNode {
     String val;
 
-    public StringNode(VarType type, String val) {
-        super(type);
-        this.val = val.substring(1, val.length() -1);
-    }
-
     public StringNode(String val) {
-        this.val = val;
+        this.val = val.substring(1, val.length() - 1);
     }
 
     @Override

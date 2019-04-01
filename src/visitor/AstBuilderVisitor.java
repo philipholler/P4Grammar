@@ -73,7 +73,7 @@ public class AstBuilderVisitor extends PivotBaseVisitor<Node> {
     public Node visitDeclVar(PivotParser.DeclVarContext ctx) {
         switch (ctx.varType().getText()) {
             case "string":
-                return new VarDeclNode(VarType.STRING, ctx.ID().getText(), visit(ctx.expr()));
+                return new VarDeclNode(VarType.STRING, ctx.ID().getText(), new StringNode(ctx.STRING().getText()));
             case "int":
                 return new VarDeclNode(VarType.INT, ctx.ID().getText(), visit(ctx.expr()));
             case "float":
@@ -421,6 +421,9 @@ public class AstBuilderVisitor extends PivotBaseVisitor<Node> {
         return super.visitVarType(ctx);
     }
 
+    /**
+     * All literal values
+     */
     @Override
     public Node visitIntVal(PivotParser.IntValContext ctx) {
         return new IntegerNode(ctx.INTEGER().getText());
