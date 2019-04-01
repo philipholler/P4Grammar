@@ -23,3 +23,11 @@ int a = 5 * 5;
 float f = 5.1 - 5.2;
 
 int a = b + c;
+
+init(){
+    int a = 10;
+
+    string hej = "hej";
+    // Optional code for initialization
+    // Automatically run when the program is run for the first time
+}
