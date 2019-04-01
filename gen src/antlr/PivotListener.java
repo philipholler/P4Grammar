@@ -1,5 +1,5 @@
 // Generated from /Users/philip/Library/Mobile Documents/com~apple~CloudDocs/Cloud dokumenter/Java projects/P4Grammar/Pivot.g4 by ANTLR 4.7.2
-package	antlr;
+package antlr;
 
 import org.antlr.v4.runtime.tree.ParseTreeListener;
 
@@ -79,25 +79,53 @@ public interface PivotListener extends ParseTreeListener {
 	 */
 	void exitRange(PivotParser.RangeContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link PivotParser#lowerBound}.
+	 * Enter a parse tree produced by the {@code intlwRange}
+	 * labeled alternative in {@link PivotParser#lowerBound}.
 	 * @param ctx the parse tree
 	 */
-	void enterLowerBound(PivotParser.LowerBoundContext ctx);
+	void enterIntlwRange(PivotParser.IntlwRangeContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link PivotParser#lowerBound}.
+	 * Exit a parse tree produced by the {@code intlwRange}
+	 * labeled alternative in {@link PivotParser#lowerBound}.
 	 * @param ctx the parse tree
 	 */
-	void exitLowerBound(PivotParser.LowerBoundContext ctx);
+	void exitIntlwRange(PivotParser.IntlwRangeContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link PivotParser#upperBound}.
+	 * Enter a parse tree produced by the {@code floatlwRange}
+	 * labeled alternative in {@link PivotParser#lowerBound}.
 	 * @param ctx the parse tree
 	 */
-	void enterUpperBound(PivotParser.UpperBoundContext ctx);
+	void enterFloatlwRange(PivotParser.FloatlwRangeContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link PivotParser#upperBound}.
+	 * Exit a parse tree produced by the {@code floatlwRange}
+	 * labeled alternative in {@link PivotParser#lowerBound}.
 	 * @param ctx the parse tree
 	 */
-	void exitUpperBound(PivotParser.UpperBoundContext ctx);
+	void exitFloatlwRange(PivotParser.FloatlwRangeContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code intupRange}
+	 * labeled alternative in {@link PivotParser#upperBound}.
+	 * @param ctx the parse tree
+	 */
+	void enterIntupRange(PivotParser.IntupRangeContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code intupRange}
+	 * labeled alternative in {@link PivotParser#upperBound}.
+	 * @param ctx the parse tree
+	 */
+	void exitIntupRange(PivotParser.IntupRangeContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code floatupRange}
+	 * labeled alternative in {@link PivotParser#upperBound}.
+	 * @param ctx the parse tree
+	 */
+	void enterFloatupRange(PivotParser.FloatupRangeContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code floatupRange}
+	 * labeled alternative in {@link PivotParser#upperBound}.
+	 * @param ctx the parse tree
+	 */
+	void exitFloatupRange(PivotParser.FloatupRangeContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link PivotParser#device}.
 	 * @param ctx the parse tree
@@ -329,75 +357,101 @@ public interface PivotListener extends ParseTreeListener {
 	 */
 	void exitRtn(PivotParser.RtnContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link PivotParser#litVal}.
+	 * Enter a parse tree produced by the {@code intVal}
+	 * labeled alternative in {@link PivotParser#litVal}.
 	 * @param ctx the parse tree
 	 */
-	void enterLitVal(PivotParser.LitValContext ctx);
+	void enterIntVal(PivotParser.IntValContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link PivotParser#litVal}.
+	 * Exit a parse tree produced by the {@code intVal}
+	 * labeled alternative in {@link PivotParser#litVal}.
 	 * @param ctx the parse tree
 	 */
-	void exitLitVal(PivotParser.LitValContext ctx);
+	void exitIntVal(PivotParser.IntValContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code funcexpr}
+	 * Enter a parse tree produced by the {@code floatVal}
+	 * labeled alternative in {@link PivotParser#litVal}.
+	 * @param ctx the parse tree
+	 */
+	void enterFloatVal(PivotParser.FloatValContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code floatVal}
+	 * labeled alternative in {@link PivotParser#litVal}.
+	 * @param ctx the parse tree
+	 */
+	void exitFloatVal(PivotParser.FloatValContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code stringVal}
+	 * labeled alternative in {@link PivotParser#litVal}.
+	 * @param ctx the parse tree
+	 */
+	void enterStringVal(PivotParser.StringValContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code stringVal}
+	 * labeled alternative in {@link PivotParser#litVal}.
+	 * @param ctx the parse tree
+	 */
+	void exitStringVal(PivotParser.StringValContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code multiExpr}
 	 * labeled alternative in {@link PivotParser#expr}.
 	 * @param ctx the parse tree
 	 */
-	void enterFuncexpr(PivotParser.FuncexprContext ctx);
+	void enterMultiExpr(PivotParser.MultiExprContext ctx);
 	/**
-	 * Exit a parse tree produced by the {@code funcexpr}
+	 * Exit a parse tree produced by the {@code multiExpr}
 	 * labeled alternative in {@link PivotParser#expr}.
 	 * @param ctx the parse tree
 	 */
-	void exitFuncexpr(PivotParser.FuncexprContext ctx);
+	void exitMultiExpr(PivotParser.MultiExprContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code addexpr}
+	 * Enter a parse tree produced by the {@code atomExpr}
 	 * labeled alternative in {@link PivotParser#expr}.
 	 * @param ctx the parse tree
 	 */
-	void enterAddexpr(PivotParser.AddexprContext ctx);
+	void enterAtomExpr(PivotParser.AtomExprContext ctx);
 	/**
-	 * Exit a parse tree produced by the {@code addexpr}
+	 * Exit a parse tree produced by the {@code atomExpr}
 	 * labeled alternative in {@link PivotParser#expr}.
 	 * @param ctx the parse tree
 	 */
-	void exitAddexpr(PivotParser.AddexprContext ctx);
+	void exitAtomExpr(PivotParser.AtomExprContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code atomexpr}
+	 * Enter a parse tree produced by the {@code paranExpr}
 	 * labeled alternative in {@link PivotParser#expr}.
 	 * @param ctx the parse tree
 	 */
-	void enterAtomexpr(PivotParser.AtomexprContext ctx);
+	void enterParanExpr(PivotParser.ParanExprContext ctx);
 	/**
-	 * Exit a parse tree produced by the {@code atomexpr}
+	 * Exit a parse tree produced by the {@code paranExpr}
 	 * labeled alternative in {@link PivotParser#expr}.
 	 * @param ctx the parse tree
 	 */
-	void exitAtomexpr(PivotParser.AtomexprContext ctx);
+	void exitParanExpr(PivotParser.ParanExprContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code multiexpr}
+	 * Enter a parse tree produced by the {@code funCall}
 	 * labeled alternative in {@link PivotParser#expr}.
 	 * @param ctx the parse tree
 	 */
-	void enterMultiexpr(PivotParser.MultiexprContext ctx);
+	void enterFunCall(PivotParser.FunCallContext ctx);
 	/**
-	 * Exit a parse tree produced by the {@code multiexpr}
+	 * Exit a parse tree produced by the {@code funCall}
 	 * labeled alternative in {@link PivotParser#expr}.
 	 * @param ctx the parse tree
 	 */
-	void exitMultiexpr(PivotParser.MultiexprContext ctx);
+	void exitFunCall(PivotParser.FunCallContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code paranexpr}
+	 * Enter a parse tree produced by the {@code plusExpr}
 	 * labeled alternative in {@link PivotParser#expr}.
 	 * @param ctx the parse tree
 	 */
-	void enterParanexpr(PivotParser.ParanexprContext ctx);
+	void enterPlusExpr(PivotParser.PlusExprContext ctx);
 	/**
-	 * Exit a parse tree produced by the {@code paranexpr}
+	 * Exit a parse tree produced by the {@code plusExpr}
 	 * labeled alternative in {@link PivotParser#expr}.
 	 * @param ctx the parse tree
 	 */
-	void exitParanexpr(PivotParser.ParanexprContext ctx);
+	void exitPlusExpr(PivotParser.PlusExprContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code logicalExpressionOr}
 	 * labeled alternative in {@link PivotParser#logical_expr}.
@@ -529,41 +583,15 @@ public interface PivotListener extends ParseTreeListener {
 	 */
 	void exitComp_operator(PivotParser.Comp_operatorContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code litValue}
-	 * labeled alternative in {@link PivotParser#atom}.
+	 * Enter a parse tree produced by {@link PivotParser#atom}.
 	 * @param ctx the parse tree
 	 */
-	void enterLitValue(PivotParser.LitValueContext ctx);
+	void enterAtom(PivotParser.AtomContext ctx);
 	/**
-	 * Exit a parse tree produced by the {@code litValue}
-	 * labeled alternative in {@link PivotParser#atom}.
+	 * Exit a parse tree produced by {@link PivotParser#atom}.
 	 * @param ctx the parse tree
 	 */
-	void exitLitValue(PivotParser.LitValueContext ctx);
-	/**
-	 * Enter a parse tree produced by the {@code varidAtom}
-	 * labeled alternative in {@link PivotParser#atom}.
-	 * @param ctx the parse tree
-	 */
-	void enterVaridAtom(PivotParser.VaridAtomContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code varidAtom}
-	 * labeled alternative in {@link PivotParser#atom}.
-	 * @param ctx the parse tree
-	 */
-	void exitVaridAtom(PivotParser.VaridAtomContext ctx);
-	/**
-	 * Enter a parse tree produced by the {@code nowAtom}
-	 * labeled alternative in {@link PivotParser#atom}.
-	 * @param ctx the parse tree
-	 */
-	void enterNowAtom(PivotParser.NowAtomContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code nowAtom}
-	 * labeled alternative in {@link PivotParser#atom}.
-	 * @param ctx the parse tree
-	 */
-	void exitNowAtom(PivotParser.NowAtomContext ctx);
+	void exitAtom(PivotParser.AtomContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link PivotParser#varType}.
 	 * @param ctx the parse tree

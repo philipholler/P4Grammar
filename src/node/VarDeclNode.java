@@ -1,18 +1,19 @@
 package node;
 
 import node.base.LeafNode;
+import node.base.Node;
+import node.base.UnaryNode;
 import semantics.VarType;
 import visitor.AbstractVisitor;
 
-public class VarDeclNode extends LeafNode {
+public class VarDeclNode extends UnaryNode {
     VarType varType;
     String ID;
-    String val;
 
-    public VarDeclNode(VarType varType, String ID, String val) {
+    public VarDeclNode(VarType varType, String ID, Node expr) {
+        super(expr);
         this.varType = varType;
         this.ID = ID;
-        this.val = val;
     }
 
     @Override
@@ -28,16 +29,11 @@ public class VarDeclNode extends LeafNode {
         return ID;
     }
 
-    public String getVal() {
-        return val;
-    }
-
     @Override
     public String toString() {
         return "VarDeclNode(" +
                 "varType=" + varType +
                 ", ID='" + ID + '\'' +
-                ", val='" + val + '\'' +
-                '}';
+                ')';
     }
 }

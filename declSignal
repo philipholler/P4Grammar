@@ -18,10 +18,8 @@ MovementSensor frontDoorSensor = "Google.com";
 
 Thermometer mainThermometer = "129.67.198.65:12565";
 
-string a = "Hej";
+int a = 5 * 5;
 
-init(){
-    wait 30 seconds;
-    // Optional code for initialization
-    // Automatically run when the program is run for the first time
-}
+float f = 5.1 - 5.2;
+
+int a = b + c;

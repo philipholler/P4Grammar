@@ -3,8 +3,15 @@ package visitor;
 import antlr.PivotBaseVisitor;
 import antlr.PivotParser;
 import node.*;
-import node.Statements.TimeFrame;
-import node.Statements.WaitNode;
+import node.Statements.Expression.AddExprNode;
+import node.Statements.Expression.IDNode;
+import node.Statements.Expression.LiteralValues.FloatNode;
+import node.Statements.Expression.LiteralValues.IntegerNode;
+import node.Statements.Expression.LiteralValues.StringNode;
+import node.Statements.Expression.MultiExprNode;
+import node.Statements.Expression.Operator;
+import node.Statements.Wait.TimeFrame;
+import node.Statements.Wait.WaitNode;
 import node.base.Node;
 import node.define_nodes.Device.DefDeviceNode;
 import node.define_nodes.InitNode;
@@ -41,20 +48,9 @@ public class AstBuilderVisitor extends PivotBaseVisitor<Node> {
     public Node visitDecls(PivotParser.DeclsContext ctx) {
         DeclsNode node = new DeclsNode();
 
-        // Add all defines
-        for (PivotParser.DefineContext context: ctx.define()) {
-            node.addChild(visit(context));
+        for (ParseTree tree : ctx.children) {
+            node.addChild(visit(tree));
         }
-        // Add all var decl
-        for (PivotParser.DeclVarContext context: ctx.declVar()) {
-            node.addChild(visit(context));
-        }
-        // Add all device decl
-        for(PivotParser.DeclDeviceContext context: ctx.declDevice()){
-            node.addChild(visit(context));
-        }
-        node.addChild(visit(ctx.init()));
-        // todo add funcs and events.
 
         return node;
     }
@@ -77,14 +73,61 @@ public class AstBuilderVisitor extends PivotBaseVisitor<Node> {
     public Node visitDeclVar(PivotParser.DeclVarContext ctx) {
         switch (ctx.varType().getText()) {
             case "string":
-                return new VarDeclNode(VarType.STRING, ctx.varID.getText(), ctx.litVal().STRING().getText());
+                return new VarDeclNode(VarType.STRING, ctx.ID().getText(), visit(ctx.expr()));
             case "int":
-                return new VarDeclNode(VarType.INT, ctx.varID.getText(), ctx.litVal().INTEGER().getText());
+                return new VarDeclNode(VarType.INT, ctx.ID().getText(), visit(ctx.expr()));
             case "float":
-                return new VarDeclNode(VarType.FLOAT, ctx.varID.getText(), ctx.litVal().FLOAT().getText());
+                return new VarDeclNode(VarType.FLOAT, ctx.ID().getText(), visit(ctx.expr()));
             default:
                 System.out.println("ERROR IN VisitDeclVar");
-                return new VarDeclNode(VarType.FLOAT, ctx.varID.getText(), ctx.litVal().getText());
+                return new VarDeclNode(VarType.FLOAT, ctx.ID().getText(), visit(ctx.expr()));
+        }
+    }
+
+
+
+    @Override
+    public Node visitMultiExpr(PivotParser.MultiExprContext ctx) {
+        if(ctx.op.getText().equals("*")){
+            return new MultiExprNode(visit(ctx.leftChild), visit(ctx.rightChild), Operator.MULTPLY);
+        } else if(ctx.op.getText().equals("/")){
+            return new MultiExprNode(visit(ctx.leftChild), visit(ctx.rightChild), Operator.DIVIDE);
+        } else{
+            // todo exception handling
+            System.out.println("Error in AstBuilderVisitor - visitMultiExpr");
+            return null;
+        }
+    }
+
+    @Override
+    public Node visitParanExpr(PivotParser.ParanExprContext ctx) {
+        return visit(ctx.expr());
+    }
+
+    @Override
+    public Node visitFunCall(PivotParser.FunCallContext ctx) {
+        return super.visitFunCall(ctx);
+    }
+
+    @Override
+    public Node visitAtom(PivotParser.AtomContext ctx) {
+        if(ctx.varID == null){
+            return visit(ctx.litVal());
+        } else {
+            return new IDNode(ctx.ID().getText());
+        }
+    }
+
+    @Override
+    public Node visitPlusExpr(PivotParser.PlusExprContext ctx) {
+        if(ctx.op.getText().equals("+")){
+            return new AddExprNode(visit(ctx.leftChild), visit(ctx.rightChild), Operator.PLUS);
+        } else if(ctx.op.getText().equals("-")){
+            return new AddExprNode(visit(ctx.leftChild), visit(ctx.rightChild), Operator.MINUS);
+        } else{
+            // todo exception handling
+            System.out.println("Error in AstBuilderVisitor - visitMultiExpr");
+            return null;
         }
     }
 
@@ -118,32 +161,44 @@ public class AstBuilderVisitor extends PivotBaseVisitor<Node> {
 
     @Override
     public Node visitEnumeration(PivotParser.EnumerationContext ctx) {
-        if(ctx.enumVal.INTEGER() != null){
-            return new EnumNode(ctx.ID().getText(), VarType.INT, ctx.enumVal.getText());
-        } else if(ctx.enumVal.FLOAT() != null){
-            return new EnumNode(ctx.ID().getText(), VarType.FLOAT, ctx.enumVal.getText());
-        } else if (ctx.enumVal.STRING() != null){
-            return new EnumNode(ctx.ID().getText(), VarType.STRING, ctx.enumVal.getText());
-        } else{
-            // todo exception handling
-            System.out.println("Something went wrong in AST-builder visitEnumeration");
-            return null;
-        }
+        return new EnumNode(ctx.ID().getText(), visit(ctx.enumVal));
     }
 
     @Override
     public Node visitRange(PivotParser.RangeContext ctx) {
         // If both have the type integer.
-        if(ctx.lowerBound().INTEGER() != null && ctx.upperBound().INTEGER() != null){
-            return new RangeNode(ctx.lowerBound().getText(), ctx.upperBound().getText(), VarType.INT);
-        }
-        // If both are of the type float
-        else if(ctx.lowerBound().FLOAT() != null && ctx.upperBound().FLOAT() != null){
-            return new RangeNode(ctx.lowerBound().getText(), ctx.upperBound().getText(), VarType.FLOAT);
-        } else{
-            System.out.println("Something went wrong in ASTBuilderVisitor visitRange");
+        Node lwBound = visit(ctx.lowerBound());
+        Node upBound = visit(ctx.upperBound());
+        if(lwBound instanceof IntegerNode && upBound instanceof IntegerNode){
+            return new RangeNode(lwBound, upBound, VarType.INT);
+        } else if (lwBound instanceof FloatNode && upBound instanceof FloatNode){
+            return new RangeNode(lwBound, upBound, VarType.FLOAT);
+        } else {
+            // todo error handling
+            System.out.println("Error in AstBuilderVisitor - visitRange");
             return null;
         }
+
+    }
+
+    @Override
+    public Node visitIntlwRange(PivotParser.IntlwRangeContext ctx) {
+        return new IntegerNode(ctx.INTEGER().getText());
+    }
+
+    @Override
+    public Node visitFloatlwRange(PivotParser.FloatlwRangeContext ctx) {
+        return new FloatNode(ctx.FLOAT().getText());
+    }
+
+    @Override
+    public Node visitIntupRange(PivotParser.IntupRangeContext ctx) {
+        return new IntegerNode(ctx.INTEGER().getText());
+    }
+
+    @Override
+    public Node visitFloatupRange(PivotParser.FloatupRangeContext ctx) {
+        return new FloatNode(ctx.FLOAT().getText());
     }
 
     @Override
@@ -184,17 +239,6 @@ public class AstBuilderVisitor extends PivotBaseVisitor<Node> {
                         ctx.getText().equals("}"));
     }
 
-
-    @Override
-    public Node visitInputs(PivotParser.InputsContext ctx) {
-        return super.visitInputs(ctx);
-    }
-
-    @Override
-    public Node visitOutputs(PivotParser.OutputsContext ctx) {
-        return super.visitOutputs(ctx);
-    }
-
     @Override
     public Node visitInit(PivotParser.InitContext ctx) {
         return new InitNode(visit(ctx.block()));
@@ -231,11 +275,6 @@ public class AstBuilderVisitor extends PivotBaseVisitor<Node> {
     }
 
     @Override
-    public Node visitTimeFrame(PivotParser.TimeFrameContext ctx) {
-        return super.visitTimeFrame(ctx);
-    }
-
-    @Override
     public Node visitBlock(PivotParser.BlockContext ctx) {
         return new BlockNode(findNodes(ctx.stmts()));
     }
@@ -243,10 +282,9 @@ public class AstBuilderVisitor extends PivotBaseVisitor<Node> {
     private ArrayList<Node> findNodes(PivotParser.StmtsContext ctx){
         ArrayList<Node> stmts = new ArrayList<>();
 
-        for (PivotParser.WaitStmtContext context: ctx.waitStmt()) {
-            stmts.add(visit(context));
+        for (ParseTree tree: ctx.children) {
+            stmts.add(visit(tree));
         }
-
 
         return stmts;
     }
@@ -272,6 +310,8 @@ public class AstBuilderVisitor extends PivotBaseVisitor<Node> {
                 return TimeFrame.WEEK;
             } else if (ctx.timeFrame().DAYS() != null){
                 return TimeFrame.DAY;
+            } else if(ctx.timeFrame().HOURS() != null){
+                return TimeFrame.HOUR;
             } else if (ctx.timeFrame().MINUTES() != null){
                 return TimeFrame.MINUTES;
             } else if (ctx.timeFrame().SECONDS() != null){
@@ -320,35 +360,6 @@ public class AstBuilderVisitor extends PivotBaseVisitor<Node> {
         return super.visitRtn(ctx);
     }
 
-    @Override
-    public Node visitLitVal(PivotParser.LitValContext ctx) {
-        return super.visitLitVal(ctx);
-    }
-
-    @Override
-    public Node visitFuncexpr(PivotParser.FuncexprContext ctx) {
-        return super.visitFuncexpr(ctx);
-    }
-
-    @Override
-    public Node visitAddexpr(PivotParser.AddexprContext ctx) {
-        return super.visitAddexpr(ctx);
-    }
-
-    @Override
-    public Node visitAtomexpr(PivotParser.AtomexprContext ctx) {
-        return super.visitAtomexpr(ctx);
-    }
-
-    @Override
-    public Node visitMultiexpr(PivotParser.MultiexprContext ctx) {
-        return super.visitMultiexpr(ctx);
-    }
-
-    @Override
-    public Node visitParanexpr(PivotParser.ParanexprContext ctx) {
-        return super.visitParanexpr(ctx);
-    }
 
     @Override
     public Node visitLogicalExpressionOr(PivotParser.LogicalExpressionOrContext ctx) {
@@ -406,19 +417,22 @@ public class AstBuilderVisitor extends PivotBaseVisitor<Node> {
     }
 
     @Override
-    public Node visitVaridAtom(PivotParser.VaridAtomContext ctx) {
-        return super.visitVaridAtom(ctx);
-    }
-
-    @Override
-    public Node visitNowAtom(PivotParser.NowAtomContext ctx) {
-        return super.visitNowAtom(ctx);
-    }
-
-    @Override
     public Node visitVarType(PivotParser.VarTypeContext ctx) {
         return super.visitVarType(ctx);
     }
 
+    @Override
+    public Node visitIntVal(PivotParser.IntValContext ctx) {
+        return new IntegerNode(ctx.INTEGER().getText());
+    }
 
+    @Override
+    public Node visitFloatVal(PivotParser.FloatValContext ctx) {
+        return new FloatNode(ctx.FLOAT().getText());
+    }
+
+    @Override
+    public Node visitStringVal(PivotParser.StringValContext ctx) {
+        return new StringNode(ctx.STRING().getText());
+    }
 }
