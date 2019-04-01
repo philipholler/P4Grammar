@@ -3,6 +3,8 @@ package visitor;
 import antlr.PivotBaseVisitor;
 import antlr.PivotParser;
 import node.*;
+import node.Statements.AssignmentNode;
+import node.Statements.BreakNode;
 import node.Statements.Expression.AddExprNode;
 import node.Statements.Expression.IDNode;
 import node.Statements.Expression.LiteralValues.FloatNode;
@@ -10,6 +12,7 @@ import node.Statements.Expression.LiteralValues.IntegerNode;
 import node.Statements.Expression.LiteralValues.StringNode;
 import node.Statements.Expression.MultiExprNode;
 import node.Statements.Expression.Operator;
+import node.Statements.ReturnNode;
 import node.Statements.Wait.TimeFrame;
 import node.Statements.Wait.WaitNode;
 import node.base.Node;
@@ -166,9 +169,10 @@ public class AstBuilderVisitor extends PivotBaseVisitor<Node> {
 
     @Override
     public Node visitRange(PivotParser.RangeContext ctx) {
-        // If both have the type integer.
         Node lwBound = visit(ctx.lowerBound());
         Node upBound = visit(ctx.upperBound());
+
+        // If both have the type integer.
         if(lwBound instanceof IntegerNode && upBound instanceof IntegerNode){
             return new RangeNode(lwBound, upBound, VarType.INT);
         } else if (lwBound instanceof FloatNode && upBound instanceof FloatNode){
@@ -327,7 +331,7 @@ public class AstBuilderVisitor extends PivotBaseVisitor<Node> {
 
     @Override
     public Node visitAssignment(PivotParser.AssignmentContext ctx) {
-        return super.visitAssignment(ctx);
+        return new AssignmentNode(visit(ctx.expr()), ctx.varID.getText());
     }
 
     @Override
@@ -352,12 +356,12 @@ public class AstBuilderVisitor extends PivotBaseVisitor<Node> {
 
     @Override
     public Node visitBrk(PivotParser.BrkContext ctx) {
-        return super.visitBrk(ctx);
+        return new BreakNode();
     }
 
     @Override
     public Node visitRtn(PivotParser.RtnContext ctx) {
-        return super.visitRtn(ctx);
+        return new ReturnNode(visit(ctx.expr()));
     }
 
 

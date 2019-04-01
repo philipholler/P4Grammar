@@ -25,11 +25,17 @@ float f = 5.1 - 5.2;
 int a = b + c;
 
 init(){
-    int a = 10;
+    // Optional code for initialization
+    // Automatically run when the program is run for the first time
+    int a = 1 + 2 * 3 - (3 / 5);
 
     string hej = "hej";
 
+    a = 3 + b;
+
     string hejhej = "hej" + "hej";
-    // Optional code for initialization
-    // Automatically run when the program is run for the first time
+
+    break;
+
+    return hejhej;
 }

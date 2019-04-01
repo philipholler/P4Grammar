@@ -16,11 +16,6 @@ public class AddExprNode extends Node {
     }
 
     @Override
-    public Object accept(AbstractVisitor visitor) {
-        return null;
-    }
-
-    @Override
     public String getTreeString(int indentation) {
         StringBuilder treeString = new StringBuilder();
 

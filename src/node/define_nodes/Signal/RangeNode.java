@@ -16,11 +16,6 @@ public class RangeNode extends BinaryNode {
     }
 
     @Override
-    public Object accept(AbstractVisitor visitor) {
-        return visitor.visit(this);
-    }
-
-    @Override
     public String toString() {
         return "RangeNode(" +
                 "Type=" + Type +

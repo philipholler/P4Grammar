@@ -10,8 +10,4 @@ public class ProgramNode extends UnaryNode {
         super(child);
     }
 
-    @Override
-    public Object accept(AbstractVisitor visitor) {
-        return visitor.visit(this);
-    }
 }

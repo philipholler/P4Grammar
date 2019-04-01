@@ -14,11 +14,6 @@ public class DevDeclNode extends LeafNode {
         this.val = val;
     }
 
-    @Override
-    public Object accept(AbstractVisitor visitor) {
-        return visitor.visit(this);
-    }
-
     public String getType() {
         return type;
     }

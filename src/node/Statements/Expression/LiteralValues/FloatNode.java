@@ -23,11 +23,6 @@ public class FloatNode extends LiteralValueNode {
     }
 
     @Override
-    public Object accept(AbstractVisitor visitor) {
-        return null;
-    }
-
-    @Override
     public String toString() {
         return "FloatNode(" +
                 "val=" + val +

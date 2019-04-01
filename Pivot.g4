@@ -74,7 +74,7 @@ declVar: varType ID EQUALS expr SEMCOL;
 
 brk: BREAK SEMCOL;
 
-rtn : (RETURN (varID=ID | litVal)? SEMCOL);
+rtn : (RETURN expr? SEMCOL);
 
 litVal: INTEGER #intVal
       | FLOAT   #floatVal

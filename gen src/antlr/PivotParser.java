@@ -1,6 +1,5 @@
 // Generated from /Users/philip/Library/Mobile Documents/com~apple~CloudDocs/Cloud dokumenter/Java projects/P4Grammar/Pivot.g4 by ANTLR 4.7.2
 package antlr;
-
 import org.antlr.v4.runtime.atn.*;
 import org.antlr.v4.runtime.dfa.DFA;
 import org.antlr.v4.runtime.*;
@@ -2542,13 +2541,11 @@ public class PivotParser extends Parser {
 	}
 
 	public static class RtnContext extends ParserRuleContext {
-		public Token varID;
 		public TerminalNode RETURN() { return getToken(PivotParser.RETURN, 0); }
 		public TerminalNode SEMCOL() { return getToken(PivotParser.SEMCOL, 0); }
-		public LitValContext litVal() {
-			return getRuleContext(LitValContext.class,0);
+		public ExprContext expr() {
+			return getRuleContext(ExprContext.class,0);
 		}
-		public TerminalNode ID() { return getToken(PivotParser.ID, 0); }
 		public RtnContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
@@ -2571,35 +2568,24 @@ public class PivotParser extends Parser {
 	public final RtnContext rtn() throws RecognitionException {
 		RtnContext _localctx = new RtnContext(_ctx, getState());
 		enterRule(_localctx, 62, RULE_rtn);
+		int _la;
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
 			{
 			setState(354);
 			match(RETURN);
-			setState(357);
+			setState(356);
 			_errHandler.sync(this);
-			switch (_input.LA(1)) {
-			case ID:
+			_la = _input.LA(1);
+			if (((((_la - 36)) & ~0x3f) == 0 && ((1L << (_la - 36)) & ((1L << (SET - 36)) | (1L << (GET - 36)) | (1L << (NOW - 36)) | (1L << (PARANBEG - 36)) | (1L << (FLOAT - 36)) | (1L << (INTEGER - 36)) | (1L << (STRING - 36)) | (1L << (ID - 36)))) != 0)) {
 				{
 				setState(355);
-				((RtnContext)_localctx).varID = match(ID);
+				expr(0);
 				}
-				break;
-			case FLOAT:
-			case INTEGER:
-			case STRING:
-				{
-				setState(356);
-				litVal();
-				}
-				break;
-			case SEMCOL:
-				break;
-			default:
-				break;
 			}
-			setState(359);
+
+			setState(358);
 			match(SEMCOL);
 			}
 			}
@@ -2682,14 +2668,14 @@ public class PivotParser extends Parser {
 		LitValContext _localctx = new LitValContext(_ctx, getState());
 		enterRule(_localctx, 64, RULE_litVal);
 		try {
-			setState(364);
+			setState(363);
 			_errHandler.sync(this);
 			switch (_input.LA(1)) {
 			case INTEGER:
 				_localctx = new IntValContext(_localctx);
 				enterOuterAlt(_localctx, 1);
 				{
-				setState(361);
+				setState(360);
 				match(INTEGER);
 				}
 				break;
@@ -2697,7 +2683,7 @@ public class PivotParser extends Parser {
 				_localctx = new FloatValContext(_localctx);
 				enterOuterAlt(_localctx, 2);
 				{
-				setState(362);
+				setState(361);
 				match(FLOAT);
 				}
 				break;
@@ -2705,7 +2691,7 @@ public class PivotParser extends Parser {
 				_localctx = new StringValContext(_localctx);
 				enterOuterAlt(_localctx, 3);
 				{
-				setState(363);
+				setState(362);
 				match(STRING);
 				}
 				break;
@@ -2865,7 +2851,7 @@ public class PivotParser extends Parser {
 			int _alt;
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(373);
+			setState(372);
 			_errHandler.sync(this);
 			switch ( getInterpreter().adaptivePredict(_input,37,_ctx) ) {
 			case 1:
@@ -2874,11 +2860,11 @@ public class PivotParser extends Parser {
 				_ctx = _localctx;
 				_prevctx = _localctx;
 
-				setState(367);
+				setState(366);
 				match(PARANBEG);
-				setState(368);
+				setState(367);
 				expr(0);
-				setState(369);
+				setState(368);
 				match(PARANEND);
 				}
 				break;
@@ -2887,7 +2873,7 @@ public class PivotParser extends Parser {
 				_localctx = new AtomExprContext(_localctx);
 				_ctx = _localctx;
 				_prevctx = _localctx;
-				setState(371);
+				setState(370);
 				atom();
 				}
 				break;
@@ -2896,13 +2882,13 @@ public class PivotParser extends Parser {
 				_localctx = new FunCallContext(_localctx);
 				_ctx = _localctx;
 				_prevctx = _localctx;
-				setState(372);
+				setState(371);
 				funcCall();
 				}
 				break;
 			}
 			_ctx.stop = _input.LT(-1);
-			setState(383);
+			setState(382);
 			_errHandler.sync(this);
 			_alt = getInterpreter().adaptivePredict(_input,39,_ctx);
 			while ( _alt!=2 && _alt!=org.antlr.v4.runtime.atn.ATN.INVALID_ALT_NUMBER ) {
@@ -2910,7 +2896,7 @@ public class PivotParser extends Parser {
 					if ( _parseListeners!=null ) triggerExitRuleEvent();
 					_prevctx = _localctx;
 					{
-					setState(381);
+					setState(380);
 					_errHandler.sync(this);
 					switch ( getInterpreter().adaptivePredict(_input,38,_ctx) ) {
 					case 1:
@@ -2918,9 +2904,9 @@ public class PivotParser extends Parser {
 						_localctx = new MultiExprContext(new ExprContext(_parentctx, _parentState));
 						((MultiExprContext)_localctx).leftChild = _prevctx;
 						pushNewRecursionContext(_localctx, _startState, RULE_expr);
-						setState(375);
+						setState(374);
 						if (!(precpred(_ctx, 5))) throw new FailedPredicateException(this, "precpred(_ctx, 5)");
-						setState(376);
+						setState(375);
 						((MultiExprContext)_localctx).op = _input.LT(1);
 						_la = _input.LA(1);
 						if ( !(_la==DIV || _la==MULT) ) {
@@ -2931,7 +2917,7 @@ public class PivotParser extends Parser {
 							_errHandler.reportMatch(this);
 							consume();
 						}
-						setState(377);
+						setState(376);
 						((MultiExprContext)_localctx).rightChild = expr(6);
 						}
 						break;
@@ -2940,9 +2926,9 @@ public class PivotParser extends Parser {
 						_localctx = new PlusExprContext(new ExprContext(_parentctx, _parentState));
 						((PlusExprContext)_localctx).leftChild = _prevctx;
 						pushNewRecursionContext(_localctx, _startState, RULE_expr);
-						setState(378);
+						setState(377);
 						if (!(precpred(_ctx, 4))) throw new FailedPredicateException(this, "precpred(_ctx, 4)");
-						setState(379);
+						setState(378);
 						((PlusExprContext)_localctx).op = _input.LT(1);
 						_la = _input.LA(1);
 						if ( !(_la==PLUS || _la==MINUS) ) {
@@ -2953,14 +2939,14 @@ public class PivotParser extends Parser {
 							_errHandler.reportMatch(this);
 							consume();
 						}
-						setState(380);
+						setState(379);
 						((PlusExprContext)_localctx).rightChild = expr(5);
 						}
 						break;
 					}
 					} 
 				}
-				setState(385);
+				setState(384);
 				_errHandler.sync(this);
 				_alt = getInterpreter().adaptivePredict(_input,39,_ctx);
 			}
@@ -3109,7 +3095,7 @@ public class PivotParser extends Parser {
 			int _alt;
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(393);
+			setState(392);
 			_errHandler.sync(this);
 			switch ( getInterpreter().adaptivePredict(_input,40,_ctx) ) {
 			case 1:
@@ -3118,7 +3104,7 @@ public class PivotParser extends Parser {
 				_ctx = _localctx;
 				_prevctx = _localctx;
 
-				setState(387);
+				setState(386);
 				comparison_expr();
 				}
 				break;
@@ -3127,11 +3113,11 @@ public class PivotParser extends Parser {
 				_localctx = new LogicalExpressionInParenContext(_localctx);
 				_ctx = _localctx;
 				_prevctx = _localctx;
-				setState(388);
+				setState(387);
 				match(PARANBEG);
-				setState(389);
+				setState(388);
 				logical_expr(0);
-				setState(390);
+				setState(389);
 				match(PARANEND);
 				}
 				break;
@@ -3140,7 +3126,7 @@ public class PivotParser extends Parser {
 				_localctx = new LogicalLiteralsContext(_localctx);
 				_ctx = _localctx;
 				_prevctx = _localctx;
-				setState(392);
+				setState(391);
 				_la = _input.LA(1);
 				if ( !(_la==TRUE || _la==FALSE) ) {
 				_errHandler.recoverInline(this);
@@ -3154,7 +3140,7 @@ public class PivotParser extends Parser {
 				break;
 			}
 			_ctx.stop = _input.LT(-1);
-			setState(403);
+			setState(402);
 			_errHandler.sync(this);
 			_alt = getInterpreter().adaptivePredict(_input,42,_ctx);
 			while ( _alt!=2 && _alt!=org.antlr.v4.runtime.atn.ATN.INVALID_ALT_NUMBER ) {
@@ -3162,18 +3148,18 @@ public class PivotParser extends Parser {
 					if ( _parseListeners!=null ) triggerExitRuleEvent();
 					_prevctx = _localctx;
 					{
-					setState(401);
+					setState(400);
 					_errHandler.sync(this);
 					switch ( getInterpreter().adaptivePredict(_input,41,_ctx) ) {
 					case 1:
 						{
 						_localctx = new LogicalExpressionAndContext(new Logical_exprContext(_parentctx, _parentState));
 						pushNewRecursionContext(_localctx, _startState, RULE_logical_expr);
-						setState(395);
+						setState(394);
 						if (!(precpred(_ctx, 5))) throw new FailedPredicateException(this, "precpred(_ctx, 5)");
-						setState(396);
+						setState(395);
 						match(AND);
-						setState(397);
+						setState(396);
 						logical_expr(6);
 						}
 						break;
@@ -3181,18 +3167,18 @@ public class PivotParser extends Parser {
 						{
 						_localctx = new LogicalExpressionOrContext(new Logical_exprContext(_parentctx, _parentState));
 						pushNewRecursionContext(_localctx, _startState, RULE_logical_expr);
-						setState(398);
+						setState(397);
 						if (!(precpred(_ctx, 4))) throw new FailedPredicateException(this, "precpred(_ctx, 4)");
-						setState(399);
+						setState(398);
 						match(OR);
-						setState(400);
+						setState(399);
 						logical_expr(5);
 						}
 						break;
 					}
 					} 
 				}
-				setState(405);
+				setState(404);
 				_errHandler.sync(this);
 				_alt = getInterpreter().adaptivePredict(_input,42,_ctx);
 			}
@@ -3271,18 +3257,18 @@ public class PivotParser extends Parser {
 		Comparison_exprContext _localctx = new Comparison_exprContext(_ctx, getState());
 		enterRule(_localctx, 70, RULE_comparison_expr);
 		try {
-			setState(414);
+			setState(413);
 			_errHandler.sync(this);
 			switch ( getInterpreter().adaptivePredict(_input,43,_ctx) ) {
 			case 1:
 				_localctx = new ComparisonExpressionWithOperatorContext(_localctx);
 				enterOuterAlt(_localctx, 1);
 				{
-				setState(406);
+				setState(405);
 				comparison_operand();
-				setState(407);
+				setState(406);
 				comp_operator();
-				setState(408);
+				setState(407);
 				comparison_operand();
 				}
 				break;
@@ -3290,11 +3276,11 @@ public class PivotParser extends Parser {
 				_localctx = new ComparisonExpressionParensContext(_localctx);
 				enterOuterAlt(_localctx, 2);
 				{
-				setState(410);
+				setState(409);
 				match(PARANBEG);
-				setState(411);
+				setState(410);
 				comparison_expr();
-				setState(412);
+				setState(411);
 				match(PARANEND);
 				}
 				break;
@@ -3382,14 +3368,14 @@ public class PivotParser extends Parser {
 		enterRule(_localctx, 72, RULE_comparison_operand);
 		int _la;
 		try {
-			setState(419);
+			setState(418);
 			_errHandler.sync(this);
 			switch (_input.LA(1)) {
 			case TIME:
 				_localctx = new TimeOpContext(_localctx);
 				enterOuterAlt(_localctx, 1);
 				{
-				setState(416);
+				setState(415);
 				match(TIME);
 				}
 				break;
@@ -3398,7 +3384,7 @@ public class PivotParser extends Parser {
 				_localctx = new DateOpContext(_localctx);
 				enterOuterAlt(_localctx, 2);
 				{
-				setState(417);
+				setState(416);
 				_la = _input.LA(1);
 				if ( !(_la==DATE || _la==DATEnoYEAR) ) {
 				_errHandler.recoverInline(this);
@@ -3421,7 +3407,7 @@ public class PivotParser extends Parser {
 				_localctx = new ExprOPContext(_localctx);
 				enterOuterAlt(_localctx, 3);
 				{
-				setState(418);
+				setState(417);
 				expr(0);
 				}
 				break;
@@ -3473,7 +3459,7 @@ public class PivotParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(421);
+			setState(420);
 			_la = _input.LA(1);
 			if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << GT) | (1L << GE) | (1L << ST) | (1L << SE) | (1L << EQ) | (1L << NE))) != 0)) ) {
 			_errHandler.recoverInline(this);
@@ -3526,7 +3512,7 @@ public class PivotParser extends Parser {
 		AtomContext _localctx = new AtomContext(_ctx, getState());
 		enterRule(_localctx, 76, RULE_atom);
 		try {
-			setState(426);
+			setState(425);
 			_errHandler.sync(this);
 			switch (_input.LA(1)) {
 			case FLOAT:
@@ -3534,21 +3520,21 @@ public class PivotParser extends Parser {
 			case STRING:
 				enterOuterAlt(_localctx, 1);
 				{
-				setState(423);
+				setState(422);
 				litVal();
 				}
 				break;
 			case ID:
 				enterOuterAlt(_localctx, 2);
 				{
-				setState(424);
+				setState(423);
 				((AtomContext)_localctx).varID = match(ID);
 				}
 				break;
 			case NOW:
 				enterOuterAlt(_localctx, 3);
 				{
-				setState(425);
+				setState(424);
 				match(NOW);
 				}
 				break;
@@ -3597,7 +3583,7 @@ public class PivotParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(428);
+			setState(427);
 			_la = _input.LA(1);
 			if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << STRINGKW) | (1L << INTEGERKW) | (1L << FLOATKW))) != 0)) ) {
 			_errHandler.recoverInline(this);
@@ -3649,7 +3635,7 @@ public class PivotParser extends Parser {
 	}
 
 	public static final String _serializedATN =
-		"\3\u608b\ua72a\u8133\ub9ed\u417c\u3be7\u7786\u5964\3F\u01b1\4\2\t\2\4"+
+		"\3\u608b\ua72a\u8133\ub9ed\u417c\u3be7\u7786\u5964\3F\u01b0\4\2\t\2\4"+
 		"\3\t\3\4\4\t\4\4\5\t\5\4\6\t\6\4\7\t\7\4\b\t\b\4\t\t\t\4\n\t\n\4\13\t"+
 		"\13\4\f\t\f\4\r\t\r\4\16\t\16\4\17\t\17\4\20\t\20\4\21\t\21\4\22\t\22"+
 		"\4\23\t\23\4\24\t\24\4\25\t\25\4\26\t\26\4\27\t\27\4\30\t\30\4\31\t\31"+
@@ -3676,29 +3662,29 @@ public class PivotParser extends Parser {
 		"\3\35\3\35\3\35\3\35\3\35\3\35\3\35\5\35\u0147\n\35\3\35\3\35\3\35\5\35"+
 		"\u014c\n\35\3\36\3\36\5\36\u0150\n\36\3\36\3\36\3\36\5\36\u0155\n\36\7"+
 		"\36\u0157\n\36\f\36\16\36\u015a\13\36\3\37\3\37\3\37\3\37\3\37\3\37\3"+
-		" \3 \3 \3!\3!\3!\5!\u0168\n!\3!\3!\3\"\3\"\3\"\5\"\u016f\n\"\3#\3#\3#"+
-		"\3#\3#\3#\3#\5#\u0178\n#\3#\3#\3#\3#\3#\3#\7#\u0180\n#\f#\16#\u0183\13"+
-		"#\3$\3$\3$\3$\3$\3$\3$\5$\u018c\n$\3$\3$\3$\3$\3$\3$\7$\u0194\n$\f$\16"+
-		"$\u0197\13$\3%\3%\3%\3%\3%\3%\3%\3%\5%\u01a1\n%\3&\3&\3&\5&\u01a6\n&\3"+
-		"\'\3\'\3(\3(\3(\5(\u01ad\n(\3)\3)\3)\2\4DF*\2\4\6\b\n\f\16\20\22\24\26"+
-		"\30\32\34\36 \"$&(*,.\60\62\64\668:<>@BDFHJLNP\2\t\3\2\33!\3\2\678\3\2"+
-		"\65\66\3\2\16\17\3\2?@\3\2\b\r\3\2#%\2\u01c6\2R\3\2\2\2\4X\3\2\2\2\6l"+
-		"\3\2\2\2\bs\3\2\2\2\nz\3\2\2\2\f\u0082\3\2\2\2\16\u0086\3\2\2\2\20\u008c"+
-		"\3\2\2\2\22\u0090\3\2\2\2\24\u0092\3\2\2\2\26\u00a4\3\2\2\2\30\u00ae\3"+
-		"\2\2\2\32\u00b8\3\2\2\2\34\u00be\3\2\2\2\36\u00c5\3\2\2\2 \u00d5\3\2\2"+
-		"\2\"\u00d7\3\2\2\2$\u00dc\3\2\2\2&\u00f2\3\2\2\2(\u0104\3\2\2\2*\u0106"+
-		"\3\2\2\2,\u0108\3\2\2\2.\u0118\3\2\2\2\60\u0125\3\2\2\2\62\u0127\3\2\2"+
-		"\2\64\u012c\3\2\2\2\66\u0135\3\2\2\28\u014b\3\2\2\2:\u014f\3\2\2\2<\u015b"+
-		"\3\2\2\2>\u0161\3\2\2\2@\u0164\3\2\2\2B\u016e\3\2\2\2D\u0177\3\2\2\2F"+
-		"\u018b\3\2\2\2H\u01a0\3\2\2\2J\u01a5\3\2\2\2L\u01a7\3\2\2\2N\u01ac\3\2"+
-		"\2\2P\u01ae\3\2\2\2RS\5\4\3\2ST\7\2\2\3T\3\3\2\2\2UW\5\6\4\2VU\3\2\2\2"+
-		"WZ\3\2\2\2XV\3\2\2\2XY\3\2\2\2Y_\3\2\2\2ZX\3\2\2\2[^\5<\37\2\\^\5\32\16"+
-		"\2][\3\2\2\2]\\\3\2\2\2^a\3\2\2\2_]\3\2\2\2_`\3\2\2\2`c\3\2\2\2a_\3\2"+
-		"\2\2bd\5\34\17\2cb\3\2\2\2cd\3\2\2\2di\3\2\2\2eh\5\36\20\2fh\5$\23\2g"+
-		"e\3\2\2\2gf\3\2\2\2hk\3\2\2\2ig\3\2\2\2ij\3\2\2\2j\5\3\2\2\2ki\3\2\2\2"+
-		"lo\7\24\2\2mp\5\b\5\2np\5\24\13\2om\3\2\2\2on\3\2\2\2pq\3\2\2\2qr\7:\2"+
-		"\2r\7\3\2\2\2st\7\20\2\2tu\7E\2\2ux\7=\2\2vy\5\16\b\2wy\5\n\6\2xv\3\2"+
-		"\2\2xw\3\2\2\2y\t\3\2\2\2z\177\5\f\7\2{|\7;\2\2|~\5\f\7\2}{\3\2\2\2~\u0081"+
+		" \3 \3 \3!\3!\5!\u0167\n!\3!\3!\3\"\3\"\3\"\5\"\u016e\n\"\3#\3#\3#\3#"+
+		"\3#\3#\3#\5#\u0177\n#\3#\3#\3#\3#\3#\3#\7#\u017f\n#\f#\16#\u0182\13#\3"+
+		"$\3$\3$\3$\3$\3$\3$\5$\u018b\n$\3$\3$\3$\3$\3$\3$\7$\u0193\n$\f$\16$\u0196"+
+		"\13$\3%\3%\3%\3%\3%\3%\3%\3%\5%\u01a0\n%\3&\3&\3&\5&\u01a5\n&\3\'\3\'"+
+		"\3(\3(\3(\5(\u01ac\n(\3)\3)\3)\2\4DF*\2\4\6\b\n\f\16\20\22\24\26\30\32"+
+		"\34\36 \"$&(*,.\60\62\64\668:<>@BDFHJLNP\2\t\3\2\33!\3\2\678\3\2\65\66"+
+		"\3\2\16\17\3\2?@\3\2\b\r\3\2#%\2\u01c4\2R\3\2\2\2\4X\3\2\2\2\6l\3\2\2"+
+		"\2\bs\3\2\2\2\nz\3\2\2\2\f\u0082\3\2\2\2\16\u0086\3\2\2\2\20\u008c\3\2"+
+		"\2\2\22\u0090\3\2\2\2\24\u0092\3\2\2\2\26\u00a4\3\2\2\2\30\u00ae\3\2\2"+
+		"\2\32\u00b8\3\2\2\2\34\u00be\3\2\2\2\36\u00c5\3\2\2\2 \u00d5\3\2\2\2\""+
+		"\u00d7\3\2\2\2$\u00dc\3\2\2\2&\u00f2\3\2\2\2(\u0104\3\2\2\2*\u0106\3\2"+
+		"\2\2,\u0108\3\2\2\2.\u0118\3\2\2\2\60\u0125\3\2\2\2\62\u0127\3\2\2\2\64"+
+		"\u012c\3\2\2\2\66\u0135\3\2\2\28\u014b\3\2\2\2:\u014f\3\2\2\2<\u015b\3"+
+		"\2\2\2>\u0161\3\2\2\2@\u0164\3\2\2\2B\u016d\3\2\2\2D\u0176\3\2\2\2F\u018a"+
+		"\3\2\2\2H\u019f\3\2\2\2J\u01a4\3\2\2\2L\u01a6\3\2\2\2N\u01ab\3\2\2\2P"+
+		"\u01ad\3\2\2\2RS\5\4\3\2ST\7\2\2\3T\3\3\2\2\2UW\5\6\4\2VU\3\2\2\2WZ\3"+
+		"\2\2\2XV\3\2\2\2XY\3\2\2\2Y_\3\2\2\2ZX\3\2\2\2[^\5<\37\2\\^\5\32\16\2"+
+		"][\3\2\2\2]\\\3\2\2\2^a\3\2\2\2_]\3\2\2\2_`\3\2\2\2`c\3\2\2\2a_\3\2\2"+
+		"\2bd\5\34\17\2cb\3\2\2\2cd\3\2\2\2di\3\2\2\2eh\5\36\20\2fh\5$\23\2ge\3"+
+		"\2\2\2gf\3\2\2\2hk\3\2\2\2ig\3\2\2\2ij\3\2\2\2j\5\3\2\2\2ki\3\2\2\2lo"+
+		"\7\24\2\2mp\5\b\5\2np\5\24\13\2om\3\2\2\2on\3\2\2\2pq\3\2\2\2qr\7:\2\2"+
+		"r\7\3\2\2\2st\7\20\2\2tu\7E\2\2ux\7=\2\2vy\5\16\b\2wy\5\n\6\2xv\3\2\2"+
+		"\2xw\3\2\2\2y\t\3\2\2\2z\177\5\f\7\2{|\7;\2\2|~\5\f\7\2}{\3\2\2\2~\u0081"+
 		"\3\2\2\2\177}\3\2\2\2\177\u0080\3\2\2\2\u0080\13\3\2\2\2\u0081\177\3\2"+
 		"\2\2\u0082\u0083\7E\2\2\u0083\u0084\7\64\2\2\u0084\u0085\5B\"\2\u0085"+
 		"\r\3\2\2\2\u0086\u0087\5\20\t\2\u0087\u0088\79\2\2\u0088\u0089\5\22\n"+
@@ -3771,36 +3757,35 @@ public class PivotParser extends Parser {
 		"\u015a\3\2\2\2\u0158\u0156\3\2\2\2\u0158\u0159\3\2\2\2\u0159;\3\2\2\2"+
 		"\u015a\u0158\3\2\2\2\u015b\u015c\5P)\2\u015c\u015d\7E\2\2\u015d\u015e"+
 		"\7\64\2\2\u015e\u015f\5D#\2\u015f\u0160\7:\2\2\u0160=\3\2\2\2\u0161\u0162"+
-		"\7-\2\2\u0162\u0163\7:\2\2\u0163?\3\2\2\2\u0164\u0167\7,\2\2\u0165\u0168"+
-		"\7E\2\2\u0166\u0168\5B\"\2\u0167\u0165\3\2\2\2\u0167\u0166\3\2\2\2\u0167"+
-		"\u0168\3\2\2\2\u0168\u0169\3\2\2\2\u0169\u016a\7:\2\2\u016aA\3\2\2\2\u016b"+
-		"\u016f\7C\2\2\u016c\u016f\7A\2\2\u016d\u016f\7D\2\2\u016e\u016b\3\2\2"+
-		"\2\u016e\u016c\3\2\2\2\u016e\u016d\3\2\2\2\u016fC\3\2\2\2\u0170\u0171"+
-		"\b#\1\2\u0171\u0172\7\60\2\2\u0172\u0173\5D#\2\u0173\u0174\7\61\2\2\u0174"+
-		"\u0178\3\2\2\2\u0175\u0178\5N(\2\u0176\u0178\58\35\2\u0177\u0170\3\2\2"+
-		"\2\u0177\u0175\3\2\2\2\u0177\u0176\3\2\2\2\u0178\u0181\3\2\2\2\u0179\u017a"+
-		"\f\7\2\2\u017a\u017b\t\3\2\2\u017b\u0180\5D#\b\u017c\u017d\f\6\2\2\u017d"+
-		"\u017e\t\4\2\2\u017e\u0180\5D#\7\u017f\u0179\3\2\2\2\u017f\u017c\3\2\2"+
-		"\2\u0180\u0183\3\2\2\2\u0181\u017f\3\2\2\2\u0181\u0182\3\2\2\2\u0182E"+
-		"\3\2\2\2\u0183\u0181\3\2\2\2\u0184\u0185\b$\1\2\u0185\u018c\5H%\2\u0186"+
-		"\u0187\7\60\2\2\u0187\u0188\5F$\2\u0188\u0189\7\61\2\2\u0189\u018c\3\2"+
-		"\2\2\u018a\u018c\t\5\2\2\u018b\u0184\3\2\2\2\u018b\u0186\3\2\2\2\u018b"+
-		"\u018a\3\2\2\2\u018c\u0195\3\2\2\2\u018d\u018e\f\7\2\2\u018e\u018f\7\6"+
-		"\2\2\u018f\u0194\5F$\b\u0190\u0191\f\6\2\2\u0191\u0192\7\7\2\2\u0192\u0194"+
-		"\5F$\7\u0193\u018d\3\2\2\2\u0193\u0190\3\2\2\2\u0194\u0197\3\2\2\2\u0195"+
-		"\u0193\3\2\2\2\u0195\u0196\3\2\2\2\u0196G\3\2\2\2\u0197\u0195\3\2\2\2"+
-		"\u0198\u0199\5J&\2\u0199\u019a\5L\'\2\u019a\u019b\5J&\2\u019b\u01a1\3"+
-		"\2\2\2\u019c\u019d\7\60\2\2\u019d\u019e\5H%\2\u019e\u019f\7\61\2\2\u019f"+
-		"\u01a1\3\2\2\2\u01a0\u0198\3\2\2\2\u01a0\u019c\3\2\2\2\u01a1I\3\2\2\2"+
-		"\u01a2\u01a6\7B\2\2\u01a3\u01a6\t\6\2\2\u01a4\u01a6\5D#\2\u01a5\u01a2"+
-		"\3\2\2\2\u01a5\u01a3\3\2\2\2\u01a5\u01a4\3\2\2\2\u01a6K\3\2\2\2\u01a7"+
-		"\u01a8\t\7\2\2\u01a8M\3\2\2\2\u01a9\u01ad\5B\"\2\u01aa\u01ad\7E\2\2\u01ab"+
-		"\u01ad\7*\2\2\u01ac\u01a9\3\2\2\2\u01ac\u01aa\3\2\2\2\u01ac\u01ab\3\2"+
-		"\2\2\u01adO\3\2\2\2\u01ae\u01af\t\b\2\2\u01afQ\3\2\2\2\60X]_cgiox\177"+
-		"\u008c\u0090\u0095\u0099\u009c\u00a0\u00a2\u00ab\u00b5\u00c5\u00d2\u00d5"+
-		"\u00dc\u00e7\u00f2\u0100\u0104\u0116\u0118\u0125\u0133\u0146\u014b\u014f"+
-		"\u0154\u0158\u0167\u016e\u0177\u017f\u0181\u018b\u0193\u0195\u01a0\u01a5"+
-		"\u01ac";
+		"\7-\2\2\u0162\u0163\7:\2\2\u0163?\3\2\2\2\u0164\u0166\7,\2\2\u0165\u0167"+
+		"\5D#\2\u0166\u0165\3\2\2\2\u0166\u0167\3\2\2\2\u0167\u0168\3\2\2\2\u0168"+
+		"\u0169\7:\2\2\u0169A\3\2\2\2\u016a\u016e\7C\2\2\u016b\u016e\7A\2\2\u016c"+
+		"\u016e\7D\2\2\u016d\u016a\3\2\2\2\u016d\u016b\3\2\2\2\u016d\u016c\3\2"+
+		"\2\2\u016eC\3\2\2\2\u016f\u0170\b#\1\2\u0170\u0171\7\60\2\2\u0171\u0172"+
+		"\5D#\2\u0172\u0173\7\61\2\2\u0173\u0177\3\2\2\2\u0174\u0177\5N(\2\u0175"+
+		"\u0177\58\35\2\u0176\u016f\3\2\2\2\u0176\u0174\3\2\2\2\u0176\u0175\3\2"+
+		"\2\2\u0177\u0180\3\2\2\2\u0178\u0179\f\7\2\2\u0179\u017a\t\3\2\2\u017a"+
+		"\u017f\5D#\b\u017b\u017c\f\6\2\2\u017c\u017d\t\4\2\2\u017d\u017f\5D#\7"+
+		"\u017e\u0178\3\2\2\2\u017e\u017b\3\2\2\2\u017f\u0182\3\2\2\2\u0180\u017e"+
+		"\3\2\2\2\u0180\u0181\3\2\2\2\u0181E\3\2\2\2\u0182\u0180\3\2\2\2\u0183"+
+		"\u0184\b$\1\2\u0184\u018b\5H%\2\u0185\u0186\7\60\2\2\u0186\u0187\5F$\2"+
+		"\u0187\u0188\7\61\2\2\u0188\u018b\3\2\2\2\u0189\u018b\t\5\2\2\u018a\u0183"+
+		"\3\2\2\2\u018a\u0185\3\2\2\2\u018a\u0189\3\2\2\2\u018b\u0194\3\2\2\2\u018c"+
+		"\u018d\f\7\2\2\u018d\u018e\7\6\2\2\u018e\u0193\5F$\b\u018f\u0190\f\6\2"+
+		"\2\u0190\u0191\7\7\2\2\u0191\u0193\5F$\7\u0192\u018c\3\2\2\2\u0192\u018f"+
+		"\3\2\2\2\u0193\u0196\3\2\2\2\u0194\u0192\3\2\2\2\u0194\u0195\3\2\2\2\u0195"+
+		"G\3\2\2\2\u0196\u0194\3\2\2\2\u0197\u0198\5J&\2\u0198\u0199\5L\'\2\u0199"+
+		"\u019a\5J&\2\u019a\u01a0\3\2\2\2\u019b\u019c\7\60\2\2\u019c\u019d\5H%"+
+		"\2\u019d\u019e\7\61\2\2\u019e\u01a0\3\2\2\2\u019f\u0197\3\2\2\2\u019f"+
+		"\u019b\3\2\2\2\u01a0I\3\2\2\2\u01a1\u01a5\7B\2\2\u01a2\u01a5\t\6\2\2\u01a3"+
+		"\u01a5\5D#\2\u01a4\u01a1\3\2\2\2\u01a4\u01a2\3\2\2\2\u01a4\u01a3\3\2\2"+
+		"\2\u01a5K\3\2\2\2\u01a6\u01a7\t\7\2\2\u01a7M\3\2\2\2\u01a8\u01ac\5B\""+
+		"\2\u01a9\u01ac\7E\2\2\u01aa\u01ac\7*\2\2\u01ab\u01a8\3\2\2\2\u01ab\u01a9"+
+		"\3\2\2\2\u01ab\u01aa\3\2\2\2\u01acO\3\2\2\2\u01ad\u01ae\t\b\2\2\u01ae"+
+		"Q\3\2\2\2\60X]_cgiox\177\u008c\u0090\u0095\u0099\u009c\u00a0\u00a2\u00ab"+
+		"\u00b5\u00c5\u00d2\u00d5\u00dc\u00e7\u00f2\u0100\u0104\u0116\u0118\u0125"+
+		"\u0133\u0146\u014b\u014f\u0154\u0158\u0166\u016d\u0176\u017e\u0180\u018a"+
+		"\u0192\u0194\u019f\u01a4\u01ab";
 	public static final ATN _ATN =
 		new ATNDeserializer().deserialize(_serializedATN.toCharArray());
 	static {
