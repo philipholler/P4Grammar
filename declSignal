@@ -28,6 +28,8 @@ init(){
     int a = 10;
 
     string hej = "hej";
+
+    string hejhej = "hej" + "hej";
     // Optional code for initialization
     // Automatically run when the program is run for the first time
 }

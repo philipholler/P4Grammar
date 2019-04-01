@@ -70,7 +70,7 @@ funcCall: ID PARANBEG inputParam PARANEND
 
     inputParam: (ID | litVal)? (LISTSEP (varID=ID | litVal))*;
 
-declVar: varType ID EQUALS (STRING | expr) SEMCOL;
+declVar: varType ID EQUALS expr SEMCOL;
 
 brk: BREAK SEMCOL;
 
