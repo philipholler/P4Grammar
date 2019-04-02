@@ -27,6 +27,6 @@ public class LogicalOrExprNode extends LogicalExprNode {
 
     @Override
     public String toString() {
-        return "LogicalAndExprNode()";
+        return "LogicalOrExprNode()";
     }
 }

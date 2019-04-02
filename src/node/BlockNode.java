@@ -12,4 +12,11 @@ public class BlockNode extends ListNode {
         super(children);
     }
 
+    public BlockNode() {
+    }
+
+    @Override
+    public String toString() {
+        return "BlockNode()";
+    }
 }

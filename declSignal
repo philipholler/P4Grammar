@@ -37,8 +37,13 @@ init(){
 
     break;
 
-    if(5 < 12 && 3 < 10 || 5 < 8){
+    if(5 < 12 && 3 < 10 || (5 < 8 && 22 < (22 + 1))){
         a = 5;
+    }
+
+    func(a, func(func(func(b))));
+
+    while(a < b){
     }
 
     return hejhej;
