@@ -31,7 +31,7 @@ declDevice: devType=ID varID=ID EQUALS val=STRING SEMCOL;
 
 init : INITFUNCKW PARANBEG PARANEND block;
 
-funcDecl : (varType | VOID) ID PARANBEG fParams PARANEND block; // Function declaration
+funcDecl : (varType | VOID) id=ID PARANBEG params=fParams PARANEND block; // Function declaration
 
     fParams : (param (LISTSEP param)*)?;
     param   : varType localID=ID;
@@ -63,12 +63,12 @@ ifstmt: IF PARANBEG logical_expr PARANEND blck=block (ELSE elseblck=block)?;
 
 whilestmt: WHILE PARANBEG logical_expr PARANEND block;
 
-funcCall: id=ID PARANBEG inputParam PARANEND
+funcCall: id=ID PARANBEG arguments PARANEND
         | SET deviceID=ID signalID=ID COL (enumID=ID | litVal)
         | GET deviceID=ID signalID=ID
         ;
 
-    inputParam: expr? (LISTSEP expr)*;
+    arguments: expr? (LISTSEP expr)*;
 
 declVar: varType ID EQUALS expr SEMCOL;
 

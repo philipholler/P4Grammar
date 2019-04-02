@@ -376,13 +376,13 @@ public class PivotBaseListener implements PivotListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterInputParam(PivotParser.InputParamContext ctx) { }
+	@Override public void enterArguments(PivotParser.ArgumentsContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitInputParam(PivotParser.InputParamContext ctx) { }
+	@Override public void exitArguments(PivotParser.ArgumentsContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

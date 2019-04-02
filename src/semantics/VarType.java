@@ -1,5 +1,5 @@
 package semantics;
 
 public enum VarType {
-    INT, STRING, FLOAT
+    INT, STRING, FLOAT, VOID
 }

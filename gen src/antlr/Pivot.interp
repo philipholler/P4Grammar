@@ -169,7 +169,7 @@ assignment
 ifstmt
 whilestmt
 funcCall
-inputParam
+arguments
 declVar
 brk
 rtn

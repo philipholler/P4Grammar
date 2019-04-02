@@ -34,7 +34,7 @@ public class PivotParser extends Parser {
 		RULE_init = 13, RULE_funcDecl = 14, RULE_fParams = 15, RULE_param = 16, 
 		RULE_event = 17, RULE_atomEvent = 18, RULE_repeatEvent = 19, RULE_timeFrame = 20, 
 		RULE_block = 21, RULE_stmts = 22, RULE_waitStmt = 23, RULE_assignment = 24, 
-		RULE_ifstmt = 25, RULE_whilestmt = 26, RULE_funcCall = 27, RULE_inputParam = 28, 
+		RULE_ifstmt = 25, RULE_whilestmt = 26, RULE_funcCall = 27, RULE_arguments = 28, 
 		RULE_declVar = 29, RULE_brk = 30, RULE_rtn = 31, RULE_litVal = 32, RULE_expr = 33, 
 		RULE_logical_expr = 34, RULE_comparison_expr = 35, RULE_comparison_operand = 36, 
 		RULE_comp_operator = 37, RULE_atom = 38, RULE_varType = 39;
@@ -44,9 +44,8 @@ public class PivotParser extends Parser {
 			"range", "lowerBound", "upperBound", "device", "inputs", "outputs", "declDevice", 
 			"init", "funcDecl", "fParams", "param", "event", "atomEvent", "repeatEvent", 
 			"timeFrame", "block", "stmts", "waitStmt", "assignment", "ifstmt", "whilestmt", 
-			"funcCall", "inputParam", "declVar", "brk", "rtn", "litVal", "expr", 
-			"logical_expr", "comparison_expr", "comparison_operand", "comp_operator", 
-			"atom", "varType"
+			"funcCall", "arguments", "declVar", "brk", "rtn", "litVal", "expr", "logical_expr", 
+			"comparison_expr", "comparison_operand", "comp_operator", "atom", "varType"
 		};
 	}
 	public static final String[] ruleNames = makeRuleNames();
@@ -1194,14 +1193,16 @@ public class PivotParser extends Parser {
 	}
 
 	public static class FuncDeclContext extends ParserRuleContext {
-		public TerminalNode ID() { return getToken(PivotParser.ID, 0); }
+		public Token id;
+		public FParamsContext params;
 		public TerminalNode PARANBEG() { return getToken(PivotParser.PARANBEG, 0); }
-		public FParamsContext fParams() {
-			return getRuleContext(FParamsContext.class,0);
-		}
 		public TerminalNode PARANEND() { return getToken(PivotParser.PARANEND, 0); }
 		public BlockContext block() {
 			return getRuleContext(BlockContext.class,0);
+		}
+		public TerminalNode ID() { return getToken(PivotParser.ID, 0); }
+		public FParamsContext fParams() {
+			return getRuleContext(FParamsContext.class,0);
 		}
 		public VarTypeContext varType() {
 			return getRuleContext(VarTypeContext.class,0);
@@ -1253,11 +1254,11 @@ public class PivotParser extends Parser {
 				throw new NoViableAltException(this);
 			}
 			setState(197);
-			match(ID);
+			((FuncDeclContext)_localctx).id = match(ID);
 			setState(198);
 			match(PARANBEG);
 			setState(199);
-			fParams();
+			((FuncDeclContext)_localctx).params = fParams();
 			setState(200);
 			match(PARANEND);
 			setState(201);
@@ -2216,8 +2217,8 @@ public class PivotParser extends Parser {
 		public Token signalID;
 		public Token enumID;
 		public TerminalNode PARANBEG() { return getToken(PivotParser.PARANBEG, 0); }
-		public InputParamContext inputParam() {
-			return getRuleContext(InputParamContext.class,0);
+		public ArgumentsContext arguments() {
+			return getRuleContext(ArgumentsContext.class,0);
 		}
 		public TerminalNode PARANEND() { return getToken(PivotParser.PARANEND, 0); }
 		public List<TerminalNode> ID() { return getTokens(PivotParser.ID); }
@@ -2264,7 +2265,7 @@ public class PivotParser extends Parser {
 				setState(314);
 				match(PARANBEG);
 				setState(315);
-				inputParam();
+				arguments();
 				setState(316);
 				match(PARANEND);
 				}
@@ -2328,7 +2329,7 @@ public class PivotParser extends Parser {
 		return _localctx;
 	}
 
-	public static class InputParamContext extends ParserRuleContext {
+	public static class ArgumentsContext extends ParserRuleContext {
 		public List<ExprContext> expr() {
 			return getRuleContexts(ExprContext.class);
 		}
@@ -2339,28 +2340,28 @@ public class PivotParser extends Parser {
 		public TerminalNode LISTSEP(int i) {
 			return getToken(PivotParser.LISTSEP, i);
 		}
-		public InputParamContext(ParserRuleContext parent, int invokingState) {
+		public ArgumentsContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
-		@Override public int getRuleIndex() { return RULE_inputParam; }
+		@Override public int getRuleIndex() { return RULE_arguments; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof PivotListener ) ((PivotListener)listener).enterInputParam(this);
+			if ( listener instanceof PivotListener ) ((PivotListener)listener).enterArguments(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof PivotListener ) ((PivotListener)listener).exitInputParam(this);
+			if ( listener instanceof PivotListener ) ((PivotListener)listener).exitArguments(this);
 		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof PivotVisitor ) return ((PivotVisitor<? extends T>)visitor).visitInputParam(this);
+			if ( visitor instanceof PivotVisitor ) return ((PivotVisitor<? extends T>)visitor).visitArguments(this);
 			else return visitor.visitChildren(this);
 		}
 	}
 
-	public final InputParamContext inputParam() throws RecognitionException {
-		InputParamContext _localctx = new InputParamContext(_ctx, getState());
-		enterRule(_localctx, 56, RULE_inputParam);
+	public final ArgumentsContext arguments() throws RecognitionException {
+		ArgumentsContext _localctx = new ArgumentsContext(_ctx, getState());
+		enterRule(_localctx, 56, RULE_arguments);
 		int _la;
 		try {
 			enterOuterAlt(_localctx, 1);
