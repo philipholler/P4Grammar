@@ -3,21 +3,15 @@ package visitor;
 import antlr.PivotBaseVisitor;
 import antlr.PivotParser;
 import node.*;
-import node.Statements.AssignmentNode;
-import node.Statements.BreakNode;
-import node.Statements.Expression.AddExprNode;
-import node.Statements.Expression.IDNode;
+import node.Statements.*;
+import node.Statements.Expression.*;
 import node.Statements.Expression.LiteralValues.FloatNode;
 import node.Statements.Expression.LiteralValues.IntegerNode;
 import node.Statements.Expression.LiteralValues.StringNode;
-import node.Statements.Expression.MultiExprNode;
-import node.Statements.Expression.Operator;
-import node.Statements.IfStmtNode;
 import node.Statements.LogicalExpression.ComparisonExprNode;
 import node.Statements.LogicalExpression.ComparisonOperator;
 import node.Statements.LogicalExpression.LogicalAndExprNode;
 import node.Statements.LogicalExpression.LogicalOrExprNode;
-import node.Statements.ReturnNode;
 import node.Statements.Wait.TimeFrame;
 import node.Statements.Wait.WaitNode;
 import node.base.Node;
@@ -110,11 +104,6 @@ public class AstBuilderVisitor extends PivotBaseVisitor<Node> {
     @Override
     public Node visitParanExpr(PivotParser.ParanExprContext ctx) {
         return visit(ctx.expr());
-    }
-
-    @Override
-    public Node visitFunCall(PivotParser.FunCallContext ctx) {
-        return super.visitFunCall(ctx);
     }
 
     @Override
@@ -285,15 +274,23 @@ public class AstBuilderVisitor extends PivotBaseVisitor<Node> {
 
     @Override
     public Node visitBlock(PivotParser.BlockContext ctx) {
-        return new BlockNode(findNodes(ctx.stmts()));
+        ArrayList<Node> stmts = findNodes(ctx.stmts());
+
+        if(!stmts.isEmpty()){
+            return new BlockNode(stmts);
+        } else {
+            return new BlockNode();
+        }
     }
 
     private ArrayList<Node> findNodes(PivotParser.StmtsContext ctx){
         ArrayList<Node> stmts = new ArrayList<>();
 
-        if(!ctx.children.isEmpty()){
+        if(ctx.getChildCount() != 0){
             for (ParseTree tree: ctx.children) {
-                stmts.add(visit(tree));
+                if (!isSeparatorSymbol(tree)) {
+                    stmts.add(visit(tree));
+                }
             }
         }
 
@@ -348,12 +345,30 @@ public class AstBuilderVisitor extends PivotBaseVisitor<Node> {
 
     @Override
     public Node visitWhilestmt(PivotParser.WhilestmtContext ctx) {
-        return super.visitWhilestmt(ctx);
+        return new WhileNode(visit(ctx.logical_expr()), visit(ctx.block()));
     }
 
     @Override
     public Node visitFuncCall(PivotParser.FuncCallContext ctx) {
-        return super.visitFuncCall(ctx);
+        ArrayList<Node> inputParams = findInputParams(ctx);
+        System.out.println("Inputs: " + inputParams);
+        if(!inputParams.isEmpty()){
+            return new FuncCallNode(inputParams, ctx.id.getText());
+        } else {
+            return new FuncCallNode(ctx.id.getText());
+        }
+    }
+
+    private ArrayList<Node> findInputParams(PivotParser.FuncCallContext ctx){
+        ArrayList<Node> inputParams = new ArrayList<>();
+        if(ctx.inputParam().getChildCount() != 0){
+            for (ParseTree tree : ctx.inputParam().children) {
+                if(!isSeparatorSymbol(tree)){
+                    inputParams.add(visit(tree));
+                }
+            }
+        }
+        return inputParams;
     }
 
     @Override
@@ -370,7 +385,6 @@ public class AstBuilderVisitor extends PivotBaseVisitor<Node> {
     public Node visitRtn(PivotParser.RtnContext ctx) {
         return new ReturnNode(visit(ctx.expr()));
     }
-
 
     @Override
     public Node visitLogicalExpressionOr(PivotParser.LogicalExpressionOrContext ctx) {
@@ -394,7 +408,7 @@ public class AstBuilderVisitor extends PivotBaseVisitor<Node> {
 
     @Override
     public Node visitLogicalExpressionInParen(PivotParser.LogicalExpressionInParenContext ctx) {
-        return super.visitLogicalExpressionInParen(ctx);
+        return visit(ctx.logical_expr());
     }
 
     @Override

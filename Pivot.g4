@@ -63,12 +63,12 @@ ifstmt: IF PARANBEG logical_expr PARANEND blck=block (ELSE elseblck=block)?;
 
 whilestmt: WHILE PARANBEG logical_expr PARANEND block;
 
-funcCall: ID PARANBEG inputParam PARANEND
+funcCall: id=ID PARANBEG inputParam PARANEND
         | SET deviceID=ID signalID=ID COL (enumID=ID | litVal)
         | GET deviceID=ID signalID=ID
         ;
 
-    inputParam: (ID | litVal)? (LISTSEP (varID=ID | litVal))*;
+    inputParam: expr? (LISTSEP expr)*;
 
 declVar: varType ID EQUALS expr SEMCOL;
 
