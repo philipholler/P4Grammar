@@ -1,4 +1,4 @@
-package node.define_nodes;
+package node;
 
 import node.BlockNode;
 import node.base.ListNode;

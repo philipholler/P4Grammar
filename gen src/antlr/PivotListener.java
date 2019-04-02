@@ -316,15 +316,15 @@ public interface PivotListener extends ParseTreeListener {
 	 */
 	void exitFuncCall(PivotParser.FuncCallContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link PivotParser#inputParam}.
+	 * Enter a parse tree produced by {@link PivotParser#arguments}.
 	 * @param ctx the parse tree
 	 */
-	void enterInputParam(PivotParser.InputParamContext ctx);
+	void enterArguments(PivotParser.ArgumentsContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link PivotParser#inputParam}.
+	 * Exit a parse tree produced by {@link PivotParser#arguments}.
 	 * @param ctx the parse tree
 	 */
-	void exitInputParam(PivotParser.InputParamContext ctx);
+	void exitArguments(PivotParser.ArgumentsContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link PivotParser#declVar}.
 	 * @param ctx the parse tree

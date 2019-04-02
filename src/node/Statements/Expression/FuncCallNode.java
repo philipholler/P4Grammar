@@ -1,17 +1,16 @@
 package node.Statements.Expression;
 
 import node.base.Node;
-import semantics.VarType;
 import utils.StringUtils;
 
 import java.util.ArrayList;
 
 public class FuncCallNode extends ExpressionNode{
-    private ArrayList<Node> params = new ArrayList<>();
+    private ArrayList<Node> arguments = new ArrayList<>();
     private String ID;
 
-    public FuncCallNode(ArrayList<Node> params, String ID) {
-        this.params = params;
+    public FuncCallNode(ArrayList<Node> arguments, String ID) {
+        this.arguments = arguments;
         this.ID = ID;
     }
 
@@ -29,7 +28,7 @@ public class FuncCallNode extends ExpressionNode{
     public String toString() {
         return "FuncCallNode(" +
                 "ID='" + ID + '\'' +
-                ", params=" + params +
+                ", arguments=" + arguments +
                 ')';
     }
 }

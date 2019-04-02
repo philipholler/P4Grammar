@@ -41,10 +41,18 @@ init(){
         a = 5;
     }
 
-    func(a, func(func(func(b))));
+    func(a, func(b));
 
     while(a < b){
     }
 
     return hejhej;
+}
+
+string setBedroomWindowsOpen(int percentage){
+    a = b;
+}
+
+string setBedroomWindowsOpen(int percentage, float f, string s){
+    a = b;
 }

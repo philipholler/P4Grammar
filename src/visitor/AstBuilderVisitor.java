@@ -3,6 +3,8 @@ package visitor;
 import antlr.PivotBaseVisitor;
 import antlr.PivotParser;
 import node.*;
+import node.Function.FunctionNode;
+import node.Function.InputParamNode;
 import node.Statements.*;
 import node.Statements.Expression.*;
 import node.Statements.Expression.LiteralValues.FloatNode;
@@ -16,7 +18,7 @@ import node.Statements.Wait.TimeFrame;
 import node.Statements.Wait.WaitNode;
 import node.base.Node;
 import node.define_nodes.Device.DefDeviceNode;
-import node.define_nodes.InitNode;
+import node.InitNode;
 import node.define_nodes.Signal.DefSignalNode;
 import node.define_nodes.Device.InputNode;
 import node.define_nodes.Device.OutputNode;
@@ -244,7 +246,49 @@ public class AstBuilderVisitor extends PivotBaseVisitor<Node> {
 
     @Override
     public Node visitFuncDecl(PivotParser.FuncDeclContext ctx) {
-        return super.visitFuncDecl(ctx);
+        // First find the type of the function
+        VarType type = null;
+        if(!ctx.varType().isEmpty()){
+            switch (ctx.varType().getText()){
+                case "string":
+                    type = VarType.STRING;
+                    break;
+                case "int":
+                    type = VarType.INT;
+                    break;
+                case "float":
+                    type = VarType.FLOAT;
+                    break;
+                case "void":
+                    type = VarType.VOID;
+                    break;
+                default:
+                    System.out.println("Error in ASTVistior -  visitFuncDecl");
+            }
+        }
+
+        // Find id
+        String id = ctx.id.getText();
+
+        ArrayList<Node> params = findInputParams(ctx);
+
+        System.out.println("type: " + type + " id: " + id + params);
+
+        return new FunctionNode(type, id, params, visit(ctx.block()));
+    }
+
+    private ArrayList<Node> findInputParams(PivotParser.FuncDeclContext ctx){
+        ArrayList<Node> params = new ArrayList<>();
+
+        if(ctx.getChildCount() != 0){
+            for(ParseTree tree : ctx.params.children){
+                if(!isSeparatorSymbol(tree)){
+                    params.add(visit(tree));
+                }
+            }
+        }
+
+        return params;
     }
 
     @Override
@@ -254,7 +298,25 @@ public class AstBuilderVisitor extends PivotBaseVisitor<Node> {
 
     @Override
     public Node visitParam(PivotParser.ParamContext ctx) {
-        return super.visitParam(ctx);
+        VarType type = null;
+        if(!ctx.varType().isEmpty()){
+            switch (ctx.varType().getText()){
+                case "string":
+                    type = VarType.STRING;
+                    break;
+                case "int":
+                    type = VarType.INT;
+                    break;
+                case "float":
+                    type = VarType.FLOAT;
+                    break;
+                default:
+                    System.out.println("Error in ASTVistior - visitParam");
+                    break;
+
+            }
+        }
+        return new InputParamNode(ctx.localID.getText(), type);
     }
 
     @Override
@@ -350,30 +412,24 @@ public class AstBuilderVisitor extends PivotBaseVisitor<Node> {
 
     @Override
     public Node visitFuncCall(PivotParser.FuncCallContext ctx) {
-        ArrayList<Node> inputParams = findInputParams(ctx);
-        System.out.println("Inputs: " + inputParams);
-        if(!inputParams.isEmpty()){
-            return new FuncCallNode(inputParams, ctx.id.getText());
+        ArrayList<Node> arguments = findArguments(ctx);
+        if(!arguments.isEmpty()){
+            return new FuncCallNode(arguments, ctx.id.getText());
         } else {
             return new FuncCallNode(ctx.id.getText());
         }
     }
 
-    private ArrayList<Node> findInputParams(PivotParser.FuncCallContext ctx){
-        ArrayList<Node> inputParams = new ArrayList<>();
-        if(ctx.inputParam().getChildCount() != 0){
-            for (ParseTree tree : ctx.inputParam().children) {
+    private ArrayList<Node> findArguments(PivotParser.FuncCallContext ctx){
+        ArrayList<Node> arguments = new ArrayList<>();
+        if(ctx.arguments().getChildCount() != 0){
+            for (ParseTree tree : ctx.arguments().children) {
                 if(!isSeparatorSymbol(tree)){
-                    inputParams.add(visit(tree));
+                    arguments.add(visit(tree));
                 }
             }
         }
-        return inputParams;
-    }
-
-    @Override
-    public Node visitInputParam(PivotParser.InputParamContext ctx) {
-        return super.visitInputParam(ctx);
+        return arguments;
     }
 
     @Override
@@ -430,16 +486,6 @@ public class AstBuilderVisitor extends PivotBaseVisitor<Node> {
         }
 
         return new ComparisonExprNode(visit(ctx.left), visit(ctx.right), op);
-    }
-
-    @Override
-    public Node visitComparisonExpressionParens(PivotParser.ComparisonExpressionParensContext ctx) {
-        return super.visitComparisonExpressionParens(ctx);
-    }
-
-    @Override
-    public Node visitComp_operator(PivotParser.Comp_operatorContext ctx) {
-        return super.visitComp_operator(ctx);
     }
 
     @Override

@@ -195,11 +195,11 @@ public interface PivotVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitFuncCall(PivotParser.FuncCallContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link PivotParser#inputParam}.
+	 * Visit a parse tree produced by {@link PivotParser#arguments}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitInputParam(PivotParser.InputParamContext ctx);
+	T visitArguments(PivotParser.ArgumentsContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link PivotParser#declVar}.
 	 * @param ctx the parse tree
