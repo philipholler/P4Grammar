@@ -364,13 +364,37 @@ public class PivotBaseListener implements PivotListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterFuncCall(PivotParser.FuncCallContext ctx) { }
+	@Override public void enterFunCall(PivotParser.FunCallContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitFuncCall(PivotParser.FuncCallContext ctx) { }
+	@Override public void exitFunCall(PivotParser.FunCallContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterSetFun(PivotParser.SetFunContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitSetFun(PivotParser.SetFunContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterGetFun(PivotParser.GetFunContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitGetFun(PivotParser.GetFunContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -460,6 +484,18 @@ public class PivotBaseListener implements PivotListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterFunCallExpr(PivotParser.FunCallExprContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitFunCallExpr(PivotParser.FunCallExprContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterMultiExpr(PivotParser.MultiExprContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -491,18 +527,6 @@ public class PivotBaseListener implements PivotListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitParanExpr(PivotParser.ParanExprContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterFunCall(PivotParser.FunCallContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitFunCall(PivotParser.FunCallContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -604,13 +628,37 @@ public class PivotBaseListener implements PivotListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterComparison_operand(PivotParser.Comparison_operandContext ctx) { }
+	@Override public void enterCompOperandTime(PivotParser.CompOperandTimeContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitComparison_operand(PivotParser.Comparison_operandContext ctx) { }
+	@Override public void exitCompOperandTime(PivotParser.CompOperandTimeContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterComOperandDate(PivotParser.ComOperandDateContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitComOperandDate(PivotParser.ComOperandDateContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterComOperandExpr(PivotParser.ComOperandExprContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitComOperandExpr(PivotParser.ComOperandExprContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

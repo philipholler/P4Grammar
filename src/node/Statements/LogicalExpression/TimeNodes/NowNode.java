@@ -3,7 +3,7 @@ package node.Statements.LogicalExpression.TimeNodes;
 import node.Statements.LogicalExpression.LogicalExprNode;
 import utils.StringUtils;
 
-public class DateNode extends LogicalExprNode {
+public class NowNode extends LogicalExprNode {
 
     @Override
     public String getTreeString(int indentation) {
@@ -13,6 +13,6 @@ public class DateNode extends LogicalExprNode {
 
     @Override
     public String toString() {
-        return "DateNode()";
+        return "NowNode()";
     }
 }
