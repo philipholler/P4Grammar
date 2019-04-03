@@ -147,6 +147,12 @@ public interface PivotVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitRepeatEvent(PivotParser.RepeatEventContext ctx);
 	/**
+	 * Visit a parse tree produced by {@link PivotParser#timeAndDate}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitTimeAndDate(PivotParser.TimeAndDateContext ctx);
+	/**
 	 * Visit a parse tree produced by {@link PivotParser#timeFrame}.
 	 * @param ctx the parse tree
 	 * @return the visitor result

@@ -1,34 +1,22 @@
 package node.Statements.Wait;
 
 import node.base.LeafNode;
+import node.base.Node;
+import node.base.UnaryNode;
 import visitor.AbstractVisitor;
 
-public class WaitNode extends LeafNode {
-    private String val;
-    private String varID;
+public class WaitNode extends UnaryNode {
     private TimeFrame timeframe;
 
-    public WaitNode(String val, TimeFrame timeframe) {
-        this.val = val;
-        this.timeframe = timeframe;
-    }
-
-    public WaitNode(TimeFrame timeframe, String varID) {
-        this.varID = varID;
+    public WaitNode(Node expr, TimeFrame timeframe) {
+        super(expr);
         this.timeframe = timeframe;
     }
 
     @Override
     public String toString() {
-        if(val == null){
-            return "WaitNode(" +
-                    ", varID='" + varID + '\'' +
-                    ", timeframe=" + timeframe +
-                    ')';
-        }
         return "WaitNode(" +
-                "val='" + val + '\'' +
-                ", timeframe=" + timeframe +
+                "timeframe=" + timeframe +
                 ')';
     }
 }

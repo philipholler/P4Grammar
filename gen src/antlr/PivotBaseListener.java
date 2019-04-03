@@ -280,6 +280,18 @@ public class PivotBaseListener implements PivotListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterTimeAndDate(PivotParser.TimeAndDateContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitTimeAndDate(PivotParser.TimeAndDateContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterTimeFrame(PivotParser.TimeFrameContext ctx) { }
 	/**
 	 * {@inheritDoc}
