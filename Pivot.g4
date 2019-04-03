@@ -38,13 +38,17 @@ funcDecl : (varType | VOID) id=ID PARANBEG params=fParams PARANEND block; // Fun
 
 event: (atomEvent | repeatEvent);
 
-atomEvent : WHEN deviceID=ID signalID=ID COL (enumID=ID | EXCEEDS INTEGER| DECEEDS INTEGER) block
-          | WHEN DATE AT TIME block
-          | WHEN TIME block
+atomEvent : WHEN deviceID=ID signalID=ID COL (enumID=ID | EXCEEDS expr| DECEEDS expr) block
+          | WHEN timeAndDate block // when 18:00 21d03m2019y // when 14:00 // when 21d03m2019y
           ;
 
-repeatEvent : EVERY INTEGER timeFrame block
-            | EVERY INTEGER timeFrame AT TIME (STARTING DATE)? block
+repeatEvent : EVERY expr timeFrame block
+            | EVERY expr timeFrame STARTING timeAndDate block
+            ;
+
+timeAndDate : TIME DATE
+            | DATE
+            | TIME
             ;
 
 timeFrame: (MONTHS | WEEKS | DAYS | HOURS | MINUTES | SECONDS | MS);
@@ -53,9 +57,7 @@ block: BLCKBEG stmts BLCKEND;
 
 stmts: (waitStmt | assignment | ifstmt | whilestmt | funcCall SEMCOL | declVar | brk | rtn)*; // Not finished
 
-waitStmt: WAIT INTEGER timeFrame SEMCOL
-        | WAIT varID=ID timeFrame SEMCOL
-        ;
+waitStmt: WAIT expr timeFrame SEMCOL;
 
 assignment : varID=ID EQUALS expr SEMCOL;
 
@@ -180,7 +182,6 @@ NOW : 'now';
 ELSE : 'else';
 RETURN : 'return';
 BREAK : 'break';
-AT : 'at';
 STARTING: 'starting';
 
 // Signs

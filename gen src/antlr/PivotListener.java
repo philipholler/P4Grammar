@@ -236,6 +236,16 @@ public interface PivotListener extends ParseTreeListener {
 	 */
 	void exitRepeatEvent(PivotParser.RepeatEventContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link PivotParser#timeAndDate}.
+	 * @param ctx the parse tree
+	 */
+	void enterTimeAndDate(PivotParser.TimeAndDateContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link PivotParser#timeAndDate}.
+	 * @param ctx the parse tree
+	 */
+	void exitTimeAndDate(PivotParser.TimeAndDateContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link PivotParser#timeFrame}.
 	 * @param ctx the parse tree
 	 */

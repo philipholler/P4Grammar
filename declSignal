@@ -62,7 +62,13 @@ string setBedroomWindowsOpen(int percentage, float f, string s){
 
     }
 
+    wait 30 seconds;
+
     if(now > 01d04m2019y){
         set frontDoorLight toggle: on;
     }
+
+    while(get frontDoorSensor toggle != "on"){
+            set frontDoorLight toggle: off;
+        }
 }

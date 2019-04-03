@@ -363,14 +363,7 @@ public class AstBuilderVisitor extends PivotBaseVisitor<Node> {
     @Override
     public Node visitWaitStmt(PivotParser.WaitStmtContext ctx) {
         TimeFrame timeframe = getTimeFrame(ctx);
-        if(ctx.varID != null){
-            return new WaitNode(timeframe, ctx.varID.getText());
-        } else if (ctx.INTEGER() != null){
-            return new WaitNode(ctx.INTEGER().getText(), timeframe);
-        }
-        // todo: error handling
-        System.out.println("Something went wrong in AST visitorbuilder wait statement");
-        return null;
+        return new WaitNode(visit(ctx.expr()), timeframe);
     }
 
     private TimeFrame getTimeFrame(PivotParser.WaitStmtContext ctx){
