@@ -55,4 +55,8 @@ string setBedroomWindowsOpen(int percentage){
 
 string setBedroomWindowsOpen(int percentage, float f, string s){
     a = b;
+
+    if(true){
+
+    }
 }

@@ -10,10 +10,7 @@ import node.Statements.Expression.*;
 import node.Statements.Expression.LiteralValues.FloatNode;
 import node.Statements.Expression.LiteralValues.IntegerNode;
 import node.Statements.Expression.LiteralValues.StringNode;
-import node.Statements.LogicalExpression.ComparisonExprNode;
-import node.Statements.LogicalExpression.ComparisonOperator;
-import node.Statements.LogicalExpression.LogicalAndExprNode;
-import node.Statements.LogicalExpression.LogicalOrExprNode;
+import node.Statements.LogicalExpression.*;
 import node.Statements.Wait.TimeFrame;
 import node.Statements.Wait.WaitNode;
 import node.base.Node;
@@ -272,8 +269,6 @@ public class AstBuilderVisitor extends PivotBaseVisitor<Node> {
 
         ArrayList<Node> params = findInputParams(ctx);
 
-        System.out.println("type: " + type + " id: " + id + params);
-
         return new FunctionNode(type, id, params, visit(ctx.block()));
     }
 
@@ -289,11 +284,6 @@ public class AstBuilderVisitor extends PivotBaseVisitor<Node> {
         }
 
         return params;
-    }
-
-    @Override
-    public Node visitFParams(PivotParser.FParamsContext ctx) {
-        return super.visitFParams(ctx);
     }
 
     @Override
@@ -454,7 +444,15 @@ public class AstBuilderVisitor extends PivotBaseVisitor<Node> {
 
     @Override
     public Node visitLogicalLiterals(PivotParser.LogicalLiteralsContext ctx) {
-        return super.visitLogicalLiterals(ctx);
+        switch(ctx.getText()){
+            case "true":
+                return new LogicalLiteralNode(true);
+            case "false":
+                return new LogicalLiteralNode(false);
+            default:
+                System.out.println("Something went wrong in AstBuilder - visitLogicalLiterals");
+                return null;
+        }
     }
 
     @Override
@@ -466,6 +464,8 @@ public class AstBuilderVisitor extends PivotBaseVisitor<Node> {
     public Node visitLogicalExpressionInParen(PivotParser.LogicalExpressionInParenContext ctx) {
         return visit(ctx.logical_expr());
     }
+
+
 
     @Override
     public Node visitComparisonExpressionWithOperator(PivotParser.ComparisonExpressionWithOperatorContext ctx) {
@@ -486,11 +486,6 @@ public class AstBuilderVisitor extends PivotBaseVisitor<Node> {
         }
 
         return new ComparisonExprNode(visit(ctx.left), visit(ctx.right), op);
-    }
-
-    @Override
-    public Node visitVarType(PivotParser.VarTypeContext ctx) {
-        return super.visitVarType(ctx);
     }
 
     /**
