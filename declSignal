@@ -62,7 +62,7 @@ string setBedroomWindowsOpen(int percentage, float f, string s){
 
     }
 
-    if(now > 17:00 && now < 21:31){
+    if(now > 01d04m2019y){
         set frontDoorLight toggle: on;
     }
 }

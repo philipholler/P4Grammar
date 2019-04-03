@@ -518,7 +518,24 @@ public class AstBuilderVisitor extends PivotBaseVisitor<Node> {
 
     @Override
     public Node visitComOperandDate(PivotParser.ComOperandDateContext ctx) {
-        return new DateNode();
+        String day, month, year;
+
+        // If the date has year also for one time events.
+        if(ctx.DATE() != null){
+            day = ctx.DATE().getText().substring(0,2);
+            month = ctx.DATE().getText().substring(3,5);
+            year = ctx.DATE().getText().substring(6,10);
+            return new DateNode(Integer.parseInt(day), Integer.parseInt(month), Integer.parseInt(year));
+        }
+        // If the event is at a specific date every year, no year is needed.
+        else if (ctx.DATEnoYEAR() != null){
+            day = ctx.DATEnoYEAR().getText().substring(0,2);
+            month = ctx.DATEnoYEAR().getText().substring(3,5);
+            return new DateNode(Integer.parseInt(day), Integer.parseInt(month));
+        } else {
+            System.out.println("Something went wrong in AstBuilder - visitComOperandDate");
+            return null;
+        }
     }
 
     /**
