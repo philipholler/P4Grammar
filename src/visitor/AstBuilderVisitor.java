@@ -363,7 +363,6 @@ public class AstBuilderVisitor extends PivotBaseVisitor<Node> {
     @Override
     public Node visitWaitStmt(PivotParser.WaitStmtContext ctx) {
         TimeFrame timeframe = getTimeFrame(ctx);
-
         return new WaitNode(visit(ctx.expr()), timeframe);
     }
 
