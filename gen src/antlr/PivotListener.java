@@ -306,15 +306,41 @@ public interface PivotListener extends ParseTreeListener {
 	 */
 	void exitWhilestmt(PivotParser.WhilestmtContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link PivotParser#funcCall}.
+	 * Enter a parse tree produced by the {@code funCall}
+	 * labeled alternative in {@link PivotParser#funcCall}.
 	 * @param ctx the parse tree
 	 */
-	void enterFuncCall(PivotParser.FuncCallContext ctx);
+	void enterFunCall(PivotParser.FunCallContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link PivotParser#funcCall}.
+	 * Exit a parse tree produced by the {@code funCall}
+	 * labeled alternative in {@link PivotParser#funcCall}.
 	 * @param ctx the parse tree
 	 */
-	void exitFuncCall(PivotParser.FuncCallContext ctx);
+	void exitFunCall(PivotParser.FunCallContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code setFun}
+	 * labeled alternative in {@link PivotParser#funcCall}.
+	 * @param ctx the parse tree
+	 */
+	void enterSetFun(PivotParser.SetFunContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code setFun}
+	 * labeled alternative in {@link PivotParser#funcCall}.
+	 * @param ctx the parse tree
+	 */
+	void exitSetFun(PivotParser.SetFunContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code getFun}
+	 * labeled alternative in {@link PivotParser#funcCall}.
+	 * @param ctx the parse tree
+	 */
+	void enterGetFun(PivotParser.GetFunContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code getFun}
+	 * labeled alternative in {@link PivotParser#funcCall}.
+	 * @param ctx the parse tree
+	 */
+	void exitGetFun(PivotParser.GetFunContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link PivotParser#arguments}.
 	 * @param ctx the parse tree
@@ -392,6 +418,18 @@ public interface PivotListener extends ParseTreeListener {
 	 */
 	void exitStringVal(PivotParser.StringValContext ctx);
 	/**
+	 * Enter a parse tree produced by the {@code funCallExpr}
+	 * labeled alternative in {@link PivotParser#expr}.
+	 * @param ctx the parse tree
+	 */
+	void enterFunCallExpr(PivotParser.FunCallExprContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code funCallExpr}
+	 * labeled alternative in {@link PivotParser#expr}.
+	 * @param ctx the parse tree
+	 */
+	void exitFunCallExpr(PivotParser.FunCallExprContext ctx);
+	/**
 	 * Enter a parse tree produced by the {@code multiExpr}
 	 * labeled alternative in {@link PivotParser#expr}.
 	 * @param ctx the parse tree
@@ -427,18 +465,6 @@ public interface PivotListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitParanExpr(PivotParser.ParanExprContext ctx);
-	/**
-	 * Enter a parse tree produced by the {@code funCall}
-	 * labeled alternative in {@link PivotParser#expr}.
-	 * @param ctx the parse tree
-	 */
-	void enterFunCall(PivotParser.FunCallContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code funCall}
-	 * labeled alternative in {@link PivotParser#expr}.
-	 * @param ctx the parse tree
-	 */
-	void exitFunCall(PivotParser.FunCallContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code plusExpr}
 	 * labeled alternative in {@link PivotParser#expr}.
@@ -536,15 +562,41 @@ public interface PivotListener extends ParseTreeListener {
 	 */
 	void exitComparisonExpressionParens(PivotParser.ComparisonExpressionParensContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link PivotParser#comparison_operand}.
+	 * Enter a parse tree produced by the {@code compOperandTime}
+	 * labeled alternative in {@link PivotParser#comparison_operand}.
 	 * @param ctx the parse tree
 	 */
-	void enterComparison_operand(PivotParser.Comparison_operandContext ctx);
+	void enterCompOperandTime(PivotParser.CompOperandTimeContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link PivotParser#comparison_operand}.
+	 * Exit a parse tree produced by the {@code compOperandTime}
+	 * labeled alternative in {@link PivotParser#comparison_operand}.
 	 * @param ctx the parse tree
 	 */
-	void exitComparison_operand(PivotParser.Comparison_operandContext ctx);
+	void exitCompOperandTime(PivotParser.CompOperandTimeContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code comOperandDate}
+	 * labeled alternative in {@link PivotParser#comparison_operand}.
+	 * @param ctx the parse tree
+	 */
+	void enterComOperandDate(PivotParser.ComOperandDateContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code comOperandDate}
+	 * labeled alternative in {@link PivotParser#comparison_operand}.
+	 * @param ctx the parse tree
+	 */
+	void exitComOperandDate(PivotParser.ComOperandDateContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code comOperandExpr}
+	 * labeled alternative in {@link PivotParser#comparison_operand}.
+	 * @param ctx the parse tree
+	 */
+	void enterComOperandExpr(PivotParser.ComOperandExprContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code comOperandExpr}
+	 * labeled alternative in {@link PivotParser#comparison_operand}.
+	 * @param ctx the parse tree
+	 */
+	void exitComOperandExpr(PivotParser.ComOperandExprContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link PivotParser#comp_operator}.
 	 * @param ctx the parse tree

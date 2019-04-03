@@ -1,11 +1,11 @@
-package node.Statements.Expression;
+package node.Statements.Expression.FunctionCall;
 
 import node.base.Node;
 import utils.StringUtils;
 
 import java.util.ArrayList;
 
-public class FuncCallNode extends ExpressionNode{
+public class FuncCallNode extends AbstractFuncCallNode{
     private ArrayList<Node> arguments = new ArrayList<>();
     private String ID;
 

@@ -56,7 +56,13 @@ string setBedroomWindowsOpen(int percentage){
 string setBedroomWindowsOpen(int percentage, float f, string s){
     a = b;
 
+    set bedRoomWindow open: percentage;
+
     if(true){
 
+    }
+
+    if(now > 17:00 && now < 21:31){
+        set frontDoorLight toggle: on;
     }
 }

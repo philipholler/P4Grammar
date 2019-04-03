@@ -63,9 +63,9 @@ ifstmt: IF PARANBEG logical_expr PARANEND blck=block (ELSE elseblck=block)?;
 
 whilestmt: WHILE PARANBEG logical_expr PARANEND block;
 
-funcCall: id=ID PARANBEG arguments PARANEND
-        | SET deviceID=ID signalID=ID COL (enumID=ID | litVal)
-        | GET deviceID=ID signalID=ID
+funcCall: id=ID PARANBEG arguments PARANEND                     #funCall
+        | SET deviceID=ID signalID=ID COL expr                  #setFun
+        | GET deviceID=ID signalID=ID                           #getFun
         ;
 
     arguments: expr? (LISTSEP expr)*;
@@ -86,7 +86,7 @@ expr: leftChild=expr op=(DIV | MULT) rightChild=expr     #multiExpr
     | leftChild=expr op=(PLUS | MINUS) rightChild=expr   #plusExpr
     | PARANBEG expr PARANEND                             #paranExpr
     | atom                                               #atomExpr
-    | funcCall                                           #funCall
+    | funcCall                                           #funCallExpr
     ;
 
 logical_expr
@@ -101,9 +101,9 @@ comparison_expr : left=comparison_operand op=comp_operator right=comparison_oper
                 | PARANBEG comparison_expr PARANEND                                  #comparisonExpressionParens
                 ;
 
-comparison_operand : TIME
-                   | (DATE | DATEnoYEAR)
-                   | expr
+comparison_operand : TIME                   #compOperandTime
+                   | (DATE | DATEnoYEAR)    #comOperandDate
+                   | expr                   #comOperandExpr
                    ;
 
 comp_operator : GT // Greater than

@@ -7,10 +7,16 @@ import node.Function.FunctionNode;
 import node.Function.InputParamNode;
 import node.Statements.*;
 import node.Statements.Expression.*;
+import node.Statements.Expression.FunctionCall.FuncCallNode;
+import node.Statements.Expression.FunctionCall.GetFuncNode;
+import node.Statements.Expression.FunctionCall.SetFuncNode;
 import node.Statements.Expression.LiteralValues.FloatNode;
 import node.Statements.Expression.LiteralValues.IntegerNode;
 import node.Statements.Expression.LiteralValues.StringNode;
 import node.Statements.LogicalExpression.*;
+import node.Statements.LogicalExpression.TimeNodes.DateNode;
+import node.Statements.LogicalExpression.TimeNodes.NowNode;
+import node.Statements.LogicalExpression.TimeNodes.TimeNode;
 import node.Statements.Wait.TimeFrame;
 import node.Statements.Wait.WaitNode;
 import node.base.Node;
@@ -107,10 +113,15 @@ public class AstBuilderVisitor extends PivotBaseVisitor<Node> {
 
     @Override
     public Node visitAtom(PivotParser.AtomContext ctx) {
-        if(ctx.varID == null){
-            return visit(ctx.litVal());
-        } else {
+        if(ctx.varID != null){
             return new IDNode(ctx.ID().getText());
+        } else if (ctx.litVal() != null){
+            return visit(ctx.litVal());
+        } else if (ctx.NOW() != null){
+            return new NowNode();
+        } else{
+            System.out.println("Something went wrong in AstBuilder - visitAtom");
+            return null;
         }
     }
 
@@ -401,7 +412,7 @@ public class AstBuilderVisitor extends PivotBaseVisitor<Node> {
     }
 
     @Override
-    public Node visitFuncCall(PivotParser.FuncCallContext ctx) {
+    public Node visitFunCall(PivotParser.FunCallContext ctx) {
         ArrayList<Node> arguments = findArguments(ctx);
         if(!arguments.isEmpty()){
             return new FuncCallNode(arguments, ctx.id.getText());
@@ -410,7 +421,17 @@ public class AstBuilderVisitor extends PivotBaseVisitor<Node> {
         }
     }
 
-    private ArrayList<Node> findArguments(PivotParser.FuncCallContext ctx){
+    @Override
+    public Node visitSetFun(PivotParser.SetFunContext ctx) {
+        return new SetFuncNode(ctx.deviceID.getText(), ctx.signalID.getText(), visit(ctx.expr()));
+    }
+
+    @Override
+    public Node visitGetFun(PivotParser.GetFunContext ctx) {
+        return new GetFuncNode(ctx.deviceID.getText(), ctx.signalID.getText());
+    }
+
+    private ArrayList<Node> findArguments(PivotParser.FunCallContext ctx){
         ArrayList<Node> arguments = new ArrayList<>();
         if(ctx.arguments().getChildCount() != 0){
             for (ParseTree tree : ctx.arguments().children) {
@@ -486,6 +507,18 @@ public class AstBuilderVisitor extends PivotBaseVisitor<Node> {
         }
 
         return new ComparisonExprNode(visit(ctx.left), visit(ctx.right), op);
+    }
+
+    @Override
+    public Node visitCompOperandTime(PivotParser.CompOperandTimeContext ctx) {
+        String hours = ctx.TIME().getText().substring(0,2);
+        String minutes = ctx.TIME().getText().substring(3,5);
+        return new TimeNode(Integer.parseInt(hours),Integer.parseInt(minutes));
+    }
+
+    @Override
+    public Node visitComOperandDate(PivotParser.ComOperandDateContext ctx) {
+        return new DateNode();
     }
 
     /**

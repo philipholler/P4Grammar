@@ -189,11 +189,26 @@ public interface PivotVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitWhilestmt(PivotParser.WhilestmtContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link PivotParser#funcCall}.
+	 * Visit a parse tree produced by the {@code funCall}
+	 * labeled alternative in {@link PivotParser#funcCall}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitFuncCall(PivotParser.FuncCallContext ctx);
+	T visitFunCall(PivotParser.FunCallContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code setFun}
+	 * labeled alternative in {@link PivotParser#funcCall}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitSetFun(PivotParser.SetFunContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code getFun}
+	 * labeled alternative in {@link PivotParser#funcCall}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitGetFun(PivotParser.GetFunContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link PivotParser#arguments}.
 	 * @param ctx the parse tree
@@ -240,6 +255,13 @@ public interface PivotVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitStringVal(PivotParser.StringValContext ctx);
 	/**
+	 * Visit a parse tree produced by the {@code funCallExpr}
+	 * labeled alternative in {@link PivotParser#expr}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitFunCallExpr(PivotParser.FunCallExprContext ctx);
+	/**
 	 * Visit a parse tree produced by the {@code multiExpr}
 	 * labeled alternative in {@link PivotParser#expr}.
 	 * @param ctx the parse tree
@@ -260,13 +282,6 @@ public interface PivotVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitParanExpr(PivotParser.ParanExprContext ctx);
-	/**
-	 * Visit a parse tree produced by the {@code funCall}
-	 * labeled alternative in {@link PivotParser#expr}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitFunCall(PivotParser.FunCallContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code plusExpr}
 	 * labeled alternative in {@link PivotParser#expr}.
@@ -324,11 +339,26 @@ public interface PivotVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitComparisonExpressionParens(PivotParser.ComparisonExpressionParensContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link PivotParser#comparison_operand}.
+	 * Visit a parse tree produced by the {@code compOperandTime}
+	 * labeled alternative in {@link PivotParser#comparison_operand}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitComparison_operand(PivotParser.Comparison_operandContext ctx);
+	T visitCompOperandTime(PivotParser.CompOperandTimeContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code comOperandDate}
+	 * labeled alternative in {@link PivotParser#comparison_operand}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitComOperandDate(PivotParser.ComOperandDateContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code comOperandExpr}
+	 * labeled alternative in {@link PivotParser#comparison_operand}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitComOperandExpr(PivotParser.ComOperandExprContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link PivotParser#comp_operator}.
 	 * @param ctx the parse tree
