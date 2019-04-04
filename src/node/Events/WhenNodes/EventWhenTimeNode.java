@@ -2,8 +2,8 @@ package node.Events.WhenNodes;
 
 import node.BlockNode;
 import node.Events.EventNode;
-import node.Statements.LogicalExpression.TimeNodes.DateNode;
-import node.Statements.LogicalExpression.TimeNodes.TimeNode;
+import node.TimeNodes.DateNode;
+import node.TimeNodes.TimeNode;
 import node.base.Node;
 import utils.StringUtils;
 
@@ -36,6 +36,12 @@ public class EventWhenTimeNode extends EventNode {
         treeString.append(StringUtils.getIndentedString(indentation));
         treeString.append(this.toString()).append("\n");
 
+        if(time != null){
+            treeString.append(time.getTreeString(indentation + 1));
+        }
+        if(date != null) {
+            treeString.append(date.getTreeString(indentation + 1));
+        }
         treeString.append(block.getTreeString(indentation + 1));
 
         return treeString.toString();
@@ -43,21 +49,6 @@ public class EventWhenTimeNode extends EventNode {
 
     @Override
     public String toString() {
-        if(time == null){
-            return "EventWhenTimeNode(" +
-                    "date=" + date +
-                    ')';
-        }
-        else if(date == null){
-            return "EventWhenTimeNode(" +
-                    "time=" + time +
-                    ')';
-        }
-        else {
-            return "EventWhenTimeNode(" +
-                    "time=" + time +
-                    ", date=" + date +
-                    ')';
-        }
+        return "EventWhenTimeNode()";
     }
 }

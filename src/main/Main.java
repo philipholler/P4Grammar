@@ -17,7 +17,7 @@ import static org.antlr.v4.runtime.CharStreams.fromFileName;
 
 public class Main {
 
-    public static final String sourceFile = "declSignal";
+    public static final String sourceFile = "testProgram";
 
     public static void main(String[] args) {
 

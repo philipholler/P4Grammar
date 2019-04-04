@@ -3,6 +3,7 @@ package visitor;
 import antlr.PivotBaseVisitor;
 import antlr.PivotParser;
 import node.*;
+import node.Events.EventEveryNode;
 import node.Events.WhenNodes.EventInputNode;
 import node.Events.WhenNodes.EventRangeInputNode;
 import node.Events.WhenNodes.EventWhenTimeNode;
@@ -18,9 +19,9 @@ import node.Statements.Expression.LiteralValues.FloatNode;
 import node.Statements.Expression.LiteralValues.IntegerNode;
 import node.Statements.Expression.LiteralValues.StringNode;
 import node.Statements.LogicalExpression.*;
-import node.Statements.LogicalExpression.TimeNodes.DateNode;
-import node.Statements.LogicalExpression.TimeNodes.NowNode;
-import node.Statements.LogicalExpression.TimeNodes.TimeNode;
+import node.TimeNodes.DateNode;
+import node.TimeNodes.NowNode;
+import node.TimeNodes.TimeNode;
 import node.Statements.Wait.TimeFrame;
 import node.Statements.Wait.WaitNode;
 import node.base.Node;
@@ -325,11 +326,6 @@ public class AstBuilderVisitor extends PivotBaseVisitor<Node> {
     }
 
     @Override
-    public Node visitEvent(PivotParser.EventContext ctx) {
-        return super.visitEvent(ctx);
-    }
-
-    @Override
     public Node visitInputWhenEvent(PivotParser.InputWhenEventContext ctx) {
         // If the event is triggered by exceeding og deceeding a threshold in a range.
         if(ctx.EXCEEDS() != null || ctx.DECEEDS() != null){
@@ -365,6 +361,47 @@ public class AstBuilderVisitor extends PivotBaseVisitor<Node> {
             return new EventWhenTimeNode((DateNode) timeAndDate.get(0), visit(ctx.block()));
         }
 
+        return null;
+    }
+
+    @Override
+    public Node visitRepeatEvent(PivotParser.RepeatEventContext ctx) {
+        // For interval events with starting time. Example "every 2 hours"
+        if(ctx.timeAndDate() == null){
+            return new EventEveryNode(
+                    (ExpressionNode) visit(ctx.expr()),
+                    getTimeFrame(ctx.timeFrame()),
+                    (BlockNode) visit(ctx.block()));
+
+        }
+
+        ArrayList<Node> timeAndDate = findTimeAndOrDate(ctx.timeAndDate());
+
+        // if both time an date are present. Index 0 is time and index 1 is date.
+        if(timeAndDate.size() == 2){
+            return new EventEveryNode(
+                    (ExpressionNode) visit(ctx.expr()),
+                    getTimeFrame(ctx.timeFrame()),
+                    (TimeNode) timeAndDate.get(0),
+                    (DateNode) timeAndDate.get(1),
+                    (BlockNode) visit(ctx.block()));
+        }
+        // If only time is present
+        if(timeAndDate.get(0) instanceof TimeNode){
+            return new EventEveryNode(
+                    (ExpressionNode) visit(ctx.expr()),
+                    getTimeFrame(ctx.timeFrame()),
+                    (TimeNode) timeAndDate.get(0),
+                    (BlockNode) visit(ctx.block()));
+        }
+        // If only date is present
+        if(timeAndDate.get(0) instanceof DateNode){
+            return new EventEveryNode(
+                    (ExpressionNode) visit(ctx.expr()),
+                    getTimeFrame(ctx.timeFrame()),
+                    (DateNode) timeAndDate.get(0),
+                    (BlockNode) visit(ctx.block()));
+        }
         return null;
     }
 
@@ -434,12 +471,6 @@ public class AstBuilderVisitor extends PivotBaseVisitor<Node> {
         return timeAndDate;
     }
 
-
-    @Override
-    public Node visitRepeatEvent(PivotParser.RepeatEventContext ctx) {
-        return super.visitRepeatEvent(ctx);
-    }
-
     @Override
     public Node visitBlock(PivotParser.BlockContext ctx) {
         ArrayList<Node> stmts = findNodes(ctx.stmts());
@@ -467,25 +498,25 @@ public class AstBuilderVisitor extends PivotBaseVisitor<Node> {
 
     @Override
     public Node visitWaitStmt(PivotParser.WaitStmtContext ctx) {
-        TimeFrame timeframe = getTimeFrame(ctx);
+        TimeFrame timeframe = getTimeFrame(ctx.timeFrame());
         return new WaitNode(visit(ctx.expr()), timeframe);
     }
 
-    private TimeFrame getTimeFrame(PivotParser.WaitStmtContext ctx){
-        if(ctx.timeFrame() != null){
-            if(ctx.timeFrame().MONTHS() != null){
+    private TimeFrame getTimeFrame(PivotParser.TimeFrameContext ctx){
+        if(ctx != null){
+            if(ctx.MONTHS() != null){
                 return TimeFrame.MONTH;
-            } else if (ctx.timeFrame().WEEKS() != null){
+            } else if (ctx.WEEKS() != null){
                 return TimeFrame.WEEK;
-            } else if (ctx.timeFrame().DAYS() != null){
+            } else if (ctx.DAYS() != null){
                 return TimeFrame.DAY;
-            } else if(ctx.timeFrame().HOURS() != null){
+            } else if(ctx.HOURS() != null){
                 return TimeFrame.HOUR;
-            } else if (ctx.timeFrame().MINUTES() != null){
+            } else if (ctx.MINUTES() != null){
                 return TimeFrame.MINUTES;
-            } else if (ctx.timeFrame().SECONDS() != null){
+            } else if (ctx.SECONDS() != null){
                 return TimeFrame.SECOND;
-            } else if (ctx.timeFrame().MS() != null){
+            } else if (ctx.MS() != null){
                 return TimeFrame.MILLISECONDS;
             }
         }
@@ -548,6 +579,9 @@ public class AstBuilderVisitor extends PivotBaseVisitor<Node> {
 
     @Override
     public Node visitRtn(PivotParser.RtnContext ctx) {
+        if(ctx.expr() == null){
+            return new ReturnNode();
+        }
         return new ReturnNode(visit(ctx.expr()));
     }
 

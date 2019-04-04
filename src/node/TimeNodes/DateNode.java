@@ -1,4 +1,4 @@
-package node.Statements.LogicalExpression.TimeNodes;
+package node.TimeNodes;
 
 import node.Statements.LogicalExpression.LogicalExprNode;
 import utils.StringUtils;

@@ -82,7 +82,7 @@ every 2 hours{
 }
 
 // // Turn on lawn mower every 2 weeks at 11:00 every summer.
-every 2 weeks at 11:00 starting 01d04m2019y{
+every 2 weeks starting 11:00 01d04m2019y{
     if(01.04 < now && now < 30d09m){
         set GardenMower toggle: on;
     }

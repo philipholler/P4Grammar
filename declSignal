@@ -101,3 +101,27 @@ when 14:00 01d01m2000y{
 when 14:00 01d01m{
 
 }
+
+every 2 hours starting 14:00{
+
+}
+
+every 2 hours starting 01d01m2000y{
+
+}
+
+every 2 hours starting 01d01m{
+
+}
+
+every 2 hours starting 14:00 01d01m2000y{
+
+}
+
+every 2 hours starting 14:00 01d01m{
+
+}
+
+every 2 hours{
+
+}
