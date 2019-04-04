@@ -25,4 +25,7 @@ public abstract class UnaryNode extends Node{
         return treeString.toString();
     }
 
+    public void setChild(Node child) {
+        this.child = child;
+    }
 }

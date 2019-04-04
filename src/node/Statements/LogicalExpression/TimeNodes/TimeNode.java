@@ -2,15 +2,16 @@ package node.Statements.LogicalExpression.TimeNodes;
 
 import node.Statements.LogicalExpression.LogicalExprNode;
 import utils.StringUtils;
+import utils.TimeUtils;
+
+import java.time.LocalTime;
 
 public class TimeNode extends LogicalExprNode {
     // todo: find et godt time library og implementer - Philip 03.04.2019
-    private int hours;
-    private int minutes;
+    LocalTime time;
 
     public TimeNode(int hours, int minutes) {
-        this.hours = hours;
-        this.minutes = minutes;
+        this.time = TimeUtils.getTime(hours, minutes);
     }
 
     @Override
@@ -22,8 +23,7 @@ public class TimeNode extends LogicalExprNode {
     @Override
     public String toString() {
         return "TimeNode(" +
-                "time=" +
-                hours + ':' + minutes +
+                "time=" + time +
                 ')';
     }
 }

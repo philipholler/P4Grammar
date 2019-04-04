@@ -3,6 +3,10 @@ package visitor;
 import antlr.PivotBaseVisitor;
 import antlr.PivotParser;
 import node.*;
+import node.Events.WhenNodes.EventInputNode;
+import node.Events.WhenNodes.EventRangeInputNode;
+import node.Events.WhenNodes.EventWhenTimeNode;
+import node.Events.WhenNodes.ExceedsAndDeceedsEnum;
 import node.Function.FunctionNode;
 import node.Function.InputParamNode;
 import node.Statements.*;
@@ -326,9 +330,110 @@ public class AstBuilderVisitor extends PivotBaseVisitor<Node> {
     }
 
     @Override
-    public Node visitAtomEvent(PivotParser.AtomEventContext ctx) {
-        return super.visitAtomEvent(ctx);
+    public Node visitInputWhenEvent(PivotParser.InputWhenEventContext ctx) {
+        // If the event is triggered by exceeding og deceeding a threshold in a range.
+        if(ctx.EXCEEDS() != null || ctx.DECEEDS() != null){
+            ExceedsAndDeceedsEnum excdsDecds = null;
+            if(ctx.EXCEEDS() != null){
+                excdsDecds = ExceedsAndDeceedsEnum.EXCEEDS;
+            } else if (ctx.DECEEDS() != null){
+                excdsDecds = ExceedsAndDeceedsEnum.DECEEDS;
+            }
+            return new EventRangeInputNode(visit(ctx.block()), ctx.deviceID.getText(),
+                    ctx.signalID.getText(), excdsDecds, (ExpressionNode) visit(ctx.expr()));
+        }
+        // For regular enum input as trigger for an event
+        else{
+            return new EventInputNode(visit(ctx.block()), ctx.deviceID.getText(), ctx.signalID.getText(), ctx.enumID.getText());
+        }
     }
+
+    @Override
+    public Node visitTimeWhenEvent(PivotParser.TimeWhenEventContext ctx) {
+        ArrayList<Node> timeAndDate = findTimeAndOrDate(ctx.timeAndDate());
+
+        // if both time an date are present. Index 0 is time and index 1 is date.
+        if(timeAndDate.size() == 2){
+            return new EventWhenTimeNode((TimeNode) timeAndDate.get(0), (DateNode) timeAndDate.get(1), visit(ctx.block()));
+        }
+        // If only time is present
+        if(timeAndDate.get(0) instanceof TimeNode){
+            return new EventWhenTimeNode((TimeNode) timeAndDate.get(0), visit(ctx.block()));
+        }
+        // If only date is present
+        if(timeAndDate.get(0) instanceof DateNode){
+            return new EventWhenTimeNode((DateNode) timeAndDate.get(0), visit(ctx.block()));
+        }
+
+        return null;
+    }
+
+    /**
+     * This method finds the date and time nodes and returns them both in an Arraylist.
+     * @return Arraylist with the time and date nodes inside.
+     */
+    private ArrayList<Node> findTimeAndOrDate(PivotParser.TimeAndDateContext ctx){
+        ArrayList<Node> timeAndDate = new ArrayList<>();
+        String minutes, hours, day, month, year;
+
+        // If the date and time are both fully used. For example "when 14:00 21d03m2019y"
+        if(ctx.DATE() != null && ctx.TIME() != null){
+            hours = ctx.TIME().getText().substring(0,2);
+            minutes = ctx.TIME().getText().substring(3,5);
+            timeAndDate.add(new TimeNode(Integer.parseInt(hours), Integer.parseInt(minutes)));
+
+            day = ctx.DATE().getText().substring(0,2);
+            month = ctx.DATE().getText().substring(3,5);
+            year = ctx.DATE().getText().substring(6,10);
+            timeAndDate.add(new DateNode(Integer.parseInt(day), Integer.parseInt(month), Integer.parseInt(year)));
+
+            return timeAndDate;
+        }
+        // If time and date are both used, but no year is given. For example if something is repeated every year.
+        // An example of this would be: "when 14:00 21d03m
+        if (ctx.DATEnoYEAR() != null && ctx.TIME() != null){
+            hours = ctx.TIME().getText().substring(0,2);
+            minutes = ctx.TIME().getText().substring(3,5);
+            timeAndDate.add(new TimeNode(Integer.parseInt(hours), Integer.parseInt(minutes)));
+
+            day = ctx.DATEnoYEAR().getText().substring(0,2);
+            month = ctx.DATEnoYEAR().getText().substring(3,5);
+            timeAndDate.add(new DateNode(Integer.parseInt(day), Integer.parseInt(month)));
+
+            return timeAndDate;
+        }
+
+        // If just a time is given. For example "when 14:00". This will then trigger every day.
+        if(ctx.TIME() != null){
+            hours = ctx.TIME().getText().substring(0,2);
+            minutes = ctx.TIME().getText().substring(3,5);
+            timeAndDate.add(new TimeNode(Integer.parseInt(hours), Integer.parseInt(minutes)));
+
+            return timeAndDate;
+        }
+
+        // if only a date i present. For example "when 01d01m2000y"
+        if(ctx.DATE() != null){
+            day = ctx.DATE().getText().substring(0,2);
+            month = ctx.DATE().getText().substring(3,5);
+            year = ctx.DATE().getText().substring(6,10);
+            timeAndDate.add(new DateNode(Integer.parseInt(day), Integer.parseInt(month), Integer.parseInt(year)));
+
+            return timeAndDate;
+        }
+
+        // If only a date without year is present. For example "when 01d01m"
+        if(ctx.DATEnoYEAR() != null){
+            day = ctx.DATEnoYEAR().getText().substring(0,2);
+            month = ctx.DATEnoYEAR().getText().substring(3,5);
+            timeAndDate.add(new DateNode(Integer.parseInt(day), Integer.parseInt(month)));
+
+            return timeAndDate;
+        }
+
+        return timeAndDate;
+    }
+
 
     @Override
     public Node visitRepeatEvent(PivotParser.RepeatEventContext ctx) {

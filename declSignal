@@ -72,3 +72,32 @@ string setBedroomWindowsOpen(int percentage, float f, string s){
             set frontDoorLight toggle: off;
         }
 }
+
+when mainThermometer celsius: exceeds 22{
+    setBedroomWindowsOpen(50); // Calling function defined further down
+}
+
+// Events
+when frontDoorSensor toggle: on {
+
+}
+
+when 14:00{
+
+}
+
+when 01d01m2000y{
+
+}
+
+when 01d01m{
+
+}
+
+when 14:00 01d01m2000y{
+
+}
+
+when 14:00 01d01m{
+
+}

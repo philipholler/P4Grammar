@@ -1466,6 +1466,17 @@ public class PivotParser extends Parser {
 	}
 
 	public static class AtomEventContext extends ParserRuleContext {
+		public AtomEventContext(ParserRuleContext parent, int invokingState) {
+			super(parent, invokingState);
+		}
+		@Override public int getRuleIndex() { return RULE_atomEvent; }
+	 
+		public AtomEventContext() { }
+		public void copyFrom(AtomEventContext ctx) {
+			super.copyFrom(ctx);
+		}
+	}
+	public static class InputWhenEventContext extends AtomEventContext {
 		public Token deviceID;
 		public Token signalID;
 		public Token enumID;
@@ -1483,24 +1494,41 @@ public class PivotParser extends Parser {
 			return getRuleContext(ExprContext.class,0);
 		}
 		public TerminalNode DECEEDS() { return getToken(PivotParser.DECEEDS, 0); }
-		public TimeAndDateContext timeAndDate() {
-			return getRuleContext(TimeAndDateContext.class,0);
-		}
-		public AtomEventContext(ParserRuleContext parent, int invokingState) {
-			super(parent, invokingState);
-		}
-		@Override public int getRuleIndex() { return RULE_atomEvent; }
+		public InputWhenEventContext(AtomEventContext ctx) { copyFrom(ctx); }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof PivotListener ) ((PivotListener)listener).enterAtomEvent(this);
+			if ( listener instanceof PivotListener ) ((PivotListener)listener).enterInputWhenEvent(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof PivotListener ) ((PivotListener)listener).exitAtomEvent(this);
+			if ( listener instanceof PivotListener ) ((PivotListener)listener).exitInputWhenEvent(this);
 		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof PivotVisitor ) return ((PivotVisitor<? extends T>)visitor).visitAtomEvent(this);
+			if ( visitor instanceof PivotVisitor ) return ((PivotVisitor<? extends T>)visitor).visitInputWhenEvent(this);
+			else return visitor.visitChildren(this);
+		}
+	}
+	public static class TimeWhenEventContext extends AtomEventContext {
+		public TerminalNode WHEN() { return getToken(PivotParser.WHEN, 0); }
+		public TimeAndDateContext timeAndDate() {
+			return getRuleContext(TimeAndDateContext.class,0);
+		}
+		public BlockContext block() {
+			return getRuleContext(BlockContext.class,0);
+		}
+		public TimeWhenEventContext(AtomEventContext ctx) { copyFrom(ctx); }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof PivotListener ) ((PivotListener)listener).enterTimeWhenEvent(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof PivotListener ) ((PivotListener)listener).exitTimeWhenEvent(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof PivotVisitor ) return ((PivotVisitor<? extends T>)visitor).visitTimeWhenEvent(this);
 			else return visitor.visitChildren(this);
 		}
 	}
@@ -1513,14 +1541,15 @@ public class PivotParser extends Parser {
 			_errHandler.sync(this);
 			switch ( getInterpreter().adaptivePredict(_input,23,_ctx) ) {
 			case 1:
+				_localctx = new InputWhenEventContext(_localctx);
 				enterOuterAlt(_localctx, 1);
 				{
 				setState(222);
 				match(WHEN);
 				setState(223);
-				((AtomEventContext)_localctx).deviceID = match(ID);
+				((InputWhenEventContext)_localctx).deviceID = match(ID);
 				setState(224);
-				((AtomEventContext)_localctx).signalID = match(ID);
+				((InputWhenEventContext)_localctx).signalID = match(ID);
 				setState(225);
 				match(COL);
 				setState(231);
@@ -1529,7 +1558,7 @@ public class PivotParser extends Parser {
 				case ID:
 					{
 					setState(226);
-					((AtomEventContext)_localctx).enumID = match(ID);
+					((InputWhenEventContext)_localctx).enumID = match(ID);
 					}
 					break;
 				case EXCEEDS:
@@ -1556,6 +1585,7 @@ public class PivotParser extends Parser {
 				}
 				break;
 			case 2:
+				_localctx = new TimeWhenEventContext(_localctx);
 				enterOuterAlt(_localctx, 2);
 				{
 				setState(234);
@@ -1666,6 +1696,7 @@ public class PivotParser extends Parser {
 	public static class TimeAndDateContext extends ParserRuleContext {
 		public TerminalNode TIME() { return getToken(PivotParser.TIME, 0); }
 		public TerminalNode DATE() { return getToken(PivotParser.DATE, 0); }
+		public TerminalNode DATEnoYEAR() { return getToken(PivotParser.DATEnoYEAR, 0); }
 		public TimeAndDateContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
@@ -1688,6 +1719,7 @@ public class PivotParser extends Parser {
 	public final TimeAndDateContext timeAndDate() throws RecognitionException {
 		TimeAndDateContext _localctx = new TimeAndDateContext(_ctx, getState());
 		enterRule(_localctx, 40, RULE_timeAndDate);
+		int _la;
 		try {
 			setState(258);
 			_errHandler.sync(this);
@@ -1698,21 +1730,37 @@ public class PivotParser extends Parser {
 				setState(254);
 				match(TIME);
 				setState(255);
-				match(DATE);
+				_la = _input.LA(1);
+				if ( !(_la==DATE || _la==DATEnoYEAR) ) {
+				_errHandler.recoverInline(this);
+				}
+				else {
+					if ( _input.LA(1)==Token.EOF ) matchedEOF = true;
+					_errHandler.reportMatch(this);
+					consume();
+				}
 				}
 				break;
 			case 2:
 				enterOuterAlt(_localctx, 2);
 				{
 				setState(256);
-				match(DATE);
+				match(TIME);
 				}
 				break;
 			case 3:
 				enterOuterAlt(_localctx, 3);
 				{
 				setState(257);
-				match(TIME);
+				_la = _input.LA(1);
+				if ( !(_la==DATE || _la==DATEnoYEAR) ) {
+				_errHandler.recoverInline(this);
+				}
+				else {
+					if ( _input.LA(1)==Token.EOF ) matchedEOF = true;
+					_errHandler.reportMatch(this);
+					consume();
+				}
 				}
 				break;
 			}
@@ -3698,7 +3746,7 @@ public class PivotParser extends Parser {
 		"\n%\3%\3%\3%\3%\3%\3%\7%\u0185\n%\f%\16%\u0188\13%\3&\3&\3&\3&\3&\3&\3"+
 		"&\3&\5&\u0192\n&\3\'\3\'\3\'\5\'\u0197\n\'\3(\3(\3)\3)\3)\5)\u019e\n)"+
 		"\3*\3*\3*\2\4FH+\2\4\6\b\n\f\16\20\22\24\26\30\32\34\36 \"$&(*,.\60\62"+
-		"\64\668:<>@BDFHJLNPR\2\t\3\2\33!\3\2\66\67\3\2\64\65\3\2\16\17\3\2>?\3"+
+		"\64\668:<>@BDFHJLNPR\2\t\3\2>?\3\2\33!\3\2\66\67\3\2\64\65\3\2\16\17\3"+
 		"\2\b\r\3\2#%\2\u01b1\2T\3\2\2\2\4Z\3\2\2\2\6n\3\2\2\2\bu\3\2\2\2\n|\3"+
 		"\2\2\2\f\u0084\3\2\2\2\16\u0088\3\2\2\2\20\u008e\3\2\2\2\22\u0092\3\2"+
 		"\2\2\24\u0094\3\2\2\2\26\u00a6\3\2\2\2\30\u00b0\3\2\2\2\32\u00ba\3\2\2"+
@@ -3756,55 +3804,55 @@ public class PivotParser extends Parser {
 		"\u00ff\3\2\2\2\u00f7\u00f8\7\32\2\2\u00f8\u00f9\5F$\2\u00f9\u00fa\5,\27"+
 		"\2\u00fa\u00fb\7.\2\2\u00fb\u00fc\5*\26\2\u00fc\u00fd\5.\30\2\u00fd\u00ff"+
 		"\3\2\2\2\u00fe\u00f2\3\2\2\2\u00fe\u00f7\3\2\2\2\u00ff)\3\2\2\2\u0100"+
-		"\u0101\7A\2\2\u0101\u0105\7>\2\2\u0102\u0105\7>\2\2\u0103\u0105\7A\2\2"+
-		"\u0104\u0100\3\2\2\2\u0104\u0102\3\2\2\2\u0104\u0103\3\2\2\2\u0105+\3"+
-		"\2\2\2\u0106\u0107\t\2\2\2\u0107-\3\2\2\2\u0108\u0109\7\61\2\2\u0109\u010a"+
-		"\5\60\31\2\u010a\u010b\7\62\2\2\u010b/\3\2\2\2\u010c\u0117\5\62\32\2\u010d"+
-		"\u0117\5\64\33\2\u010e\u0117\5\66\34\2\u010f\u0117\58\35\2\u0110\u0111"+
-		"\5:\36\2\u0111\u0112\79\2\2\u0112\u0117\3\2\2\2\u0113\u0117\5> \2\u0114"+
-		"\u0117\5@!\2\u0115\u0117\5B\"\2\u0116\u010c\3\2\2\2\u0116\u010d\3\2\2"+
-		"\2\u0116\u010e\3\2\2\2\u0116\u010f\3\2\2\2\u0116\u0110\3\2\2\2\u0116\u0113"+
-		"\3\2\2\2\u0116\u0114\3\2\2\2\u0116\u0115\3\2\2\2\u0117\u011a\3\2\2\2\u0118"+
-		"\u0116\3\2\2\2\u0118\u0119\3\2\2\2\u0119\61\3\2\2\2\u011a\u0118\3\2\2"+
-		"\2\u011b\u011c\7\"\2\2\u011c\u011d\5F$\2\u011d\u011e\5,\27\2\u011e\u011f"+
-		"\79\2\2\u011f\63\3\2\2\2\u0120\u0121\7D\2\2\u0121\u0122\7\63\2\2\u0122"+
-		"\u0123\5F$\2\u0123\u0124\79\2\2\u0124\65\3\2\2\2\u0125\u0126\7\25\2\2"+
-		"\u0126\u0127\7/\2\2\u0127\u0128\5H%\2\u0128\u0129\7\60\2\2\u0129\u012c"+
-		"\5.\30\2\u012a\u012b\7+\2\2\u012b\u012d\5.\30\2\u012c\u012a\3\2\2\2\u012c"+
-		"\u012d\3\2\2\2\u012d\67\3\2\2\2\u012e\u012f\7\26\2\2\u012f\u0130\7/\2"+
-		"\2\u0130\u0131\5H%\2\u0131\u0132\7\60\2\2\u0132\u0133\5.\30\2\u01339\3"+
-		"\2\2\2\u0134\u0135\7D\2\2\u0135\u0136\7/\2\2\u0136\u0137\5<\37\2\u0137"+
-		"\u0138\7\60\2\2\u0138\u0142\3\2\2\2\u0139\u013a\7&\2\2\u013a\u013b\7D"+
-		"\2\2\u013b\u013c\7D\2\2\u013c\u013d\7<\2\2\u013d\u0142\5F$\2\u013e\u013f"+
-		"\7\'\2\2\u013f\u0140\7D\2\2\u0140\u0142\7D\2\2\u0141\u0134\3\2\2\2\u0141"+
-		"\u0139\3\2\2\2\u0141\u013e\3\2\2\2\u0142;\3\2\2\2\u0143\u0145\5F$\2\u0144"+
-		"\u0143\3\2\2\2\u0144\u0145\3\2\2\2\u0145\u014a\3\2\2\2\u0146\u0147\7:"+
-		"\2\2\u0147\u0149\5F$\2\u0148\u0146\3\2\2\2\u0149\u014c\3\2\2\2\u014a\u0148"+
-		"\3\2\2\2\u014a\u014b\3\2\2\2\u014b=\3\2\2\2\u014c\u014a\3\2\2\2\u014d"+
-		"\u014e\5R*\2\u014e\u014f\7D\2\2\u014f\u0150\7\63\2\2\u0150\u0151\5F$\2"+
-		"\u0151\u0152\79\2\2\u0152?\3\2\2\2\u0153\u0154\7-\2\2\u0154\u0155\79\2"+
-		"\2\u0155A\3\2\2\2\u0156\u0158\7,\2\2\u0157\u0159\5F$\2\u0158\u0157\3\2"+
-		"\2\2\u0158\u0159\3\2\2\2\u0159\u015a\3\2\2\2\u015a\u015b\79\2\2\u015b"+
-		"C\3\2\2\2\u015c\u0160\7B\2\2\u015d\u0160\7@\2\2\u015e\u0160\7C\2\2\u015f"+
-		"\u015c\3\2\2\2\u015f\u015d\3\2\2\2\u015f\u015e\3\2\2\2\u0160E\3\2\2\2"+
-		"\u0161\u0162\b$\1\2\u0162\u0163\7/\2\2\u0163\u0164\5F$\2\u0164\u0165\7"+
-		"\60\2\2\u0165\u0169\3\2\2\2\u0166\u0169\5P)\2\u0167\u0169\5:\36\2\u0168"+
-		"\u0161\3\2\2\2\u0168\u0166\3\2\2\2\u0168\u0167\3\2\2\2\u0169\u0172\3\2"+
-		"\2\2\u016a\u016b\f\7\2\2\u016b\u016c\t\3\2\2\u016c\u0171\5F$\b\u016d\u016e"+
-		"\f\6\2\2\u016e\u016f\t\4\2\2\u016f\u0171\5F$\7\u0170\u016a\3\2\2\2\u0170"+
-		"\u016d\3\2\2\2\u0171\u0174\3\2\2\2\u0172\u0170\3\2\2\2\u0172\u0173\3\2"+
-		"\2\2\u0173G\3\2\2\2\u0174\u0172\3\2\2\2\u0175\u0176\b%\1\2\u0176\u017d"+
-		"\5J&\2\u0177\u0178\7/\2\2\u0178\u0179\5H%\2\u0179\u017a\7\60\2\2\u017a"+
-		"\u017d\3\2\2\2\u017b\u017d\t\5\2\2\u017c\u0175\3\2\2\2\u017c\u0177\3\2"+
-		"\2\2\u017c\u017b\3\2\2\2\u017d\u0186\3\2\2\2\u017e\u017f\f\7\2\2\u017f"+
-		"\u0180\7\6\2\2\u0180\u0185\5H%\b\u0181\u0182\f\6\2\2\u0182\u0183\7\7\2"+
-		"\2\u0183\u0185\5H%\7\u0184\u017e\3\2\2\2\u0184\u0181\3\2\2\2\u0185\u0188"+
-		"\3\2\2\2\u0186\u0184\3\2\2\2\u0186\u0187\3\2\2\2\u0187I\3\2\2\2\u0188"+
-		"\u0186\3\2\2\2\u0189\u018a\5L\'\2\u018a\u018b\5N(\2\u018b\u018c\5L\'\2"+
-		"\u018c\u0192\3\2\2\2\u018d\u018e\7/\2\2\u018e\u018f\5J&\2\u018f\u0190"+
-		"\7\60\2\2\u0190\u0192\3\2\2\2\u0191\u0189\3\2\2\2\u0191\u018d\3\2\2\2"+
-		"\u0192K\3\2\2\2\u0193\u0197\7A\2\2\u0194\u0197\t\6\2\2\u0195\u0197\5F"+
-		"$\2\u0196\u0193\3\2\2\2\u0196\u0194\3\2\2\2\u0196\u0195\3\2\2\2\u0197"+
+		"\u0101\7A\2\2\u0101\u0105\t\2\2\2\u0102\u0105\7A\2\2\u0103\u0105\t\2\2"+
+		"\2\u0104\u0100\3\2\2\2\u0104\u0102\3\2\2\2\u0104\u0103\3\2\2\2\u0105+"+
+		"\3\2\2\2\u0106\u0107\t\3\2\2\u0107-\3\2\2\2\u0108\u0109\7\61\2\2\u0109"+
+		"\u010a\5\60\31\2\u010a\u010b\7\62\2\2\u010b/\3\2\2\2\u010c\u0117\5\62"+
+		"\32\2\u010d\u0117\5\64\33\2\u010e\u0117\5\66\34\2\u010f\u0117\58\35\2"+
+		"\u0110\u0111\5:\36\2\u0111\u0112\79\2\2\u0112\u0117\3\2\2\2\u0113\u0117"+
+		"\5> \2\u0114\u0117\5@!\2\u0115\u0117\5B\"\2\u0116\u010c\3\2\2\2\u0116"+
+		"\u010d\3\2\2\2\u0116\u010e\3\2\2\2\u0116\u010f\3\2\2\2\u0116\u0110\3\2"+
+		"\2\2\u0116\u0113\3\2\2\2\u0116\u0114\3\2\2\2\u0116\u0115\3\2\2\2\u0117"+
+		"\u011a\3\2\2\2\u0118\u0116\3\2\2\2\u0118\u0119\3\2\2\2\u0119\61\3\2\2"+
+		"\2\u011a\u0118\3\2\2\2\u011b\u011c\7\"\2\2\u011c\u011d\5F$\2\u011d\u011e"+
+		"\5,\27\2\u011e\u011f\79\2\2\u011f\63\3\2\2\2\u0120\u0121\7D\2\2\u0121"+
+		"\u0122\7\63\2\2\u0122\u0123\5F$\2\u0123\u0124\79\2\2\u0124\65\3\2\2\2"+
+		"\u0125\u0126\7\25\2\2\u0126\u0127\7/\2\2\u0127\u0128\5H%\2\u0128\u0129"+
+		"\7\60\2\2\u0129\u012c\5.\30\2\u012a\u012b\7+\2\2\u012b\u012d\5.\30\2\u012c"+
+		"\u012a\3\2\2\2\u012c\u012d\3\2\2\2\u012d\67\3\2\2\2\u012e\u012f\7\26\2"+
+		"\2\u012f\u0130\7/\2\2\u0130\u0131\5H%\2\u0131\u0132\7\60\2\2\u0132\u0133"+
+		"\5.\30\2\u01339\3\2\2\2\u0134\u0135\7D\2\2\u0135\u0136\7/\2\2\u0136\u0137"+
+		"\5<\37\2\u0137\u0138\7\60\2\2\u0138\u0142\3\2\2\2\u0139\u013a\7&\2\2\u013a"+
+		"\u013b\7D\2\2\u013b\u013c\7D\2\2\u013c\u013d\7<\2\2\u013d\u0142\5F$\2"+
+		"\u013e\u013f\7\'\2\2\u013f\u0140\7D\2\2\u0140\u0142\7D\2\2\u0141\u0134"+
+		"\3\2\2\2\u0141\u0139\3\2\2\2\u0141\u013e\3\2\2\2\u0142;\3\2\2\2\u0143"+
+		"\u0145\5F$\2\u0144\u0143\3\2\2\2\u0144\u0145\3\2\2\2\u0145\u014a\3\2\2"+
+		"\2\u0146\u0147\7:\2\2\u0147\u0149\5F$\2\u0148\u0146\3\2\2\2\u0149\u014c"+
+		"\3\2\2\2\u014a\u0148\3\2\2\2\u014a\u014b\3\2\2\2\u014b=\3\2\2\2\u014c"+
+		"\u014a\3\2\2\2\u014d\u014e\5R*\2\u014e\u014f\7D\2\2\u014f\u0150\7\63\2"+
+		"\2\u0150\u0151\5F$\2\u0151\u0152\79\2\2\u0152?\3\2\2\2\u0153\u0154\7-"+
+		"\2\2\u0154\u0155\79\2\2\u0155A\3\2\2\2\u0156\u0158\7,\2\2\u0157\u0159"+
+		"\5F$\2\u0158\u0157\3\2\2\2\u0158\u0159\3\2\2\2\u0159\u015a\3\2\2\2\u015a"+
+		"\u015b\79\2\2\u015bC\3\2\2\2\u015c\u0160\7B\2\2\u015d\u0160\7@\2\2\u015e"+
+		"\u0160\7C\2\2\u015f\u015c\3\2\2\2\u015f\u015d\3\2\2\2\u015f\u015e\3\2"+
+		"\2\2\u0160E\3\2\2\2\u0161\u0162\b$\1\2\u0162\u0163\7/\2\2\u0163\u0164"+
+		"\5F$\2\u0164\u0165\7\60\2\2\u0165\u0169\3\2\2\2\u0166\u0169\5P)\2\u0167"+
+		"\u0169\5:\36\2\u0168\u0161\3\2\2\2\u0168\u0166\3\2\2\2\u0168\u0167\3\2"+
+		"\2\2\u0169\u0172\3\2\2\2\u016a\u016b\f\7\2\2\u016b\u016c\t\4\2\2\u016c"+
+		"\u0171\5F$\b\u016d\u016e\f\6\2\2\u016e\u016f\t\5\2\2\u016f\u0171\5F$\7"+
+		"\u0170\u016a\3\2\2\2\u0170\u016d\3\2\2\2\u0171\u0174\3\2\2\2\u0172\u0170"+
+		"\3\2\2\2\u0172\u0173\3\2\2\2\u0173G\3\2\2\2\u0174\u0172\3\2\2\2\u0175"+
+		"\u0176\b%\1\2\u0176\u017d\5J&\2\u0177\u0178\7/\2\2\u0178\u0179\5H%\2\u0179"+
+		"\u017a\7\60\2\2\u017a\u017d\3\2\2\2\u017b\u017d\t\6\2\2\u017c\u0175\3"+
+		"\2\2\2\u017c\u0177\3\2\2\2\u017c\u017b\3\2\2\2\u017d\u0186\3\2\2\2\u017e"+
+		"\u017f\f\7\2\2\u017f\u0180\7\6\2\2\u0180\u0185\5H%\b\u0181\u0182\f\6\2"+
+		"\2\u0182\u0183\7\7\2\2\u0183\u0185\5H%\7\u0184\u017e\3\2\2\2\u0184\u0181"+
+		"\3\2\2\2\u0185\u0188\3\2\2\2\u0186\u0184\3\2\2\2\u0186\u0187\3\2\2\2\u0187"+
+		"I\3\2\2\2\u0188\u0186\3\2\2\2\u0189\u018a\5L\'\2\u018a\u018b\5N(\2\u018b"+
+		"\u018c\5L\'\2\u018c\u0192\3\2\2\2\u018d\u018e\7/\2\2\u018e\u018f\5J&\2"+
+		"\u018f\u0190\7\60\2\2\u0190\u0192\3\2\2\2\u0191\u0189\3\2\2\2\u0191\u018d"+
+		"\3\2\2\2\u0192K\3\2\2\2\u0193\u0197\7A\2\2\u0194\u0197\t\2\2\2\u0195\u0197"+
+		"\5F$\2\u0196\u0193\3\2\2\2\u0196\u0194\3\2\2\2\u0196\u0195\3\2\2\2\u0197"+
 		"M\3\2\2\2\u0198\u0199\t\7\2\2\u0199O\3\2\2\2\u019a\u019e\5D#\2\u019b\u019e"+
 		"\7D\2\2\u019c\u019e\7*\2\2\u019d\u019a\3\2\2\2\u019d\u019b\3\2\2\2\u019d"+
 		"\u019c\3\2\2\2\u019eQ\3\2\2\2\u019f\u01a0\t\b\2\2\u01a0S\3\2\2\2-Z_ae"+

@@ -4,14 +4,14 @@ import node.base.Node;
 import utils.StringUtils;
 import visitor.AbstractVisitor;
 
-public class AddExprNode extends Node {
-    private Node leftChild;
-    private Node rightChild;
+public class AddExprNode extends ExpressionNode {
+    private ExpressionNode leftChild;
+    private ExpressionNode rightChild;
     private Operator op;
 
     public AddExprNode(Node leftChild, Node rightChild, Operator op) {
-        this.leftChild = leftChild;
-        this.rightChild = rightChild;
+        this.leftChild = (ExpressionNode) leftChild;
+        this.rightChild = (ExpressionNode) rightChild;
         this.op = op;
     }
 

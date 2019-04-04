@@ -15,6 +15,11 @@ public class EnumNode extends UnaryNode {
         this.ID = ID;
     }
 
+    public EnumNode(Node child, String ID) {
+        super(child);
+        this.ID = ID;
+    }
+
     @Override
     public String getTreeString(int indentation) {
         return super.getTreeString(indentation);

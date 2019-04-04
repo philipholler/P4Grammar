@@ -2,22 +2,22 @@ package node.Statements.LogicalExpression.TimeNodes;
 
 import node.Statements.LogicalExpression.LogicalExprNode;
 import utils.StringUtils;
+import utils.TimeUtils;
+
+import java.time.LocalDate;
+import java.time.MonthDay;
 
 public class DateNode extends LogicalExprNode {
     // todo: find proper date library and implement - Philip
-    private int day;
-    private int month;
-    private int year;
+    LocalDate date;
+    MonthDay monthDay;
 
     public DateNode(int day, int month, int year) {
-        this.day = day;
-        this.month = month;
-        this.year = year;
+        this.date = TimeUtils.getDate(day, month, year);
     }
 
     public DateNode(int day, int month) {
-        this.day = day;
-        this.month = month;
+        this.monthDay = TimeUtils.getMonthDay(day, month);
     }
 
     @Override
@@ -28,10 +28,23 @@ public class DateNode extends LogicalExprNode {
 
     @Override
     public String toString() {
-        return "DateNode(" +
-                "day=" + day +
-                "/" + month +
-                "/" + year +
-                ')';
+        if(date == null){
+            return "DateNode(" +
+                    "monthDay=" + monthDay +
+                    ')';
+        } else {
+            return "DateNode(" +
+                    "date=" + date +
+                    ')';
+        }
+
+    }
+
+    public LocalDate getDate() {
+        return date;
+    }
+
+    public MonthDay getMonthDay() {
+        return monthDay;
     }
 }

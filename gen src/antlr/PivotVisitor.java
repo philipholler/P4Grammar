@@ -135,11 +135,19 @@ public interface PivotVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitEvent(PivotParser.EventContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link PivotParser#atomEvent}.
+	 * Visit a parse tree produced by the {@code inputWhenEvent}
+	 * labeled alternative in {@link PivotParser#atomEvent}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitAtomEvent(PivotParser.AtomEventContext ctx);
+	T visitInputWhenEvent(PivotParser.InputWhenEventContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code timeWhenEvent}
+	 * labeled alternative in {@link PivotParser#atomEvent}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitTimeWhenEvent(PivotParser.TimeWhenEventContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link PivotParser#repeatEvent}.
 	 * @param ctx the parse tree

@@ -216,15 +216,29 @@ public interface PivotListener extends ParseTreeListener {
 	 */
 	void exitEvent(PivotParser.EventContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link PivotParser#atomEvent}.
+	 * Enter a parse tree produced by the {@code inputWhenEvent}
+	 * labeled alternative in {@link PivotParser#atomEvent}.
 	 * @param ctx the parse tree
 	 */
-	void enterAtomEvent(PivotParser.AtomEventContext ctx);
+	void enterInputWhenEvent(PivotParser.InputWhenEventContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link PivotParser#atomEvent}.
+	 * Exit a parse tree produced by the {@code inputWhenEvent}
+	 * labeled alternative in {@link PivotParser#atomEvent}.
 	 * @param ctx the parse tree
 	 */
-	void exitAtomEvent(PivotParser.AtomEventContext ctx);
+	void exitInputWhenEvent(PivotParser.InputWhenEventContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code timeWhenEvent}
+	 * labeled alternative in {@link PivotParser#atomEvent}.
+	 * @param ctx the parse tree
+	 */
+	void enterTimeWhenEvent(PivotParser.TimeWhenEventContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code timeWhenEvent}
+	 * labeled alternative in {@link PivotParser#atomEvent}.
+	 * @param ctx the parse tree
+	 */
+	void exitTimeWhenEvent(PivotParser.TimeWhenEventContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link PivotParser#repeatEvent}.
 	 * @param ctx the parse tree

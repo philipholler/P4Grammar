@@ -256,13 +256,25 @@ public class PivotBaseListener implements PivotListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterAtomEvent(PivotParser.AtomEventContext ctx) { }
+	@Override public void enterInputWhenEvent(PivotParser.InputWhenEventContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitAtomEvent(PivotParser.AtomEventContext ctx) { }
+	@Override public void exitInputWhenEvent(PivotParser.InputWhenEventContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterTimeWhenEvent(PivotParser.TimeWhenEventContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitTimeWhenEvent(PivotParser.TimeWhenEventContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
