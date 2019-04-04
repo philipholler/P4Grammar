@@ -261,7 +261,9 @@ public class AstBuilderVisitor extends PivotBaseVisitor<Node> {
     public Node visitFuncDecl(PivotParser.FuncDeclContext ctx) {
         // First find the type of the function
         VarType type = null;
-        if(!ctx.varType().isEmpty()){
+        if(ctx.varType() == null && ctx.VOID() != null){
+            type = VarType.VOID;
+        } else {
             switch (ctx.varType().getText()){
                 case "string":
                     type = VarType.STRING;
@@ -271,9 +273,6 @@ public class AstBuilderVisitor extends PivotBaseVisitor<Node> {
                     break;
                 case "float":
                     type = VarType.FLOAT;
-                    break;
-                case "void":
-                    type = VarType.VOID;
                     break;
                 default:
                     System.out.println("Error in ASTVistior -  visitFuncDecl");

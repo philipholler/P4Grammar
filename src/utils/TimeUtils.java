@@ -42,7 +42,7 @@ public class TimeUtils {
         if(month < 10){
             stringMonth = "0" + month;
         }
-        return MonthDay.parse("--" + stringDay + '-' + stringMonth);
+        return MonthDay.parse("--" + stringMonth + '-' + stringDay);
     }
 
     public static LocalDateTime getDateAndTime(int hours, int minutes, int seconds, int day, int month, int year){

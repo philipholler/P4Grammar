@@ -66,6 +66,11 @@ string setBedroomWindowsOpen(int percentage, float f, string s){
     return;
 }
 
+// Function
+void setBedroomWindowsOpen(int percentage){
+    set bedRoomWindow openWindow: percentage;
+}
+
 // Repeating event
 every 2 hours{
     int a = a;
@@ -83,7 +88,7 @@ every 2 hours{
 
 // // Turn on lawn mower every 2 weeks at 11:00 every summer.
 every 2 weeks starting 11:00 01d04m2019y{
-    if(01.04 < now && now < 30d09m){
+    if(01d04m < now && now < 30d09m){
         set GardenMower toggle: on;
     }
 
