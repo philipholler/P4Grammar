@@ -9,15 +9,26 @@ import java.util.Optional;
 
 public class SymbolTable {
 
+    public static final String INT_TYPE_ID = "int", FLOAT_TYPE_ID = "float", STRING_TYPE_ID = "string";
+
+    public final ArrayList<String> typeIDs = new ArrayList<>();
+
     // The outermost block (Where global variables and type declarations reside)
     Block globalBlock;
     // The currently opened block
     Block currentBlock;
 
+    // Functions can have the same name as other symbols and are therefore kept in a seperate list
+    // Additionally, functions can only be defined globally and are therefore listed here instead of within a block
+    private ArrayList<FunctionSymbol> functions = new ArrayList<>();
 
     public SymbolTable(){
         globalBlock = new Block();
         currentBlock = globalBlock;
+
+        typeIDs.add(INT_TYPE_ID);
+        typeIDs.add(FLOAT_TYPE_ID);
+        typeIDs.add(STRING_TYPE_ID);
     }
 
     public boolean isDeviceTypeDefined(String ID){
@@ -30,6 +41,12 @@ public class SymbolTable {
         return symbol.isPresent() && symbol.get() instanceof SignalTypeSymbol;
     }
 
+    private void enterSymbol(ArrayList<Symbol> symbols) throws IdAlreadyUsedException{
+        for(Symbol s : symbols){
+            enterSymbol(s);
+        }
+    }
+
     /** Adds the given symbol to the currently opened scope */
     public void enterSymbol(Symbol s) throws IdAlreadyUsedException {
         if(s instanceof FunctionSymbol) enterFunctionSymbol((FunctionSymbol) s);
@@ -37,19 +54,32 @@ public class SymbolTable {
         currentBlock.addSymbol(s);
     }
 
-    private void enterFunctionSymbol(FunctionSymbol s){
+    private void enterFunctionSymbol(FunctionSymbol s) throws IdAlreadyUsedException{
+        // Throw exception if function with same name already exists...
+        for(FunctionSymbol fs : functions){
+            if(fs.id.equals(s.id)) throw new IdAlreadyUsedException("",fs);
+        }
 
+        // ...otherwise add the function to the function list
+        functions.add(s);
     }
 
-    private void enterRegularSymbol(Symbol s){
+    private void enterRegularSymbol(Symbol s) throws IdAlreadyUsedException{
+        // Throw exception if the symbol id is already in use in the current scope...
+        Optional<Symbol> existingSymbol = currentBlock.getSymbol(s.id);
+        if(existingSymbol.isPresent())
+            throw new IdAlreadyUsedException(s.id, existingSymbol.get());
 
+        // ...otherwise add the symbol to the current scope
+        currentBlock.addSymbol(s);
+        // Add type id to global type list if the symbol is a type definition
+        if(s instanceof DeviceTypeSymbol) typeIDs.add(s.id);
     }
 
     /** Checks if the current scope (or any parent scopes) contains any symbol with the given idString */
     public boolean containsID(String id){
         return currentBlock.idExistsInScope(id);
     }
-
 
 
     /**
@@ -82,7 +112,12 @@ public class SymbolTable {
 
 
     public String toString(){
-        return globalBlock.toString(0);
+        StringBuilder functionsString = new StringBuilder("Functions : \n");
+        for(FunctionSymbol fs : functions)
+            functionsString.append(fs.toString()).append("\n");
+
+
+        return functionsString.append(globalBlock.toString(0)).toString();
     }
 
 

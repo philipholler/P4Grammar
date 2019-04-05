@@ -25,4 +25,17 @@ public class FunctionSymbol extends Symbol {
         return false;
     }
 
+    @Override
+    public String toString() {
+        StringBuilder string = new StringBuilder(id + " (");
+
+        for(FieldSymbol s : parameters){
+            string.append(s.id).append(",");
+        }
+        // Delete last comma
+        string.deleteCharAt(string.length() - 1);
+        string.append(")");
+
+        return string.toString();
+    }
 }
