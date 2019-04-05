@@ -6,11 +6,13 @@ import java.util.ArrayList;
 
 public class FunctionSymbol extends Symbol {
 
+    private final String returnType;
     ArrayList<FieldSymbol> parameters;
 
-    public FunctionSymbol(String id, Node declarationNode, ArrayList<FieldSymbol> parameters) {
+    public FunctionSymbol(String id, Node declarationNode, String returnType, ArrayList<FieldSymbol> parameters) {
         super(id, declarationNode);
         this.parameters = parameters;
+        this.returnType = returnType;
     }
 
     public ArrayList<FieldSymbol> getParameters() {
@@ -23,6 +25,10 @@ public class FunctionSymbol extends Symbol {
         }
 
         return false;
+    }
+
+    public String getReturnType() {
+        return returnType;
     }
 
     @Override

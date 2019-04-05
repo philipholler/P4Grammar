@@ -1,8 +1,29 @@
 package node.base;
 
+import org.antlr.v4.runtime.ParserRuleContext;
+import org.antlr.v4.runtime.RuleContext;
 import org.antlr.v4.runtime.tree.ParseTree;
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.Arrays;
+
 public abstract class Node {
+
+    ArrayList<Node> children = new ArrayList<>();
+    ParserRuleContext context;
+
+    public Node(ParserRuleContext context, ArrayList<Node> children) {
+        this.children = children;
+        this.context = context;
+    }
+
+    public Node(ParserRuleContext context, Node...children) {
+        if(children != null)
+            this.children = new ArrayList<>(Arrays.asList(children));
+
+        this.context = context;
+    }
 
     /**
      * Philip, 31.03.2019

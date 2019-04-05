@@ -1,12 +1,16 @@
 package node.base;
 
+import org.antlr.v4.runtime.ParserRuleContext;
 import utils.StringUtils;
+
+import java.util.ArrayList;
 
 public abstract class BinaryNode extends Node{
     Node leftChild;
     Node rightChild;
 
-    public BinaryNode(Node leftChild, Node rightChild) {
+    public BinaryNode(ParserRuleContext ctx, Node leftChild, Node rightChild) {
+        super(ctx, leftChild, rightChild);
         this.leftChild = leftChild;
         this.rightChild = rightChild;
     }

@@ -6,15 +6,15 @@ import java.util.Objects;
 
 public class FieldSymbol extends Symbol{
 
-    private VarType type;
+    private String typeID;
 
-    public FieldSymbol(String name, Node declarationNode, VarType type) {
+    public FieldSymbol(String name, Node declarationNode, String typeID) {
         super(name, declarationNode);
-        this.type = type;
+        this.typeID = typeID;
     }
 
-    public VarType getType() {
-        return type;
+    public String getTypeID() {
+        return typeID;
     }
 
     @Override
@@ -23,19 +23,19 @@ public class FieldSymbol extends Symbol{
         if (o == null || getClass() != o.getClass()) return false;
         FieldSymbol fieldSymbol = (FieldSymbol) o;
         return Objects.equals(id, fieldSymbol.id) &&
-                type == fieldSymbol.type;
+                typeID == fieldSymbol.typeID;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, type);
+        return Objects.hash(id, typeID);
     }
 
     @Override
     public String toString() {
         return "FieldSymbol{" +
                 "name='" + id + '\'' +
-                ", type=" + type +
+                ", typeID=" + typeID +
                 ", declarationNode=" + declarationNode +
                 '}';
     }

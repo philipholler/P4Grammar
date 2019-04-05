@@ -2,7 +2,12 @@ package visitor;
 
 import antlr.PivotBaseVisitor;
 import antlr.PivotParser;
-import exceptions.CompileErrorException;
+import com.sun.jdi.InvalidTypeException;
+import exceptions.TypeUndefinedException;
+import exceptions.user_side.CompileErrorException;
+import exceptions.user_side.DuplicateIDCompileError;
+import exceptions.IdAlreadyUsedException;
+import exceptions.user_side.TypeUndefinedCompileError;
 import node.*;
 import node.Events.EventEveryNode;
 import node.Events.WhenNodes.EventInputNode;
@@ -35,6 +40,8 @@ import node.define_nodes.Signal.EnumNode;
 import node.define_nodes.Signal.RangeNode;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.TerminalNode;
+import semantics.FieldSymbol;
+import semantics.SymbolTable;
 import semantics.VarType;
 import org.antlr.v4.runtime.ParserRuleContext;
 
@@ -43,6 +50,11 @@ import java.util.ArrayList;
 public class AstBuilderVisitor extends PivotBaseVisitor<Node> {
 
     private static int currentLineNumber = 0;
+    private SymbolTable symbolTable;
+
+    public SymbolTable getSymbolTable() {
+        return symbolTable;
+    }
 
     public static int getCurrentLineNumber() {
         return currentLineNumber;
@@ -54,7 +66,9 @@ public class AstBuilderVisitor extends PivotBaseVisitor<Node> {
 
     @Override
     public Node visitProgram(PivotParser.ProgramContext ctx) {
+        symbolTable = new SymbolTable();
         updateLineNumber(ctx);
+
         return new ProgramNode(visit(ctx.decls()));
     }
 
@@ -88,11 +102,11 @@ public class AstBuilderVisitor extends PivotBaseVisitor<Node> {
     public Node visitDeclVar(PivotParser.DeclVarContext ctx) {
         updateLineNumber(ctx);
         switch (ctx.varType().getText()) {
-            case "string":
+            case SymbolTable.STRING_TYPE_ID:
                 return new VarDeclNode(VarType.STRING, ctx.ID().getText(), visit(ctx.expr()));
-            case "int":
+            case SymbolTable.INT_TYPE_ID:
                 return new VarDeclNode(VarType.INT, ctx.ID().getText(), visit(ctx.expr()));
-            case "float":
+            case SymbolTable.FLOAT_TYPE_ID:
                 return new VarDeclNode(VarType.FLOAT, ctx.ID().getText(), visit(ctx.expr()));
             default:
                 throw new CompileErrorException("Error in visitDeclVar", getCurrentLineNumber());
@@ -148,7 +162,18 @@ public class AstBuilderVisitor extends PivotBaseVisitor<Node> {
     @Override
     public Node visitDeclDevice(PivotParser.DeclDeviceContext ctx) {
         updateLineNumber(ctx);
-        return new DevDeclNode(ctx.devType.getText(), ctx.varID.getText(), ctx.val.getText());
+        DevDeclNode deviceDeclNode = new DevDeclNode(ctx.devType.getText(), ctx.varID.getText(), ctx.val.getText());
+
+        try {
+            // Add device variable declaration to the symbol table
+            symbolTable.enterSymbol(new FieldSymbol(deviceDeclNode.getID(), deviceDeclNode, deviceDeclNode.getType()));
+        } catch (IdAlreadyUsedException e) {
+            throw new DuplicateIDCompileError(deviceDeclNode.getID(), ctx.getStart().getLine());
+        } catch (TypeUndefinedException e) {
+            throw new TypeUndefinedCompileError(deviceDeclNode.getType(), ctx.getStart().getLine());
+        }
+
+        return deviceDeclNode;
     }
 
     @Override
@@ -194,7 +219,6 @@ public class AstBuilderVisitor extends PivotBaseVisitor<Node> {
         } else {
             throw new CompileErrorException("Error in visitRange", getCurrentLineNumber());
         }
-
     }
 
     @Override

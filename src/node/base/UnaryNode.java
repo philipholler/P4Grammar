@@ -1,11 +1,15 @@
 package node.base;
 
+import org.antlr.v4.runtime.ParserRuleContext;
 import utils.StringUtils;
+
+import java.util.ArrayList;
 
 public abstract class UnaryNode extends Node{
     Node child;
 
-    public UnaryNode(Node child) {
+    public UnaryNode(ParserRuleContext ctx, Node child) {
+        super(ctx, child);
         this.child = child;
     }
 
@@ -27,5 +31,8 @@ public abstract class UnaryNode extends Node{
 
     public void setChild(Node child) {
         this.child = child;
+        // Set super class children to only contain the new child
+        children.clear();
+        children.add(child);
     }
 }

@@ -1,17 +1,19 @@
 package node.base;
 
+import org.antlr.v4.runtime.ParserRuleContext;
 import utils.StringUtils;
 
 import java.util.ArrayList;
 
 public abstract class ListNode extends Node{
-    private ArrayList<Node> children = new ArrayList<>();
 
-    public ListNode() {
+
+    public ListNode(ParserRuleContext ctx) {
+        super(ctx);
     }
 
-    public ListNode(ArrayList<Node> children) {
-        this.children = children;
+    public ListNode(ParserRuleContext ctx, ArrayList<Node> children) {
+        super(ctx, children);
     }
 
     public ArrayList<Node> getChildren() {

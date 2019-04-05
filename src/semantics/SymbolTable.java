@@ -1,6 +1,8 @@
 package semantics;
 
+import com.sun.jdi.InvalidTypeException;
 import exceptions.IdAlreadyUsedException;
+import exceptions.TypeUndefinedException;
 import node.base.Node;
 import utils.StringUtils;
 
@@ -11,7 +13,7 @@ public class SymbolTable {
 
     public static final String INT_TYPE_ID = "int", FLOAT_TYPE_ID = "float", STRING_TYPE_ID = "string";
 
-    public final ArrayList<String> typeIDs = new ArrayList<>();
+    public final ArrayList<String> definedTypeIDs = new ArrayList<>();
 
     // The outermost block (Where global variables and type declarations reside)
     Block globalBlock;
@@ -26,9 +28,9 @@ public class SymbolTable {
         globalBlock = new Block();
         currentBlock = globalBlock;
 
-        typeIDs.add(INT_TYPE_ID);
-        typeIDs.add(FLOAT_TYPE_ID);
-        typeIDs.add(STRING_TYPE_ID);
+        definedTypeIDs.add(INT_TYPE_ID);
+        definedTypeIDs.add(FLOAT_TYPE_ID);
+        definedTypeIDs.add(STRING_TYPE_ID);
     }
 
     public boolean isDeviceTypeDefined(String ID){
@@ -41,27 +43,23 @@ public class SymbolTable {
         return symbol.isPresent() && symbol.get() instanceof SignalTypeSymbol;
     }
 
-    private void enterSymbol(ArrayList<Symbol> symbols) throws IdAlreadyUsedException{
+    private void enterSymbol(ArrayList<Symbol> symbols) throws IdAlreadyUsedException, TypeUndefinedException {
         for(Symbol s : symbols){
             enterSymbol(s);
         }
     }
 
     /** Adds the given symbol to the currently opened scope */
-    public void enterSymbol(Symbol s) throws IdAlreadyUsedException {
+    public void enterSymbol(Symbol s) throws IdAlreadyUsedException, TypeUndefinedException {
         if(s instanceof FunctionSymbol) enterFunctionSymbol((FunctionSymbol) s);
+        else if(s instanceof FieldSymbol) enterFieldSymbol((FieldSymbol)s);
         else enterRegularSymbol(s);
-        currentBlock.addSymbol(s);
     }
 
-    private void enterFunctionSymbol(FunctionSymbol s) throws IdAlreadyUsedException{
-        // Throw exception if function with same name already exists...
-        for(FunctionSymbol fs : functions){
-            if(fs.id.equals(s.id)) throw new IdAlreadyUsedException("",fs);
-        }
-
-        // ...otherwise add the function to the function list
-        functions.add(s);
+    private void enterFieldSymbol(FieldSymbol s) throws IdAlreadyUsedException, TypeUndefinedException{
+        // Verify that type of the variable is defined before adding it to the symbol table
+        if(definedTypeIDs.contains(s.getTypeID())) enterRegularSymbol(s);
+        else throw new TypeUndefinedException(s.getTypeID());
     }
 
     private void enterRegularSymbol(Symbol s) throws IdAlreadyUsedException{
@@ -73,8 +71,22 @@ public class SymbolTable {
         // ...otherwise add the symbol to the current scope
         currentBlock.addSymbol(s);
         // Add type id to global type list if the symbol is a type definition
-        if(s instanceof DeviceTypeSymbol) typeIDs.add(s.id);
+        if(s instanceof DeviceTypeSymbol) definedTypeIDs.add(s.id);
     }
+
+    private void enterFunctionSymbol(FunctionSymbol s) throws IdAlreadyUsedException, TypeUndefinedException{
+
+
+        // Throw exception if function with same name already exists...
+        for(FunctionSymbol fs : functions){
+            if(fs.id.equals(s.id)) throw new IdAlreadyUsedException("",fs);
+        }
+
+        // ...otherwise add the function to the function list
+        functions.add(s);
+    }
+
+
 
     /** Checks if the current scope (or any parent scopes) contains any symbol with the given idString */
     public boolean containsID(String id){
