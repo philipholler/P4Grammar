@@ -21,7 +21,7 @@ Thermometer mainThermometer = "129.67.198.65:12565";
 string a = "Hej";
 
 init(){
-    int a = 10;
+    int a = 2.0;
     // Optional code for initialization
     // Automatically run when the program is run for the first time
 }
@@ -33,7 +33,7 @@ when frontDoorSensor toggle: on {
     }
     wait 30 seconds;
 
-    while(get frontDoorSensor toggle != "on"){
+    while(get frontDoorSensor toggle == "on"){
         set frontDoorLight toggle: off;
     }
 

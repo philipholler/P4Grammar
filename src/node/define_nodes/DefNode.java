@@ -7,10 +7,6 @@ import visitor.AbstractVisitor;
 
 import java.util.ArrayList;
 
-/**
- * TODO ERROR HANDLING I CONSTRUCTORS
- */
-
 public abstract class DefNode extends ListNode {
 
     public DefNode() {
