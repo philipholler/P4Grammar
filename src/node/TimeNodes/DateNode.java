@@ -8,7 +8,6 @@ import java.time.LocalDate;
 import java.time.MonthDay;
 
 public class DateNode extends LogicalExprNode {
-    // todo: find proper date library and implement - Philip
     LocalDate date;
     MonthDay monthDay;
 

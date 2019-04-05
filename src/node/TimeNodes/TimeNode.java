@@ -7,7 +7,6 @@ import utils.TimeUtils;
 import java.time.LocalTime;
 
 public class TimeNode extends LogicalExprNode {
-    // todo: find et godt time library og implementer - Philip 03.04.2019
     LocalTime time;
 
     public TimeNode(int hours, int minutes) {

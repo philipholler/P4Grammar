@@ -21,7 +21,7 @@ Thermometer mainThermometer = "129.67.198.65:12565";
 string a = "Hej";
 
 init(){
-    int a = 10;
+    int a = 2.0;
     // Optional code for initialization
     // Automatically run when the program is run for the first time
 }
@@ -33,7 +33,7 @@ when frontDoorSensor toggle: on {
     }
     wait 30 seconds;
 
-    while(get frontDoorSensor toggle != "on"){
+    while(get frontDoorSensor toggle == "on"){
         set frontDoorLight toggle: off;
     }
 
@@ -94,4 +94,61 @@ every 2 weeks starting 11:00 01d04m2019y{
 
     if(5 == 5 && (b == a || a == b)){
     }
+
+    while(true){
+
+    }
+}
+
+when mainThermometer celsius: exceeds 22{
+    setBedroomWindowsOpen(50); // Calling function defined further down
+}
+
+// Events
+when frontDoorSensor toggle: on {
+
+}
+
+when 14:00{
+
+}
+
+when 01d01m2000y{
+
+}
+
+when 01d01m{
+
+}
+
+when 14:00 01d01m2000y{
+
+}
+
+when 14:00 01d01m{
+
+}
+
+every 2 hours starting 14:00{
+
+}
+
+every 2 hours starting 01d01m2000y{
+
+}
+
+every 2 hours starting 01d01m{
+
+}
+
+every 2 hours starting 14:00 01d01m2000y{
+
+}
+
+every 2 hours starting 14:00 01d01m{
+
+}
+
+every 2 hours{
+
 }
