@@ -686,4 +686,9 @@ public class AstBuilderVisitor extends PivotBaseVisitor<Node> {
     public Node visitStringVal(PivotParser.StringValContext ctx) {
         return new StringNode(ctx.STRING().getText());
     }
+
+    @Override
+    public Node visitFParams(PivotParser.FParamsContext ctx) {
+        return super.visitFParams(ctx);
+    }
 }
