@@ -4,19 +4,20 @@ import node.Statements.Expression.LiteralValues.LiteralValueNode;
 import node.base.LeafNode;
 import node.base.Node;
 import node.base.UnaryNode;
+import org.antlr.v4.runtime.ParserRuleContext;
 import semantics.VarType;
 import visitor.AbstractVisitor;
 
 public class EnumNode extends UnaryNode {
     private String ID;
 
-    public EnumNode(String ID, Node val) {
-        super(val);
+    public EnumNode(ParserRuleContext ctx, String ID, Node val) {
+        super(ctx,val);
         this.ID = ID;
     }
 
-    public EnumNode(Node child, String ID) {
-        super(child);
+    public EnumNode(ParserRuleContext ctx, Node child, String ID) {
+        super(ctx, child);
         this.ID = ID;
     }
 

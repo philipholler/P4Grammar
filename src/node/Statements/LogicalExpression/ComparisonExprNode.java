@@ -1,6 +1,7 @@
 package node.Statements.LogicalExpression;
 
 import node.base.Node;
+import org.antlr.v4.runtime.ParserRuleContext;
 import utils.StringUtils;
 
 public class ComparisonExprNode extends LogicalExprNode {
@@ -8,7 +9,8 @@ public class ComparisonExprNode extends LogicalExprNode {
     Node rightChild;
     ComparisonOperator op;
 
-    public ComparisonExprNode(Node leftChild, Node rightChild, ComparisonOperator op) {
+    public ComparisonExprNode(ParserRuleContext ctx, Node leftChild, Node rightChild, ComparisonOperator op) {
+        super(ctx, leftChild, rightChild);
         this.leftChild = leftChild;
         this.rightChild = rightChild;
         this.op = op;

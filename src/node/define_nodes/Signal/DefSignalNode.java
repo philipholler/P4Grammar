@@ -2,6 +2,7 @@ package node.define_nodes.Signal;
 
 import node.base.ListNode;
 import node.base.Node;
+import org.antlr.v4.runtime.ParserRuleContext;
 import utils.StringUtils;
 import visitor.AbstractVisitor;
 
@@ -18,22 +19,24 @@ public class DefSignalNode extends ListNode {
 
 
     // Constructores for signals with ranges:
-    public DefSignalNode(String ID, RangeNode rangeNode) {
+    public DefSignalNode(ParserRuleContext ctx, String ID, RangeNode rangeNode) {
+        super(ctx, rangeNode);
         this.ID = ID;
         this.rangeNode = rangeNode;
     }
 
     // Constructors for defining Signals with enumvalues:
-    public DefSignalNode(ArrayList<Node> enums, String ID) {
-        super(enums);
+    public DefSignalNode(ParserRuleContext ctx, ArrayList<Node> enums, String ID) {
+        super(ctx, enums);
         this.ID = ID;
     }
 
-    public DefSignalNode() {
+    public DefSignalNode(ParserRuleContext ctx) {
+        super(ctx);
     }
 
-    public DefSignalNode(ArrayList<Node> children) {
-        super(children);
+    public DefSignalNode(ParserRuleContext ctx, ArrayList<Node> children) {
+        super(ctx, children);
     }
 
     public String getID() {

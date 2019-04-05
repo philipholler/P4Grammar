@@ -4,6 +4,7 @@ import node.BlockNode;
 import node.Events.EventNode;
 import node.base.Node;
 import node.define_nodes.Signal.EnumNode;
+import org.antlr.v4.runtime.ParserRuleContext;
 import utils.StringUtils;
 
 public class EventInputNode extends EventNode {
@@ -12,7 +13,8 @@ public class EventInputNode extends EventNode {
     private String enumID;
     private BlockNode blockNode;
 
-    public EventInputNode(Node block, String deviceID, String signalID, String enumID) {
+    public EventInputNode(ParserRuleContext ctx, Node block, String deviceID, String signalID, String enumID) {
+        super(ctx, block);
         if(!(block instanceof BlockNode)) {
             System.out.println("Error in EventInputNode constructor");
             this.blockNode = null;

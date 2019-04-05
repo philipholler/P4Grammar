@@ -1,5 +1,6 @@
 package node.Statements.Expression;
 
+import org.antlr.v4.runtime.ParserRuleContext;
 import semantics.VarType;
 import utils.StringUtils;
 import visitor.AbstractVisitor;
@@ -7,12 +8,13 @@ import visitor.AbstractVisitor;
 public class IDNode extends ExpressionNode {
     String ID;
 
-    public IDNode(VarType type, String ID) {
-        super(type);
+    public IDNode(ParserRuleContext ctx, VarType type, String ID) {
+        super(ctx, type);
         this.ID = ID;
     }
 
-    public IDNode(String ID) {
+    public IDNode(ParserRuleContext ctx, String ID) {
+        super(ctx);
         this.ID = ID;
     }
 

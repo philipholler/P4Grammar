@@ -1,11 +1,13 @@
 package node.Statements.LogicalExpression;
 
+import org.antlr.v4.runtime.ParserRuleContext;
 import utils.StringUtils;
 
 public class LogicalLiteralNode extends LogicalExprNode {
     private boolean val;
 
-    public LogicalLiteralNode(boolean val) {
+    public LogicalLiteralNode(ParserRuleContext ctx, boolean val) {
+        super(ctx);
         this.val = val;
     }
 

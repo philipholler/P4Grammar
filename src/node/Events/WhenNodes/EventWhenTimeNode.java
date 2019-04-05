@@ -5,6 +5,7 @@ import node.Events.EventNode;
 import node.TimeNodes.DateNode;
 import node.TimeNodes.TimeNode;
 import node.base.Node;
+import org.antlr.v4.runtime.ParserRuleContext;
 import utils.StringUtils;
 
 public class EventWhenTimeNode extends EventNode {
@@ -12,18 +13,21 @@ public class EventWhenTimeNode extends EventNode {
     private DateNode date;
     private BlockNode block;
 
-    public EventWhenTimeNode(TimeNode time, DateNode date, Node block) {
+    public EventWhenTimeNode(ParserRuleContext ctx, TimeNode time, DateNode date, Node block) {
+        super(ctx, time, date, block);
         this.time = time;
         this.date = date;
         this.block = (BlockNode) block;
     }
 
-    public EventWhenTimeNode(TimeNode time, Node block) {
+    public EventWhenTimeNode(ParserRuleContext ctx, TimeNode time, Node block) {
+        super(ctx, time, block);
         this.time = time;
         this.block = (BlockNode) block;
     }
 
-    public EventWhenTimeNode(DateNode date, Node block) {
+    public EventWhenTimeNode(ParserRuleContext ctx, DateNode date, Node block) {
+        super(ctx, date, block);
         this.date = date;
         this.block = (BlockNode) block;
     }

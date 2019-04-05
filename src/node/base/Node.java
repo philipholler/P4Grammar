@@ -34,6 +34,14 @@ public abstract class Node {
      */
     public abstract String getTreeString(int indentation);
 
+    public ArrayList<Node> getChildren() {
+        return children;
+    }
+
+    public ParserRuleContext getContext() {
+        return context;
+    }
+
     @Override
     public String toString() {
         return getClass().getSimpleName();

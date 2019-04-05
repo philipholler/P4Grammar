@@ -1,13 +1,15 @@
 package node.Statements.LogicalExpression;
 
 import node.base.Node;
+import org.antlr.v4.runtime.ParserRuleContext;
 import utils.StringUtils;
 
 public class LogicalAndExprNode extends LogicalExprNode {
     Node leftChild;
     Node rightChild;
 
-    public LogicalAndExprNode(Node leftChild, Node rightChild) {
+    public LogicalAndExprNode(ParserRuleContext ctx, Node leftChild, Node rightChild) {
+        super(ctx, leftChild, rightChild);
         this.leftChild = leftChild;
         this.rightChild = rightChild;
     }

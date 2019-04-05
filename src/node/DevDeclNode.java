@@ -1,6 +1,7 @@
 package node;
 
 import node.base.LeafNode;
+import org.antlr.v4.runtime.ParserRuleContext;
 import visitor.AbstractVisitor;
 
 public class DevDeclNode extends LeafNode {
@@ -8,7 +9,8 @@ public class DevDeclNode extends LeafNode {
     String ID;
     String val;
 
-    public DevDeclNode(String type, String ID, String val) {
+    public DevDeclNode(ParserRuleContext ctx, String type, String ID, String val) {
+        super(ctx);
         this.type = type;
         this.ID = ID;
         this.val = val;

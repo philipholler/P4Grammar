@@ -69,13 +69,13 @@ public class AstBuilderVisitor extends PivotBaseVisitor<Node> {
         symbolTable = new SymbolTable();
         updateLineNumber(ctx);
 
-        return new ProgramNode(visit(ctx.decls()));
+        return new ProgramNode(ctx, visit(ctx.decls()));
     }
 
     @Override
     public Node visitDecls(PivotParser.DeclsContext ctx) {
         updateLineNumber(ctx);
-        DeclsNode node = new DeclsNode();
+        DeclsNode node = new DeclsNode(ctx);
 
         for (ParseTree tree : ctx.children) {
             node.addChild(visit(tree));
@@ -103,11 +103,11 @@ public class AstBuilderVisitor extends PivotBaseVisitor<Node> {
         updateLineNumber(ctx);
         switch (ctx.varType().getText()) {
             case SymbolTable.STRING_TYPE_ID:
-                return new VarDeclNode(VarType.STRING, ctx.ID().getText(), visit(ctx.expr()));
+                return new VarDeclNode(ctx, VarType.STRING, ctx.ID().getText(), visit(ctx.expr()));
             case SymbolTable.INT_TYPE_ID:
-                return new VarDeclNode(VarType.INT, ctx.ID().getText(), visit(ctx.expr()));
+                return new VarDeclNode(ctx, VarType.INT, ctx.ID().getText(), visit(ctx.expr()));
             case SymbolTable.FLOAT_TYPE_ID:
-                return new VarDeclNode(VarType.FLOAT, ctx.ID().getText(), visit(ctx.expr()));
+                return new VarDeclNode(ctx, VarType.FLOAT, ctx.ID().getText(), visit(ctx.expr()));
             default:
                 throw new CompileErrorException("Error in visitDeclVar", getCurrentLineNumber());
         }
@@ -119,9 +119,9 @@ public class AstBuilderVisitor extends PivotBaseVisitor<Node> {
     public Node visitMultiExpr(PivotParser.MultiExprContext ctx) {
         updateLineNumber(ctx);
         if(ctx.op.getText().equals("*")){
-            return new MultiExprNode(visit(ctx.leftChild), visit(ctx.rightChild), Operator.MULTPLY);
+            return new MultiExprNode(ctx, visit(ctx.leftChild), visit(ctx.rightChild), Operator.MULTPLY);
         } else if(ctx.op.getText().equals("/")){
-            return new MultiExprNode(visit(ctx.leftChild), visit(ctx.rightChild), Operator.DIVIDE);
+            return new MultiExprNode(ctx, visit(ctx.leftChild), visit(ctx.rightChild), Operator.DIVIDE);
         } else{
             throw new CompileErrorException("Error in visitMultiExpr", getCurrentLineNumber());
         }
@@ -137,11 +137,11 @@ public class AstBuilderVisitor extends PivotBaseVisitor<Node> {
     public Node visitAtom(PivotParser.AtomContext ctx) {
         updateLineNumber(ctx);
         if(ctx.varID != null){
-            return new IDNode(ctx.ID().getText());
+            return new IDNode(ctx, ctx.ID().getText());
         } else if (ctx.litVal() != null){
             return visit(ctx.litVal());
         } else if (ctx.NOW() != null){
-            return new NowNode();
+            return new NowNode(ctx);
         } else{
             throw new CompileErrorException("Error in visitAtom", getCurrentLineNumber());
         }
@@ -151,9 +151,9 @@ public class AstBuilderVisitor extends PivotBaseVisitor<Node> {
     public Node visitPlusExpr(PivotParser.PlusExprContext ctx) {
         updateLineNumber(ctx);
         if(ctx.op.getText().equals("+")){
-            return new AddExprNode(visit(ctx.leftChild), visit(ctx.rightChild), Operator.PLUS);
+            return new AddExprNode(ctx, visit(ctx.leftChild), visit(ctx.rightChild), Operator.PLUS);
         } else if(ctx.op.getText().equals("-")){
-            return new AddExprNode(visit(ctx.leftChild), visit(ctx.rightChild), Operator.MINUS);
+            return new AddExprNode(ctx, visit(ctx.leftChild), visit(ctx.rightChild), Operator.MINUS);
         } else{
             throw new CompileErrorException("Error in visitPlusExpr", getCurrentLineNumber());
         }
@@ -162,16 +162,7 @@ public class AstBuilderVisitor extends PivotBaseVisitor<Node> {
     @Override
     public Node visitDeclDevice(PivotParser.DeclDeviceContext ctx) {
         updateLineNumber(ctx);
-        DevDeclNode deviceDeclNode = new DevDeclNode(ctx.devType.getText(), ctx.varID.getText(), ctx.val.getText());
-
-        try {
-            // Add device variable declaration to the symbol table
-            symbolTable.enterSymbol(new FieldSymbol(deviceDeclNode.getID(), deviceDeclNode, deviceDeclNode.getType()));
-        } catch (IdAlreadyUsedException e) {
-            throw new DuplicateIDCompileError(deviceDeclNode.getID(), ctx.getStart().getLine());
-        } catch (TypeUndefinedException e) {
-            throw new TypeUndefinedCompileError(deviceDeclNode.getType(), ctx.getStart().getLine());
-        }
+        DevDeclNode deviceDeclNode = new DevDeclNode(ctx, ctx.devType.getText(), ctx.varID.getText(), ctx.val.getText());
 
         return deviceDeclNode;
     }
@@ -180,10 +171,10 @@ public class AstBuilderVisitor extends PivotBaseVisitor<Node> {
     public Node visitSignal(PivotParser.SignalContext ctx) {
         updateLineNumber(ctx);
         if(ctx.range() != null){
-            return new DefSignalNode(ctx.ID().getText(), (RangeNode) visit(ctx.range()));
+            return new DefSignalNode(ctx, ctx.ID().getText(), (RangeNode) visit(ctx.range()));
         } else if(ctx.enumerations() != null){
             ArrayList<Node> enums = visitEnums(ctx.enumerations());
-            return new DefSignalNode(enums, ctx.ID().getText());
+            return new DefSignalNode(ctx, enums, ctx.ID().getText());
         } else{
             throw new CompileErrorException("Error in visitSignal", getCurrentLineNumber());
         }
@@ -202,7 +193,7 @@ public class AstBuilderVisitor extends PivotBaseVisitor<Node> {
     @Override
     public Node visitEnumeration(PivotParser.EnumerationContext ctx) {
         updateLineNumber(ctx);
-        return new EnumNode(ctx.ID().getText(), visit(ctx.enumVal));
+        return new EnumNode(ctx, ctx.ID().getText(), visit(ctx.enumVal));
     }
 
     @Override
@@ -213,9 +204,9 @@ public class AstBuilderVisitor extends PivotBaseVisitor<Node> {
 
         // If both have the type integer.
         if(lwBound instanceof IntegerNode && upBound instanceof IntegerNode){
-            return new RangeNode(lwBound, upBound, VarType.INT);
+            return new RangeNode(ctx, lwBound, upBound, VarType.INT);
         } else if (lwBound instanceof FloatNode && upBound instanceof FloatNode){
-            return new RangeNode(lwBound, upBound, VarType.FLOAT);
+            return new RangeNode(ctx, lwBound, upBound, VarType.FLOAT);
         } else {
             throw new CompileErrorException("Error in visitRange", getCurrentLineNumber());
         }
@@ -224,25 +215,25 @@ public class AstBuilderVisitor extends PivotBaseVisitor<Node> {
     @Override
     public Node visitIntlwRange(PivotParser.IntlwRangeContext ctx) {
         updateLineNumber(ctx);
-        return new IntegerNode(ctx.INTEGER().getText());
+        return new IntegerNode(ctx, ctx.INTEGER().getText());
     }
 
     @Override
     public Node visitFloatlwRange(PivotParser.FloatlwRangeContext ctx) {
         updateLineNumber(ctx);
-        return new FloatNode(ctx.FLOAT().getText());
+        return new FloatNode(ctx, ctx.FLOAT().getText());
     }
 
     @Override
     public Node visitIntupRange(PivotParser.IntupRangeContext ctx) {
         updateLineNumber(ctx);
-        return new IntegerNode(ctx.INTEGER().getText());
+        return new IntegerNode(ctx, ctx.INTEGER().getText());
     }
 
     @Override
     public Node visitFloatupRange(PivotParser.FloatupRangeContext ctx) {
         updateLineNumber(ctx);
-        return new FloatNode(ctx.FLOAT().getText());
+        return new FloatNode(ctx, ctx.FLOAT().getText());
     }
 
     @Override
@@ -256,7 +247,7 @@ public class AstBuilderVisitor extends PivotBaseVisitor<Node> {
             for(int i = 1; i < ctx.inputs().children.size(); i++){
                 ParseTree childCtx = ctx.inputs().getChild(i);
                 if(isSeparatorSymbol(childCtx)) continue;
-                inputs.add(new InputNode((ctx.inputs().children.get(i)).getText()));
+                inputs.add(new InputNode(ctx, (ctx.inputs().children.get(i)).getText()));
             }
         }
 
@@ -265,11 +256,11 @@ public class AstBuilderVisitor extends PivotBaseVisitor<Node> {
             for(int i = 1; i < ctx.outputs().getChildCount(); i++){
                 ParseTree childCtx = ctx.outputs().getChild(i);
                 if(isSeparatorSymbol(childCtx)) continue;
-                outputs.add(new OutputNode((ctx.outputs().children.get(i)).getText()));
+                outputs.add(new OutputNode(ctx, (ctx.outputs().children.get(i)).getText()));
             }
         }
 
-        return new DefDeviceNode(ctx.ID().getText(), outputs, inputs);
+        return new DefDeviceNode(ctx, ctx.ID().getText(), outputs, inputs);
     }
 
     private boolean isSeparatorSymbol(ParseTree ctx){
@@ -287,7 +278,7 @@ public class AstBuilderVisitor extends PivotBaseVisitor<Node> {
     @Override
     public Node visitInit(PivotParser.InitContext ctx) {
         updateLineNumber(ctx);
-        return new InitNode(visit(ctx.block()));
+        return new InitNode(ctx, visit(ctx.block()));
     }
 
     @Override
@@ -318,7 +309,7 @@ public class AstBuilderVisitor extends PivotBaseVisitor<Node> {
 
         ArrayList<Node> params = findInputParams(ctx);
 
-        return new FunctionNode(type, id, params, visit(ctx.block()));
+        return new FunctionNode(ctx, type, id, params, visit(ctx.block()));
     }
 
     private ArrayList<Node> findInputParams(PivotParser.FuncDeclContext ctx){
@@ -356,7 +347,7 @@ public class AstBuilderVisitor extends PivotBaseVisitor<Node> {
 
             }
         }
-        return new InputParamNode(ctx.localID.getText(), type);
+        return new InputParamNode(ctx, ctx.localID.getText(), type);
     }
 
     @Override
@@ -370,12 +361,12 @@ public class AstBuilderVisitor extends PivotBaseVisitor<Node> {
             } else if (ctx.DECEEDS() != null){
                 excdsDecds = ExceedsAndDeceedsEnum.DECEEDS;
             }
-            return new EventRangeInputNode(visit(ctx.block()), ctx.deviceID.getText(),
+            return new EventRangeInputNode(ctx, visit(ctx.block()), ctx.deviceID.getText(),
                     ctx.signalID.getText(), excdsDecds, (ExpressionNode) visit(ctx.expr()));
         }
         // For regular enum input as trigger for an event
         else{
-            return new EventInputNode(visit(ctx.block()), ctx.deviceID.getText(), ctx.signalID.getText(), ctx.enumID.getText());
+            return new EventInputNode(ctx, visit(ctx.block()), ctx.deviceID.getText(), ctx.signalID.getText(), ctx.enumID.getText());
         }
     }
 
@@ -386,15 +377,15 @@ public class AstBuilderVisitor extends PivotBaseVisitor<Node> {
 
         // if both time an date are present. Index 0 is time and index 1 is date.
         if(timeAndDate.size() == 2){
-            return new EventWhenTimeNode((TimeNode) timeAndDate.get(0), (DateNode) timeAndDate.get(1), visit(ctx.block()));
+            return new EventWhenTimeNode(ctx, (TimeNode) timeAndDate.get(0), (DateNode) timeAndDate.get(1), visit(ctx.block()));
         }
         // If only time is present
         if(timeAndDate.get(0) instanceof TimeNode){
-            return new EventWhenTimeNode((TimeNode) timeAndDate.get(0), visit(ctx.block()));
+            return new EventWhenTimeNode(ctx, (TimeNode) timeAndDate.get(0), visit(ctx.block()));
         }
         // If only date is present
         if(timeAndDate.get(0) instanceof DateNode){
-            return new EventWhenTimeNode((DateNode) timeAndDate.get(0), visit(ctx.block()));
+            return new EventWhenTimeNode(ctx, (DateNode) timeAndDate.get(0), visit(ctx.block()));
         }
 
         throw new CompileErrorException("Error in visitTimeWhenEvent", getCurrentLineNumber());
@@ -405,7 +396,7 @@ public class AstBuilderVisitor extends PivotBaseVisitor<Node> {
         updateLineNumber(ctx);
         // For interval events with starting time. Example "every 2 hours"
         if(ctx.timeAndDate() == null){
-            return new EventEveryNode(
+            return new EventEveryNode(ctx,
                     (ExpressionNode) visit(ctx.expr()),
                     getTimeFrame(ctx.timeFrame()),
                     (BlockNode) visit(ctx.block()));
@@ -416,7 +407,7 @@ public class AstBuilderVisitor extends PivotBaseVisitor<Node> {
 
         // if both time an date are present. Index 0 is time and index 1 is date.
         if(timeAndDate.size() == 2){
-            return new EventEveryNode(
+            return new EventEveryNode(ctx,
                     (ExpressionNode) visit(ctx.expr()),
                     getTimeFrame(ctx.timeFrame()),
                     (TimeNode) timeAndDate.get(0),
@@ -425,7 +416,7 @@ public class AstBuilderVisitor extends PivotBaseVisitor<Node> {
         }
         // If only time is present
         if(timeAndDate.get(0) instanceof TimeNode){
-            return new EventEveryNode(
+            return new EventEveryNode(ctx,
                     (ExpressionNode) visit(ctx.expr()),
                     getTimeFrame(ctx.timeFrame()),
                     (TimeNode) timeAndDate.get(0),
@@ -433,7 +424,7 @@ public class AstBuilderVisitor extends PivotBaseVisitor<Node> {
         }
         // If only date is present
         if(timeAndDate.get(0) instanceof DateNode){
-            return new EventEveryNode(
+            return new EventEveryNode(ctx,
                     (ExpressionNode) visit(ctx.expr()),
                     getTimeFrame(ctx.timeFrame()),
                     (DateNode) timeAndDate.get(0),
@@ -457,12 +448,12 @@ public class AstBuilderVisitor extends PivotBaseVisitor<Node> {
         if(ctx.DATE() != null && ctx.TIME() != null){
             hours = ctx.TIME().getText().substring(0,2);
             minutes = ctx.TIME().getText().substring(3,5);
-            timeAndDate.add(new TimeNode(Integer.parseInt(hours), Integer.parseInt(minutes)));
+            timeAndDate.add(new TimeNode(ctx, Integer.parseInt(hours), Integer.parseInt(minutes)));
 
             day = ctx.DATE().getText().substring(0,2);
             month = ctx.DATE().getText().substring(3,5);
             year = ctx.DATE().getText().substring(6,10);
-            timeAndDate.add(new DateNode(Integer.parseInt(day), Integer.parseInt(month), Integer.parseInt(year)));
+            timeAndDate.add(new DateNode(ctx, Integer.parseInt(day), Integer.parseInt(month), Integer.parseInt(year)));
 
             return timeAndDate;
         }
@@ -471,11 +462,11 @@ public class AstBuilderVisitor extends PivotBaseVisitor<Node> {
         if (ctx.DATEnoYEAR() != null && ctx.TIME() != null){
             hours = ctx.TIME().getText().substring(0,2);
             minutes = ctx.TIME().getText().substring(3,5);
-            timeAndDate.add(new TimeNode(Integer.parseInt(hours), Integer.parseInt(minutes)));
+            timeAndDate.add(new TimeNode(ctx, Integer.parseInt(hours), Integer.parseInt(minutes)));
 
             day = ctx.DATEnoYEAR().getText().substring(0,2);
             month = ctx.DATEnoYEAR().getText().substring(3,5);
-            timeAndDate.add(new DateNode(Integer.parseInt(day), Integer.parseInt(month)));
+            timeAndDate.add(new DateNode(ctx, Integer.parseInt(day), Integer.parseInt(month)));
 
             return timeAndDate;
         }
@@ -484,7 +475,7 @@ public class AstBuilderVisitor extends PivotBaseVisitor<Node> {
         if(ctx.TIME() != null){
             hours = ctx.TIME().getText().substring(0,2);
             minutes = ctx.TIME().getText().substring(3,5);
-            timeAndDate.add(new TimeNode(Integer.parseInt(hours), Integer.parseInt(minutes)));
+            timeAndDate.add(new TimeNode(ctx, Integer.parseInt(hours), Integer.parseInt(minutes)));
 
             return timeAndDate;
         }
@@ -494,7 +485,7 @@ public class AstBuilderVisitor extends PivotBaseVisitor<Node> {
             day = ctx.DATE().getText().substring(0,2);
             month = ctx.DATE().getText().substring(3,5);
             year = ctx.DATE().getText().substring(6,10);
-            timeAndDate.add(new DateNode(Integer.parseInt(day), Integer.parseInt(month), Integer.parseInt(year)));
+            timeAndDate.add(new DateNode(ctx, Integer.parseInt(day), Integer.parseInt(month), Integer.parseInt(year)));
 
             return timeAndDate;
         }
@@ -503,7 +494,7 @@ public class AstBuilderVisitor extends PivotBaseVisitor<Node> {
         if(ctx.DATEnoYEAR() != null){
             day = ctx.DATEnoYEAR().getText().substring(0,2);
             month = ctx.DATEnoYEAR().getText().substring(3,5);
-            timeAndDate.add(new DateNode(Integer.parseInt(day), Integer.parseInt(month)));
+            timeAndDate.add(new DateNode(ctx, Integer.parseInt(day), Integer.parseInt(month)));
 
             return timeAndDate;
         }
@@ -517,9 +508,9 @@ public class AstBuilderVisitor extends PivotBaseVisitor<Node> {
         ArrayList<Node> stmts = findNodes(ctx.stmts());
 
         if(!stmts.isEmpty()){
-            return new BlockNode(stmts);
+            return new BlockNode(ctx, stmts);
         } else {
-            return new BlockNode();
+            return new BlockNode(ctx);
         }
     }
 
@@ -542,7 +533,7 @@ public class AstBuilderVisitor extends PivotBaseVisitor<Node> {
     public Node visitWaitStmt(PivotParser.WaitStmtContext ctx) {
         updateLineNumber(ctx);
         TimeFrame timeframe = getTimeFrame(ctx.timeFrame());
-        return new WaitNode(visit(ctx.expr()), timeframe);
+        return new WaitNode(ctx, visit(ctx.expr()), timeframe);
     }
 
     private TimeFrame getTimeFrame(PivotParser.TimeFrameContext ctx){
@@ -570,19 +561,19 @@ public class AstBuilderVisitor extends PivotBaseVisitor<Node> {
     @Override
     public Node visitAssignment(PivotParser.AssignmentContext ctx) {
         updateLineNumber(ctx);
-        return new AssignmentNode(visit(ctx.expr()), ctx.varID.getText());
+        return new AssignmentNode(ctx, visit(ctx.expr()), ctx.varID.getText());
     }
 
     @Override
     public Node visitIfstmt(PivotParser.IfstmtContext ctx) {
         updateLineNumber(ctx);
-        return new IfStmtNode(visit(ctx.logical_expr()), visit(ctx.blck));
+        return new IfStmtNode(ctx, visit(ctx.logical_expr()), visit(ctx.blck));
     }
 
     @Override
     public Node visitWhilestmt(PivotParser.WhilestmtContext ctx) {
         updateLineNumber(ctx);
-        return new WhileNode(visit(ctx.logical_expr()), visit(ctx.block()));
+        return new WhileNode(ctx, visit(ctx.logical_expr()), visit(ctx.block()));
     }
 
     @Override
@@ -590,22 +581,22 @@ public class AstBuilderVisitor extends PivotBaseVisitor<Node> {
         updateLineNumber(ctx);
         ArrayList<Node> arguments = findArguments(ctx);
         if(!arguments.isEmpty()){
-            return new FuncCallNode(arguments, ctx.id.getText());
+            return new FuncCallNode(ctx, arguments, ctx.id.getText());
         } else {
-            return new FuncCallNode(ctx.id.getText());
+            return new FuncCallNode(ctx, ctx.id.getText());
         }
     }
 
     @Override
     public Node visitSetFun(PivotParser.SetFunContext ctx) {
         updateLineNumber(ctx);
-        return new SetFuncNode(ctx.deviceID.getText(), ctx.signalID.getText(), visit(ctx.expr()));
+        return new SetFuncNode(ctx, ctx.deviceID.getText(), ctx.signalID.getText(), visit(ctx.expr()));
     }
 
     @Override
     public Node visitGetFun(PivotParser.GetFunContext ctx) {
         updateLineNumber(ctx);
-        return new GetFuncNode(ctx.deviceID.getText(), ctx.signalID.getText());
+        return new GetFuncNode(ctx, ctx.deviceID.getText(), ctx.signalID.getText());
     }
 
     private ArrayList<Node> findArguments(PivotParser.FunCallContext ctx){
@@ -624,22 +615,22 @@ public class AstBuilderVisitor extends PivotBaseVisitor<Node> {
     @Override
     public Node visitBrk(PivotParser.BrkContext ctx) {
         updateLineNumber(ctx);
-        return new BreakNode();
+        return new BreakNode(ctx);
     }
 
     @Override
     public Node visitRtn(PivotParser.RtnContext ctx) {
         updateLineNumber(ctx);
         if(ctx.expr() == null){
-            return new ReturnNode();
+            return new ReturnNode(ctx);
         }
-        return new ReturnNode(visit(ctx.expr()));
+        return new ReturnNode(ctx, visit(ctx.expr()));
     }
 
     @Override
     public Node visitLogicalExpressionOr(PivotParser.LogicalExpressionOrContext ctx) {
         updateLineNumber(ctx);
-        return new LogicalOrExprNode(visit(ctx.left), visit(ctx.right));
+        return new LogicalOrExprNode(ctx, visit(ctx.left), visit(ctx.right));
     }
 
     @Override
@@ -647,9 +638,9 @@ public class AstBuilderVisitor extends PivotBaseVisitor<Node> {
         updateLineNumber(ctx);
         switch(ctx.getText()){
             case "true":
-                return new LogicalLiteralNode(true);
+                return new LogicalLiteralNode(ctx, true);
             case "false":
-                return new LogicalLiteralNode(false);
+                return new LogicalLiteralNode(ctx, false);
             default:
                 throw new CompileErrorException("Error in visitLogicalLiterals. Could not identify literal: " +
                         ctx.getText(), getCurrentLineNumber());
@@ -659,7 +650,7 @@ public class AstBuilderVisitor extends PivotBaseVisitor<Node> {
     @Override
     public Node visitLogicalExpressionAnd(PivotParser.LogicalExpressionAndContext ctx) {
         updateLineNumber(ctx);
-        return new LogicalAndExprNode(visit(ctx.left), visit(ctx.right));
+        return new LogicalAndExprNode(ctx, visit(ctx.left), visit(ctx.right));
     }
 
     @Override
@@ -689,7 +680,7 @@ public class AstBuilderVisitor extends PivotBaseVisitor<Node> {
             op = ComparisonOperator.SMALLERTHAN;
         }
 
-        return new ComparisonExprNode(visit(ctx.left), visit(ctx.right), op);
+        return new ComparisonExprNode(ctx, visit(ctx.left), visit(ctx.right), op);
     }
 
     @Override
@@ -697,7 +688,7 @@ public class AstBuilderVisitor extends PivotBaseVisitor<Node> {
         updateLineNumber(ctx);
         String hours = ctx.TIME().getText().substring(0,2);
         String minutes = ctx.TIME().getText().substring(3,5);
-        return new TimeNode(Integer.parseInt(hours),Integer.parseInt(minutes));
+        return new TimeNode(ctx, Integer.parseInt(hours),Integer.parseInt(minutes));
     }
 
     @Override
@@ -710,13 +701,13 @@ public class AstBuilderVisitor extends PivotBaseVisitor<Node> {
             day = ctx.DATE().getText().substring(0,2);
             month = ctx.DATE().getText().substring(3,5);
             year = ctx.DATE().getText().substring(6,10);
-            return new DateNode(Integer.parseInt(day), Integer.parseInt(month), Integer.parseInt(year));
+            return new DateNode(ctx, Integer.parseInt(day), Integer.parseInt(month), Integer.parseInt(year));
         }
         // If the event is at a specific date every year, no year is needed.
         else if (ctx.DATEnoYEAR() != null){
             day = ctx.DATEnoYEAR().getText().substring(0,2);
             month = ctx.DATEnoYEAR().getText().substring(3,5);
-            return new DateNode(Integer.parseInt(day), Integer.parseInt(month));
+            return new DateNode(ctx, Integer.parseInt(day), Integer.parseInt(month));
         } else {
             throw new CompileErrorException("Error in visitComOperandDate. Could not identify date or date without year",
                     getCurrentLineNumber());
@@ -729,18 +720,18 @@ public class AstBuilderVisitor extends PivotBaseVisitor<Node> {
     @Override
     public Node visitIntVal(PivotParser.IntValContext ctx) {
         updateLineNumber(ctx);
-        return new IntegerNode(ctx.INTEGER().getText());
+        return new IntegerNode(ctx, ctx.INTEGER().getText());
     }
 
     @Override
     public Node visitFloatVal(PivotParser.FloatValContext ctx) {
         updateLineNumber(ctx);
-        return new FloatNode(ctx.FLOAT().getText());
+        return new FloatNode(ctx, ctx.FLOAT().getText());
     }
 
     @Override
     public Node visitStringVal(PivotParser.StringValContext ctx) {
         updateLineNumber(ctx);
-        return new StringNode(ctx.STRING().getText());
+        return new StringNode(ctx, ctx.STRING().getText());
     }
 }

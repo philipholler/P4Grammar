@@ -4,6 +4,7 @@ import node.BlockNode;
 import node.Events.EventNode;
 import node.Statements.Expression.ExpressionNode;
 import node.base.Node;
+import org.antlr.v4.runtime.ParserRuleContext;
 import utils.StringUtils;
 
 import java.util.ArrayList;
@@ -15,7 +16,8 @@ public class EventRangeInputNode extends EventNode {
     private ExpressionNode val;
     private BlockNode block;
 
-    public EventRangeInputNode(Node block, String deviceID, String signalID, ExceedsAndDeceedsEnum exceedsAndDeceedsEnum, ExpressionNode expr) {
+    public EventRangeInputNode(ParserRuleContext ctx, Node block, String deviceID, String signalID, ExceedsAndDeceedsEnum exceedsAndDeceedsEnum, ExpressionNode expr) {
+        super(ctx, block);
         if(!(block instanceof BlockNode)) {
             System.out.println("Error in EventRangeInputNode constructor");
             this.block = null;

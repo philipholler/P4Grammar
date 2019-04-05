@@ -1,6 +1,7 @@
 package node.TimeNodes;
 
 import node.Statements.LogicalExpression.LogicalExprNode;
+import org.antlr.v4.runtime.ParserRuleContext;
 import utils.StringUtils;
 import utils.TimeUtils;
 
@@ -11,11 +12,13 @@ public class DateNode extends LogicalExprNode {
     LocalDate date;
     MonthDay monthDay;
 
-    public DateNode(int day, int month, int year) {
+    public DateNode(ParserRuleContext ctx, int day, int month, int year) {
+        super(ctx);
         this.date = TimeUtils.getDate(day, month, year);
     }
 
-    public DateNode(int day, int month) {
+    public DateNode(ParserRuleContext ctx, int day, int month) {
+        super(ctx);
         this.monthDay = TimeUtils.getMonthDay(day, month);
     }
 

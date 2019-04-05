@@ -4,16 +4,19 @@ import node.Statements.Expression.ExpressionNode;
 import node.base.LeafNode;
 import node.base.Node;
 import node.base.UnaryNode;
+import org.antlr.v4.runtime.ParserRuleContext;
 import utils.StringUtils;
 
 public class ReturnNode extends Node {
     private ExpressionNode exprNode;
 
-    public ReturnNode(Node returnVal) {
+    public ReturnNode(ParserRuleContext ctx, Node returnVal) {
+        super(ctx, returnVal);
         this.exprNode = (ExpressionNode) returnVal;
     }
 
-    public ReturnNode() {
+    public ReturnNode(ParserRuleContext ctx) {
+        super(ctx);
     }
 
     @Override

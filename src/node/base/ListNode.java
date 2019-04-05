@@ -7,6 +7,9 @@ import java.util.ArrayList;
 
 public abstract class ListNode extends Node{
 
+    /**
+     * Contains a list of children nodes (stored in the super class (Node))
+     */
 
     public ListNode(ParserRuleContext ctx) {
         super(ctx);
@@ -16,8 +19,8 @@ public abstract class ListNode extends Node{
         super(ctx, children);
     }
 
-    public ArrayList<Node> getChildren() {
-        return children;
+    public ListNode(ParserRuleContext ctx, Node...children) {
+        super(ctx, children);
     }
 
     public void addChild(Node child){
@@ -25,7 +28,7 @@ public abstract class ListNode extends Node{
     }
 
     public void addChildren(ArrayList<Node> children){
-        this.children.addAll(children);
+        children.addAll(children);
     }
 
     @Override

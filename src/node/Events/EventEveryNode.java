@@ -5,6 +5,7 @@ import node.Statements.Expression.ExpressionNode;
 import node.Statements.Wait.TimeFrame;
 import node.TimeNodes.DateNode;
 import node.TimeNodes.TimeNode;
+import org.antlr.v4.runtime.ParserRuleContext;
 import utils.StringUtils;
 
 public class EventEveryNode extends EventNode {
@@ -14,7 +15,8 @@ public class EventEveryNode extends EventNode {
     private DateNode dateNode;
     private BlockNode block;
 
-    public EventEveryNode(ExpressionNode exprNode, TimeFrame timeframe, TimeNode timeNode, DateNode dateNode, BlockNode block) {
+    public EventEveryNode(ParserRuleContext ctx, ExpressionNode exprNode, TimeFrame timeframe, TimeNode timeNode, DateNode dateNode, BlockNode block) {
+        super(ctx, exprNode, timeNode, dateNode, block);
         this.exprNode = exprNode;
         this.timeframe = timeframe;
         this.timeNode = timeNode;
@@ -22,21 +24,24 @@ public class EventEveryNode extends EventNode {
         this.block = block;
     }
 
-    public EventEveryNode(ExpressionNode exprNode, TimeFrame timeframe, DateNode dateNode, BlockNode block) {
+    public EventEveryNode(ParserRuleContext ctx, ExpressionNode exprNode, TimeFrame timeframe, DateNode dateNode, BlockNode block) {
+        super(ctx, exprNode, dateNode, block);
         this.exprNode = exprNode;
         this.timeframe = timeframe;
         this.dateNode = dateNode;
         this.block = block;
     }
 
-    public EventEveryNode(ExpressionNode exprNode, TimeFrame timeframe, TimeNode timeNode, BlockNode block) {
+    public EventEveryNode(ParserRuleContext ctx, ExpressionNode exprNode, TimeFrame timeframe, TimeNode timeNode, BlockNode block) {
+        super(ctx, exprNode, timeNode, block);
         this.exprNode = exprNode;
         this.timeframe = timeframe;
         this.timeNode = timeNode;
         this.block = block;
     }
 
-    public EventEveryNode(ExpressionNode exprNode, TimeFrame timeframe, BlockNode block) {
+    public EventEveryNode(ParserRuleContext ctx, ExpressionNode exprNode, TimeFrame timeframe, BlockNode block) {
+        super(ctx, exprNode, block);
         this.exprNode = exprNode;
         this.timeframe = timeframe;
         this.block = block;

@@ -7,8 +7,11 @@ import java.util.ArrayList;
 
 public abstract class LogicalExprNode extends Node {
 
-    // todo Is this node used? It doesn't seem to have unique behaivor
-    public LogicalExprNode(ArrayList<Node> children, ParserRuleContext context) {
+    public LogicalExprNode(ParserRuleContext context, ArrayList<Node> children) {
+        super(context, children);
+    }
+
+    public LogicalExprNode(ParserRuleContext context, Node... children) {
         super(context, children);
     }
 }

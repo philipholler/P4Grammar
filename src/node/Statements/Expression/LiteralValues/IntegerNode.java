@@ -1,5 +1,6 @@
 package node.Statements.Expression.LiteralValues;
 
+import org.antlr.v4.runtime.ParserRuleContext;
 import semantics.VarType;
 import utils.StringUtils;
 import visitor.AbstractVisitor;
@@ -7,12 +8,13 @@ import visitor.AbstractVisitor;
 public class IntegerNode extends LiteralValueNode {
     int val;
 
-    public IntegerNode(String val) {
+    public IntegerNode(ParserRuleContext ctx, String val) {
+        super(ctx);
         this.val = Integer.parseInt(val);
     }
 
-    public IntegerNode(VarType type, String val) {
-        super(type);
+    public IntegerNode(ParserRuleContext ctx, VarType type, String val) {
+        super(ctx, type);
         this.val = Integer.parseInt(val);
     }
 

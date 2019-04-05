@@ -1,12 +1,14 @@
 package node.Statements.Expression.FunctionCall;
 
+import org.antlr.v4.runtime.ParserRuleContext;
 import utils.StringUtils;
 
 public class GetFuncNode extends AbstractFuncCallNode{
     private String deviceID;
     private String signalID;
 
-    public GetFuncNode(String deviceID, String signalID) {
+    public GetFuncNode(ParserRuleContext ctx, String deviceID, String signalID) {
+        super(ctx);
         this.deviceID = deviceID;
         this.signalID = signalID;
     }

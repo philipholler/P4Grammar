@@ -2,6 +2,8 @@ package node.define_nodes.Device;
 
 import node.base.Node;
 import node.define_nodes.DefNode;
+import org.antlr.v4.runtime.ParserRuleContext;
+import utils.ListUtils;
 
 import java.util.ArrayList;
 
@@ -11,8 +13,8 @@ public class DefDeviceNode extends DefNode {
     ArrayList<OutputNode> outputs = new ArrayList<>();
     ArrayList<InputNode> inputs = new ArrayList<>();
 
-    public DefDeviceNode(String ID, ArrayList<OutputNode> outputs, ArrayList<InputNode> inputs) {
-        super();
+    public DefDeviceNode(ParserRuleContext ctx, String ID, ArrayList<OutputNode> outputs, ArrayList<InputNode> inputs) {
+        super(ctx, ListUtils.combineNodeLists(outputs, inputs));
         this.ID = ID;
         if(outputs != null) this.outputs = outputs;
         if(inputs != null) this.inputs = inputs;

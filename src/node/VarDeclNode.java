@@ -3,6 +3,7 @@ package node;
 import node.base.LeafNode;
 import node.base.Node;
 import node.base.UnaryNode;
+import org.antlr.v4.runtime.ParserRuleContext;
 import semantics.VarType;
 import visitor.AbstractVisitor;
 
@@ -10,8 +11,8 @@ public class VarDeclNode extends UnaryNode {
     VarType varType;
     String ID;
 
-    public VarDeclNode(VarType varType, String ID, Node expr) {
-        super(expr);
+    public VarDeclNode(ParserRuleContext ctx, VarType varType, String ID, Node expr) {
+        super(ctx, expr);
         this.varType = varType;
         this.ID = ID;
     }

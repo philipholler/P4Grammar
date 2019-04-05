@@ -1,5 +1,6 @@
 package node.Statements.Expression.LiteralValues;
 
+import org.antlr.v4.runtime.ParserRuleContext;
 import semantics.VarType;
 import utils.StringUtils;
 import visitor.AbstractVisitor;
@@ -7,7 +8,8 @@ import visitor.AbstractVisitor;
 public class StringNode extends LiteralValueNode {
     String val;
 
-    public StringNode(String val) {
+    public StringNode(ParserRuleContext ctx, String val) {
+        super(ctx);
         this.val = val.substring(1, val.length() - 1);
     }
 

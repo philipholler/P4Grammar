@@ -1,13 +1,15 @@
 package node.define_nodes.Device;
 
 import node.base.LeafNode;
+import org.antlr.v4.runtime.ParserRuleContext;
 import visitor.AbstractVisitor;
 
 public class OutputNode extends LeafNode {
 
     public final String ID;
 
-    public OutputNode(String ID) {
+    public OutputNode(ParserRuleContext ctx, String ID) {
+        super(ctx);
         this.ID = ID;
     }
 
