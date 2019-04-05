@@ -1,5 +1,7 @@
 package node.base;
 
+import org.antlr.v4.runtime.tree.ParseTree;
+
 public abstract class Node {
 
     /**
@@ -15,4 +17,5 @@ public abstract class Node {
     public String toString() {
         return getClass().getSimpleName();
     }
+
 }

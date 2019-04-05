@@ -1,25 +1,60 @@
 package semantics;
 
-import exceptions.CompileErrorException;
+import exceptions.IdAlreadyUsedException;
 import node.base.Node;
 import utils.StringUtils;
 
 import java.util.ArrayList;
+import java.util.Optional;
 
 public class SymbolTable {
 
+    // The outermost block (Where global variables and type declarations reside)
     Block globalBlock;
+    // The currently opened block
     Block currentBlock;
 
+
     public SymbolTable(){
-        globalBlock = new Block(null, null);
+        globalBlock = new Block();
         currentBlock = globalBlock;
     }
+
+    public boolean isDeviceTypeDefined(String ID){
+        Optional<Symbol> symbol = globalBlock.getSymbol(ID);
+        return symbol.isPresent() && symbol.get() instanceof DeviceTypeSymbol;
+    }
+
+    public boolean isSignalTypeDefined(String ID){
+        Optional<Symbol> symbol = globalBlock.getSymbol(ID);
+        return symbol.isPresent() && symbol.get() instanceof SignalTypeSymbol;
+    }
+
+    /** Adds the given symbol to the currently opened scope */
+    public void enterSymbol(Symbol s) throws IdAlreadyUsedException {
+        if(s instanceof FunctionSymbol) enterFunctionSymbol((FunctionSymbol) s);
+        else enterRegularSymbol(s);
+        currentBlock.addSymbol(s);
+    }
+
+    private void enterFunctionSymbol(FunctionSymbol s){
+
+    }
+
+    private void enterRegularSymbol(Symbol s){
+
+    }
+
+    /** Checks if the current scope (or any parent scopes) contains any symbol with the given idString */
+    public boolean containsID(String id){
+        return currentBlock.idExistsInScope(id);
+    }
+
+
 
     /**
      * Opens a scope corresponding to the current node
      **/
-    // TODO: 28-03-2019 Should this maybe be recursive? (and maybe check all blocks/scopes)
     public void openScope(Node n){
         // Check if the block is already contained within the current block
         for(Block b : currentBlock.subBlocks){
@@ -45,30 +80,14 @@ public class SymbolTable {
         currentBlock = currentBlock.getParentBlock();
     }
 
-    /**
-     * Adds the given symbol to the currently opened scope
-     */
-    public void enterSymbol(Symbol s){
-        currentBlock.addSymbol(s);
-    }
-
-    /**
-     * Checks if the current scope (or any parent scopes) contains any symbol with the given idString
-     */
-    public boolean containsID(String id){
-        return currentBlock.idExistsInScope(id);
-    }
-
-    public Symbol retriveSymbol(String id){
-        return currentBlock.retriveSymbol(id);
-    }
 
     public String toString(){
         return globalBlock.toString(0);
     }
 
 
-    // TODO: 28-03-2019 Should this be named Block instead?
+
+    // TODO: 28-03-2019 Should this be named Scope instead?
     private class Block {
 
         private Node blockNode;
@@ -82,8 +101,10 @@ public class SymbolTable {
             this.parentBlock = parentBlock;
         }
 
+        private Block(){}
+
         private boolean addSymbol(Symbol symbol){
-            if(idExistsInScope(symbol.getName()))
+            if(idExistsInScope(symbol.id))
                 return false;
 
             localSymbols.add(symbol);
@@ -93,7 +114,7 @@ public class SymbolTable {
         // Checks if there is already a symbol with the given idString in this block or any parent blocks.
         private boolean idExistsInScope (String id){
             for(Symbol s : localSymbols)
-                if(s.getName().equals(id)) return true;
+                if(s.id.equals(id)) return true;
 
             if(hasParent())
                 return parentBlock.idExistsInScope(id);
@@ -101,15 +122,14 @@ public class SymbolTable {
             return false;
         }
 
-        private Symbol retriveSymbol(String id){
+        private Optional<Symbol> getSymbol(String id){
             for(Symbol s : localSymbols)
-                if(s.getName().equals(id)) return s;
+                if(s.id.equals(id)) return Optional.of(s);
 
             if(hasParent())
-                return parentBlock.retriveSymbol(id);
+                return parentBlock.getSymbol(id);
 
-
-            return null;
+            return Optional.empty();
         }
 
         private void addSubBlock(Block block){

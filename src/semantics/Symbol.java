@@ -2,53 +2,22 @@ package semantics;
 
 import node.base.Node;
 
-import java.util.Objects;
+public abstract class Symbol {
 
-public class Symbol {
+    protected String id;
+    protected Node declarationNode;
 
-    private String name;
-    private VarType type;
-    private Node declarationNode;
-
-    public Symbol(String name, VarType type, Node declarationNode) {
-        this.name = name;
-        this.type = type;
+    public Symbol(String id, Node declarationNode) {
+        this.id = id;
         this.declarationNode = declarationNode;
     }
 
-    public String getName() {
-        return name;
+    public String getID(){
+        return id;
     }
 
-    public VarType getType() {
-        return type;
-    }
-
-    public Node getDeclarationNode() {
+    public Node getDelcarationNode(){
         return declarationNode;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Symbol symbol = (Symbol) o;
-        return Objects.equals(name, symbol.name) &&
-                type == symbol.type;
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(name, type);
-    }
-
-    @Override
-    public String toString() {
-        return "Symbol{" +
-                "name='" + name + '\'' +
-                ", type=" + type +
-                ", declarationNode=" + declarationNode +
-                '}';
     }
 
 }
