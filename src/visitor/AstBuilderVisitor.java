@@ -2,12 +2,7 @@ package visitor;
 
 import antlr.PivotBaseVisitor;
 import antlr.PivotParser;
-import com.sun.jdi.InvalidTypeException;
-import exceptions.TypeUndefinedException;
 import exceptions.user_side.CompileErrorException;
-import exceptions.user_side.DuplicateIDCompileError;
-import exceptions.IdAlreadyUsedException;
-import exceptions.user_side.TypeUndefinedCompileError;
 import node.*;
 import node.Events.EventEveryNode;
 import node.Events.WhenNodes.EventInputNode;
@@ -23,6 +18,7 @@ import node.Statements.Expression.FunctionCall.GetFuncNode;
 import node.Statements.Expression.FunctionCall.SetFuncNode;
 import node.Statements.Expression.LiteralValues.FloatNode;
 import node.Statements.Expression.LiteralValues.IntegerNode;
+import node.Statements.Expression.LiteralValues.LiteralValueNode;
 import node.Statements.Expression.LiteralValues.StringNode;
 import node.Statements.LogicalExpression.*;
 import node.TimeNodes.DateNode;
@@ -40,9 +36,7 @@ import node.define_nodes.Signal.EnumNode;
 import node.define_nodes.Signal.RangeNode;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.TerminalNode;
-import semantics.FieldSymbol;
-import semantics.SymbolTable;
-import semantics.VarType;
+import semantics.*;
 import org.antlr.v4.runtime.ParserRuleContext;
 
 import java.util.ArrayList;
@@ -101,16 +95,22 @@ public class AstBuilderVisitor extends PivotBaseVisitor<Node> {
     @Override
     public Node visitDeclVar(PivotParser.DeclVarContext ctx) {
         updateLineNumber(ctx);
+        VarDeclNode varDeclNode;
         switch (ctx.varType().getText()) {
             case SymbolTable.STRING_TYPE_ID:
-                return new VarDeclNode(ctx, VarType.STRING, ctx.ID().getText(), visit(ctx.expr()));
+                varDeclNode = new VarDeclNode(ctx, SymbolTable.STRING_TYPE_ID, ctx.ID().getText(), visit(ctx.expr()));
+                break;
             case SymbolTable.INT_TYPE_ID:
-                return new VarDeclNode(ctx, VarType.INT, ctx.ID().getText(), visit(ctx.expr()));
+                varDeclNode = new VarDeclNode(ctx, SymbolTable.INT_TYPE_ID, ctx.ID().getText(), visit(ctx.expr()));
+                break;
             case SymbolTable.FLOAT_TYPE_ID:
-                return new VarDeclNode(ctx, VarType.FLOAT, ctx.ID().getText(), visit(ctx.expr()));
+                varDeclNode = new VarDeclNode(ctx, SymbolTable.FLOAT_TYPE_ID, ctx.ID().getText(), visit(ctx.expr()));
+                break;
             default:
                 throw new CompileErrorException("Error in visitDeclVar", getCurrentLineNumber());
         }
+        symbolTable.enterSymbol(new FieldSymbol(varDeclNode, varDeclNode.getID(), varDeclNode.getVarType()));
+        return varDeclNode;
     }
 
 
@@ -171,21 +171,56 @@ public class AstBuilderVisitor extends PivotBaseVisitor<Node> {
     public Node visitSignal(PivotParser.SignalContext ctx) {
         updateLineNumber(ctx);
         if(ctx.range() != null){
-            return new DefSignalNode(ctx, ctx.ID().getText(), (RangeNode) visit(ctx.range()));
+            // The defined signal is a range of numbers
+            DefSignalNode defSignalNode = new DefSignalNode(ctx, ctx.ID().getText(), (RangeNode) visit(ctx.range()));
+            symbolTable.enterSymbol(createSignalSymbol(defSignalNode));
+            return defSignalNode;
+
         } else if(ctx.enumerations() != null){
-            ArrayList<Node> enums = visitEnums(ctx.enumerations());
-            return new DefSignalNode(ctx, enums, ctx.ID().getText());
+            // The defined signal is a list of enums
+            ArrayList<EnumNode> enums = visitEnums(ctx.enumerations());
+            DefSignalNode defSignalNode = new DefSignalNode(ctx, enums, ctx.ID().getText());
+            symbolTable.enterSymbol(createSignalSymbol(defSignalNode));
+            return defSignalNode;
         } else{
-            throw new CompileErrorException("Error in visitSignal", getCurrentLineNumber());
+            throw new CompileErrorException("Signal definitions must have either a range or a list of values"
+                    , getCurrentLineNumber());
         }
     }
 
+    /** Creates a SignalTypeNode with either a range or list of enums based on the given signal definition node */
+    private SignalTypeSymbol createSignalSymbol(DefSignalNode defSignalNode){
+        if(!defSignalNode.getEnumValues().isEmpty()){
+            // Create signal symbol with a list of enum values
+            ArrayList<FieldSymbol> enums = new ArrayList<>();
+            for(EnumNode eNode : defSignalNode.getEnumValues())
+                enums.add(createFieldSymbol(eNode));
+            return new SignalTypeSymbol(defSignalNode, defSignalNode.getID(), enums);
+        }
+
+        if(defSignalNode.getRangeNode().getType().equals(SymbolTable.INT_TYPE_ID)){
+            // Create int range signal symbol
+            int lowerBound = ((IntegerNode)(defSignalNode.getRangeNode().getLeftChild())).getVal();
+            int upperBound = ((IntegerNode)(defSignalNode.getRangeNode().getRightChild())).getVal();
+            return new SignalTypeSymbol(defSignalNode, defSignalNode.getID(), lowerBound, upperBound);
+        }else{
+            // Create float range signal symbol
+            float lowerBound = ((FloatNode)(defSignalNode.getRangeNode().getLeftChild())).getVal();
+            float upperBound = ((FloatNode)(defSignalNode.getRangeNode().getRightChild())).getVal();
+            return new SignalTypeSymbol(defSignalNode, defSignalNode.getID(), lowerBound, upperBound);
+        }
+    }
+
+    private FieldSymbol createFieldSymbol(EnumNode node){
+        return new FieldSymbol(node, node.getID(), node.getValue().getType());
+    }
+
     // Alternative to visitEnumerations that can return more than one node.
-    private ArrayList<Node> visitEnums(PivotParser.EnumerationsContext ctx){
+    private ArrayList<EnumNode> visitEnums(PivotParser.EnumerationsContext ctx){
         updateLineNumber(ctx);
-        ArrayList<Node> enums = new ArrayList<>();
+        ArrayList<EnumNode> enums = new ArrayList<>();
         for(PivotParser.EnumerationContext context: ctx.enumeration()){
-            enums.add(visit(context));
+            enums.add((EnumNode) visit(context));
         }
         return enums;
     }
@@ -193,7 +228,7 @@ public class AstBuilderVisitor extends PivotBaseVisitor<Node> {
     @Override
     public Node visitEnumeration(PivotParser.EnumerationContext ctx) {
         updateLineNumber(ctx);
-        return new EnumNode(ctx, ctx.ID().getText(), visit(ctx.enumVal));
+        return new EnumNode(ctx, ctx.ID().getText(), (LiteralValueNode) visit(ctx.enumVal));
     }
 
     @Override
@@ -204,11 +239,12 @@ public class AstBuilderVisitor extends PivotBaseVisitor<Node> {
 
         // If both have the type integer.
         if(lwBound instanceof IntegerNode && upBound instanceof IntegerNode){
-            return new RangeNode(ctx, lwBound, upBound, VarType.INT);
+            return new RangeNode(ctx, lwBound, upBound, SymbolTable.INT_TYPE_ID);
         } else if (lwBound instanceof FloatNode && upBound instanceof FloatNode){
-            return new RangeNode(ctx, lwBound, upBound, VarType.FLOAT);
+            return new RangeNode(ctx, lwBound, upBound, SymbolTable.FLOAT_TYPE_ID);
         } else {
-            throw new CompileErrorException("Error in visitRange", getCurrentLineNumber());
+            throw new CompileErrorException("Range type mismatch: The bounds of a range must both be integers " +
+                    "or both be floats", getCurrentLineNumber());
         }
     }
 
@@ -259,8 +295,11 @@ public class AstBuilderVisitor extends PivotBaseVisitor<Node> {
                 outputs.add(new OutputNode(ctx, (ctx.outputs().children.get(i)).getText()));
             }
         }
+        DefDeviceNode defDeviceNode = new DefDeviceNode(ctx, ctx.ID().getText(), outputs, inputs);
 
-        return new DefDeviceNode(ctx, ctx.ID().getText(), outputs, inputs);
+        symbolTable.enterSymbol(new DeviceTypeSymbol(defDeviceNode, symbolTable));
+
+        return defDeviceNode;
     }
 
     private boolean isSeparatorSymbol(ParseTree ctx){
@@ -285,19 +324,19 @@ public class AstBuilderVisitor extends PivotBaseVisitor<Node> {
     public Node visitFuncDecl(PivotParser.FuncDeclContext ctx) {
         updateLineNumber(ctx);
         // First find the type of the function
-        VarType type = null;
+        String type;
         if(ctx.varType() == null && ctx.VOID() != null){
-            type = VarType.VOID;
+            type = SymbolTable.VOID_TYPE_ID;
         } else {
             switch (ctx.varType().getText()){
                 case "string":
-                    type = VarType.STRING;
+                    type = SymbolTable.STRING_TYPE_ID;
                     break;
                 case "int":
-                    type = VarType.INT;
+                    type = SymbolTable.INT_TYPE_ID;
                     break;
                 case "float":
-                    type = VarType.FLOAT;
+                    type = SymbolTable.FLOAT_TYPE_ID;
                     break;
                 default:
                     throw new CompileErrorException("Error in visitFuncDecl. Could not find returntype.", getCurrentLineNumber());
@@ -305,21 +344,24 @@ public class AstBuilderVisitor extends PivotBaseVisitor<Node> {
         }
 
         // Find id
-        String id = ctx.id.getText();
+        java.lang.String id = ctx.id.getText();
 
-        ArrayList<Node> params = findInputParams(ctx);
+        ArrayList<InputParamNode> params = findInputParams(ctx);
 
-        return new FunctionNode(ctx, type, id, params, visit(ctx.block()));
+
+        FunctionNode fNode = new FunctionNode(ctx, type, id, params, visit(ctx.block()));
+        symbolTable.enterSymbol(new FunctionSymbol(fNode));
+        return fNode;
     }
 
-    private ArrayList<Node> findInputParams(PivotParser.FuncDeclContext ctx){
+    private ArrayList<InputParamNode> findInputParams(PivotParser.FuncDeclContext ctx){
         updateLineNumber(ctx);
-        ArrayList<Node> params = new ArrayList<>();
+        ArrayList<InputParamNode> params = new ArrayList<>();
 
         if(ctx.getChildCount() != 0){
             for(ParseTree tree : ctx.params.children){
                 if(!isSeparatorSymbol(tree)){
-                    params.add(visit(tree));
+                    params.add((InputParamNode) visit(tree));
                 }
             }
         }
@@ -330,23 +372,11 @@ public class AstBuilderVisitor extends PivotBaseVisitor<Node> {
     @Override
     public Node visitParam(PivotParser.ParamContext ctx) {
         updateLineNumber(ctx);
-        VarType type = null;
-        if(!ctx.varType().isEmpty()){
-            switch (ctx.varType().getText()){
-                case "string":
-                    type = VarType.STRING;
-                    break;
-                case "int":
-                    type = VarType.INT;
-                    break;
-                case "float":
-                    type = VarType.FLOAT;
-                    break;
-                default:
-                    throw new CompileErrorException("Error in visitParam. Could not find param type.", getCurrentLineNumber());
+        String type = ctx.varType().getText();
 
-            }
-        }
+        if(!symbolTable.isValidType(type))
+            throw new CompileErrorException("Error in visitParam. Could not find param type.", getCurrentLineNumber());
+
         return new InputParamNode(ctx, ctx.localID.getText(), type);
     }
 
@@ -442,7 +472,7 @@ public class AstBuilderVisitor extends PivotBaseVisitor<Node> {
     private ArrayList<Node> findTimeAndOrDate(PivotParser.TimeAndDateContext ctx){
         updateLineNumber(ctx);
         ArrayList<Node> timeAndDate = new ArrayList<>();
-        String minutes, hours, day, month, year;
+        java.lang.String minutes, hours, day, month, year;
 
         // If the date and time are both fully used. For example "when 14:00 21d03m2019y"
         if(ctx.DATE() != null && ctx.TIME() != null){
@@ -505,13 +535,14 @@ public class AstBuilderVisitor extends PivotBaseVisitor<Node> {
     @Override
     public Node visitBlock(PivotParser.BlockContext ctx) {
         updateLineNumber(ctx);
+        BlockNode block = new BlockNode(ctx);
+        
+        symbolTable.openScope(block);
         ArrayList<Node> stmts = findNodes(ctx.stmts());
+        symbolTable.closeScope();
 
-        if(!stmts.isEmpty()){
-            return new BlockNode(ctx, stmts);
-        } else {
-            return new BlockNode(ctx);
-        }
+        block.addChildren(stmts);
+        return block;
     }
 
     private ArrayList<Node> findNodes(PivotParser.StmtsContext ctx){
@@ -686,15 +717,15 @@ public class AstBuilderVisitor extends PivotBaseVisitor<Node> {
     @Override
     public Node visitCompOperandTime(PivotParser.CompOperandTimeContext ctx) {
         updateLineNumber(ctx);
-        String hours = ctx.TIME().getText().substring(0,2);
-        String minutes = ctx.TIME().getText().substring(3,5);
+        java.lang.String hours = ctx.TIME().getText().substring(0,2);
+        java.lang.String minutes = ctx.TIME().getText().substring(3,5);
         return new TimeNode(ctx, Integer.parseInt(hours),Integer.parseInt(minutes));
     }
 
     @Override
     public Node visitComOperandDate(PivotParser.ComOperandDateContext ctx) {
         updateLineNumber(ctx);
-        String day, month, year;
+        java.lang.String day, month, year;
 
         // If the date has year also for one time events.
         if(ctx.DATE() != null){

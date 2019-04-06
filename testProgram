@@ -1,7 +1,7 @@
 // Define signals
 define Signal toggle: On = 1, Off = 0, on = "hej";
 define Signal celsius:  1..60;
-define Signal percentage:  0.0..100.0;
+define Signal open:  0.0..100.0;
 
 // Define device types
 define Device Bulb input: toggle;
@@ -18,7 +18,9 @@ MovementSensor frontDoorSensor = "Google.com";
 
 Thermometer mainThermometer = "129.67.198.65:12565";
 
-string a = "Hej";
+string aString = "Hej";
+int testInt = 5;
+float testFloat = 6.0;
 
 init(){
     int a = 2.0;
@@ -44,7 +46,7 @@ when mainThermometer celsius: exceeds 22{
 }
 
 // Function
-string setBedroomWindowsOpen(int percentage){
+string testFunction(int percentage){
     set bedRoomWindow open: percentage;
 
     while(true){
@@ -59,7 +61,7 @@ string setBedroomWindowsOpen(int percentage){
 }
 
 // Function
-string setBedroomWindowsOpen(int percentage, float f, string s){
+string setBedroomWindowsOpenExtra(int percentage, float f, string s){
     set bedRoomWindow open: percentage;
 
     setBedroomWindowsOpen(1, 2.0, "hej");
@@ -73,16 +75,17 @@ void setBedroomWindowsOpen(int percentage){
 
 // Repeating event
 every 2 hours{
-    int a = a;
-    a = b;
-    float a = 1.2;
+    int ab = a;
+    ab = b;
+    float af = 1.2;
     b = 1.2;
     string c = "Magnus";
+    string godPerson = "hey";
 
     if(a == 3){
-        mads = faggot;
+        string mads = "hey";
     } else {
-        magnus = faggot;
+        string magnus = godPerson;
     }
 }
 

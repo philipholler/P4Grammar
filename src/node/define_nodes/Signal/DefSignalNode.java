@@ -1,12 +1,17 @@
 package node.define_nodes.Signal;
 
+import node.Statements.Expression.LiteralValues.LiteralValueNode;
 import node.base.ListNode;
 import node.base.Node;
 import org.antlr.v4.runtime.ParserRuleContext;
+import utils.ListUtils;
 import utils.StringUtils;
 import visitor.AbstractVisitor;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 
 /**
  * TODO ERROR HANDLING I CONSTRUCTORS
@@ -16,7 +21,7 @@ public class DefSignalNode extends ListNode {
     // define Signal toggle: On = 1, Off = 0, on = "hej";
     private String ID;
     private RangeNode rangeNode;
-
+    private ArrayList<EnumNode> enumValues = new ArrayList<>();
 
     // Constructores for signals with ranges:
     public DefSignalNode(ParserRuleContext ctx, String ID, RangeNode rangeNode) {
@@ -26,13 +31,21 @@ public class DefSignalNode extends ListNode {
     }
 
     // Constructors for defining Signals with enumvalues:
-    public DefSignalNode(ParserRuleContext ctx, ArrayList<Node> enums, String ID) {
-        super(ctx, enums);
+    public DefSignalNode(ParserRuleContext ctx, ArrayList<EnumNode> enums, String ID) {
+        // Super requires ArrayList<Node> so the enums list is converted to <Node> type with combineNodeList
+        super(ctx, ListUtils.combineNodeLists(new ArrayList<>(), enums));
+        this.enumValues.addAll(enums);
         this.ID = ID;
     }
 
+
+
     public DefSignalNode(ParserRuleContext ctx) {
         super(ctx);
+    }
+
+    public ArrayList<EnumNode> getEnumValues() {
+        return enumValues;
     }
 
     public DefSignalNode(ParserRuleContext ctx, ArrayList<Node> children) {

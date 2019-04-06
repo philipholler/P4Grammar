@@ -8,7 +8,7 @@ public class FieldSymbol extends Symbol{
 
     private String typeID;
 
-    public FieldSymbol(String name, Node declarationNode, String typeID) {
+    public FieldSymbol(Node declarationNode, String name, String typeID) {
         super(name, declarationNode);
         this.typeID = typeID;
     }
@@ -33,11 +33,7 @@ public class FieldSymbol extends Symbol{
 
     @Override
     public String toString() {
-        return "FieldSymbol{" +
-                "name='" + id + '\'' +
-                ", typeID=" + typeID +
-                ", declarationNode=" + declarationNode +
-                '}';
+        return  typeID + " " + id;
     }
 
 }

@@ -1,9 +1,8 @@
 package node.Statements.Expression.LiteralValues;
 
 import org.antlr.v4.runtime.ParserRuleContext;
-import semantics.VarType;
+import semantics.SymbolTable;
 import utils.StringUtils;
-import visitor.AbstractVisitor;
 
 public class StringNode extends LiteralValueNode {
     String val;
@@ -24,5 +23,10 @@ public class StringNode extends LiteralValueNode {
         return "StringNode(" +
                 "val='" + val + '\'' +
                 ')';
+    }
+
+    @Override
+    public String getType() {
+        return SymbolTable.STRING_TYPE_ID;
     }
 }

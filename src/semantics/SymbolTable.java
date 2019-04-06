@@ -1,8 +1,8 @@
 package semantics;
 
-import com.sun.jdi.InvalidTypeException;
-import exceptions.IdAlreadyUsedException;
-import exceptions.TypeUndefinedException;
+import exceptions.user_side.DuplicateIDCompileError;
+import exceptions.user_side.TypeUndefinedCompileError;
+import node.BlockNode;
 import node.base.Node;
 import utils.StringUtils;
 
@@ -11,7 +11,7 @@ import java.util.Optional;
 
 public class SymbolTable {
 
-    public static final String INT_TYPE_ID = "int", FLOAT_TYPE_ID = "float", STRING_TYPE_ID = "string";
+    public static final String INT_TYPE_ID = "int", FLOAT_TYPE_ID = "float", STRING_TYPE_ID = "string", VOID_TYPE_ID = "void";
 
     public final ArrayList<String> definedTypeIDs = new ArrayList<>();
 
@@ -43,30 +43,31 @@ public class SymbolTable {
         return symbol.isPresent() && symbol.get() instanceof SignalTypeSymbol;
     }
 
-    private void enterSymbol(ArrayList<Symbol> symbols) throws IdAlreadyUsedException, TypeUndefinedException {
+    private void enterSymbol(ArrayList<Symbol> symbols) {
         for(Symbol s : symbols){
             enterSymbol(s);
         }
     }
 
     /** Adds the given symbol to the currently opened scope */
-    public void enterSymbol(Symbol s) throws IdAlreadyUsedException, TypeUndefinedException {
+    public void enterSymbol(Symbol s){
         if(s instanceof FunctionSymbol) enterFunctionSymbol((FunctionSymbol) s);
         else if(s instanceof FieldSymbol) enterFieldSymbol((FieldSymbol)s);
         else enterRegularSymbol(s);
     }
 
-    private void enterFieldSymbol(FieldSymbol s) throws IdAlreadyUsedException, TypeUndefinedException{
+    private void enterFieldSymbol(FieldSymbol s){
         // Verify that type of the variable is defined before adding it to the symbol table
         if(definedTypeIDs.contains(s.getTypeID())) enterRegularSymbol(s);
-        else throw new TypeUndefinedException(s.getTypeID());
+        else throw new TypeUndefinedCompileError(s.getTypeID(), s.declarationNode.getLineNumber());
     }
 
-    private void enterRegularSymbol(Symbol s) throws IdAlreadyUsedException{
+    private void enterRegularSymbol(Symbol s){
         // Throw exception if the symbol id is already in use in the current scope...
         Optional<Symbol> existingSymbol = currentBlock.getSymbol(s.id);
         if(existingSymbol.isPresent())
-            throw new IdAlreadyUsedException(s.id, existingSymbol.get());
+            throw new DuplicateIDCompileError(s.id, s.declarationNode.getLineNumber(),
+                    existingSymbol.get().declarationNode.getLineNumber());
 
         // ...otherwise add the symbol to the current scope
         currentBlock.addSymbol(s);
@@ -74,16 +75,20 @@ public class SymbolTable {
         if(s instanceof DeviceTypeSymbol) definedTypeIDs.add(s.id);
     }
 
-    private void enterFunctionSymbol(FunctionSymbol s) throws IdAlreadyUsedException, TypeUndefinedException{
-
-
+    private void enterFunctionSymbol(FunctionSymbol s){
         // Throw exception if function with same name already exists...
         for(FunctionSymbol fs : functions){
-            if(fs.id.equals(s.id)) throw new IdAlreadyUsedException("",fs);
+            if(fs.id.equals(s.id))
+                throw new DuplicateIDCompileError(s.id, s.declarationNode.getLineNumber(),
+                    fs.declarationNode.getLineNumber());
         }
 
         // ...otherwise add the function to the function list
         functions.add(s);
+    }
+
+    public Optional<Symbol> getSymbol(String id){
+        return currentBlock.getSymbol(id);
     }
 
 
@@ -124,17 +129,18 @@ public class SymbolTable {
 
 
     public String toString(){
-        StringBuilder functionsString = new StringBuilder("Functions : \n");
+        StringBuilder symbolString = new StringBuilder("Functions : \n");
         for(FunctionSymbol fs : functions)
-            functionsString.append(fs.toString()).append("\n");
+            symbolString.append(fs.toString()).append("\n");
+        symbolString.append("\n__________________________________\nOther symbols : \n");
 
-
-        return functionsString.append(globalBlock.toString(0)).toString();
+        return symbolString.append(globalBlock.toString(1)).toString();
     }
 
+    public boolean isValidType(String type) {
+        return definedTypeIDs.contains(type);
+    }
 
-
-    // TODO: 28-03-2019 Should this be named Scope instead?
     private class Block {
 
         private Node blockNode;
@@ -197,16 +203,26 @@ public class SymbolTable {
 
 
         public String toString(int indentation) {
-            String s = StringUtils.getIndentedString(indentation);
+            StringBuilder s = new StringBuilder();
+
             for(Symbol sym : localSymbols){
-                s += StringUtils.getIndentedString(indentation);
-                s += sym.toString();
-            }
-            for(Block b : subBlocks){
-                s += "\n" + b.toString(indentation + 1);
+                s.append(StringUtils.getIndentedString(indentation));
+                s.append(sym.toString()).append("\n");
             }
 
-            return s;
+            for(Block b : subBlocks){
+                s.append(b.toString(indentation + 1));
+            }
+
+            if(s.length() != 0){
+                String blockSeperator = StringUtils.getIndentedString(indentation - 1) +
+                        StringUtils.getLineIndentedString(1) + "\n";
+                s.insert(0, blockSeperator);
+                s.append(blockSeperator);
+
+            }
+
+            return s.toString();
         }
     }
 }

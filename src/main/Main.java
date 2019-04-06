@@ -42,6 +42,7 @@ public class Main {
 
             // Use the Node.getTreeString() to pretty-print the AST.
             System.out.println(ast.getTreeString(0));
+            System.out.println(astVisitor.getSymbolTable().toString());
 
         } catch (IOException e) {
             e.printStackTrace();

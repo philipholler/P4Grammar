@@ -47,4 +47,9 @@ public abstract class Node {
         return getClass().getSimpleName();
     }
 
+    public int getLineNumber(){
+        return context.getStart().getLine();
+    }
+
+
 }

@@ -2,14 +2,13 @@ package node.Statements.Expression;
 
 import node.base.Node;
 import org.antlr.v4.runtime.ParserRuleContext;
-import semantics.VarType;
 
 import java.util.ArrayList;
 
 public abstract class ExpressionNode extends Node {
-    private VarType type;
+    private String type;
 
-    public ExpressionNode(ParserRuleContext context, ArrayList<Node> children, VarType type) {
+    public ExpressionNode(ParserRuleContext context, ArrayList<Node> children, String type) {
         super(context, children);
         this.type = type;
     }
@@ -18,13 +17,17 @@ public abstract class ExpressionNode extends Node {
         super(context, children);
     }
 
-    public ExpressionNode(ParserRuleContext context, VarType type, Node... children) {
+    public ExpressionNode(ParserRuleContext context, String type, Node... children) {
         super(context, children);
         this.type = type;
     }
 
     public ExpressionNode(ParserRuleContext context, Node... children) {
         super(context, children);
+    }
+
+    public String getType(){
+        return type;
     }
 
 }

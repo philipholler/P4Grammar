@@ -1,31 +1,29 @@
 package node.Statements.Expression;
 
 import org.antlr.v4.runtime.ParserRuleContext;
-import semantics.VarType;
 import utils.StringUtils;
-import visitor.AbstractVisitor;
 
 public class IDNode extends ExpressionNode {
-    String ID;
+    java.lang.String ID;
 
-    public IDNode(ParserRuleContext ctx, VarType type, String ID) {
+    public IDNode(ParserRuleContext ctx, String type, java.lang.String ID) {
         super(ctx, type);
         this.ID = ID;
     }
 
-    public IDNode(ParserRuleContext ctx, String ID) {
+    public IDNode(ParserRuleContext ctx, java.lang.String ID) {
         super(ctx);
         this.ID = ID;
     }
 
     @Override
-    public String getTreeString(int indentation) {
+    public java.lang.String getTreeString(int indentation) {
         return StringUtils.getIndentedString(indentation) +
                 this.toString() + "\n";
     }
 
     @Override
-    public String toString() {
+    public java.lang.String toString() {
         return "IDNode(" +
                 "ID='" + ID + '\'' +
                 ')';

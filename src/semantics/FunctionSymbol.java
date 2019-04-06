@@ -1,5 +1,7 @@
 package semantics;
 
+import node.Function.FunctionNode;
+import node.Function.InputParamNode;
 import node.base.Node;
 
 import java.util.ArrayList;
@@ -13,6 +15,20 @@ public class FunctionSymbol extends Symbol {
         super(id, declarationNode);
         this.parameters = parameters;
         this.returnType = returnType;
+    }
+
+    public FunctionSymbol(FunctionNode fNode) {
+        super(fNode.getId(), fNode);
+        this.returnType = fNode.getReturnType();
+        this.parameters = createParamSymbols(fNode.getInputParams());
+    }
+
+    private ArrayList<FieldSymbol> createParamSymbols(ArrayList<InputParamNode> inputNodes){
+        ArrayList<FieldSymbol> params = new ArrayList<>();
+        for(InputParamNode paramNode : inputNodes){
+            params.add(new FieldSymbol(paramNode, paramNode.getId(), paramNode.getType()));
+        }
+        return params;
     }
 
     public ArrayList<FieldSymbol> getParameters() {
@@ -33,13 +49,13 @@ public class FunctionSymbol extends Symbol {
 
     @Override
     public String toString() {
-        StringBuilder string = new StringBuilder(id + " (");
+        StringBuilder string = new StringBuilder(returnType + " " + id + " (");
 
         for(FieldSymbol s : parameters){
-            string.append(s.id).append(",");
+            string.append(s.getTypeID()).append(" ").append(s.id).append(", ");
         }
         // Delete last comma
-        string.deleteCharAt(string.length() - 1);
+        string.delete(string.length() - 2, string.length());
         string.append(")");
 
         return string.toString();

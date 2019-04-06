@@ -25,14 +25,14 @@ public class SignalTypeSymbol extends Symbol{
     private ArrayList<FieldSymbol> signalLiterals = new ArrayList<>();
 
     // Constructor for SignalType with a list of literal values
-    public SignalTypeSymbol(String id, Node declarationNode, ArrayList<FieldSymbol> signalLiterals) {
+    public SignalTypeSymbol(Node declarationNode, String id, ArrayList<FieldSymbol> signalLiterals) {
         super(id, declarationNode);
         TYPE = SIGNAL_TYPE.LITERALS;
         this.signalLiterals = signalLiterals;
     }
 
     // Constructor for SignalType with an integer range
-    public SignalTypeSymbol(String id, Node declarationNode, int lowerBound, int upperBound) {
+    public SignalTypeSymbol(Node declarationNode, String id, int lowerBound, int upperBound) {
         super(id, declarationNode);
         TYPE = SIGNAL_TYPE.INT_RANGE;
         this.intLowerBound = lowerBound;
@@ -40,7 +40,7 @@ public class SignalTypeSymbol extends Symbol{
     }
 
     // Constructor for SignalType with a float range
-    public SignalTypeSymbol(String id, Node declarationNode, float lowerBound, float upperBound) {
+    public SignalTypeSymbol(Node declarationNode, String id, float lowerBound, float upperBound) {
         super(id, declarationNode);
         TYPE = SIGNAL_TYPE.FLOAT_RANGE;
         this.floatLowerBound = lowerBound;
@@ -80,7 +80,21 @@ public class SignalTypeSymbol extends Symbol{
         return false;
     }
 
+    @Override
+    public String toString() {
+        StringBuilder values = new StringBuilder();
 
+        if(TYPE == SIGNAL_TYPE.INT_RANGE){
+            values = new StringBuilder(intLowerBound + "..." + intUpperBound);
+        }else if(TYPE == SIGNAL_TYPE.FLOAT_RANGE){
+            values = new StringBuilder(floatLowerBound + "..." + floatUpperBound);
+        }else{
+            for(FieldSymbol s : signalLiterals)
+                values.append(s.toString()).append(", ");
 
+            values.delete(values.length() - 2, values.length()); // Remove last comma and space
+        }
 
+        return "Signal: " + id + " - " + TYPE + "(" + values + ")";
+    }
 }

@@ -11,4 +11,12 @@ public class StringUtils {
         return sb.toString();
     }
 
+    public static String getLineIndentedString(int indentations){
+        StringBuilder sb = new StringBuilder();
+        for(int i = 0; i < indentations; i++){
+            sb.append("-----");
+        }
+        return sb.toString();
+    }
+
 }
