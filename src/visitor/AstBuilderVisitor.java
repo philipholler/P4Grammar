@@ -350,7 +350,13 @@ public class AstBuilderVisitor extends PivotBaseVisitor<Node> {
 
 
         FunctionNode fNode = new FunctionNode(ctx, type, id, params, visit(ctx.block()));
-        symbolTable.enterSymbol(new FunctionSymbol(fNode));
+        FunctionSymbol fSymmbol = new FunctionSymbol(fNode);
+        symbolTable.enterSymbol(fSymmbol);
+
+        // Add function parameters to function scope
+        symbolTable.openScope(fNode.getBlock());
+        symbolTable.enterSymbols(fSymmbol.getParameters());
+        symbolTable.closeScope();
         return fNode;
     }
 

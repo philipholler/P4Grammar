@@ -1,5 +1,6 @@
 package node.Function;
 
+import node.BlockNode;
 import node.base.Node;
 import node.base.UnaryNode;
 import org.antlr.v4.runtime.ParserRuleContext;
@@ -28,6 +29,10 @@ public class FunctionNode extends UnaryNode {
 
     public ArrayList<InputParamNode> getInputParams() {
         return inputParams;
+    }
+
+    public BlockNode getBlock(){
+        return (BlockNode) this.getChild();
     }
 
     @Override

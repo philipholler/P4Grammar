@@ -43,10 +43,9 @@ public class SymbolTable {
         return symbol.isPresent() && symbol.get() instanceof SignalTypeSymbol;
     }
 
-    private void enterSymbol(ArrayList<Symbol> symbols) {
-        for(Symbol s : symbols){
+    public  <T extends Symbol> void enterSymbols(ArrayList<T> symbols) {
+        for(Symbol s : symbols)
             enterSymbol(s);
-        }
     }
 
     /** Adds the given symbol to the currently opened scope */

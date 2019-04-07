@@ -47,8 +47,8 @@ when mainThermometer celsius: exceeds 22{
 
 // Function
 string testFunction(int percentage){
+    string test = " ";
     set bedRoomWindow open: percentage;
-
     while(true){
         return;
     }
