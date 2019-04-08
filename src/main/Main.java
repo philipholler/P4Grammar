@@ -7,6 +7,7 @@ import visitor.AstBuilderVisitor;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.tree.ParseTree;
+import visitor.PrintVisitors.ParseTreePrinter;
 
 import java.io.IOException;
 
@@ -26,8 +27,8 @@ public class Main {
             PivotParser parser = new PivotParser(token);
 
             // Print parse tree
-            // ParseTreePrinter parseTreePrinter = new ParseTreePrinter();
-            // parseTreePrinter.print(parser.program());
+            //ParseTreePrinter parseTreePrinter = new ParseTreePrinter();
+            //parseTreePrinter.print(parser.program());
 
             // Create parse tree with parser
             ParseTree tree = parser.program();
@@ -36,11 +37,7 @@ public class Main {
             AstBuilderVisitor astVisitor = new AstBuilderVisitor();
             Node ast = astVisitor.visit(tree);
 
-            // Print the AST using the printVisitor (NOT PRETTY)
-            //PrintASTVisitor printVisitor = new PrintASTVisitor();
-            //System.out.println(ast.accept(printVisitor));
-
-            // Use the Node.getTreeString() to pretty-print the AST.
+            // Print ast. Use the Node.getTreeString() to pretty-print the AST.
             System.out.println(ast.getTreeString(0));
             System.out.println(astVisitor.getSymbolTable().toString());
 

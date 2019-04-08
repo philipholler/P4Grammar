@@ -71,8 +71,10 @@ public class AstBuilderVisitor extends PivotBaseVisitor<Node> {
         updateLineNumber(ctx);
         DeclsNode node = new DeclsNode(ctx);
 
-        for (ParseTree tree : ctx.children) {
-            node.addChild(visit(tree));
+        if(!ctx.children.isEmpty()){
+            for (ParseTree tree : ctx.children) {
+                node.addChild(visit(tree));
+            }
         }
 
         return node;
@@ -604,7 +606,19 @@ public class AstBuilderVisitor extends PivotBaseVisitor<Node> {
     @Override
     public Node visitIfstmt(PivotParser.IfstmtContext ctx) {
         updateLineNumber(ctx);
-        return new IfStmtNode(ctx, visit(ctx.logical_expr()), visit(ctx.blck));
+
+        ArrayList<Node> children = new ArrayList<>();
+        Node logicalExpr = visit(ctx.logical_expr());
+        Node ifBlock = visit(ctx.blck);
+        if(ctx.elseblck != null){
+            Node elseBlocK = visit(ctx.elseblck);
+            children.add(elseBlocK);
+        }
+
+        children.add(logicalExpr);
+        children.add(ifBlock);
+
+        return new IfStmtNode(ctx, children);
     }
 
     @Override

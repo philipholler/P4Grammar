@@ -51,25 +51,6 @@ public abstract class ASTBaseVisitor extends AbstractVisitor{
         return null;
     }
 
-    protected void visitChildren(UnaryNode node) {
-        if (node.getChild() != null)
-            visit(node.getChild());
-    }
-
-    protected void visitChildren(ListNode node) {
-        List<Node> children = node.getChildren();
-
-        for (int i = 0; i < children.size(); ++i) {
-            visit(children.get(i));
-            if (children.get(i) == null) {
-                children.remove(i);
-            }
-            else{
-                i++;
-            }
-        }
-    }
-
     /**
      * Philip 31.03.2019
      * This method is meant to find the visit method that matches the class of the node passed as argument.
