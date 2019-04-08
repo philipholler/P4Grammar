@@ -90,7 +90,20 @@ public class SymbolTable {
         return currentBlock.getSymbol(id);
     }
 
+    public Optional<FunctionSymbol> getFunctionSymbol(String id){
+        for(FunctionSymbol fs : functions)
+            if(fs.getID().equals(id)) return Optional.of(fs);
 
+        return Optional.empty();
+    }
+
+    public boolean containsFunctionSymbol(String id){
+        for(FunctionSymbol fs : functions){
+            if(fs.getID().equals(id)) return true;
+        }
+
+        return false;
+    }
 
     /** Checks if the current scope (or any parent scopes) contains any symbol with the given idString */
     public boolean containsID(String id){
