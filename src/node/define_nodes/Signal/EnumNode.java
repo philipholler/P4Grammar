@@ -3,6 +3,7 @@ package node.define_nodes.Signal;
 import node.Statements.Expression.LiteralValues.LiteralValueNode;
 import node.base.UnaryNode;
 import org.antlr.v4.runtime.ParserRuleContext;
+import visitor.ASTBaseVisitor;
 
 public class EnumNode extends UnaryNode {
     private String ID;
@@ -33,4 +34,8 @@ public class EnumNode extends UnaryNode {
                 "ID='" + ID + '\'' +
                 ')';
     }
+
+    public <T> T accept(ASTBaseVisitor<? extends T> astBaseVisitor) {
+    return astBaseVisitor.visit(this);
+}
 }

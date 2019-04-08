@@ -1,17 +1,13 @@
 package node.define_nodes.Signal;
 
-import node.Statements.Expression.LiteralValues.LiteralValueNode;
 import node.base.ListNode;
 import node.base.Node;
 import org.antlr.v4.runtime.ParserRuleContext;
 import utils.ListUtils;
 import utils.StringUtils;
-import visitor.AbstractVisitor;
+import visitor.ASTBaseVisitor;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
 
 /**
  * TODO ERROR HANDLING I CONSTRUCTORS
@@ -82,5 +78,9 @@ public class DefSignalNode extends ListNode {
                     this.toString() + "\n" + rangeNode.getTreeString(indentation + 1);
         }
     }
+
+    public <T> T accept(ASTBaseVisitor<? extends T> astBaseVisitor) {
+    return astBaseVisitor.visit(this);
+}
 }
 

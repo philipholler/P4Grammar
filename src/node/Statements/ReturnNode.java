@@ -1,11 +1,10 @@
 package node.Statements;
 
 import node.Statements.Expression.ExpressionNode;
-import node.base.LeafNode;
 import node.base.Node;
-import node.base.UnaryNode;
 import org.antlr.v4.runtime.ParserRuleContext;
 import utils.StringUtils;
+import visitor.ASTBaseVisitor;
 
 public class ReturnNode extends Node {
     private ExpressionNode exprNode;
@@ -37,4 +36,8 @@ public class ReturnNode extends Node {
     public String toString() {
         return "ReturnNode()";
     }
+
+    public <T> T accept(ASTBaseVisitor<? extends T> astBaseVisitor) {
+    return astBaseVisitor.visit(this);
+}
 }

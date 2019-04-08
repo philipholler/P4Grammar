@@ -1,88 +1,197 @@
 package visitor;
 
-import node.base.ListNode;
+import antlr.PivotParser;
+import node.*;
+import node.Events.EventEveryNode;
+import node.Events.WhenNodes.EventInputNode;
+import node.Events.WhenNodes.EventRangeInputNode;
+import node.Events.WhenNodes.EventWhenTimeNode;
+import node.Function.FunctionNode;
+import node.Function.InputParamNode;
+import node.Statements.*;
+import node.Statements.Expression.AddExprNode;
+import node.Statements.Expression.FunctionCall.FuncCallNode;
+import node.Statements.Expression.FunctionCall.GetFuncNode;
+import node.Statements.Expression.FunctionCall.SetFuncNode;
+import node.Statements.Expression.IDNode;
+import node.Statements.Expression.LiteralValues.FloatNode;
+import node.Statements.Expression.LiteralValues.IntegerNode;
+import node.Statements.Expression.LiteralValues.StringNode;
+import node.Statements.Expression.MultiExprNode;
+import node.Statements.LogicalExpression.ComparisonExprNode;
+import node.Statements.LogicalExpression.LogicalAndExprNode;
+import node.Statements.LogicalExpression.LogicalLiteralNode;
+import node.Statements.LogicalExpression.LogicalOrExprNode;
+import node.Statements.Wait.WaitNode;
+import node.TimeNodes.DateNode;
+import node.TimeNodes.NowNode;
+import node.TimeNodes.TimeNode;
 import node.base.Node;
-import node.base.UnaryNode;
+import node.define_nodes.Device.DefDeviceNode;
+import node.define_nodes.Signal.DefSignalNode;
+import node.define_nodes.Device.InputNode;
+import node.define_nodes.Device.OutputNode;
+import node.define_nodes.Signal.EnumNode;
+import node.define_nodes.Signal.RangeNode;
 
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.util.List;
+public abstract class ASTBaseVisitor<T>{
+    // Must just call node.accept(this) in all implementations
+    public T visit(Node node){
+        return node.accept(this);
+    }
 
-/**
- * Philip 31.03.2019
- * This visitor is meant as a default abstract class to visit the AST. It has methods for visiting by finding
- * the best method for all nodes. This approach is called (i believe) a reflective visitor, since it visits
- * all the super classes, if the sub class does not contain the correct visit method.
- */
+    public T visit(ProgramNode node){
+        return visitChildren(node);
+    }
 
-public abstract class ASTBaseVisitor extends AbstractVisitor{
-
-    public abstract Object defaultVisit(Node node);
-
-
-    /**
-     * Philip 31.03.2019
-     * This method takes all kinds of nodes and finds the best visit method for it in the node itself as well
-     * as in all super classes.
-     * @param node A node from the AST
-     */
-    public Object visit(Object node) {
-        if (node == null)
-        {
-            System.out.println("Attempted to visit a null object!");
-            new Exception().printStackTrace(); // Print stack trace for debugging purposes
-            return null;
-        }
-
-
-        // Get best method for this object
-        Method method = getMethodFor(node);
-
-        // Attempt to invoke the method
-        try
-        {
-            return method.invoke(this, node);
-        }
-        catch (IllegalAccessException | InvocationTargetException e)
-        {
-            e.printStackTrace();
+    public T visitChildren(Node node){
+        for (Node n: node.getChildren()) {
+            n.accept(this);
         }
 
         return null;
     }
 
+    // Device nodes
+    public T visit(DefDeviceNode node){
+        return visitChildren(node);
+    }
+    public T visit(InputNode node){
+        return visitChildren(node);
+    }
+    public T visit(OutputNode node){
+        return visitChildren(node);
+    }
+
+    // Signal nodes
+    public T visit(DefSignalNode node){
+        return visitChildren(node);
+    }
+    public T visit(EnumNode node){
+        return visitChildren(node);
+    }
+    public T visit(RangeNode node){
+        return visitChildren(node);
+    }
+
+    // Events
+    public T visit(EventInputNode node){
+        return visitChildren(node);
+    }
+    public T visit(EventRangeInputNode node){
+        return visitChildren(node);
+    }
+    public T visit(EventWhenTimeNode node){
+        return visitChildren(node);
+    }
+    public T visit(EventEveryNode node){
+        return visitChildren(node);
+    }
+
+    // Function
+    public T visit(FunctionNode node){
+        return visitChildren(node);
+    }
+    public T visit(InputParamNode node){
+        return visitChildren(node);
+    }
+
     /**
-     * Philip 31.03.2019
-     * This method is meant to find the visit method that matches the class of the node passed as argument.
-     * @return The visit method for the given node class.
+     * Statements
      */
-    private Method getMethodFor(Object node) {
-        Method ans = null;
-
-        // Find a method which matches the class of the node
-        Class currentClass = node.getClass();
-        while (ans == null && currentClass != Object.class && currentClass != Node.class) {
-            try {
-                ans = this.getClass().getMethod("visit", currentClass);
-            }
-            catch (NoSuchMethodException e) {
-                // This may happen if the implementation of the visitor does implement a visitor for all nodes
-            }
-
-            // If no appropriate method was found, look in its superclass
-            if (ans == null)
-                currentClass = currentClass.getSuperclass();
+    //Expression nodes
+        // Function call nodes
+        public T visit(FuncCallNode node){
+            return visitChildren(node);
+        }
+        public T visit(GetFuncNode node){
+            return visitChildren(node);
+        }
+        public T visit(SetFuncNode node){
+            return visitChildren(node);
         }
 
-        // If no method was found, return default method
-        if (ans == null) {
-            try {
-                ans = this.getClass().getMethod("defaultVisit", Node.class);
-            }
-            catch (NoSuchMethodException e) {
-                // Should not happen since defaultVisit is abstract and must be implemented
-            }
+        // Literal values node
+        public T visit(FloatNode node){
+            return visitChildren(node);
         }
-        return ans;
+        public T visit(IntegerNode node){
+            return visitChildren(node);
+        }
+        public T visit(StringNode node){
+            return visitChildren(node);
+        }
+
+    public T visit(AddExprNode node){
+        return visitChildren(node);
+    }
+    public T visit(IDNode node){
+        return visitChildren(node);
+    }
+    public T visit(MultiExprNode node){
+        return visitChildren(node);
+    }
+
+    // Logical expression nodes
+    public T visit(ComparisonExprNode node){
+        return visitChildren(node);
+    }
+    public T visit(LogicalAndExprNode node){
+        return visitChildren(node);
+    }
+    public T visit(LogicalLiteralNode node){
+        return visitChildren(node);
+    }
+    public T visit(LogicalOrExprNode node){
+        return visitChildren(node);
+    }
+
+    // Wait
+    public T visit(WaitNode node){
+        return visitChildren(node);
+    }
+
+    public T visit(AssignmentNode node){
+        return visitChildren(node);
+    }
+    public T visit(BreakNode node){
+        return visitChildren(node);
+    }
+    public T visit(IfStmtNode node){
+        return visitChildren(node);
+    }
+    public T visit(ReturnNode node){
+        return visitChildren(node);
+    }
+    public T visit(WhileNode node){
+        return visitChildren(node);
+    }
+
+    // Time nodes
+    public T visit(DateNode node){
+        return visitChildren(node);
+    }
+    public T visit(NowNode node){
+        return visitChildren(node);
+    }
+    public T visit(TimeNode node){
+        return visitChildren(node);
+    }
+
+    public T visit(BlockNode node){
+        return visitChildren(node);
+    }
+    public T visit(DeclsNode node){
+        return visitChildren(node);
+    }
+    public T visit(DevDeclNode node){
+        return visitChildren(node);
+    }
+    public T visit(InitNode node){
+        return visitChildren(node);
+    }
+    public T visit(VarDeclNode node){
+        return visitChildren(node);
     }
 }
+

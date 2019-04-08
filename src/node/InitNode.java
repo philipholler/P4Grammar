@@ -1,11 +1,10 @@
 package node;
 
-import node.BlockNode;
-import node.base.ListNode;
 import node.base.Node;
 import node.base.UnaryNode;
 import org.antlr.v4.runtime.ParserRuleContext;
-import visitor.AbstractVisitor;
+import visitor.ASTBaseVisitor;
+
 
 public class InitNode extends UnaryNode {
 
@@ -13,4 +12,7 @@ public class InitNode extends UnaryNode {
         super(ctx, block);
     }
 
+    public <T> T accept(ASTBaseVisitor<? extends T> astBaseVisitor) {
+    return astBaseVisitor.visit(this);
+}
 }

@@ -7,6 +7,7 @@ import node.TimeNodes.TimeNode;
 import node.base.Node;
 import org.antlr.v4.runtime.ParserRuleContext;
 import utils.StringUtils;
+import visitor.ASTBaseVisitor;
 
 public class EventWhenTimeNode extends EventNode {
     private TimeNode time;
@@ -55,4 +56,8 @@ public class EventWhenTimeNode extends EventNode {
     public String toString() {
         return "EventWhenTimeNode()";
     }
+
+    public <T> T accept(ASTBaseVisitor<? extends T> astBaseVisitor) {
+    return astBaseVisitor.visit(this);
+}
 }

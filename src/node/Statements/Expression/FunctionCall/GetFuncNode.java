@@ -2,6 +2,7 @@ package node.Statements.Expression.FunctionCall;
 
 import org.antlr.v4.runtime.ParserRuleContext;
 import utils.StringUtils;
+import visitor.ASTBaseVisitor;
 
 public class GetFuncNode extends AbstractFuncCallNode{
     private String deviceID;
@@ -26,4 +27,8 @@ public class GetFuncNode extends AbstractFuncCallNode{
                 ", signalID='" + signalID + '\'' +
                 ')';
     }
+
+    public <T> T accept(ASTBaseVisitor<? extends T> astBaseVisitor) {
+    return astBaseVisitor.visit(this);
+}
 }

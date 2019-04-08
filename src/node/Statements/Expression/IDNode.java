@@ -2,6 +2,7 @@ package node.Statements.Expression;
 
 import org.antlr.v4.runtime.ParserRuleContext;
 import utils.StringUtils;
+import visitor.ASTBaseVisitor;
 
 public class IDNode extends ExpressionNode {
     java.lang.String ID;
@@ -28,4 +29,8 @@ public class IDNode extends ExpressionNode {
                 "ID='" + ID + '\'' +
                 ')';
     }
+
+    public <T> T accept(ASTBaseVisitor<? extends T> astBaseVisitor) {
+    return astBaseVisitor.visit(this);
+}
 }

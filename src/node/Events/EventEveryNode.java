@@ -7,6 +7,7 @@ import node.TimeNodes.DateNode;
 import node.TimeNodes.TimeNode;
 import org.antlr.v4.runtime.ParserRuleContext;
 import utils.StringUtils;
+import visitor.ASTBaseVisitor;
 
 public class EventEveryNode extends EventNode {
     private ExpressionNode exprNode;
@@ -72,4 +73,8 @@ public class EventEveryNode extends EventNode {
                 "timeframe=" + timeframe +
                 ')';
     }
+
+    public <T> T accept(ASTBaseVisitor<? extends T> astBaseVisitor) {
+    return astBaseVisitor.visit(this);
+}
 }

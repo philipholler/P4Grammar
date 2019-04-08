@@ -7,6 +7,7 @@ import visitor.AstBuilderVisitor;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.tree.ParseTree;
+import visitor.DeclarationVisitor;
 import visitor.PrintVisitors.ParseTreePrinter;
 
 import java.io.IOException;
@@ -40,6 +41,9 @@ public class Main {
             // Print ast. Use the Node.getTreeString() to pretty-print the AST.
             System.out.println(ast.getTreeString(0));
             System.out.println(astVisitor.getSymbolTable().toString());
+
+            DeclarationVisitor dclVisitor = new DeclarationVisitor();
+            ast.accept(dclVisitor);
 
         } catch (IOException e) {
             e.printStackTrace();

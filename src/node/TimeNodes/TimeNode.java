@@ -4,6 +4,7 @@ import node.Statements.LogicalExpression.LogicalExprNode;
 import org.antlr.v4.runtime.ParserRuleContext;
 import utils.StringUtils;
 import utils.TimeUtils;
+import visitor.ASTBaseVisitor;
 
 import java.time.LocalTime;
 
@@ -27,4 +28,8 @@ public class TimeNode extends LogicalExprNode {
                 "time=" + time +
                 ')';
     }
+
+    public <T> T accept(ASTBaseVisitor<? extends T> astBaseVisitor) {
+    return astBaseVisitor.visit(this);
+}
 }

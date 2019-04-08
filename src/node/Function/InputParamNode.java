@@ -2,6 +2,7 @@ package node.Function;
 
 import node.base.LeafNode;
 import org.antlr.v4.runtime.ParserRuleContext;
+import visitor.ASTBaseVisitor;
 
 public class InputParamNode extends LeafNode {
     private java.lang.String id;
@@ -28,4 +29,8 @@ public class InputParamNode extends LeafNode {
                 ", type=" + type +
                 ')';
     }
+
+    public <T> T accept(ASTBaseVisitor<? extends T> astBaseVisitor) {
+    return astBaseVisitor.visit(this);
+}
 }

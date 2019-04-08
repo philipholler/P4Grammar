@@ -3,6 +3,7 @@ package node.Statements.Expression.LiteralValues;
 import org.antlr.v4.runtime.ParserRuleContext;
 import semantics.SymbolTable;
 import utils.StringUtils;
+import visitor.ASTBaseVisitor;
 
 public class FloatNode extends LiteralValueNode {
     float val;
@@ -38,4 +39,8 @@ public class FloatNode extends LiteralValueNode {
                 "val=" + val +
                 ')';
     }
+
+    public <T> T accept(ASTBaseVisitor<? extends T> astBaseVisitor) {
+    return astBaseVisitor.visit(this);
+}
 }

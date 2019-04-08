@@ -3,9 +3,9 @@ package node.Events.WhenNodes;
 import node.BlockNode;
 import node.Events.EventNode;
 import node.base.Node;
-import node.define_nodes.Signal.EnumNode;
 import org.antlr.v4.runtime.ParserRuleContext;
 import utils.StringUtils;
+import visitor.ASTBaseVisitor;
 
 public class EventInputNode extends EventNode {
     private String deviceID;
@@ -46,4 +46,8 @@ public class EventInputNode extends EventNode {
                 ", enumID='" + enumID + '\'' +
                 ')';
     }
+
+    public <T> T accept(ASTBaseVisitor<? extends T> astBaseVisitor) {
+    return astBaseVisitor.visit(this);
+}
 }

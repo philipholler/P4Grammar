@@ -4,6 +4,7 @@ import node.base.Node;
 import node.define_nodes.DefNode;
 import org.antlr.v4.runtime.ParserRuleContext;
 import utils.ListUtils;
+import visitor.ASTBaseVisitor;
 
 import java.util.ArrayList;
 
@@ -44,4 +45,9 @@ public class DefDeviceNode extends DefNode {
                 "ID='" + ID + '\'' +
                 ')';
     }
+
+    public <T> T accept(ASTBaseVisitor<? extends T> astBaseVisitor) {
+        return astBaseVisitor.visit(this);
+    }
+
 }

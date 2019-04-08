@@ -3,6 +3,7 @@ package node.define_nodes.Signal;
 import node.base.BinaryNode;
 import node.base.Node;
 import org.antlr.v4.runtime.ParserRuleContext;
+import visitor.ASTBaseVisitor;
 
 public class RangeNode extends BinaryNode {
 
@@ -24,4 +25,7 @@ public class RangeNode extends BinaryNode {
                 ')';
     }
 
+    public <T> T accept(ASTBaseVisitor<? extends T> astBaseVisitor) {
+    return astBaseVisitor.visit(this);
+}
 }

@@ -6,8 +6,7 @@ import node.Statements.Expression.ExpressionNode;
 import node.base.Node;
 import org.antlr.v4.runtime.ParserRuleContext;
 import utils.StringUtils;
-
-import java.util.ArrayList;
+import visitor.ASTBaseVisitor;
 
 public class EventRangeInputNode extends EventNode {
     private String deviceID;
@@ -51,4 +50,8 @@ public class EventRangeInputNode extends EventNode {
 
         return treeString.toString();
     }
+
+    public <T> T accept(ASTBaseVisitor<? extends T> astBaseVisitor) {
+    return astBaseVisitor.visit(this);
+}
 }

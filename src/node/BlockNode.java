@@ -3,7 +3,7 @@ package node;
 import node.base.ListNode;
 import node.base.Node;
 import org.antlr.v4.runtime.ParserRuleContext;
-import visitor.AbstractVisitor;
+import visitor.ASTBaseVisitor;
 
 import java.util.ArrayList;
 
@@ -21,4 +21,8 @@ public class BlockNode extends ListNode {
     public String toString() {
         return "BlockNode()";
     }
+
+    public <T> T accept(ASTBaseVisitor<? extends T> astBaseVisitor) {
+    return astBaseVisitor.visit(this);
+}
 }

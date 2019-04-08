@@ -1,14 +1,12 @@
 package node.base;
 
 import org.antlr.v4.runtime.ParserRuleContext;
-import org.antlr.v4.runtime.RuleContext;
-import org.antlr.v4.runtime.tree.ParseTree;
+import visitor.ASTBaseVisitor;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-public abstract class Node {
+public abstract class Node implements Visitable{
 
     ArrayList<Node> children = new ArrayList<>();
     ParserRuleContext context;
@@ -51,5 +49,8 @@ public abstract class Node {
         return context.getStart().getLine();
     }
 
-
+    @Override
+    public <T>T accept(ASTBaseVisitor<? extends T> astBaseVisitor) {
+        return astBaseVisitor.visit(this);
+    }
 }

@@ -1,10 +1,9 @@
 package node.Statements;
 
-import node.BlockNode;
-import node.base.BinaryNode;
 import node.base.ListNode;
 import node.base.Node;
 import org.antlr.v4.runtime.ParserRuleContext;
+import visitor.ASTBaseVisitor;
 
 import java.util.ArrayList;
 
@@ -28,4 +27,8 @@ public class IfStmtNode extends ListNode {
     public Node getElseBlock(){
         return super.getChildren().get(2);
     }
+
+    public <T> T accept(ASTBaseVisitor<? extends T> astBaseVisitor) {
+    return astBaseVisitor.visit(this);
+}
 }

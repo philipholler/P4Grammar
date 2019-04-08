@@ -4,6 +4,7 @@ import node.Statements.LogicalExpression.LogicalExprNode;
 import org.antlr.v4.runtime.ParserRuleContext;
 import utils.StringUtils;
 import utils.TimeUtils;
+import visitor.ASTBaseVisitor;
 
 import java.time.LocalDate;
 import java.time.MonthDay;
@@ -49,4 +50,8 @@ public class DateNode extends LogicalExprNode {
     public MonthDay getMonthDay() {
         return monthDay;
     }
+
+    public <T> T accept(ASTBaseVisitor<? extends T> astBaseVisitor) {
+    return astBaseVisitor.visit(this);
+}
 }

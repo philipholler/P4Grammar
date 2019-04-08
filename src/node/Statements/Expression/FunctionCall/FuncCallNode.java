@@ -3,6 +3,7 @@ package node.Statements.Expression.FunctionCall;
 import node.base.Node;
 import org.antlr.v4.runtime.ParserRuleContext;
 import utils.StringUtils;
+import visitor.ASTBaseVisitor;
 
 import java.util.ArrayList;
 
@@ -34,4 +35,8 @@ public class FuncCallNode extends AbstractFuncCallNode{
                 ", arguments=" + arguments +
                 ')';
     }
+
+    public <T> T accept(ASTBaseVisitor<? extends T> astBaseVisitor) {
+    return astBaseVisitor.visit(this);
+}
 }

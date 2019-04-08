@@ -2,6 +2,7 @@ package node.Statements.LogicalExpression;
 
 import org.antlr.v4.runtime.ParserRuleContext;
 import utils.StringUtils;
+import visitor.ASTBaseVisitor;
 
 public class LogicalLiteralNode extends LogicalExprNode {
     private boolean val;
@@ -23,4 +24,8 @@ public class LogicalLiteralNode extends LogicalExprNode {
                 "val=" + val +
                 ')';
     }
+
+    public <T> T accept(ASTBaseVisitor<? extends T> astBaseVisitor) {
+    return astBaseVisitor.visit(this);
+}
 }

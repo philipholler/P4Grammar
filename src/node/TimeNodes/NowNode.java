@@ -1,11 +1,9 @@
 package node.TimeNodes;
 
 import node.Statements.LogicalExpression.LogicalExprNode;
-import node.base.Node;
 import org.antlr.v4.runtime.ParserRuleContext;
 import utils.StringUtils;
-
-import java.util.ArrayList;
+import visitor.ASTBaseVisitor;
 
 public class NowNode extends LogicalExprNode {
 
@@ -23,4 +21,8 @@ public class NowNode extends LogicalExprNode {
     public String toString() {
         return "NowNode()";
     }
+
+    public <T> T accept(ASTBaseVisitor<? extends T> astBaseVisitor) {
+    return astBaseVisitor.visit(this);
+}
 }

@@ -2,7 +2,8 @@ package node;
 
 import node.base.LeafNode;
 import org.antlr.v4.runtime.ParserRuleContext;
-import visitor.AbstractVisitor;
+import visitor.ASTBaseVisitor;
+
 
 public class DevDeclNode extends LeafNode {
     String type;
@@ -36,4 +37,8 @@ public class DevDeclNode extends LeafNode {
                 ", val='" + val + '\'' +
                 ')';
     }
+
+    public <T> T accept(ASTBaseVisitor<? extends T> astBaseVisitor) {
+    return astBaseVisitor.visit(this);
+}
 }

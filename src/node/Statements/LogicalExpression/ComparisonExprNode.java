@@ -3,6 +3,7 @@ package node.Statements.LogicalExpression;
 import node.base.Node;
 import org.antlr.v4.runtime.ParserRuleContext;
 import utils.StringUtils;
+import visitor.ASTBaseVisitor;
 
 public class ComparisonExprNode extends LogicalExprNode {
     Node leftChild;
@@ -35,4 +36,8 @@ public class ComparisonExprNode extends LogicalExprNode {
                 "op=" + op +
                 ')';
     }
+
+    public <T> T accept(ASTBaseVisitor<? extends T> astBaseVisitor) {
+    return astBaseVisitor.visit(this);
+}
 }

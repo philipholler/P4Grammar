@@ -3,6 +3,7 @@ package node.Statements.Expression.LiteralValues;
 import org.antlr.v4.runtime.ParserRuleContext;
 import semantics.SymbolTable;
 import utils.StringUtils;
+import visitor.ASTBaseVisitor;
 
 public class StringNode extends LiteralValueNode {
     String val;
@@ -29,4 +30,8 @@ public class StringNode extends LiteralValueNode {
     public String getType() {
         return SymbolTable.STRING_TYPE_ID;
     }
+
+    public <T> T accept(ASTBaseVisitor<? extends T> astBaseVisitor) {
+    return astBaseVisitor.visit(this);
+}
 }

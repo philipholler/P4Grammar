@@ -3,7 +3,7 @@ package node.Statements.Expression;
 import node.base.Node;
 import org.antlr.v4.runtime.ParserRuleContext;
 import utils.StringUtils;
-import visitor.AbstractVisitor;
+import visitor.ASTBaseVisitor;
 
 public class MultiExprNode extends ExpressionNode {
     private ExpressionNode leftChild;
@@ -35,4 +35,8 @@ public class MultiExprNode extends ExpressionNode {
         return "MultiExprNode(op=" + op +
                 ')';
     }
+
+    public <T> T accept(ASTBaseVisitor<? extends T> astBaseVisitor) {
+    return astBaseVisitor.visit(this);
+}
 }

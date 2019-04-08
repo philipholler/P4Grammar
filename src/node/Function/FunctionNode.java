@@ -4,6 +4,7 @@ import node.BlockNode;
 import node.base.Node;
 import node.base.UnaryNode;
 import org.antlr.v4.runtime.ParserRuleContext;
+import visitor.ASTBaseVisitor;
 
 import java.util.ArrayList;
 
@@ -43,4 +44,8 @@ public class FunctionNode extends UnaryNode {
                 ", inputParams=" + inputParams +
                 ')';
     }
+
+    public <T> T accept(ASTBaseVisitor<? extends T> astBaseVisitor) {
+    return astBaseVisitor.visit(this);
+}
 }

@@ -3,6 +3,7 @@ package node.Statements.LogicalExpression;
 import node.base.Node;
 import org.antlr.v4.runtime.ParserRuleContext;
 import utils.StringUtils;
+import visitor.ASTBaseVisitor;
 
 public class LogicalOrExprNode extends LogicalExprNode {
     Node leftChild;
@@ -31,4 +32,8 @@ public class LogicalOrExprNode extends LogicalExprNode {
     public String toString() {
         return "LogicalOrExprNode()";
     }
+
+    public <T> T accept(ASTBaseVisitor<? extends T> astBaseVisitor) {
+    return astBaseVisitor.visit(this);
+}
 }

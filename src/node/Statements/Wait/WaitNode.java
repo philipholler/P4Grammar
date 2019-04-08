@@ -1,10 +1,10 @@
 package node.Statements.Wait;
 
-import node.base.LeafNode;
 import node.base.Node;
 import node.base.UnaryNode;
 import org.antlr.v4.runtime.ParserRuleContext;
-import visitor.AbstractVisitor;
+import visitor.ASTBaseVisitor;
+
 
 public class WaitNode extends UnaryNode {
     private TimeFrame timeframe;
@@ -20,4 +20,8 @@ public class WaitNode extends UnaryNode {
                 "timeframe=" + timeframe +
                 ')';
     }
+
+    public <T> T accept(ASTBaseVisitor<? extends T> astBaseVisitor) {
+    return astBaseVisitor.visit(this);
+}
 }
