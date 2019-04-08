@@ -44,11 +44,6 @@ import java.util.ArrayList;
 public class AstBuilderVisitor extends PivotBaseVisitor<Node> {
 
     private static int currentLineNumber = 0;
-    private SymbolTable symbolTable;
-
-    public SymbolTable getSymbolTable() {
-        return symbolTable;
-    }
 
     public static int getCurrentLineNumber() {
         return currentLineNumber;
@@ -60,7 +55,6 @@ public class AstBuilderVisitor extends PivotBaseVisitor<Node> {
 
     @Override
     public Node visitProgram(PivotParser.ProgramContext ctx) {
-        symbolTable = new SymbolTable();
         updateLineNumber(ctx);
 
         return new ProgramNode(ctx, visit(ctx.decls()));
@@ -111,7 +105,7 @@ public class AstBuilderVisitor extends PivotBaseVisitor<Node> {
             default:
                 throw new CompileErrorException("Error in visitDeclVar", getCurrentLineNumber());
         }
-        symbolTable.enterSymbol(new FieldSymbol(varDeclNode, varDeclNode.getID(), varDeclNode.getVarType()));
+
         return varDeclNode;
     }
 
@@ -174,16 +168,12 @@ public class AstBuilderVisitor extends PivotBaseVisitor<Node> {
         updateLineNumber(ctx);
         if(ctx.range() != null){
             // The defined signal is a range of numbers
-            DefSignalNode defSignalNode = new DefSignalNode(ctx, ctx.ID().getText(), (RangeNode) visit(ctx.range()));
-            symbolTable.enterSymbol(createSignalSymbol(defSignalNode));
-            return defSignalNode;
+            return new DefSignalNode(ctx, ctx.ID().getText(), (RangeNode) visit(ctx.range()));
 
         } else if(ctx.enumerations() != null){
             // The defined signal is a list of enums
             ArrayList<EnumNode> enums = visitEnums(ctx.enumerations());
-            DefSignalNode defSignalNode = new DefSignalNode(ctx, enums, ctx.ID().getText());
-            symbolTable.enterSymbol(createSignalSymbol(defSignalNode));
-            return defSignalNode;
+            return new DefSignalNode(ctx, enums, ctx.ID().getText());
         } else{
             throw new CompileErrorException("Signal definitions must have either a range or a list of values"
                     , getCurrentLineNumber());
@@ -299,8 +289,6 @@ public class AstBuilderVisitor extends PivotBaseVisitor<Node> {
         }
         DefDeviceNode defDeviceNode = new DefDeviceNode(ctx, ctx.ID().getText(), outputs, inputs);
 
-        symbolTable.enterSymbol(new DeviceTypeSymbol(defDeviceNode, symbolTable));
-
         return defDeviceNode;
     }
 
@@ -351,15 +339,7 @@ public class AstBuilderVisitor extends PivotBaseVisitor<Node> {
         ArrayList<InputParamNode> params = findInputParams(ctx);
 
 
-        FunctionNode fNode = new FunctionNode(ctx, type, id, params, visit(ctx.block()));
-        FunctionSymbol fSymmbol = new FunctionSymbol(fNode);
-        symbolTable.enterSymbol(fSymmbol);
-
-        // Add function parameters to function scope
-        symbolTable.openScope(fNode.getBlock());
-        symbolTable.enterSymbols(fSymmbol.getParameters());
-        symbolTable.closeScope();
-        return fNode;
+        return new FunctionNode(ctx, type, id, params, visit(ctx.block()));
     }
 
     private ArrayList<InputParamNode> findInputParams(PivotParser.FuncDeclContext ctx){
@@ -381,9 +361,6 @@ public class AstBuilderVisitor extends PivotBaseVisitor<Node> {
     public Node visitParam(PivotParser.ParamContext ctx) {
         updateLineNumber(ctx);
         String type = ctx.varType().getText();
-
-        if(!symbolTable.isValidType(type))
-            throw new CompileErrorException("Error in visitParam. Could not find param type.", getCurrentLineNumber());
 
         return new InputParamNode(ctx, ctx.localID.getText(), type);
     }
@@ -544,12 +521,8 @@ public class AstBuilderVisitor extends PivotBaseVisitor<Node> {
     public Node visitBlock(PivotParser.BlockContext ctx) {
         updateLineNumber(ctx);
         BlockNode block = new BlockNode(ctx);
-        
-        symbolTable.openScope(block);
-        ArrayList<Node> stmts = findNodes(ctx.stmts());
-        symbolTable.closeScope();
 
-        block.addChildren(stmts);
+        block.addChildren(findNodes(ctx.stmts()));
         return block;
     }
 
