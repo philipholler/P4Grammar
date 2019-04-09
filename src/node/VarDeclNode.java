@@ -7,9 +7,9 @@ import visitor.ASTBaseVisitor;
 
 public class VarDeclNode extends UnaryNode {
     String varType;
-    java.lang.String ID;
+    String ID;
 
-    public VarDeclNode(ParserRuleContext ctx, String varType, java.lang.String ID, Node expr) {
+    public VarDeclNode(ParserRuleContext ctx, String varType, String ID, Node expr) {
         super(ctx, expr);
         this.varType = varType;
         this.ID = ID;

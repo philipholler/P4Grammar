@@ -7,11 +7,9 @@ import utils.StringUtils;
 import visitor.ASTBaseVisitor;
 
 public class ReturnNode extends Node {
-    private ExpressionNode exprNode;
 
     public ReturnNode(ParserRuleContext ctx, Node returnVal) {
         super(ctx, returnVal);
-        this.exprNode = (ExpressionNode) returnVal;
     }
 
     public ReturnNode(ParserRuleContext ctx) {
@@ -25,9 +23,8 @@ public class ReturnNode extends Node {
         treeString.append(StringUtils.getIndentedString(indentation));
         treeString.append(this.toString()).append("\n");
 
-        if(exprNode != null){
-            treeString.append(exprNode.getTreeString(indentation + 1));
-        }
+        for(Node n : super.getChildren())
+            treeString.append(n.getTreeString(indentation + 1));
 
         return treeString.toString();
     }

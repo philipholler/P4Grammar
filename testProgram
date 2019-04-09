@@ -77,8 +77,8 @@ void setBedroomWindowsOpen(int percentage){
 every 2 hours{
     int ab = a;
     ab = b;
-    float af = 1.2;
-    b = 1.2;
+    float af = 1.2 + 2.5 + 3.5;
+    b = 1.2 * 5.3 + 3.3;
     string c = "Magnus";
     string godPerson = "hey";
 

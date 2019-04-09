@@ -24,7 +24,7 @@ public class FieldSymbol extends Symbol{
 
     public FieldSymbol(EnumNode enumNode) {
         super(enumNode.getID(), enumNode);
-        this.typeID = enumNode.getValue().getType();
+        this.typeID = enumNode.getType();
     }
 
     public FieldSymbol(DevDeclNode device) {

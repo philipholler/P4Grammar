@@ -8,12 +8,12 @@ import visitor.ASTBaseVisitor;
 public class IntegerNode extends LiteralValueNode {
     int val;
 
-    public IntegerNode(ParserRuleContext ctx, java.lang.String val) {
+    public IntegerNode(ParserRuleContext ctx, String val) {
         super(ctx);
         this.val = Integer.parseInt(val);
     }
 
-    public IntegerNode(ParserRuleContext ctx, String type, java.lang.String val) {
+    public IntegerNode(ParserRuleContext ctx, String type, String val) {
         super(ctx, type);
         this.val = Integer.parseInt(val);
     }

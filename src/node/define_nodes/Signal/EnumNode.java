@@ -1,26 +1,26 @@
 package node.define_nodes.Signal;
 
+import node.Statements.Expression.ExpressionNode;
+import node.Statements.Expression.LiteralValues.FloatNode;
+import node.Statements.Expression.LiteralValues.IntegerNode;
 import node.Statements.Expression.LiteralValues.LiteralValueNode;
+import node.Statements.Expression.LiteralValues.StringNode;
+import node.base.Node;
 import node.base.UnaryNode;
 import org.antlr.v4.runtime.ParserRuleContext;
+import semantics.SymbolTable;
 import visitor.ASTBaseVisitor;
 
 public class EnumNode extends UnaryNode {
     private String ID;
-    private LiteralValueNode value;
 
     public EnumNode(ParserRuleContext ctx, String ID, LiteralValueNode value) {
         super(ctx, value);
         this.ID = ID;
-        this.value = value;
     }
 
     public String getID() {
         return ID;
-    }
-
-    public LiteralValueNode getValue() {
-        return value;
     }
 
     @Override
@@ -39,8 +39,17 @@ public class EnumNode extends UnaryNode {
     return astBaseVisitor.visit(this);
 }
 
+
     public String getType(){
-        return this.value.getType();
+        Node val = super.getChildren().get(0);
+
+        if(val instanceof IntegerNode){
+            return ((IntegerNode) val).getType();
+        } else if (val instanceof FloatNode){
+            return ((FloatNode) val).getType();
+        } else {
+            return ((StringNode) val).getType();
+        }
     }
 
 }

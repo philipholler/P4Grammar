@@ -6,13 +6,9 @@ import utils.StringUtils;
 import visitor.ASTBaseVisitor;
 
 public class LogicalOrExprNode extends LogicalExprNode {
-    Node leftChild;
-    Node rightChild;
 
     public LogicalOrExprNode(ParserRuleContext ctx, Node leftChild, Node rightChild) {
         super(ctx, leftChild, rightChild);
-        this.leftChild = leftChild;
-        this.rightChild = rightChild;
     }
 
     @Override
@@ -22,8 +18,8 @@ public class LogicalOrExprNode extends LogicalExprNode {
         treeString.append(StringUtils.getIndentedString(indentation));
         treeString.append(this.toString()).append("\n");
 
-        treeString.append(leftChild.getTreeString(indentation + 1));
-        treeString.append(rightChild.getTreeString(indentation + 1));
+        for(Node n : super.getChildren())
+            treeString.append(n.getTreeString(indentation + 1));
 
         return treeString.toString();
     }

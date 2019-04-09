@@ -12,4 +12,6 @@ public abstract class LiteralValueNode extends ExpressionNode {
     public LiteralValueNode(ParserRuleContext ctx) {
         super(ctx);
     }
+
+    public abstract String getType();
 }

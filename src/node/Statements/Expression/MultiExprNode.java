@@ -6,14 +6,10 @@ import utils.StringUtils;
 import visitor.ASTBaseVisitor;
 
 public class MultiExprNode extends ExpressionNode {
-    private ExpressionNode leftChild;
-    private ExpressionNode rightChild;
     private Operator op;
 
-    public MultiExprNode(ParserRuleContext ctx, Node leftChild, Node rightChild, Operator op) {
+    public MultiExprNode(ParserRuleContext ctx, ExpressionNode leftChild, ExpressionNode rightChild, Operator op) {
         super(ctx, leftChild, rightChild);
-        this.leftChild = (ExpressionNode) leftChild;
-        this.rightChild = (ExpressionNode) rightChild;
         this.op = op;
     }
 
@@ -24,8 +20,8 @@ public class MultiExprNode extends ExpressionNode {
         treeString.append(StringUtils.getIndentedString(indentation));
         treeString.append(this.toString()).append("\n");
 
-        treeString.append(leftChild.getTreeString(indentation + 1));
-        treeString.append(rightChild.getTreeString(indentation + 1));
+        for(Node n : super.getChildren())
+            treeString.append(n.getTreeString(indentation + 1));
 
         return treeString.toString();
     }

@@ -76,7 +76,7 @@ public class SignalTypeSymbol extends Symbol{
         } // For a signal type with enum values
          else {
              this.TYPE = SIGNAL_TYPE.LITERALS;
-            for (EnumNode node: declarationNode.getEnumValues()) {
+            for (EnumNode node: declarationNode.getEnumNodes()) {
                 this.signalLiterals.add(new FieldSymbol(node));
             }
         }

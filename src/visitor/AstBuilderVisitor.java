@@ -115,9 +115,9 @@ public class AstBuilderVisitor extends PivotBaseVisitor<Node> {
     public Node visitMultiExpr(PivotParser.MultiExprContext ctx) {
         updateLineNumber(ctx);
         if(ctx.op.getText().equals("*")){
-            return new MultiExprNode(ctx, visit(ctx.leftChild), visit(ctx.rightChild), Operator.MULTPLY);
+            return new MultiExprNode(ctx, (ExpressionNode) visit(ctx.leftChild), (ExpressionNode) visit(ctx.rightChild), Operator.MULTPLY);
         } else if(ctx.op.getText().equals("/")){
-            return new MultiExprNode(ctx, visit(ctx.leftChild), visit(ctx.rightChild), Operator.DIVIDE);
+            return new MultiExprNode(ctx, (ExpressionNode) visit(ctx.leftChild), (ExpressionNode) visit(ctx.rightChild), Operator.DIVIDE);
         } else{
             throw new CompileErrorException("Error in visitMultiExpr", getCurrentLineNumber());
         }
@@ -147,9 +147,9 @@ public class AstBuilderVisitor extends PivotBaseVisitor<Node> {
     public Node visitPlusExpr(PivotParser.PlusExprContext ctx) {
         updateLineNumber(ctx);
         if(ctx.op.getText().equals("+")){
-            return new AddExprNode(ctx, visit(ctx.leftChild), visit(ctx.rightChild), Operator.PLUS);
+            return new AddExprNode(ctx, (ExpressionNode) visit(ctx.leftChild), (ExpressionNode) visit(ctx.rightChild), Operator.PLUS);
         } else if(ctx.op.getText().equals("-")){
-            return new AddExprNode(ctx, visit(ctx.leftChild), visit(ctx.rightChild), Operator.MINUS);
+            return new AddExprNode(ctx, (ExpressionNode) visit(ctx.leftChild), (ExpressionNode) visit(ctx.rightChild), Operator.MINUS);
         } else{
             throw new CompileErrorException("Error in visitPlusExpr", getCurrentLineNumber());
         }
@@ -182,10 +182,10 @@ public class AstBuilderVisitor extends PivotBaseVisitor<Node> {
 
     /** Creates a SignalTypeNode with either a range or list of enums based on the given signal definition node */
     private SignalTypeSymbol createSignalSymbol(DefSignalNode defSignalNode){
-        if(!defSignalNode.getEnumValues().isEmpty()){
+        if(!defSignalNode.getEnumNodes().isEmpty()){
             // Create signal symbol with a list of enum values
             ArrayList<FieldSymbol> enums = new ArrayList<>();
-            for(EnumNode eNode : defSignalNode.getEnumValues())
+            for(EnumNode eNode : defSignalNode.getEnumNodes())
                 enums.add(createFieldSymbol(eNode));
             return new SignalTypeSymbol(defSignalNode, defSignalNode.getID(), enums);
         }
@@ -204,7 +204,7 @@ public class AstBuilderVisitor extends PivotBaseVisitor<Node> {
     }
 
     private FieldSymbol createFieldSymbol(EnumNode node){
-        return new FieldSymbol(node, node.getID(), node.getValue().getType());
+        return new FieldSymbol(node, node.getID(), node.getType());
     }
 
     // Alternative to visitEnumerations that can return more than one node.
@@ -617,7 +617,7 @@ public class AstBuilderVisitor extends PivotBaseVisitor<Node> {
     @Override
     public Node visitSetFun(PivotParser.SetFunContext ctx) {
         updateLineNumber(ctx);
-        return new SetFuncNode(ctx, ctx.deviceID.getText(), ctx.signalID.getText(), visit(ctx.expr()));
+        return new SetFuncNode(ctx, ctx.deviceID.getText(), ctx.signalID.getText(), (ExpressionNode) visit(ctx.expr()));
     }
 
     @Override

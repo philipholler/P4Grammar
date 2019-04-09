@@ -12,6 +12,10 @@ public abstract class AbstractFuncCallNode extends ExpressionNode {
         super(ctx, children);
     }
 
+    public AbstractFuncCallNode(ParserRuleContext context, Node... children) {
+        super(context, children);
+    }
+
     public AbstractFuncCallNode(ParserRuleContext ctx, String type) {
         super(ctx, type);
     }
