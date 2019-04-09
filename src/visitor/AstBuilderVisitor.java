@@ -376,12 +376,12 @@ public class AstBuilderVisitor extends PivotBaseVisitor<Node> {
             } else if (ctx.DECEEDS() != null){
                 excdsDecds = ExceedsAndDeceedsEnum.DECEEDS;
             }
-            return new EventRangeInputNode(ctx, visit(ctx.block()), ctx.deviceID.getText(),
+            return new EventRangeInputNode(ctx, (BlockNode) visit(ctx.block()), ctx.deviceID.getText(),
                     ctx.signalID.getText(), excdsDecds, (ExpressionNode) visit(ctx.expr()));
         }
         // For regular enum input as trigger for an event
         else{
-            return new EventInputNode(ctx, visit(ctx.block()), ctx.deviceID.getText(), ctx.signalID.getText(), ctx.enumID.getText());
+            return new EventInputNode(ctx, (BlockNode) visit(ctx.block()), ctx.deviceID.getText(), ctx.signalID.getText(), ctx.enumID.getText());
         }
     }
 
@@ -522,7 +522,10 @@ public class AstBuilderVisitor extends PivotBaseVisitor<Node> {
         updateLineNumber(ctx);
         BlockNode block = new BlockNode(ctx);
 
-        block.addChildren(findNodes(ctx.stmts()));
+        ArrayList<Node> nodes = findNodes(ctx.stmts());
+
+        block.addChildren(nodes);
+
         return block;
     }
 

@@ -178,20 +178,24 @@ public abstract class ASTBaseVisitor<T>{
         return visitChildren(node);
     }
 
-    public T visit(BlockNode node){
-        return visitChildren(node);
-    }
+    // Declaration nodes
     public T visit(DeclsNode node){
         return visitChildren(node);
     }
     public T visit(DevDeclNode node){
         return visitChildren(node);
     }
-    public T visit(InitNode node){
-        return visitChildren(node);
-    }
     public T visit(VarDeclNode node){
         return visitChildren(node);
     }
+
+    // Block and init
+    public T visit(BlockNode node){
+        return visitChildren(node);
+    }
+    public T visit(InitNode node){
+        return visitChildren(node);
+    }
+
 }
 

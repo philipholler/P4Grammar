@@ -25,7 +25,12 @@ public class IfStmtNode extends ListNode {
     }
 
     public Node getElseBlock(){
-        return super.getChildren().get(2);
+        // No if block present
+        if(super.getChildren().size() < 3){
+            return null;
+        } else {
+            return super.getChildren().get(2);
+        }
     }
 
     public <T> T accept(ASTBaseVisitor<? extends T> astBaseVisitor) {

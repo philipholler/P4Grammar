@@ -64,9 +64,10 @@ public class SymbolTable {
     private void enterRegularSymbol(Symbol s){
         // Throw exception if the symbol id is already in use in the current scope...
         Optional<Symbol> existingSymbol = currentBlock.getSymbol(s.id);
-        if(existingSymbol.isPresent())
+        if(existingSymbol.isPresent()){
             throw new DuplicateIDCompileError(s.id, s.declarationNode.getLineNumber(),
                     existingSymbol.get().declarationNode.getLineNumber());
+        }
 
         // ...otherwise add the symbol to the current scope
         currentBlock.addSymbol(s);

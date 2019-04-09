@@ -24,11 +24,11 @@ public abstract class ListNode extends Node{
     }
 
     public void addChild(Node child){
-        children.add(child);
+        super.children.add(child);
     }
 
     public void addChildren(ArrayList<Node> children){
-        children.addAll(children);
+        super.children.addAll(children);
     }
 
     @Override

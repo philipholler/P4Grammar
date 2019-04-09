@@ -11,31 +11,12 @@ public class EventInputNode extends EventNode {
     private String deviceID;
     private String signalID;
     private String enumID;
-    private BlockNode blockNode;
 
-    public EventInputNode(ParserRuleContext ctx, Node block, String deviceID, String signalID, String enumID) {
+    public EventInputNode(ParserRuleContext ctx, BlockNode block, String deviceID, String signalID, String enumID) {
         super(ctx, block);
-        if(!(block instanceof BlockNode)) {
-            System.out.println("Error in EventInputNode constructor");
-            this.blockNode = null;
-        } else {
-            this.blockNode = (BlockNode) block;
-        }
         this.deviceID = deviceID;
         this.signalID = signalID;
         this.enumID = enumID;
-    }
-
-    @Override
-    public String getTreeString(int indentation) {
-        StringBuilder treeString = new StringBuilder();
-
-        treeString.append(StringUtils.getIndentedString(indentation));
-        treeString.append(this.toString()).append("\n");
-
-        treeString.append(blockNode.getTreeString(indentation + 1));
-
-        return treeString.toString();
     }
 
     @Override
@@ -50,4 +31,8 @@ public class EventInputNode extends EventNode {
     public <T> T accept(ASTBaseVisitor<? extends T> astBaseVisitor) {
     return astBaseVisitor.visit(this);
 }
+
+    public BlockNode getBlockNode(){
+        return (BlockNode) super.getChildren().get(0);
+    }
 }

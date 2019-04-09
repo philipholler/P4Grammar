@@ -1,12 +1,13 @@
 package node.Events;
 
+import node.base.ListNode;
 import node.base.Node;
 import node.base.UnaryNode;
 import org.antlr.v4.runtime.ParserRuleContext;
 
 import java.util.ArrayList;
 
-public abstract class EventNode extends Node{
+public abstract class EventNode extends ListNode {
 
     public EventNode(ParserRuleContext context, ArrayList<Node> children) {
         super(context, children);

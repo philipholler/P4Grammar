@@ -1,6 +1,12 @@
 package semantics;
 
+import exceptions.user_side.CompileErrorException;
+import node.DeclsNode;
+import node.Statements.Expression.LiteralValues.FloatNode;
+import node.Statements.Expression.LiteralValues.IntegerNode;
 import node.base.Node;
+import node.define_nodes.Signal.DefSignalNode;
+import node.define_nodes.Signal.EnumNode;
 
 import java.util.ArrayList;
 
@@ -45,6 +51,36 @@ public class SignalTypeSymbol extends Symbol{
         TYPE = SIGNAL_TYPE.FLOAT_RANGE;
         this.floatLowerBound = lowerBound;
         this.floatUpperBound = upperBound;
+    }
+
+    public SignalTypeSymbol(DefSignalNode declarationNode) {
+        super(declarationNode.getID(), declarationNode);
+
+        // For a signal type with a range
+        if(declarationNode.getRangeNode() != null){
+            if(declarationNode.getRangeNode().getType().equals("float")){
+                this.TYPE = SIGNAL_TYPE.FLOAT_RANGE;
+                if(declarationNode.getRangeNode().getLeftChild() instanceof FloatNode && declarationNode.getRangeNode().getLeftChild() instanceof FloatNode){
+                    this.floatLowerBound = ((FloatNode) declarationNode.getRangeNode().getLeftChild()).getVal();
+                    this.floatUpperBound = ((FloatNode) declarationNode.getRangeNode().getRightChild()).getVal();
+                }
+            } else if (declarationNode.getRangeNode().getType().equals("int")){
+                this.TYPE = SIGNAL_TYPE.INT_RANGE;
+                if(declarationNode.getRangeNode().getLeftChild() instanceof IntegerNode && declarationNode.getRangeNode().getLeftChild() instanceof IntegerNode){
+                    this.floatLowerBound = ((IntegerNode) declarationNode.getRangeNode().getLeftChild()).getVal();
+                    this.floatUpperBound = ((IntegerNode) declarationNode.getRangeNode().getRightChild()).getVal();
+                }
+            } else {
+                throw new CompileErrorException("Error in SignalTypeSymbol constructor");
+            }
+        } // For a signal type with enum values
+         else {
+             this.TYPE = SIGNAL_TYPE.LITERALS;
+            for (EnumNode node: declarationNode.getEnumValues()) {
+                this.signalLiterals.add(new FieldSymbol(node));
+            }
+        }
+
     }
 
     /**

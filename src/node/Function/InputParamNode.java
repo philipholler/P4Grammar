@@ -5,10 +5,10 @@ import org.antlr.v4.runtime.ParserRuleContext;
 import visitor.ASTBaseVisitor;
 
 public class InputParamNode extends LeafNode {
-    private java.lang.String id;
+    private String id;
     private String type;
 
-    public InputParamNode(ParserRuleContext ctx, java.lang.String id, String type) {
+    public InputParamNode(ParserRuleContext ctx, String id, String type) {
         super(ctx);
         this.id = id;
         this.type = type;
@@ -23,7 +23,7 @@ public class InputParamNode extends LeafNode {
     }
 
     @Override
-    public java.lang.String toString() {
+    public String toString() {
         return "InputParamNode(" +
                 "id='" + id + '\'' +
                 ", type=" + type +

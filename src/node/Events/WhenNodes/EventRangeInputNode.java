@@ -12,21 +12,12 @@ public class EventRangeInputNode extends EventNode {
     private String deviceID;
     private String signalID;
     private ExceedsAndDeceedsEnum exceedsAndDeceedsEnum;
-    private ExpressionNode val;
-    private BlockNode block;
 
-    public EventRangeInputNode(ParserRuleContext ctx, Node block, String deviceID, String signalID, ExceedsAndDeceedsEnum exceedsAndDeceedsEnum, ExpressionNode expr) {
-        super(ctx, block);
-        if(!(block instanceof BlockNode)) {
-            System.out.println("Error in EventRangeInputNode constructor");
-            this.block = null;
-        } else{
-            this.block = (BlockNode) block;
-        }
+    public EventRangeInputNode(ParserRuleContext ctx, BlockNode block, String deviceID, String signalID, ExceedsAndDeceedsEnum exceedsAndDeceedsEnum, ExpressionNode expr) {
+        super(ctx, block, expr);
         this.deviceID = deviceID;
         this.signalID = signalID;
         this.exceedsAndDeceedsEnum = exceedsAndDeceedsEnum;
-        this.val = expr;
     }
 
     @Override
@@ -38,20 +29,25 @@ public class EventRangeInputNode extends EventNode {
                 ')';
     }
 
-    @Override
-    public String getTreeString(int indentation) {
-        StringBuilder treeString = new StringBuilder();
-
-        treeString.append(StringUtils.getIndentedString(indentation));
-        treeString.append(this.toString()).append("\n");
-
-        treeString.append(val.getTreeString(indentation + 1));
-        treeString.append(block.getTreeString(indentation + 1));
-
-        return treeString.toString();
-    }
-
     public <T> T accept(ASTBaseVisitor<? extends T> astBaseVisitor) {
     return astBaseVisitor.visit(this);
 }
+
+    public ExpressionNode getExprNode(){
+        for (Node node: super.getChildren()) {
+            if(node instanceof ExpressionNode){
+                return (ExpressionNode) node;
+            }
+        }
+        return null;
+    }
+
+    public BlockNode getBlockNode(){
+        for (Node node: super.getChildren()) {
+            if(node instanceof BlockNode){
+                return (BlockNode) node;
+            }
+        }
+        return null;
+    }
 }

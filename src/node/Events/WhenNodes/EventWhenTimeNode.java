@@ -10,47 +10,19 @@ import utils.StringUtils;
 import visitor.ASTBaseVisitor;
 
 public class EventWhenTimeNode extends EventNode {
-    private TimeNode time;
-    private DateNode date;
-    private BlockNode block;
 
     public EventWhenTimeNode(ParserRuleContext ctx, TimeNode time, DateNode date, Node block) {
         super(ctx, time, date, block);
-        this.time = time;
-        this.date = date;
-        this.block = (BlockNode) block;
     }
 
     public EventWhenTimeNode(ParserRuleContext ctx, TimeNode time, Node block) {
         super(ctx, time, block);
-        this.time = time;
-        this.block = (BlockNode) block;
     }
 
     public EventWhenTimeNode(ParserRuleContext ctx, DateNode date, Node block) {
         super(ctx, date, block);
-        this.date = date;
-        this.block = (BlockNode) block;
     }
 
-
-    @Override
-    public String getTreeString(int indentation) {
-        StringBuilder treeString = new StringBuilder();
-
-        treeString.append(StringUtils.getIndentedString(indentation));
-        treeString.append(this.toString()).append("\n");
-
-        if(time != null){
-            treeString.append(time.getTreeString(indentation + 1));
-        }
-        if(date != null) {
-            treeString.append(date.getTreeString(indentation + 1));
-        }
-        treeString.append(block.getTreeString(indentation + 1));
-
-        return treeString.toString();
-    }
 
     @Override
     public String toString() {
@@ -60,4 +32,31 @@ public class EventWhenTimeNode extends EventNode {
     public <T> T accept(ASTBaseVisitor<? extends T> astBaseVisitor) {
     return astBaseVisitor.visit(this);
 }
+
+    public TimeNode getTimeNode(){
+        for (Node node: super.getChildren()) {
+            if(node instanceof TimeNode){
+                return (TimeNode) node;
+            }
+        }
+        return null;
+    }
+
+    public DateNode getDateNode(){
+        for (Node node: super.getChildren()) {
+            if(node instanceof DateNode){
+                return (DateNode) node;
+            }
+        }
+        return null;
+    }
+
+    public BlockNode getBlockNode(){
+        for (Node node: super.getChildren()) {
+            if(node instanceof BlockNode){
+                return (BlockNode) node;
+            }
+        }
+        return null;
+    }
 }

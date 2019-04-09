@@ -38,4 +38,9 @@ public class EnumNode extends UnaryNode {
     public <T> T accept(ASTBaseVisitor<? extends T> astBaseVisitor) {
     return astBaseVisitor.visit(this);
 }
+
+    public String getType(){
+        return this.value.getType();
+    }
+
 }
