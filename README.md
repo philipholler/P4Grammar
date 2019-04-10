@@ -10,8 +10,8 @@ _________________________________________________________________________
 CHANGE THE GRAMMAR
 
 If you want to change anything in the grammar, you need to download the following ANTLR plugins for intellij:
-1. ANTLR v4 grammar plugin
-2. ANTLRWorks
+1. ANTLR v4 grammar plugin (version 1.9)
+2. ANTLRWorks (version 1.3.1)
 
 Also make sure to configure ANTLR. This is done by right clicking the grammarfile (.g4) and click configure ANTLR.
 This should open up a new window.
@@ -23,7 +23,5 @@ Inside this window make sure, that the following options are checked:
 Also inside the window fill out the following textboxes:
 1. Output directory where all output is generated -> ".../P4Grammar/gen src/"
 2. Package/namespace for the generated code -> "antlr"
-
-__________________________________________________________________________
-
+________________________________________________
 HAVE FUN!
