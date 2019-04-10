@@ -7,6 +7,7 @@ MAKE THE PROGRAM WORK
 _________________________________________________________________________
 
 CHANGE THE GRAMMAR
+
 If you want to change anything in the grammar, you need to download the following ANTLR plugins for intellij:
 1. ANTLR v4 grammar plugin
 2. ANTLRWorks
