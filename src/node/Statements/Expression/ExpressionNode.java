@@ -30,4 +30,7 @@ public abstract class ExpressionNode extends Node {
         return type;
     }
 
+    public void setType(String type) {
+        this.type = type;
+    }
 }

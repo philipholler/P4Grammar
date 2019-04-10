@@ -5,7 +5,7 @@ import utils.StringUtils;
 import visitor.ASTBaseVisitor;
 
 public class IDNode extends ExpressionNode {
-    java.lang.String ID;
+    String ID;
 
     public IDNode(ParserRuleContext ctx, String type, java.lang.String ID) {
         super(ctx, type);
@@ -33,4 +33,8 @@ public class IDNode extends ExpressionNode {
     public <T> T accept(ASTBaseVisitor<? extends T> astBaseVisitor) {
     return astBaseVisitor.visit(this);
 }
+
+    public String getID() {
+        return ID;
+    }
 }

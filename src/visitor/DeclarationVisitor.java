@@ -1,5 +1,7 @@
 package visitor;
 
+import exceptions.user_side.VariableNotInitialisedException;
+import node.BlockNode;
 import node.DevDeclNode;
 import node.Events.EventEveryNode;
 import node.Events.WhenNodes.EventInputNode;
@@ -7,6 +9,8 @@ import node.Events.WhenNodes.EventRangeInputNode;
 import node.Events.WhenNodes.EventWhenTimeNode;
 import node.Function.FunctionNode;
 import node.InitNode;
+import node.Statements.AssignmentNode;
+import node.Statements.Expression.IDNode;
 import node.Statements.IfStmtNode;
 import node.Statements.WhileNode;
 import node.VarDeclNode;
@@ -42,16 +46,29 @@ public class DeclarationVisitor extends ASTBaseVisitor<Void> {
         return null;
     }
 
+
+
     @Override
     public Void visit(FunctionNode node) {
-        st.openScope(node);
+        st.openScope(node.getBlock());
 
         Optional<FunctionSymbol> functionSymbol = st.getFunctionSymbol(node.getId());
         if(functionSymbol.isPresent()){
             st.enterSymbols(functionSymbol.get().getParameters());
         }
 
+        st.closeScope();
+
         super.visit(node.getBlock());
+
+        return null;
+    }
+
+    @Override
+    public Void visit(BlockNode node) {
+        st.openScope(node);
+
+        super.visit(node);
 
         st.closeScope();
 
@@ -65,16 +82,6 @@ public class DeclarationVisitor extends ASTBaseVisitor<Void> {
     }
 
     @Override
-    public Void visit(InitNode node) {
-        st.openScope(node);
-
-        super.visit(node);
-
-        st.closeScope();
-        return null;
-    }
-
-    @Override
     public Void visit(VarDeclNode node) {
         st.enterSymbol(new FieldSymbol(node));
         return null;
@@ -82,76 +89,20 @@ public class DeclarationVisitor extends ASTBaseVisitor<Void> {
 
     @Override
     public Void visit(IfStmtNode node) {
-        st.openScope(node);
-
         super.visit(node.getIfBlock());
 
-        st.closeScope();
-
-
         if(node.getElseBlock() != null){
-            st.openScope(node);
-
             super.visit(node.getElseBlock());
-
-            st.closeScope();
         }
 
         return null;
     }
 
     @Override
-    public Void visit(WhileNode node) {
-        st.openScope(node);
-
-        super.visit(node.getRightChild());
-
-        st.closeScope();
-
-        return null;
-    }
-
-    @Override
-    public Void visit(EventInputNode node) {
-        st.openScope(node);
-
-        super.visit(node.getBlockNode());
-
-        st.closeScope();
-
-        return null;
-    }
-
-    @Override
-    public Void visit(EventRangeInputNode node) {
-        st.openScope(node);
-
-        super.visit(node.getBlockNode());
-
-        st.closeScope();
-
-        return null;
-    }
-
-    @Override
-    public Void visit(EventWhenTimeNode node) {
-        st.openScope(node);
-
-        super.visit(node.getBlockNode());
-
-        st.closeScope();
-
-        return null;
-    }
-
-    @Override
-    public Void visit(EventEveryNode node) {
-        st.openScope(node);
-
-        super.visit(node.getBlockNode());
-
-        st.closeScope();
-
-        return null;
+    public Void visit(IDNode node) {
+        if(!st.getSymbol(node.getID()).isPresent()){
+            throw new VariableNotInitialisedException("Variable " + node.getID() + " not declared", node.getLineNumber());
+        }
+        return super.visit(node);
     }
 }

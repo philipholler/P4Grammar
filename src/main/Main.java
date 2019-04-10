@@ -8,11 +8,11 @@ import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.tree.ParseTree;
 import visitor.DeclarationVisitor;
-import visitor.JasminVisitor;
 import visitor.FunctionVisitor;
+import visitor.PrintVisitors.ParseTreePrinter;
+import visitor.TypeCheckerVisitor;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 
 import static org.antlr.v4.runtime.CharStreams.fromFileName;
 
@@ -48,15 +48,11 @@ public class Main {
 
             DeclarationVisitor dclVisitor = new DeclarationVisitor(fv.getSt());
             ast.accept(dclVisitor);
-            System.out.println(dclVisitor.getSt());
 
-           //Jasmin Visitor
-            //Creates Jasmine file and writes to filepath
-            /*
-            JasminVisitor jv = new JasminVisitor();
-            PrintWriter pw = new PrintWriter("C:\\Users\\Mads\\Desktop\\testmappe\\helloworld.j");
-            pw.println(jv.visit(ast));
-            pw.flush();*/
+            TypeCheckerVisitor typeCheckVisitor = new TypeCheckerVisitor(dclVisitor.getSt());
+            ast.accept(typeCheckVisitor);
+
+            System.out.println(typeCheckVisitor.getSt());
 
         } catch (IOException e) {
             e.printStackTrace();

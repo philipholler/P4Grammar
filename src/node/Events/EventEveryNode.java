@@ -12,10 +12,12 @@ import visitor.ASTBaseVisitor;
 
 public class EventEveryNode extends EventNode {
     private TimeFrame timeframe;
+    private BlockNode blocK;
 
     public EventEveryNode(ParserRuleContext ctx, ExpressionNode exprNode, TimeFrame timeframe, TimeNode timeNode, DateNode dateNode, BlockNode block) {
         super(ctx, exprNode, timeNode, dateNode, block);
         this.timeframe = timeframe;
+        this.blocK = block;
     }
 
     public EventEveryNode(ParserRuleContext ctx, ExpressionNode exprNode, TimeFrame timeframe, DateNode dateNode, BlockNode block) {

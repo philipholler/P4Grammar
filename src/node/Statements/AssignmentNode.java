@@ -1,5 +1,6 @@
 package node.Statements;
 
+import node.Statements.Expression.ExpressionNode;
 import node.base.Node;
 import node.base.UnaryNode;
 import org.antlr.v4.runtime.ParserRuleContext;
@@ -7,11 +8,13 @@ import visitor.ASTBaseVisitor;
 
 
 public class AssignmentNode extends UnaryNode {
-    String ID;
+    private String ID;
+    private ExpressionNode expr;
 
     public AssignmentNode(ParserRuleContext ctx, Node expr, String ID) {
         super(ctx, expr);
         this.ID = ID;
+        this.expr = (ExpressionNode) expr;
     }
 
     @Override
@@ -24,4 +27,12 @@ public class AssignmentNode extends UnaryNode {
     public <T> T accept(ASTBaseVisitor<? extends T> astBaseVisitor) {
     return astBaseVisitor.visit(this);
 }
+
+    public String getID() {
+        return ID;
+    }
+
+    public ExpressionNode getExpr() {
+        return expr;
+    }
 }

@@ -190,8 +190,14 @@ public class SymbolTable {
         }
 
         private Optional<Symbol> getSymbol(String id){
-            for(Symbol s : localSymbols)
-                if(s.id.equals(id)) return Optional.of(s);
+            for(Symbol s : localSymbols) {
+                if (s instanceof SignalTypeSymbol) {
+
+                }
+                if (s.id.equals(id)) {
+                    return Optional.of(s);
+                }
+            }
 
             if(hasParent())
                 return parentBlock.getSymbol(id);
@@ -238,5 +244,9 @@ public class SymbolTable {
 
             return s.toString();
         }
+    }
+
+    public void resetScope(){
+        currentBlock = globalBlock;
     }
 }

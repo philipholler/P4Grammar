@@ -7,12 +7,18 @@ import visitor.ASTBaseVisitor;
 
 
 public class InitNode extends UnaryNode {
+    private BlockNode block;
 
     public InitNode(ParserRuleContext ctx, Node block) {
         super(ctx, block);
+        this.block = (BlockNode) block;
     }
 
     public <T> T accept(ASTBaseVisitor<? extends T> astBaseVisitor) {
     return astBaseVisitor.visit(this);
 }
+
+    public BlockNode getBlock() {
+        return block;
+    }
 }

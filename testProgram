@@ -18,13 +18,15 @@ MovementSensor frontDoorSensor = "Google.com";
 
 Thermometer mainThermometer = "129.67.198.65:12565";
 
+int a = 2;
 string aString = "Hej";
 int testInt = 5;
 float testFloat = 6.0;
 
 init(){
-    int a = 2.0;
-    print "hey"
+    int jkl = 2;
+    jkl = 1;
+    jkl = 2 + a + 2 + testInt;
     // Optional code for initialization
     // Automatically run when the program is run for the first time
 }
@@ -63,7 +65,7 @@ string testFunction(int percentage){
 
 // Function
 string setBedroomWindowsOpenExtra(int percentage, float f, string s){
-    int a = get bedRoomWindow open;
+    set bedRoomWindow open: percentage;
 
     setBedroomWindowsOpen(1, 2.0, "hej");
     return;
