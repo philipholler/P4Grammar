@@ -39,7 +39,7 @@ when frontDoorSensor toggle: on {
     wait 30 seconds;
 
     while(get frontDoorSensor toggle == "on"){
-        set frontDoorLight toggle: off;
+        set frontDoorLight toggle: Off;
     }
 
 }
@@ -51,7 +51,7 @@ when mainThermometer celsius: exceeds 22{
 // Function
 string testFunction(int percentage){
     string test = " ";
-    set bedRoomWindow open: percentage;
+    set bedRoomWindow open: 15;
     while(true){
         return;
     }
@@ -65,7 +65,7 @@ string testFunction(int percentage){
 
 // Function
 string setBedroomWindowsOpenExtra(int percentage, float f, string s){
-    set bedRoomWindow open: percentage;
+    set bedRoomWindow open: 50;
 
     setBedroomWindowsOpen(1, 2.0, "hej");
     return;

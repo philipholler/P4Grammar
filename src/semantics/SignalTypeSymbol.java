@@ -9,6 +9,7 @@ import node.define_nodes.Signal.DefSignalNode;
 import node.define_nodes.Signal.EnumNode;
 
 import java.util.ArrayList;
+import java.util.Optional;
 
 public class SignalTypeSymbol extends Symbol{
 
@@ -132,5 +133,12 @@ public class SignalTypeSymbol extends Symbol{
         }
 
         return "Signal: " + id + " - " + TYPE + "(" + values + ")";
+    }
+
+    public Optional<FieldSymbol> getSignalLiteral(String id){
+        for(FieldSymbol literal : signalLiterals)
+            if(literal.id.equals(id)) return Optional.of(literal);
+
+        return Optional.empty();
     }
 }

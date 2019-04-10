@@ -5,7 +5,8 @@ import main.Main;
 
 import java.io.PrintStream;
 import java.io.PrintWriter;
-import java.util.ArrayList;
+
+import static main.Main.COMPILER_DEBUG_MODE;
 
 public class CompileErrorException extends RuntimeException {
 
@@ -14,7 +15,7 @@ public class CompileErrorException extends RuntimeException {
 
     public CompileErrorException(String msg, int lineNumber) {
         super();
-        this.msg = msg + "\n" + "at " + getLineReference(Main.sourceFile, lineNumber);
+        this.msg = msg + "\n" + "at " + getLineReference(Main.SOURCE_FILE, lineNumber);
         this.lineNumber = lineNumber;
     }
 
@@ -35,10 +36,20 @@ public class CompileErrorException extends RuntimeException {
     @Override
     public void printStackTrace(PrintStream s) {
         System.err.println("\n" + msg);
+
+        if(COMPILER_DEBUG_MODE){
+            System.err.println("\n");
+            super.printStackTrace(s);
+        }
+
     }
 
     @Override
     public void printStackTrace(PrintWriter s) {
         System.err.println("\n" + msg);
+        if(COMPILER_DEBUG_MODE){
+            System.err.println("\n");
+            super.printStackTrace(s);
+        }
     }
 }

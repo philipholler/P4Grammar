@@ -190,15 +190,22 @@ public class SymbolTable {
         }
 
         private Optional<Symbol> getSymbol(String id){
+            // Check every symbol within this scope
             for(Symbol s : localSymbols) {
-                if (s instanceof SignalTypeSymbol) {
 
+                // Check the literals defined in signal symbols
+                if (s instanceof SignalTypeSymbol) {
+                    Optional<FieldSymbol> matchingSignalLiteral = ((SignalTypeSymbol) s).getSignalLiteral(id);
+                    // (at return) The extra Optional.of converts Optional<FieldSymbol> to Optional<Symbol>
+                    if(matchingSignalLiteral.isPresent()) return Optional.of(matchingSignalLiteral.get());
                 }
-                if (s.id.equals(id)) {
+
+                // Check if the symbol id matches the given id
+                if (s.id.equals(id))
                     return Optional.of(s);
-                }
             }
 
+            // Check the parent block if no local symbols match the id
             if(hasParent())
                 return parentBlock.getSymbol(id);
 

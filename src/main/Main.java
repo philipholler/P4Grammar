@@ -9,7 +9,6 @@ import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.tree.ParseTree;
 import visitor.DeclarationVisitor;
 import visitor.FunctionVisitor;
-import visitor.PrintVisitors.ParseTreePrinter;
 import visitor.TypeCheckerVisitor;
 
 import java.io.IOException;
@@ -18,13 +17,14 @@ import static org.antlr.v4.runtime.CharStreams.fromFileName;
 
 public class Main {
 
-    public static final String sourceFile = "testProgram";
+    public static final String SOURCE_FILE = "testProgram";
+    public static final boolean COMPILER_DEBUG_MODE = true;
 
     public static void main(String[] args) {
 
         try{
             // Input test file name. The rest creates the lexer and parser.
-            CharStream cs = fromFileName(sourceFile);
+            CharStream cs = fromFileName(SOURCE_FILE);
             PivotLexer lexer = new PivotLexer(cs);
             CommonTokenStream token = new CommonTokenStream(lexer);
             PivotParser parser = new PivotParser(token);

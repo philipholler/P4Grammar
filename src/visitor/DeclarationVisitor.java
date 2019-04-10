@@ -101,7 +101,7 @@ public class DeclarationVisitor extends ASTBaseVisitor<Void> {
     @Override
     public Void visit(IDNode node) {
         if(!st.getSymbol(node.getID()).isPresent()){
-            throw new VariableNotInitialisedException("Variable " + node.getID() + " not declared", node.getLineNumber());
+            throw new VariableNotInitialisedException("Variable '" + node.getID() + "' not declared", node.getLineNumber());
         }
         return super.visit(node);
     }
