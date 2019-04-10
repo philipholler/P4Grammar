@@ -13,8 +13,8 @@ If you want to change anything in the grammar, you need to download the followin
 1. ANTLR v4 grammar plugin
 2. ANTLRWorks
 
-also make sure to configure ANTLR. This is done by right clicking the grammarfile (.g4) and click configure ANTLR.
-This should open op a new window.
+Also make sure to configure ANTLR. This is done by right clicking the grammarfile (.g4) and click configure ANTLR.
+This should open up a new window.
 
 Inside this window make sure, that the following options are checked:
 1. Auto-generate parsers upon save
