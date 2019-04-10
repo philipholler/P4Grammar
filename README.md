@@ -3,6 +3,7 @@
 MAKE THE PROGRAM WORK
 1. Import libraries to projekt from the libs folder
 2. Chose the Pivot file in main class under String SOURCE_FILE
+3. Run the /P4Grammar/src/main/Main.java class
 
 _________________________________________________________________________
 
