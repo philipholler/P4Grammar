@@ -16,6 +16,7 @@ import node.Statements.WhileNode;
 import node.VarDeclNode;
 import node.define_nodes.Device.DefDeviceNode;
 import node.define_nodes.Signal.DefSignalNode;
+import node.define_nodes.Signal.EnumNode;
 import semantics.*;
 
 import java.util.Optional;
@@ -25,6 +26,7 @@ public class DeclarationVisitor extends ASTBaseVisitor<Void> {
 
     public DeclarationVisitor(SymbolTable st) {
         this.st = st;
+        this.st.resetScope();
     }
 
     public SymbolTable getSt() {
@@ -36,6 +38,7 @@ public class DeclarationVisitor extends ASTBaseVisitor<Void> {
     public Void visit(DefDeviceNode node) {
         DeviceTypeSymbol deviceTypeSymbol = new DeviceTypeSymbol(node, st);
         st.enterSymbol(deviceTypeSymbol);
+        super.visit(node);
         return null;
     }
 
@@ -43,6 +46,7 @@ public class DeclarationVisitor extends ASTBaseVisitor<Void> {
     public Void visit(DefSignalNode node) {
         SignalTypeSymbol signalType = new SignalTypeSymbol(node);
         st.enterSymbol(signalType);
+        super.visit(node);
         return null;
     }
 
@@ -59,7 +63,7 @@ public class DeclarationVisitor extends ASTBaseVisitor<Void> {
 
         st.closeScope();
 
-        super.visit(node.getBlock());
+        super.visit(node);
 
         return null;
     }
@@ -78,17 +82,21 @@ public class DeclarationVisitor extends ASTBaseVisitor<Void> {
     @Override
     public Void visit(DevDeclNode node) {
         st.enterSymbol(new FieldSymbol(node));
+        super.visit(node);
         return null;
     }
 
     @Override
     public Void visit(VarDeclNode node) {
         st.enterSymbol(new FieldSymbol(node));
+        super.visit(node);
         return null;
     }
 
     @Override
     public Void visit(IfStmtNode node) {
+        super.visit(node.getLogicalExprNode());
+
         super.visit(node.getIfBlock());
 
         if(node.getElseBlock() != null){

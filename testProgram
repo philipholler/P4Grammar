@@ -2,6 +2,7 @@
 define Signal toggle: On = 1, Off = 0, on = "hej";
 define Signal celsius:  1..60;
 define Signal open:  0.0..100.0;
+define Signal percentage: 0.0..100.0;
 
 // Define device types
 define Device Bulb input: toggle;
@@ -15,8 +16,6 @@ Bulb frontDoorLight = "129.6.18.1:12565";
 Window bedRoomWindow = "129.67.198.65:12565";
 
 MovementSensor frontDoorSensor = "Google.com";
-
-Thermometer mainThermometer = "129.67.198.65:12565";
 
 int a = 2;
 string aString = "Hej";
@@ -49,7 +48,7 @@ when mainThermometer celsius: exceeds 22{
 }
 
 // Function
-string testFunction(int percentage){
+string testFunction(int percent){
     string test = " ";
     set bedRoomWindow open: 15;
     while(true){
@@ -64,7 +63,7 @@ string testFunction(int percentage){
 }
 
 // Function
-string setBedroomWindowsOpenExtra(int percentage, float f, string s){
+string setBedroomWindowsOpenExtra(int percent, float f, string s){
     set bedRoomWindow open: 50;
 
     setBedroomWindowsOpen(1, 2.0, "hej");
@@ -72,14 +71,13 @@ string setBedroomWindowsOpenExtra(int percentage, float f, string s){
 }
 
 // Function
-void setBedroomWindowsOpen(int percentage){
-    set bedRoomWindow openWindow: percentage;
+void setBedroomWindowsOpen(int percent){
+    set bedRoomWindow openWindow: percent;
 }
 
 // Repeating event
 every 2 hours{
     int ab = a;
-    ab = b;
     float af = 1.2 + 2.5 + 3.5;
     b = 1.2 * 5.3 + 3.3;
     string c = "Magnus";
@@ -98,7 +96,9 @@ every 2 weeks starting 11:00 01d04m2019y{
         set GardenMower toggle: on;
     }
 
+    int b = 3;
     if(5 == 5 && (b == a || a == b)){
+        b = 5;
     }
 
     while(true){
