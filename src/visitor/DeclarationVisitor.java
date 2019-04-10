@@ -108,6 +108,7 @@ public class DeclarationVisitor extends ASTBaseVisitor<Void> {
 
     @Override
     public Void visit(IDNode node) {
+        // Check if the IDNode (i.e. the variable) is already declared and available from this scope
         if(!st.getSymbol(node.getID()).isPresent()){
             throw new VariableNotInitialisedException("Variable '" + node.getID() + "' not declared", node.getLineNumber());
         }
