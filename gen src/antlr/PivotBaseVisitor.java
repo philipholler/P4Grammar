@@ -1,4 +1,4 @@
-// Generated from /Users/philip/Library/Mobile Documents/com~apple~CloudDocs/Cloud dokumenter/Java projects/P4Grammar/Pivot.g4 by ANTLR 4.7.2
+// Generated from C:/Users/Magnus/Desktop/P4_Pivot\Pivot.g4 by ANTLR 4.7.2
 package antlr;
 import org.antlr.v4.runtime.tree.AbstractParseTreeVisitor;
 
@@ -200,6 +200,13 @@ public class PivotBaseVisitor<T> extends AbstractParseTreeVisitor<T> implements 
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
 	@Override public T visitStmts(PivotParser.StmtsContext ctx) { return visitChildren(ctx); }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation returns the result of calling
+	 * {@link #visitChildren} on {@code ctx}.</p>
+	 */
+	@Override public T visitPrintStmt(PivotParser.PrintStmtContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *

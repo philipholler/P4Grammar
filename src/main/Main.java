@@ -9,7 +9,6 @@ import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.tree.ParseTree;
 import visitor.DeclarationVisitor;
 import visitor.FunctionVisitor;
-import visitor.PrintVisitors.ParseTreePrinter;
 
 import java.io.IOException;
 

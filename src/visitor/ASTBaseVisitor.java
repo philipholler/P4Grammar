@@ -1,6 +1,5 @@
 package visitor;
 
-import antlr.PivotParser;
 import node.*;
 import node.Events.EventEveryNode;
 import node.Events.WhenNodes.EventInputNode;
@@ -10,6 +9,7 @@ import node.Function.FunctionNode;
 import node.Function.InputParamNode;
 import node.Statements.*;
 import node.Statements.Expression.AddExprNode;
+import node.Statements.Expression.ExpressionNode;
 import node.Statements.Expression.FunctionCall.FuncCallNode;
 import node.Statements.Expression.FunctionCall.GetFuncNode;
 import node.Statements.Expression.FunctionCall.SetFuncNode;
@@ -34,18 +34,20 @@ import node.define_nodes.Device.OutputNode;
 import node.define_nodes.Signal.EnumNode;
 import node.define_nodes.Signal.RangeNode;
 
-public abstract class ASTBaseVisitor<T>{
+public abstract class ASTBaseVisitor<T> {
+
+
     // Must just call node.accept(this) in all implementations
-    public T visit(Node node){
+    public T visit(Node node) {
         return node.accept(this);
     }
 
-    public T visit(ProgramNode node){
+    public T visit(ProgramNode node) {
         return visitChildren(node);
     }
 
-    public T visitChildren(Node node){
-        for (Node n: node.getChildren()) {
+    public T visitChildren(Node node) {
+        for (Node n : node.getChildren()) {
             n.accept(this);
         }
 
@@ -53,46 +55,54 @@ public abstract class ASTBaseVisitor<T>{
     }
 
     // Device nodes
-    public T visit(DefDeviceNode node){
+    public T visit(DefDeviceNode node) {
         return visitChildren(node);
     }
-    public T visit(InputNode node){
+
+    public T visit(InputNode node) {
         return visitChildren(node);
     }
-    public T visit(OutputNode node){
+
+    public T visit(OutputNode node) {
         return visitChildren(node);
     }
 
     // Signal nodes
-    public T visit(DefSignalNode node){
+    public T visit(DefSignalNode node) {
         return visitChildren(node);
     }
-    public T visit(EnumNode node){
+
+    public T visit(EnumNode node) {
         return visitChildren(node);
     }
-    public T visit(RangeNode node){
+
+    public T visit(RangeNode node) {
         return visitChildren(node);
     }
 
     // Events
-    public T visit(EventInputNode node){
+    public T visit(EventInputNode node) {
         return visitChildren(node);
     }
-    public T visit(EventRangeInputNode node){
+
+    public T visit(EventRangeInputNode node) {
         return visitChildren(node);
     }
-    public T visit(EventWhenTimeNode node){
+
+    public T visit(EventWhenTimeNode node) {
         return visitChildren(node);
     }
-    public T visit(EventEveryNode node){
+
+    public T visit(EventEveryNode node) {
         return visitChildren(node);
     }
 
     // Function
-    public T visit(FunctionNode node){
+    public T visit(FunctionNode node) {
         return visitChildren(node);
     }
-    public T visit(InputParamNode node){
+
+    public T visit(InputParamNode node) {
         return visitChildren(node);
     }
 
@@ -100,102 +110,128 @@ public abstract class ASTBaseVisitor<T>{
      * Statements
      */
     //Expression nodes
-        // Function call nodes
-        public T visit(FuncCallNode node){
-            return visitChildren(node);
-        }
-        public T visit(GetFuncNode node){
-            return visitChildren(node);
-        }
-        public T visit(SetFuncNode node){
-            return visitChildren(node);
-        }
-
-        // Literal values node
-        public T visit(FloatNode node){
-            return visitChildren(node);
-        }
-        public T visit(IntegerNode node){
-            return visitChildren(node);
-        }
-        public T visit(StringNode node){
-            return visitChildren(node);
-        }
-
-    public T visit(AddExprNode node){
+    // Function call nodes
+    public T visit(FuncCallNode node) {
         return visitChildren(node);
     }
-    public T visit(IDNode node){
+
+    public T visit(GetFuncNode node) {
         return visitChildren(node);
     }
-    public T visit(MultiExprNode node){
+
+    public T visit(SetFuncNode node) {
+        return visitChildren(node);
+    }
+
+    // Literal values node
+    public T visit(FloatNode node) {
+        return visitChildren(node);
+    }
+
+    public T visit(IntegerNode node) {
+        return visitChildren(node);
+    }
+
+    public T visit(StringNode node) {
+        return visitChildren(node);
+    }
+
+    public T visit(AddExprNode node) {
+        return visitChildren(node);
+    }
+
+    public T visit(IDNode node) {
+        return visitChildren(node);
+    }
+
+    public T visit(MultiExprNode node) {
         return visitChildren(node);
     }
 
     // Logical expression nodes
-    public T visit(ComparisonExprNode node){
+    public T visit(ComparisonExprNode node) {
         return visitChildren(node);
     }
-    public T visit(LogicalAndExprNode node){
+
+    public T visit(LogicalAndExprNode node) {
         return visitChildren(node);
     }
-    public T visit(LogicalLiteralNode node){
+
+    public T visit(LogicalLiteralNode node) {
         return visitChildren(node);
     }
-    public T visit(LogicalOrExprNode node){
+
+    public T visit(LogicalOrExprNode node) {
         return visitChildren(node);
     }
 
     // Wait
-    public T visit(WaitNode node){
+    public T visit(WaitNode node) {
         return visitChildren(node);
     }
 
-    public T visit(AssignmentNode node){
+    public T visit(AssignmentNode node) {
         return visitChildren(node);
     }
-    public T visit(BreakNode node){
+
+    public T visit(BreakNode node) {
         return visitChildren(node);
     }
-    public T visit(IfStmtNode node){
+
+    public T visit(IfStmtNode node) {
         return visitChildren(node);
     }
-    public T visit(ReturnNode node){
+
+    public T visit(ReturnNode node) {
         return visitChildren(node);
     }
-    public T visit(WhileNode node){
+
+    public T visit(WhileNode node) {
         return visitChildren(node);
     }
 
     // Time nodes
-    public T visit(DateNode node){
+    public T visit(DateNode node) {
         return visitChildren(node);
     }
-    public T visit(NowNode node){
+
+    public T visit(NowNode node) {
         return visitChildren(node);
     }
-    public T visit(TimeNode node){
+
+    public T visit(TimeNode node) {
         return visitChildren(node);
     }
 
     // Declaration nodes
-    public T visit(DeclsNode node){
+    public T visit(DeclsNode node) {
         return visitChildren(node);
     }
-    public T visit(DevDeclNode node){
+
+    public T visit(DevDeclNode node) {
         return visitChildren(node);
     }
-    public T visit(VarDeclNode node){
+
+    public T visit(VarDeclNode node) {
         return visitChildren(node);
     }
 
     // Block and init
-    public T visit(BlockNode node){
+    public T visit(BlockNode node) {
         return visitChildren(node);
     }
-    public T visit(InitNode node){
+
+    public T visit(InitNode node) {
         return visitChildren(node);
     }
+
+    public T visit(PrintNode node) {
+        return visitChildren(node);
+    }
+
+
+
+
 
 }
 

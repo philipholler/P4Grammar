@@ -1,4 +1,4 @@
-// Generated from /Users/philip/Library/Mobile Documents/com~apple~CloudDocs/Cloud dokumenter/Java projects/P4Grammar/Pivot.g4 by ANTLR 4.7.2
+// Generated from C:/Users/Magnus/Desktop/P4_Pivot\Pivot.g4 by ANTLR 4.7.2
 package antlr;
 import org.antlr.v4.runtime.tree.ParseTreeListener;
 
@@ -289,6 +289,16 @@ public interface PivotListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitStmts(PivotParser.StmtsContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link PivotParser#printStmt}.
+	 * @param ctx the parse tree
+	 */
+	void enterPrintStmt(PivotParser.PrintStmtContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link PivotParser#printStmt}.
+	 * @param ctx the parse tree
+	 */
+	void exitPrintStmt(PivotParser.PrintStmtContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link PivotParser#waitStmt}.
 	 * @param ctx the parse tree

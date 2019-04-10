@@ -56,7 +56,9 @@ timeFrame: (MONTHS | WEEKS | DAYS | HOURS | MINUTES | SECONDS | MS);
 
 block: BLCKBEG stmts BLCKEND;
 
-stmts: (waitStmt | assignment | ifstmt | whilestmt | funcCall SEMCOL | declVar | brk | rtn)*; // Not finished
+stmts: (waitStmt | assignment | ifstmt | whilestmt | funcCall SEMCOL | printStmt | declVar | brk | rtn)*; // Not finished
+
+printStmt: PRINT expr;
 
 waitStmt: WAIT expr timeFrame SEMCOL;
 
@@ -184,6 +186,7 @@ ELSE : 'else';
 RETURN : 'return';
 BREAK : 'break';
 STARTING: 'starting';
+PRINT : 'print';
 
 // Signs
 PARANBEG : '(';

@@ -1,4 +1,4 @@
-// Generated from /Users/philip/Library/Mobile Documents/com~apple~CloudDocs/Cloud dokumenter/Java projects/P4Grammar/Pivot.g4 by ANTLR 4.7.2
+// Generated from C:/Users/Magnus/Desktop/P4_Pivot\Pivot.g4 by ANTLR 4.7.2
 package antlr;
 
 import org.antlr.v4.runtime.ParserRuleContext;
@@ -335,6 +335,18 @@ public class PivotBaseListener implements PivotListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitStmts(PivotParser.StmtsContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterPrintStmt(PivotParser.PrintStmtContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitPrintStmt(PivotParser.PrintStmtContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

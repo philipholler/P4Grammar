@@ -24,6 +24,7 @@ float testFloat = 6.0;
 
 init(){
     int a = 2.0;
+    print "hey"
     // Optional code for initialization
     // Automatically run when the program is run for the first time
 }
@@ -62,7 +63,7 @@ string testFunction(int percentage){
 
 // Function
 string setBedroomWindowsOpenExtra(int percentage, float f, string s){
-    set bedRoomWindow open: percentage;
+    int a = get bedRoomWindow open;
 
     setBedroomWindowsOpen(1, 2.0, "hej");
     return;

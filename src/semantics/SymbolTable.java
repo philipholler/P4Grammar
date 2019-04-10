@@ -71,6 +71,7 @@ public class SymbolTable {
 
         // ...otherwise add the symbol to the current scope
         currentBlock.addSymbol(s);
+
         // Add type id to global type list if the symbol is a type definition
         if(s instanceof DeviceTypeSymbol) definedTypeIDs.add(s.id);
     }

@@ -761,4 +761,9 @@ public class AstBuilderVisitor extends PivotBaseVisitor<Node> {
         updateLineNumber(ctx);
         return new StringNode(ctx, ctx.STRING().getText());
     }
+
+    @Override
+    public Node visitPrintStmt(PivotParser.PrintStmtContext ctx) {
+        return new PrintNode(ctx, (ExpressionNode) visit(ctx.expr()));
+    }
 }
