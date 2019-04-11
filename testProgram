@@ -26,7 +26,7 @@ int testInt = 5;
 float testFloat = 6.0;
 
 init(){
-    int jkl = 2 + a + get GardenMower toggle + testFunctionInt("hej");
+    int jkl = 2 + a + get GardenMower toggle + testFunctionInt("hej" + testFunction(5) + "i");
     jkl = 1;
     jkl = 2 + a + 2 + testInt;
     // Optional code for initialization
@@ -59,7 +59,7 @@ when mainThermometer celsius: exceeds 22{
 // Function
 string testFunction(int percent){
     string test = " ";
-    set bedRoomWindow open: 15;
+    set bedRoomWindow open: 15.0;
     while(true){
         return;
     }

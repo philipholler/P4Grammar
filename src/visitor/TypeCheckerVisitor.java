@@ -4,17 +4,17 @@ import exceptions.user_side.ArgumentWrongTypeException;
 import exceptions.user_side.ExpressionTypeException;
 import node.BlockNode;
 import node.Statements.AssignmentNode;
+import node.Statements.Expression.AddExprNode;
 import node.Statements.Expression.ExpressionNode;
 import node.Statements.Expression.FunctionCall.FuncCallNode;
 import node.Statements.Expression.FunctionCall.GetFuncNode;
+import node.Statements.Expression.FunctionCall.SetFuncNode;
 import node.Statements.Expression.IDNode;
 import node.Statements.Expression.LiteralValues.LiteralValueNode;
+import node.Statements.Expression.MultiExprNode;
 import node.VarDeclNode;
 import node.base.Node;
-import semantics.FieldSymbol;
-import semantics.FunctionSymbol;
-import semantics.Symbol;
-import semantics.SymbolTable;
+import semantics.*;
 
 import java.util.Optional;
 
@@ -46,7 +46,7 @@ public class TypeCheckerVisitor extends ASTBaseVisitor<Void>{
                     if (node.getArguments().get(i) instanceof FuncCallNode) {
                         super.visit(node);
                     }
-                    if (!funcSym.getParameters().get(i).getTypeID().equals(((ExpressionNode) node.getArguments().get(i)).getType())) {
+                    if(!isExprTypeCorrect((ExpressionNode)node.getArguments().get(i), funcSym.getParameters().get(i).getTypeID())){
                         throw new ArgumentWrongTypeException("Argument wrong type. Expected '" +
                                 funcSym.getParameters().get(i).getTypeID() +
                                 "' got: '" +
@@ -94,6 +94,19 @@ public class TypeCheckerVisitor extends ASTBaseVisitor<Void>{
      * @return true, if all parts have the same type
      */
     public boolean isExprTypeCorrect(Node expr, String expectedType){
+        // Check addexpr and multiexpr by checking their children
+        if(expr instanceof AddExprNode || expr instanceof MultiExprNode){
+            for(Node n : expr.getChildren()){
+                // Check the children. Not if funcCall node, since they are already checked in the visit(FunccallNode)
+                if(!(n instanceof FuncCallNode) && !isExprTypeCorrect(n, expectedType)){
+                    throw new ExpressionTypeException("Expression has different type than expected. Got: " +
+                            ((ExpressionNode) expr).getType() +
+                            " Expected: " +
+                            expectedType
+                            , expr.getLineNumber());
+                }
+            }
+        }
         // For literal value
         if(expr instanceof LiteralValueNode){
             if(!((LiteralValueNode) expr).getType().equals(expectedType)){
@@ -135,14 +148,6 @@ public class TypeCheckerVisitor extends ASTBaseVisitor<Void>{
             }
         }
 
-        // Do the same for all children
-        for (Node n: expr.getChildren()) {
-            // Don't visit a funcCallNodes children. It's returnType is already checked earlier.
-            if (!(expr instanceof FuncCallNode)) {
-                isExprTypeCorrect(n, expectedType);
-            }
-        }
-
         return true;
     }
 
@@ -178,5 +183,28 @@ public class TypeCheckerVisitor extends ASTBaseVisitor<Void>{
         return null;
     }
 
+    @Override
+    public Void visit(SetFuncNode node) {
+        // Find signal type
+        if(!isExprTypeCorrect(node.getExpr(), node.getType())){
+            throw new ExpressionTypeException("SetFuncNode: '" +
+                    node.getDeviceID() +
+                    " " +
+                    node.getSignalID() +
+                    " " +
+                    node.getExpr() +  "' was not type correct" );
+        }
 
+        return super.visit(node);
+    }
+
+    @Override
+    public Void visit(AddExprNode node) {
+        return super.visit(node);
+    }
+
+    @Override
+    public Void visit(MultiExprNode node) {
+        return super.visit(node);
+    }
 }

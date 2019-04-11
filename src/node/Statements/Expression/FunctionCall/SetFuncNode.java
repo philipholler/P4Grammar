@@ -9,11 +9,13 @@ import visitor.ASTBaseVisitor;
 public class SetFuncNode extends AbstractFuncCallNode {
     private String deviceID;
     private String signalID;
+    private ExpressionNode expr;
 
     public SetFuncNode(ParserRuleContext ctx, String deviceID, String signalID, ExpressionNode expr) {
         super(ctx, expr);
         this.deviceID = deviceID;
         this.signalID = signalID;
+        this.expr = expr;
     }
 
     @Override
@@ -47,5 +49,9 @@ public class SetFuncNode extends AbstractFuncCallNode {
 
     public String getSignalID() {
         return signalID;
+    }
+
+    public ExpressionNode getExpr() {
+        return expr;
     }
 }

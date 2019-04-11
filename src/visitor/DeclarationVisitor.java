@@ -136,12 +136,14 @@ public class DeclarationVisitor extends ASTBaseVisitor<Void> {
         return null;
     }
 
+    @SuppressWarnings("Duplicates")
     @Override
     public Void visit(GetFuncNode node) {
         Optional<Symbol> signal = st.getSymbol(node.getSignalID());
         Optional<Symbol> device = st.getSymbol(node.getDeviceID());
 
         // Check that both the device and signal are declared.
+        //noinspection Duplicates
         if(signal.isPresent() && device.isPresent() && signal.get() instanceof SignalTypeSymbol){
             SignalTypeSymbol signalSymb = (SignalTypeSymbol) signal.get();
 
@@ -157,22 +159,47 @@ public class DeclarationVisitor extends ASTBaseVisitor<Void> {
                     node.setType(signalSymb.getSignalLiterals().get(0).getTypeID());
                     break;
             }
+        } else {
+            throw new TypeUndefinedCompileError("Type with name: '" + node.getDeviceID() +
+                    "' or " + node.getSignalID() + " not defined"
+            , node.getLineNumber());
         }
 
         return super.visit(node);
     }
 
+    @SuppressWarnings("Duplicates")
     @Override
     public Void visit(SetFuncNode node) {
         Optional<Symbol> signal = st.getSymbol(node.getSignalID());
         Optional<Symbol> device = st.getSymbol(node.getDeviceID());
 
-        if(signal.isEmpty()){
-            throw new TypeUndefinedCompileError("Signal type '" + node.getSignalID() + "' not defined.", node.getLineNumber());
+        if(signal.isPresent() && signal.get() instanceof SignalTypeSymbol){
+            SignalTypeSymbol signalSymb = (SignalTypeSymbol) signal.get();
+
+            // Set the expression type of the node depending on the signal type.
+            switch (signalSymb.getTYPE()){
+                case INT_RANGE:
+                    node.setType("int");
+                    break;
+                case FLOAT_RANGE:
+                    node.setType("float");
+                    break;
+                case LITERALS:
+                    node.setType(signalSymb.getSignalLiterals().get(0).getTypeID());
+                    break;
+            }
+        }else {
+            throw new TypeUndefinedCompileError("Type with name: '" + node.getSignalID() + "' not defined", node.getLineNumber());
         }
+
+
         if(device.isEmpty()){
             throw new TypeUndefinedCompileError("Type '" + node.getDeviceID() + "' not defined", node.getLineNumber());
         }
+
+
+
         return super.visit(node);
     }
 }
