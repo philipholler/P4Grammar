@@ -31,4 +31,12 @@ public class GetFuncNode extends AbstractFuncCallNode{
     public <T> T accept(ASTBaseVisitor<? extends T> astBaseVisitor) {
     return astBaseVisitor.visit(this);
 }
+
+    public String getDeviceID() {
+        return deviceID;
+    }
+
+    public String getSignalID() {
+        return signalID;
+    }
 }

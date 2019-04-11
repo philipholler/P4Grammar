@@ -1,6 +1,7 @@
 package semantics;
 
 import exceptions.user_side.CompileErrorException;
+import exceptions.user_side.SignalLiteralWrongTypeException;
 import node.DeclsNode;
 import node.Statements.Expression.LiteralValues.FloatNode;
 import node.Statements.Expression.LiteralValues.IntegerNode;
@@ -21,7 +22,7 @@ public class SignalTypeSymbol extends Symbol{
      *
      *  Note : One SignalType can contain literals of multiple different types (floats, ints and strings)
      */
-    private enum SIGNAL_TYPE{
+    public enum SIGNAL_TYPE{
         INT_RANGE, FLOAT_RANGE, LITERALS;
     }
 
@@ -77,8 +78,19 @@ public class SignalTypeSymbol extends Symbol{
         } // For a signal type with enum values
          else {
              this.TYPE = SIGNAL_TYPE.LITERALS;
+             // Get the expected type of the first enum
+            String expectedType = declarationNode.getEnumNodes().get(0).getType();
             for (EnumNode node: declarationNode.getEnumNodes()) {
-                this.signalLiterals.add(new FieldSymbol(node));
+                if(node.getType().equals(expectedType)){
+                    this.signalLiterals.add(new FieldSymbol(node));
+                } else {
+                    throw new SignalLiteralWrongTypeException("Wrong type for signal literal. Expected: '" +
+                            expectedType +
+                            "' got: '" +
+                            node.getType() +
+                            "'",
+                            node.getLineNumber());
+                }
             }
         }
 
@@ -140,5 +152,13 @@ public class SignalTypeSymbol extends Symbol{
             if(literal.id.equals(id)) return Optional.of(literal);
 
         return Optional.empty();
+    }
+
+    public ArrayList<FieldSymbol> getSignalLiterals() {
+        return signalLiterals;
+    }
+
+    public SIGNAL_TYPE getTYPE() {
+        return TYPE;
     }
 }

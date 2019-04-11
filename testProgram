@@ -1,5 +1,5 @@
 // Define signals
-define Signal toggle: On = 1, Off = 0, on = "hej";
+define Signal toggle: On = 1, Off = 0;
 define Signal celsius:  1..60;
 define Signal open:  0.0..100.0;
 define Signal percentage: 0.0..100.0;
@@ -10,41 +10,50 @@ define Device Window input: open;
 // Define sensors
 define Device MovementSensor output: toggle & input: celsius;
 define Device Thermometer output: celsius;
+define Device LawnMower input: toggle;
 
 // Variable definitions of every device in the house
 Bulb frontDoorLight = "129.6.18.1:12565";
 Window bedRoomWindow = "129.67.198.65:12565";
 
+LawnMower GardenMower = "129.10.10:10210";
+
 MovementSensor frontDoorSensor = "Google.com";
 
-int a = 2;
+int a = 5;
 string aString = "Hej";
 int testInt = 5;
 float testFloat = 6.0;
 
 init(){
-    int jkl = 2;
+    int jkl = 2 + a + get GardenMower toggle + testFunctionInt("hej");
     jkl = 1;
     jkl = 2 + a + 2 + testInt;
     // Optional code for initialization
     // Automatically run when the program is run for the first time
+
+    // Arguments can now be nested returning functions.
+    string stringReturn = testFunction(testFunctionInt(testFunction(55)));
+}
+
+int testFunctionInt(string hej){
+    return 5;
 }
 
 // Events
 when frontDoorSensor toggle: on {
     if(now > 17:00 && now < 21:00){
-        set frontDoorLight toggle: on;
+        set frontDoorLight toggle: On;
     }
     wait 30 seconds;
 
-    while(get frontDoorSensor toggle == "on"){
+    while(get frontDoorSensor toggle == "On"){
         set frontDoorLight toggle: Off;
     }
-
 }
 
 when mainThermometer celsius: exceeds 22{
-    setBedroomWindowsOpen(50); // Calling function defined further down
+    setBedroomWindowsOpen(50.0); // Calling function defined further down
 }
 
 // Function
@@ -63,16 +72,8 @@ string testFunction(int percent){
 }
 
 // Function
-string setBedroomWindowsOpenExtra(int percent, float f, string s){
-    set bedRoomWindow open: 50;
-
-    setBedroomWindowsOpen(1, 2.0, "hej");
-    return;
-}
-
-// Function
-void setBedroomWindowsOpen(int percent){
-    set bedRoomWindow openWindow: percent;
+void setBedroomWindowsOpen(float percent){
+    set bedRoomWindow open: percent;
 }
 
 // Repeating event
@@ -93,7 +94,7 @@ every 2 hours{
 // // Turn on lawn mower every 2 weeks at 11:00 every summer.
 every 2 weeks starting 11:00 01d04m2019y{
     if(01d04m < now && now < 30d09m){
-        set GardenMower toggle: on;
+        set GardenMower toggle: On;
     }
 
     int b = 3;
@@ -107,7 +108,7 @@ every 2 weeks starting 11:00 01d04m2019y{
 }
 
 when mainThermometer celsius: exceeds 22{
-    setBedroomWindowsOpen(50); // Calling function defined further down
+    setBedroomWindowsOpen(50.0); // Calling function defined further down
 }
 
 // Events

@@ -39,6 +39,6 @@ public class VarDeclNode extends UnaryNode {
     }
 
     public <T> T accept(ASTBaseVisitor<? extends T> astBaseVisitor) {
-    return astBaseVisitor.visit(this);
-}
+        return astBaseVisitor.visit(this);
+    }
 }

@@ -1,11 +1,13 @@
 package node.Statements.Expression.FunctionCall;
 
+import node.Statements.Expression.ExpressionNode;
 import node.base.Node;
 import org.antlr.v4.runtime.ParserRuleContext;
 import utils.StringUtils;
 import visitor.ASTBaseVisitor;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 public class FuncCallNode extends AbstractFuncCallNode{
     private ArrayList<Node> arguments = new ArrayList<>();
@@ -39,4 +41,13 @@ public class FuncCallNode extends AbstractFuncCallNode{
     public <T> T accept(ASTBaseVisitor<? extends T> astBaseVisitor) {
     return astBaseVisitor.visit(this);
 }
+
+    public String getID() {
+        return ID;
+    }
+
+    public ArrayList<Node> getArguments() {
+        return arguments;
+    }
+
 }
