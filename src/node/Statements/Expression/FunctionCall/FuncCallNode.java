@@ -35,6 +35,7 @@ public class FuncCallNode extends AbstractFuncCallNode{
         return "FuncCallNode(" +
                 "ID='" + ID + '\'' +
                 ", arguments=" + arguments +
+                ", type=" + super.getType() +
                 ')';
     }
 

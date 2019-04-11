@@ -26,6 +26,7 @@ int testInt = 5;
 float testFloat = 6.0;
 
 init(){
+    int man = 2;
     int jkl = 2 + a + get GardenMower toggle + testFunctionInt("hej" + testFunction(5) + "i");
     jkl = 1;
     jkl = 2 + a + 2 + testInt;

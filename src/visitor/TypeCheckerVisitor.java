@@ -1,6 +1,7 @@
 package visitor;
 
 import exceptions.user_side.ArgumentWrongTypeException;
+import exceptions.user_side.DivideOrMultiStringExpection;
 import exceptions.user_side.ExpressionTypeException;
 import node.BlockNode;
 import node.Statements.AssignmentNode;
@@ -35,7 +36,6 @@ public class TypeCheckerVisitor extends ASTBaseVisitor<Void>{
         Optional<FunctionSymbol> sym = st.getFunctionSymbol(node.getID());
         if(sym.isPresent()) {
             FunctionSymbol funcSym = sym.get();
-            node.setType(funcSym.getReturnType());
 
             // Check that the correct number of variables are parsed
             if (funcSym.getParameters().size() == node.getArguments().size()) {
@@ -81,9 +81,6 @@ public class TypeCheckerVisitor extends ASTBaseVisitor<Void>{
             throw new ExpressionTypeException("Expression has more types in it or doesn't match variable type.", node.getLineNumber());
         }
 
-        // Set the type of the entire expr
-        node.getExpr().setType(node.getVarType());
-
         return super.visit(node);
     }
 
@@ -97,7 +94,8 @@ public class TypeCheckerVisitor extends ASTBaseVisitor<Void>{
         // Check addexpr and multiexpr by checking their children
         if(expr instanceof AddExprNode || expr instanceof MultiExprNode){
             for(Node n : expr.getChildren()){
-                // Check the children. Not if funcCall node, since they are already checked in the visit(FunccallNode)
+                // Check the children. Not if the child is a funcCall node, since they are already checked in the
+                // visit(FuncCallNode)
                 if(!(n instanceof FuncCallNode) && !isExprTypeCorrect(n, expectedType)){
                     throw new ExpressionTypeException("Expression has different type than expected. Got: " +
                             ((ExpressionNode) expr).getType() +
@@ -146,6 +144,12 @@ public class TypeCheckerVisitor extends ASTBaseVisitor<Void>{
                         expectedType
                         , expr.getLineNumber());
             }
+
+        }
+
+        // If the method gets to here without exception, the expression has the expected value
+        if(expr instanceof ExpressionNode){
+            ((ExpressionNode) expr).setType(expectedType);
         }
 
         return true;
@@ -199,12 +203,10 @@ public class TypeCheckerVisitor extends ASTBaseVisitor<Void>{
     }
 
     @Override
-    public Void visit(AddExprNode node) {
-        return super.visit(node);
-    }
-
-    @Override
     public Void visit(MultiExprNode node) {
+        if(node.getType().equals(SymbolTable.STRING_TYPE_ID)){
+            throw new DivideOrMultiStringExpection("Cannot divide or multiply strings", node.getLineNumber());
+        }
         return super.visit(node);
     }
 }

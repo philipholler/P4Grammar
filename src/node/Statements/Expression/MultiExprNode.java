@@ -7,10 +7,14 @@ import visitor.ASTBaseVisitor;
 
 public class MultiExprNode extends ExpressionNode {
     private Operator op;
+    private ExpressionNode leftChild;
+    private ExpressionNode rightChild;
 
     public MultiExprNode(ParserRuleContext ctx, ExpressionNode leftChild, ExpressionNode rightChild, Operator op) {
         super(ctx, leftChild, rightChild);
         this.op = op;
+        this.leftChild = leftChild;
+        this.rightChild = rightChild;
     }
 
     @Override
@@ -35,4 +39,12 @@ public class MultiExprNode extends ExpressionNode {
     public <T> T accept(ASTBaseVisitor<? extends T> astBaseVisitor) {
     return astBaseVisitor.visit(this);
 }
+
+    public ExpressionNode getLeftChild() {
+        return leftChild;
+    }
+
+    public ExpressionNode getRightChild() {
+        return rightChild;
+    }
 }

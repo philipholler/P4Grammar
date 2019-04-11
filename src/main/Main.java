@@ -3,13 +3,10 @@ package main;
 import antlr.PivotLexer;
 import antlr.PivotParser;
 import node.base.Node;
-import visitor.AstBuilderVisitor;
+import visitor.*;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.tree.ParseTree;
-import visitor.DeclarationVisitor;
-import visitor.FunctionVisitor;
-import visitor.TypeCheckerVisitor;
 
 import java.io.IOException;
 
@@ -43,20 +40,28 @@ public class Main {
             // Print ast. Use the Node.getTreeString() to pretty-print the AST.
             System.out.println(ast.getTreeString(0));
 
-            FunctionVisitor fv = new FunctionVisitor();
-            ast.accept(fv);
-
-            DeclarationVisitor dclVisitor = new DeclarationVisitor(fv.getSt());
-            ast.accept(dclVisitor);
-
-            TypeCheckerVisitor typeCheckVisitor = new TypeCheckerVisitor(dclVisitor.getSt());
-            ast.accept(typeCheckVisitor);
-
-            System.out.println(typeCheckVisitor.getSt());
+            // Dispatch all AST-visitors and print out the symbol table
+            dispatchASTVisitors(ast);
 
         } catch (IOException e) {
             e.printStackTrace();
         }
 
+    }
+
+    private static void dispatchASTVisitors(Node ast){
+        FunctionVisitor fv = new FunctionVisitor();
+        ast.accept(fv);
+
+        DeclarationVisitor dclVisitor = new DeclarationVisitor(fv.getSt());
+        ast.accept(dclVisitor);
+
+        TypeAssignmentVisitor typeAssignmentVisitor = new TypeAssignmentVisitor(dclVisitor.getSt());
+        ast.accept(typeAssignmentVisitor);
+
+        TypeCheckerVisitor typeCheckVisitor = new TypeCheckerVisitor(typeAssignmentVisitor.getSt());
+        ast.accept(typeCheckVisitor);
+
+        System.out.println(typeCheckVisitor.getSt());
     }
 }
