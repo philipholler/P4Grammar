@@ -1,10 +1,10 @@
 package exceptions.user_side;
 
-import main.Main;
+import compiler.Compiler;
 
 public class TypeUndefinedCompileError extends CompileErrorException {
     public TypeUndefinedCompileError(String typeID, int lineNumber) {
-        super("The type : " + typeID + " is not defined \n      at " + getLineReference(Main.SOURCE_FILE, lineNumber));
+        super("The type : " + typeID + " is not defined \n      at " + getLineReference(Compiler.SOURCE_FILE, lineNumber));
     }
 }
 

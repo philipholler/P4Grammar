@@ -1,4 +1,4 @@
-package main;
+package compiler;
 
 import antlr.PivotLexer;
 import antlr.PivotParser;
@@ -12,7 +12,7 @@ import java.io.IOException;
 
 import static org.antlr.v4.runtime.CharStreams.fromFileName;
 
-public class Main {
+public class Compiler {
 
     public static final String SOURCE_FILE = "testProgram";
     public static final boolean COMPILER_DEBUG_MODE = true;

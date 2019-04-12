@@ -1,12 +1,12 @@
 package exceptions.user_side;
 
 
-import main.Main;
+import compiler.Compiler;
 
 import java.io.PrintStream;
 import java.io.PrintWriter;
 
-import static main.Main.COMPILER_DEBUG_MODE;
+import static compiler.Compiler.COMPILER_DEBUG_MODE;
 
 public class CompileErrorException extends RuntimeException {
 
@@ -15,7 +15,7 @@ public class CompileErrorException extends RuntimeException {
 
     public CompileErrorException(String msg, int lineNumber) {
         super();
-        this.msg = msg + "\n" + "at " + getLineReference(Main.SOURCE_FILE, lineNumber);
+        this.msg = msg + "\n" + "at " + getLineReference(Compiler.SOURCE_FILE, lineNumber);
         this.lineNumber = lineNumber;
     }
 

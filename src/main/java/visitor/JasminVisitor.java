@@ -35,7 +35,7 @@ public class JasminVisitor extends ASTBaseVisitor {
         }
         return  ".class public PivotClass\n" +
                 ".super java/lang/Object\n"+
-                ".method public static main([Ljava/lang/String;)V \n" +
+                ".method public static compiler([Ljava/lang/String;)V \n" +
                 " .limit stack 100\n" +
                 " .limit locals 100\n" +
                 body + "\n"
