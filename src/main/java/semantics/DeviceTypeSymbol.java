@@ -1,6 +1,6 @@
 package semantics;
 
-import exceptions.user_side.NoSuchSignalCompileError;
+import exceptions.userside.NoSuchSignalCompileError;
 import node.base.Node;
 import node.define_nodes.Device.DefDeviceNode;
 import node.define_nodes.Device.InputNode;

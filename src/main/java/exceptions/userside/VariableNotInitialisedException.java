@@ -1,4 +1,4 @@
-package exceptions.user_side;
+package exceptions.userside;
 
 public class VariableNotInitialisedException extends CompileErrorException {
 

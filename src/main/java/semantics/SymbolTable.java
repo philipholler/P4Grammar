@@ -1,8 +1,7 @@
 package semantics;
 
-import exceptions.user_side.DuplicateIDCompileError;
-import exceptions.user_side.TypeUndefinedCompileError;
-import node.BlockNode;
+import exceptions.userside.DuplicateIDCompileError;
+import exceptions.userside.TypeUndefinedCompileError;
 import node.base.Node;
 import utils.StringUtils;
 

@@ -1,8 +1,8 @@
 package visitor;
 
-import exceptions.user_side.ArgumentWrongTypeException;
-import exceptions.user_side.DivideOrMultiStringExpection;
-import exceptions.user_side.ExpressionTypeException;
+import exceptions.userside.ArgumentWrongTypeException;
+import exceptions.userside.DivideOrMultiStringExpection;
+import exceptions.userside.ExpressionTypeException;
 import node.BlockNode;
 import node.Statements.AssignmentNode;
 import node.Statements.Expression.AddExprNode;

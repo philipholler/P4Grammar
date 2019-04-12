@@ -1,7 +1,7 @@
 package visitor;
 
-import exceptions.user_side.ExpressionTypeException;
-import exceptions.user_side.TypeUndefinedCompileError;
+import exceptions.userside.ExpressionTypeException;
+import exceptions.userside.TypeUndefinedCompileError;
 import node.BlockNode;
 import node.Statements.Expression.AddExprNode;
 import node.Statements.Expression.FunctionCall.FuncCallNode;
@@ -12,7 +12,6 @@ import node.Statements.Expression.LiteralValues.FloatNode;
 import node.Statements.Expression.LiteralValues.IntegerNode;
 import node.Statements.Expression.LiteralValues.StringNode;
 import node.Statements.Expression.MultiExprNode;
-import node.base.Node;
 import semantics.*;
 
 import java.util.Optional;

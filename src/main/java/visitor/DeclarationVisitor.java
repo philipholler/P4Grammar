@@ -1,30 +1,14 @@
 package visitor;
 
-import exceptions.user_side.*;
+import exceptions.userside.*;
 import node.BlockNode;
 import node.DevDeclNode;
-import node.Events.EventEveryNode;
-import node.Events.WhenNodes.EventInputNode;
-import node.Events.WhenNodes.EventRangeInputNode;
-import node.Events.WhenNodes.EventWhenTimeNode;
 import node.Function.FunctionNode;
-import node.Function.InputParamNode;
-import node.InitNode;
-import node.Statements.AssignmentNode;
-import node.Statements.Expression.AddExprNode;
-import node.Statements.Expression.ExpressionNode;
-import node.Statements.Expression.FunctionCall.FuncCallNode;
-import node.Statements.Expression.FunctionCall.GetFuncNode;
-import node.Statements.Expression.FunctionCall.SetFuncNode;
 import node.Statements.Expression.IDNode;
-import node.Statements.Expression.MultiExprNode;
 import node.Statements.IfStmtNode;
-import node.Statements.WhileNode;
 import node.VarDeclNode;
-import node.base.Node;
 import node.define_nodes.Device.DefDeviceNode;
 import node.define_nodes.Signal.DefSignalNode;
-import node.define_nodes.Signal.EnumNode;
 import semantics.*;
 
 import java.util.Optional;

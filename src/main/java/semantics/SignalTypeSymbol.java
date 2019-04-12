@@ -1,8 +1,7 @@
 package semantics;
 
-import exceptions.user_side.CompileErrorException;
-import exceptions.user_side.SignalLiteralWrongTypeException;
-import node.DeclsNode;
+import exceptions.userside.CompileErrorException;
+import exceptions.userside.SignalLiteralWrongTypeException;
 import node.Statements.Expression.LiteralValues.FloatNode;
 import node.Statements.Expression.LiteralValues.IntegerNode;
 import node.base.Node;

@@ -2,7 +2,7 @@ package visitor;
 
 import antlr.PivotBaseVisitor;
 import antlr.PivotParser;
-import exceptions.user_side.CompileErrorException;
+import exceptions.userside.CompileErrorException;
 import node.*;
 import node.Events.EventEveryNode;
 import node.Events.WhenNodes.EventInputNode;
