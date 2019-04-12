@@ -3,6 +3,7 @@ package visitor;
 import exceptions.user_side.ArgumentWrongTypeException;
 import exceptions.user_side.DivideOrMultiStringExpection;
 import exceptions.user_side.ExpressionTypeException;
+import exceptions.user_side.SignalLiteralNotDeclaredException;
 import node.BlockNode;
 import node.Statements.AssignmentNode;
 import node.Statements.Expression.AddExprNode;
@@ -18,6 +19,7 @@ import node.base.Node;
 import semantics.*;
 
 import java.util.Optional;
+
 
 public class TypeCheckerVisitor extends ASTBaseVisitor<Void>{
     SymbolTable st;
@@ -105,72 +107,20 @@ public class TypeCheckerVisitor extends ASTBaseVisitor<Void>{
                 }
             }
         }
-        // For literal value
-        if(expr instanceof LiteralValueNode){
-            if(!((LiteralValueNode) expr).getType().equals(expectedType)){
+
+        // If the ExpressionNode has one of the following types, it can simply check the type against the expected type
+        if(expr instanceof LiteralValueNode ||
+                expr instanceof FuncCallNode ||
+                expr instanceof GetFuncNode ||
+                expr instanceof SetFuncNode ||
+                expr instanceof IDNode
+        ){
+            if(!((ExpressionNode) expr).getType().equals(expectedType)){
                 throw new ExpressionTypeException("Expression has different type than expected. Got: " +
-                        ((LiteralValueNode) expr).getType() +
+                        ((ExpressionNode) expr).getType() +
                         " Expected: " +
                         expectedType
                         , expr.getLineNumber());
-            }
-        }
-        // Check the IDNode type
-        if(expr instanceof IDNode){
-            if(!isIDSameType(expr, expectedType)){
-                throw new ExpressionTypeException("Expression has different type than expected. Got: " +
-                        ((IDNode) expr).getType() +
-                        " Expected: " +
-                        expectedType
-                        , expr.getLineNumber());
-            }
-        }
-        // Check that the funcCall returns a value of the expected type
-        if(expr instanceof FuncCallNode){
-            if(!((FuncCallNode) expr).getType().equals(expectedType)){
-                throw new ExpressionTypeException("Expression has different type than expected. Got: " +
-                        ((FuncCallNode) expr).getType() +
-                        " Expected: " +
-                        expectedType
-                        , expr.getLineNumber());
-            }
-        }
-        // Check if the get function returns a value of the expected type
-        if(expr instanceof GetFuncNode){
-            if(!((GetFuncNode) expr).getType().equals(expectedType)){
-                throw new ExpressionTypeException("Expression has different type than expected. Got: " +
-                        ((GetFuncNode) expr).getType() +
-                        " Expected: " +
-                        expectedType
-                        , expr.getLineNumber());
-            }
-
-        }
-
-        // If the method gets to here without exception, the expression has the expected value
-        if(expr instanceof ExpressionNode){
-            ((ExpressionNode) expr).setType(expectedType);
-        }
-
-        return true;
-    }
-
-    /**
-     * Helper function for the isExprTypeCorrect
-     * Check if an ID node (i.e. a variable) is also of the same type as the expected type
-     */
-    private Boolean isIDSameType(Node IDNode, String expectedType) {
-        if(IDNode instanceof IDNode){
-            Optional<Symbol> optSymbol = st.getSymbol(((IDNode) IDNode).getID());
-            if (optSymbol.isPresent()) {
-                FieldSymbol symbol = (FieldSymbol) optSymbol.get();
-                if (!symbol.getTypeID().equals(expectedType)) {
-                    throw new ExpressionTypeException("Expression has different type than expected. Got: " +
-                            symbol.getTypeID() +
-                            " Expected: " +
-                            expectedType
-                            , IDNode.getLineNumber());
-                }
             }
         }
         return true;
@@ -189,14 +139,39 @@ public class TypeCheckerVisitor extends ASTBaseVisitor<Void>{
 
     @Override
     public Void visit(SetFuncNode node) {
-        // Find signal type
-        if(!isExprTypeCorrect(node.getExpr(), node.getType())){
-            throw new ExpressionTypeException("SetFuncNode: '" +
-                    node.getDeviceID() +
-                    " " +
-                    node.getSignalID() +
-                    " " +
-                    node.getExpr() +  "' was not type correct" );
+        // Check that the enum is actually contained in the signal definition
+        Optional<Symbol> symbol = st.getSymbol(node.getSignalID());
+        if(symbol.isPresent()){
+            SignalTypeSymbol signal = (SignalTypeSymbol) symbol.get();
+            // If the signal is an int range and got an expression of the type int.
+            if(signal.getTYPE() == SignalTypeSymbol.SIGNAL_TYPE.INT_RANGE &&
+                    !isExprTypeCorrect(node.getExpr(), SymbolTable.INT_TYPE_ID)){
+                throw new ExpressionTypeException("Expression does not match range type. Expected '" +
+                        SymbolTable.INT_TYPE_ID +
+                        "' got: '" +
+                        node.getType() +
+                        "'"
+                        );
+            }
+            // Check if the node has a float range and the expr also evaluates a float
+            if(signal.getTYPE() == SignalTypeSymbol.SIGNAL_TYPE.FLOAT_RANGE &&
+                    !isExprTypeCorrect(node.getExpr(), SymbolTable.FLOAT_TYPE_ID)){
+                throw new ExpressionTypeException("Expression does not match range type. Expected '" +
+                        SymbolTable.FLOAT_TYPE_ID +
+                        "' got: '" +
+                        node.getType() +
+                        "'"
+                );
+            }
+
+            // If the signal uses signal Literals, check that the value set is also an enum for the given signal
+            // Since signal literal will still be an expr, it will just be a leaf IDNode from which, we can get the value.
+            if(signal.getTYPE() == SignalTypeSymbol.SIGNAL_TYPE.LITERALS){
+                String signalLiteral = ((IDNode)node.getExpr()).getID();
+                if(!signal.containsSymbol(signalLiteral)) {
+                    throw new SignalLiteralNotDeclaredException("Signal literal '" + signalLiteral + "' not declared", node.getLineNumber());
+                }
+            }
         }
 
         return super.visit(node);

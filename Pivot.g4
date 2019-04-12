@@ -68,9 +68,9 @@ ifstmt: IF PARANBEG logical_expr PARANEND blck=block (ELSE elseblck=block)?;
 
 whilestmt: WHILE PARANBEG logical_expr PARANEND block;
 
-funcCall: id=ID PARANBEG arguments PARANEND                     #funCall
-        | SET deviceID=ID signalID=ID COL expr                  #setFun
-        | GET deviceID=ID signalID=ID                           #getFun
+funcCall: id=ID PARANBEG arguments PARANEND                                 #funCall
+        | SET deviceID=ID signalID=ID COL exprVal=expr                      #setFun
+        | GET deviceID=ID signalID=ID                                       #getFun
         ;
 
     arguments: expr? (LISTSEP expr)*;

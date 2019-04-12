@@ -15,7 +15,6 @@ import node.Statements.Expression.AddExprNode;
 import node.Statements.Expression.ExpressionNode;
 import node.Statements.Expression.FunctionCall.FuncCallNode;
 import node.Statements.Expression.FunctionCall.GetFuncNode;
-import node.Statements.Expression.FunctionCall.SetFuncNode;
 import node.Statements.Expression.IDNode;
 import node.Statements.Expression.MultiExprNode;
 import node.Statements.IfStmtNode;
@@ -57,8 +56,6 @@ public class DeclarationVisitor extends ASTBaseVisitor<Void> {
         super.visit(node);
         return null;
     }
-
-
 
     @Override
     public Void visit(FunctionNode node) {

@@ -41,7 +41,7 @@ public class Main {
             System.out.println(ast.getTreeString(0));
 
             // Dispatch all AST-visitors and print out the symbol table
-            dispatchASTVisitors(ast);
+            decorateAndPrintAST(ast);
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -49,7 +49,7 @@ public class Main {
 
     }
 
-    private static void dispatchASTVisitors(Node ast){
+    private static void decorateAndPrintAST(Node ast){
         FunctionVisitor fv = new FunctionVisitor();
         ast.accept(fv);
 

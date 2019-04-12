@@ -1,6 +1,7 @@
 package semantics;
 
 import exceptions.user_side.CompileErrorException;
+import exceptions.user_side.SignalLiteralDuplicateException;
 import exceptions.user_side.SignalLiteralWrongTypeException;
 import node.DeclsNode;
 import node.Statements.Expression.LiteralValues.FloatNode;
@@ -81,8 +82,15 @@ public class SignalTypeSymbol extends Symbol{
              // Get the expected type of the first enum
             String expectedType = declarationNode.getEnumNodes().get(0).getType();
             for (EnumNode node: declarationNode.getEnumNodes()) {
+                // Check that the node has the expected type.
                 if(node.getType().equals(expectedType)){
-                    this.signalLiterals.add(new FieldSymbol(node));
+                    // Check that the node is not already defined
+                    if(!containsSymbol(node.getID())){
+                        this.signalLiterals.add(new FieldSymbol(node));
+                    } else {
+                        throw new SignalLiteralDuplicateException("Signal '" + node.getID() + "' already defined.", node.getLineNumber());
+                    }
+
                 } else {
                     throw new SignalLiteralWrongTypeException("Wrong type for signal literal. Expected: '" +
                             expectedType +
@@ -160,5 +168,15 @@ public class SignalTypeSymbol extends Symbol{
 
     public SIGNAL_TYPE getTYPE() {
         return TYPE;
+    }
+
+    public boolean containsSymbol(String symbolID){
+        for (FieldSymbol symbol: getSignalLiterals()) {
+            if(symbol.getID().equals(symbolID)){
+                return true;
+            }
+        }
+
+        return false;
     }
 }

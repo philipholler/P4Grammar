@@ -2130,14 +2130,15 @@ public class PivotParser extends Parser {
 	public static class SetFunContext extends FuncCallContext {
 		public Token deviceID;
 		public Token signalID;
+		public ExprContext exprVal;
 		public TerminalNode SET() { return getToken(PivotParser.SET, 0); }
 		public TerminalNode COL() { return getToken(PivotParser.COL, 0); }
-		public ExprContext expr() {
-			return getRuleContext(ExprContext.class,0);
-		}
 		public List<TerminalNode> ID() { return getTokens(PivotParser.ID); }
 		public TerminalNode ID(int i) {
 			return getToken(PivotParser.ID, i);
+		}
+		public ExprContext expr() {
+			return getRuleContext(ExprContext.class,0);
 		}
 		public SetFunContext(FuncCallContext ctx) { copyFrom(ctx); }
 		@Override
@@ -2181,7 +2182,7 @@ public class PivotParser extends Parser {
 				setState(320);
 				match(COL);
 				setState(321);
-				expr(0);
+				((SetFunContext)_localctx).exprVal = expr(0);
 				}
 				break;
 			case GET:

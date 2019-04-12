@@ -617,7 +617,7 @@ public class AstBuilderVisitor extends PivotBaseVisitor<Node> {
     @Override
     public Node visitSetFun(PivotParser.SetFunContext ctx) {
         updateLineNumber(ctx);
-        return new SetFuncNode(ctx, ctx.deviceID.getText(), ctx.signalID.getText(), (ExpressionNode) visit(ctx.expr()));
+        return new SetFuncNode(ctx, ctx.deviceID.getText(), ctx.signalID.getText(), (ExpressionNode) visit(ctx.exprVal));
     }
 
     @Override

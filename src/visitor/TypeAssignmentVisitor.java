@@ -2,6 +2,7 @@ package visitor;
 
 import exceptions.user_side.ExpressionTypeException;
 import exceptions.user_side.TypeUndefinedCompileError;
+import exceptions.user_side.VariableNotInitialisedException;
 import node.BlockNode;
 import node.Statements.Expression.AddExprNode;
 import node.Statements.Expression.FunctionCall.FuncCallNode;
@@ -60,9 +61,11 @@ public class TypeAssignmentVisitor extends ASTBaseVisitor<String> {
             switch (signalSymb.getTYPE()){
                 case INT_RANGE:
                     node.setType(SymbolTable.INT_TYPE_ID);
+                    visit(node.getExpr());
                     break;
                 case FLOAT_RANGE:
                     node.setType(SymbolTable.FLOAT_TYPE_ID);
+                    visit(node.getExpr());
                     break;
                 case LITERALS:
                     node.setType(signalSymb.getSignalLiterals().get(0).getTypeID());
@@ -71,6 +74,7 @@ public class TypeAssignmentVisitor extends ASTBaseVisitor<String> {
                     throw new TypeUndefinedCompileError("Could not identify type", node.getLineNumber());
             }
         }
+
         return node.getType();
     }
 
@@ -156,6 +160,8 @@ public class TypeAssignmentVisitor extends ASTBaseVisitor<String> {
         Optional<Symbol> varSymbol = st.getSymbol(node.getID());
         if(varSymbol.isPresent() && varSymbol.get() instanceof FieldSymbol){
             node.setType(((FieldSymbol) varSymbol.get()).getTypeID());
+        } else {
+            throw new VariableNotInitialisedException("Variable '" + node.getID() + "' not initialised.", node.getLineNumber());
         }
 
         return node.getType();
@@ -171,4 +177,6 @@ public class TypeAssignmentVisitor extends ASTBaseVisitor<String> {
 
         return null;
     }
+
+
 }

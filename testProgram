@@ -1,5 +1,5 @@
 // Define signals
-define Signal toggle: On = 1, Off = 0;
+define Signal toggle: On = 1, Off = 0, yo = 3;
 define Signal celsius:  1..60;
 define Signal open:  0.0..100.0;
 define Signal percentage: 0.0..100.0;
@@ -60,7 +60,8 @@ when mainThermometer celsius: exceeds 22{
 // Function
 string testFunction(int percent){
     string test = " ";
-    set bedRoomWindow open: 15.0;
+    float procent = 15.0;
+    set bedRoomWindow open: procent;
     while(true){
         return;
     }
@@ -95,7 +96,7 @@ every 2 hours{
 // // Turn on lawn mower every 2 weeks at 11:00 every summer.
 every 2 weeks starting 11:00 01d04m2019y{
     if(01d04m < now && now < 30d09m){
-        set GardenMower toggle: On;
+        set GardenMower toggle: yo;
     }
 
     int b = 3;
