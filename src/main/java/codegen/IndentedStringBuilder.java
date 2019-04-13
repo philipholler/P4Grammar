@@ -1,5 +1,8 @@
 package codegen;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 public class IndentedStringBuilder {
 
     private int indentation = 0; // Amount of 'tabs' to displace lines by
@@ -50,6 +53,19 @@ public class IndentedStringBuilder {
     private void indentCurrentLine(){
         stringBuilder.append(getIndentedString());
         freshLine = false;
+    }
+
+    public int getLineCount(){
+        Matcher m = Pattern.compile("\r\n|\r|\n").matcher(stringBuilder.toString());
+        int lines = 1;
+        while (m.find()) {
+            lines ++;
+        }
+        return lines;
+    }
+
+    public boolean isEmpty(){
+        return stringBuilder.toString().isEmpty();
     }
 
 
