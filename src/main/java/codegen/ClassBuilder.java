@@ -16,6 +16,8 @@ public class ClassBuilder {
 
     private static final String START_BRACKET = "{", END_BRACKET = "}";
     private static final String TAB = "    ";
+    private static final String COMMA = ",";
+
 
     public enum BlockType{
         CLASS, METHOD, WHILE, IF, ELSE, FOR;
@@ -38,10 +40,11 @@ public class ClassBuilder {
         superClass.ifPresent(s -> codeBuilder.append("extends " + s).append(" "));
 
         openBlock(BlockType.CLASS);
+        codeBuilder.newLine();
         return this;
     }
 
-    public void openBlock(BlockType blockType){
+    private void openBlock(BlockType blockType){
         blocks.push(blockType);
         codeBuilder.append(START_BRACKET).newLine();
         codeBuilder.incrementIndentation();
@@ -60,8 +63,27 @@ public class ClassBuilder {
         codeBuilder.append(END_BRACKET).newLine();
     }
 
-    public void addMethod(String methodName, FieldSymbol...inputs){
+    public ClassBuilder addMethod(String methodName, JavaType returnType, JavaInputParameter...inputs){
+        codeBuilder.append("public ").append(returnType.keyword).append(" ").append(methodName);
 
+        codeBuilder.append(" (");
+        appendFormalParameters(inputs);
+        codeBuilder.append(") ");
+
+        openBlock(BlockType.METHOD);
+        return this;
+    }
+
+    private void appendFormalParameters(JavaInputParameter[] inputs) {
+        // Add parameters to method definition
+        for(int i = 0; i < inputs.length; i++){
+            JavaInputParameter p = inputs[i];
+            codeBuilder.append(p.TYPE.keyword).append(" ").append(p.identifier);
+
+            // Add comma separator after every parameter, except for the last one
+            if(i != inputs.length - 1)
+                codeBuilder.append(COMMA).append(" ");
+        }
     }
 
     public String getClassCode(){

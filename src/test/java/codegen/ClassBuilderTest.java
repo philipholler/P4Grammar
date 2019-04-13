@@ -14,8 +14,17 @@ class ClassBuilderTest {
 
     @Test
     void addClassDefinition() {
-        classBuilder.addClassDefinition("Child");
+        classBuilder.addClassDefinition("MyClass", "SuperClassSample");
+
+        classBuilder.addMethod("setValues", JavaType.VOID,
+                new JavaInputParameter(JavaType.INT, "value1"),
+                new JavaInputParameter(JavaType.INT, "value2"));
+        classBuilder.closeBlock(ClassBuilder.BlockType.METHOD);
+
+
         classBuilder.closeBlock(ClassBuilder.BlockType.CLASS);
+
+
 
         System.out.println(classBuilder.getClassCode());
     }
