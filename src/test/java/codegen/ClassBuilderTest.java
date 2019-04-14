@@ -14,7 +14,7 @@ class ClassBuilderTest {
 
     @Test
     void addClassDefinition() { // todo not an actual test
-        classBuilder.addClassDefinition("MyClass", "SuperClassSample");
+        classBuilder.appendClassDef("MyClass", "SuperClassSample");
 
         classBuilder.appendMethod("setValues", JavaType.VOID.keyword,
                 new JavaInputParameter(JavaType.INT.keyword, "value1"),

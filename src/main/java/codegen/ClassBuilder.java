@@ -2,9 +2,7 @@ package codegen;
 
 import exceptions.compilerside.CodeGenerationError;
 import exceptions.compilerside.MismatchedBracketException;
-import semantics.FieldSymbol;
 
-import java.util.Optional;
 import java.util.Stack;
 
 public class ClassBuilder {
@@ -48,21 +46,21 @@ public class ClassBuilder {
     }
 
     /** Adds a standard public class definition to the builder */
-    public ClassBuilder addClassDefinition(final String className){
+    public ClassBuilder appendClassDef(final String className){
         this.className = className;
-        return addClassDefinition(className, Optional.empty());
+        return appendClassDef(className, "", "");
     }
 
     /**
      * Adds a public class extending a given super class to the builder
      * @param superClass The name of the class that this class should extend
      */
-    public ClassBuilder addClassDefinition(String className, String superClass){
+    public ClassBuilder appendClassDef(String className, String superClass){
         this.className = className;
-        return addClassDefinition(className, Optional.of(superClass));
+        return appendClassDef(className, superClass, "");
     }
 
-    private ClassBuilder addClassDefinition(String className, Optional<String> superClass){
+    public ClassBuilder appendClassDef(String className, String superClass, String genericType){
         if(hasClassDefinition)
             throw new CodeGenerationError("Only one class definition is allowed per class generator. " +
                     "New class definitions should go in a separate file.");
@@ -70,7 +68,11 @@ public class ClassBuilder {
         codeBuilder.append("public class ").append(className).append(" ");
 
         // Add extends superclass to class definition if a superclass is given
-        superClass.ifPresent(s -> codeBuilder.append("extends " + s).append(" "));
+        if(!superClass.isEmpty())
+            codeBuilder.append("extends " + superClass).append(" ");
+
+        if(!genericType.isEmpty())
+            codeBuilder.append(" <" + genericType + "> ");
 
         openBlock(BlockType.CLASS);
         codeBuilder.newLine();

@@ -11,7 +11,7 @@ public class JavaFileWriter { // todo very very temporary implementation
 
     public static void main(String[] args) {
         ClassBuilder classBuilder = new ClassBuilder("device");
-        classBuilder.addClassDefinition("TestClass", "SuperClassSample");
+        classBuilder.appendClassDef("TestClass", "SuperClassSample");
 
         classBuilder.appendMethod("setValues", JavaType.VOID.keyword,
                 new JavaInputParameter(JavaType.INT.keyword, "value1"),
@@ -24,7 +24,6 @@ public class JavaFileWriter { // todo very very temporary implementation
         classBuilder.appendMethodCall("setValues", "a", "b");
 
         classBuilder.closeBlock(ClassBuilder.BlockType.METHOD);
-
 
         classBuilder.closeBlock(ClassBuilder.BlockType.CLASS);
         writeClass(classBuilder);

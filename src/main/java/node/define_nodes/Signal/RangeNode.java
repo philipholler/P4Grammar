@@ -25,6 +25,16 @@ public class RangeNode extends BinaryNode {
                 ')';
     }
 
+
+    public Node getLowerBoundNode() {
+        return super.getLeftChild();
+    }
+
+
+    public Node getUpperBoundNode() {
+        return super.getRightChild();
+    }
+
     public <T> T accept(ASTBaseVisitor<? extends T> astBaseVisitor) {
     return astBaseVisitor.visit(this);
 }

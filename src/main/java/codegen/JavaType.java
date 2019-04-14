@@ -1,11 +1,16 @@
 package codegen;
 
 public enum JavaType {
-    INT("int"), DOUBLE("double"), STRING("String"), FLOAT("float"), VOID("void");
+    INT("int", "Integer"), DOUBLE("double", "Double"),
+    STRING("String", "String"), FLOAT("float", "Float"),
+    VOID("void", "Void");
 
     public final String keyword;
-    JavaType(String s){
-        keyword = s;
+    public final String objectType;
+    JavaType(String keyword, String objectType){
+        this.keyword = keyword;
+        this.objectType = objectType;
     }
+
 
 }
