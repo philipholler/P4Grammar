@@ -118,7 +118,16 @@ public class ClassBuilder {
         }
     }
 
+    // Asserts that a statement is not placed outside a method body
+    private void checkStatementPlacement(){
+        if(blocks.empty() || blocks.peek() == BlockType.CLASS)
+            throw new CodeGenerationError("Statements cannot be placed outside a method body");
+    }
 
+    /**
+     * Adds a method call. Must be inside a method body.
+     * @param inputParams text to write as input parameters, can be literal values as well as variable IDs
+     */
     public ClassBuilder appendMethodCall(String methodName, String...inputParams){
         checkStatementPlacement();
 
@@ -127,13 +136,6 @@ public class ClassBuilder {
         codeBuilder.append(END_PARAN).append(LINE_END).newLine();
 
         return this;
-    }
-
-
-    // Asserts that a statement is not placed outside a method body
-    private void checkStatementPlacement(){
-        if(blocks.empty() || blocks.peek() == BlockType.CLASS)
-            throw new CodeGenerationError("Statements cannot be placed outside a method body");
     }
 
     // Appends comma-separated actual parameters with the form : "type paramID1, type paramID2"
@@ -150,6 +152,33 @@ public class ClassBuilder {
         }
     }
 
+
+    public ClassBuilder appendVarDecl(JavaType type, String id){
+        appendVarDecl(type, id, "");
+        return this;
+    }
+
+    public ClassBuilder appendVarDecl(JavaType type, String id, String value){
+        codeBuilder.append(type.keyword).append(" ").append(id);
+
+        if(!value.isEmpty())
+            codeBuilder.append(" = ").append(value);
+
+        codeBuilder.append(LINE_END).newLine();
+        return this;
+    }
+
+
+    public ClassBuilder appendAssignment(String varID, String value){
+        codeBuilder.append(varID).append(" = ").append(value).append(LINE_END).newLine();
+        return this;
+    }
+
+
+    public String getClassName() {
+        return className;
+    }
+
     /**
      * Requires all brackets within the class to be closed before returning the generated code.
      * @return a string containing all code generated in this class generator
@@ -159,8 +188,12 @@ public class ClassBuilder {
             throw new MismatchedBracketException("Not all brackets has been closed. Last opened bracket : "
                     + blocks.peek().name());
 
+        if(!hasClassDefinition)
+            throw new CodeGenerationError("Generated class code does not contain a class definition");
+
         return codeBuilder.toString();
     }
+
 
 
 
