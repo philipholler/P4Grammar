@@ -7,6 +7,7 @@ import visitor.*;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.tree.ParseTree;
+import visitor.codegen.ClassGenerationVisitor;
 
 import java.io.IOException;
 
@@ -42,6 +43,10 @@ public class Compiler {
 
             // Dispatch all AST-visitors and print out the symbol table
             dispatchASTVisitors(ast);
+
+            // Generate java classes corresponding to the (device and signal) type definitions
+            ClassGenerationVisitor classGenVisitor = new ClassGenerationVisitor();
+            classGenVisitor.visit(ast);
 
         } catch (IOException e) {
             e.printStackTrace();

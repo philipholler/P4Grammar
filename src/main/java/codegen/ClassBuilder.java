@@ -3,6 +3,7 @@ package codegen;
 import exceptions.compilerside.CodeGenerationError;
 import exceptions.compilerside.MismatchedBracketException;
 
+import java.lang.reflect.Method;
 import java.util.Stack;
 
 public class ClassBuilder {
@@ -103,7 +104,7 @@ public class ClassBuilder {
 
         codeBuilder.newLine();
         codeBuilder.decremmentIndentation();
-        codeBuilder.append(END_BRACKET).newLine();
+        codeBuilder.append(END_BRACKET).newLine().newLine();
     }
 
     /**
@@ -127,6 +128,8 @@ public class ClassBuilder {
         codeBuilder.append("public ").append(type).append(" ").append("get").append(varName);
         codeBuilder.append(START_PARAN).append(END_PARAN);
         openBlock(BlockType.METHOD);
+        appendReturnStatement(varName);
+        closeBlock(BlockType.METHOD);
         return this;
     }
 
@@ -142,6 +145,11 @@ public class ClassBuilder {
             if(i != inputs.length - 1)
                 codeBuilder.append(COMMA).append(" ");
         }
+    }
+
+    public ClassBuilder appendReturnStatement(String val){
+        codeBuilder.append("return ").append(val).append(LINE_END);
+        return this;
     }
 
     // Asserts that a statement is not placed outside a method body
@@ -208,6 +216,11 @@ public class ClassBuilder {
 
     public ClassBuilder appendAssignment(String varID, String value){
         codeBuilder.append(varID).append(" = ").append(value).append(LINE_END).newLine();
+        return this;
+    }
+
+    public ClassBuilder appendNewLine(){
+        codeBuilder.newLine();
         return this;
     }
 

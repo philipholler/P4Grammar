@@ -66,7 +66,7 @@ public class ClassGenerationVisitor extends ASTBaseVisitor<ClassBuilder> {
 
         appendRangeConstants(classBuilder, rangeType, upperBound, lowerBound);
         // The default value variable of the range is set to the lower bound
-        classBuilder.appendPrimitiveDecl(rangeType, CURRENT_VALUE_ID, lowerBound);
+        classBuilder.appendPrimitiveDecl(rangeType, CURRENT_VALUE_ID, lowerBound).appendNewLine();
 
         addRangeGetters(classBuilder, rangeType);
         addCurrentValGetter(classBuilder, rangeType);
@@ -77,7 +77,7 @@ public class ClassGenerationVisitor extends ASTBaseVisitor<ClassBuilder> {
     }
 
     private void addCurrentValGetter(ClassBuilder classBuilder, JavaType rangeType) {
-        classBuilder.appendGetMethod(rangeType.objectType, CURRENT_VALUE_ID);
+        classBuilder.appendGetMethod(rangeType.objectType, CURRENT_VALUE_ID).appendNewLine();
     }
 
     private void addRangeGetters(ClassBuilder classBuilder, JavaType rangeType) {
@@ -87,7 +87,7 @@ public class ClassGenerationVisitor extends ASTBaseVisitor<ClassBuilder> {
 
     private void appendRangeConstants(ClassBuilder classBuilder, JavaType type, String lowerBound, String upperBound){
         classBuilder.appendPrimitiveDecl(type, RANGE_LOWER_BOUND_ID, lowerBound);
-        classBuilder.appendPrimitiveDecl(type, RANGE_UPPER_BOUND_ID, upperBound);
+        classBuilder.appendPrimitiveDecl(type, RANGE_UPPER_BOUND_ID, upperBound).appendNewLine();
     }
 
 
