@@ -9,7 +9,7 @@ class ClassBuilderTest {
 
     @BeforeEach
     void setUp() {
-        classBuilder = new ClassBuilder();
+        classBuilder = new ClassBuilder("standard");
     }
 
     @Test

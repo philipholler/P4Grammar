@@ -12,6 +12,7 @@ public class ClassBuilder {
     private IndentedStringBuilder codeBuilder = new IndentedStringBuilder();
 
     private String className = "";
+    private String packageName = "";
 
     private Stack<BlockType> blocks = new Stack<BlockType>();
 
@@ -25,10 +26,19 @@ public class ClassBuilder {
 
     private boolean hasClassDefinition = false;
 
+    public String getPackage() {
+        return packageName;
+    }
+
     public enum BlockType{
         CLASS, METHOD, WHILE, IF, ELSE, FOR;
     }
 
+
+    public ClassBuilder(String packageString) {
+        codeBuilder.append("package ").append(packageString);
+        this.packageName = packageString;
+    }
 
     /** Adds a standard public class definition to the builder */
     public ClassBuilder addClassDefinition(final String className){

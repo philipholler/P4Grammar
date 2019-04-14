@@ -4,13 +4,13 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 
-public class JavaFileWriter {
+public class JavaFileWriter { // todo very very temporary implementation
 
     private static final String outDir = System.getProperty("user.dir") +
             File.separator + "compiled_code" + File.separator;
 
     public static void main(String[] args) {
-        ClassBuilder classBuilder = new ClassBuilder();
+        ClassBuilder classBuilder = new ClassBuilder("standard");
         classBuilder.addClassDefinition("TestClass", "SuperClassSample");
 
         classBuilder.appendMethod("setValues", JavaType.VOID,
@@ -32,7 +32,11 @@ public class JavaFileWriter {
 
 
     public static void writeClass(ClassBuilder classBuilder){
-        try (PrintWriter printWriter = new PrintWriter(outDir + classBuilder.getClassName() + ".java")){
+        String packagePath = outDir + classBuilder.getPackage() + File.separator;
+        new File(packagePath).mkdirs();
+
+        try (PrintWriter printWriter = new PrintWriter(packagePath +
+                classBuilder.getClassName() + ".java")){
             printWriter.print(classBuilder.getClassCode());
         } catch (FileNotFoundException e) {
             // todo exception handling. Lol.
