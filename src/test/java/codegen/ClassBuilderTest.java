@@ -16,7 +16,7 @@ class ClassBuilderTest {
     void addClassDefinition() {
         classBuilder.addClassDefinition("MyClass", "SuperClassSample");
 
-        classBuilder.addMethod("setValues", JavaType.VOID,
+        classBuilder.appendMethod("setValues", JavaType.VOID,
                 new JavaInputParameter(JavaType.INT, "value1"),
                 new JavaInputParameter(JavaType.INT, "value2"));
         classBuilder.closeBlock(ClassBuilder.BlockType.METHOD);
