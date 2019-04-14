@@ -6,6 +6,7 @@ import visitor.ASTBaseVisitor;
 
 
 public class DevDeclNode extends LeafNode {
+
     String type;
     String ID;
     String val;

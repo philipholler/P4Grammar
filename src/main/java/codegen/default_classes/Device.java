@@ -18,14 +18,6 @@ public abstract class Device {
         this.networkID = networkID;
     }
 
-    protected void addInputSignal(Signal signal){
-        inputSignals.add(signal);
-    }
-
-    protected void addOutputSignal(Signal signal){
-        inputSignals.add(signal);
-    }
-
     public String getNetworkID(){
         return networkID;
     }

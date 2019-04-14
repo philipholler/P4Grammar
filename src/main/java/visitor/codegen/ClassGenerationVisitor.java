@@ -1,6 +1,7 @@
 package visitor.codegen;
 
-import codegen.ClassBuilder;
+import codegen.CodeBuilder;
+import codegen.JavaFileWriter;
 import codegen.JavaType;
 import exceptions.compilerside.CodeGenerationError;
 import node.DeclsNode;
@@ -8,6 +9,7 @@ import node.Statements.Expression.LiteralValues.FloatNode;
 import node.Statements.Expression.LiteralValues.IntegerNode;
 import node.Statements.Expression.LiteralValues.StringNode;
 import node.base.Node;
+import node.define_nodes.Device.DefDeviceNode;
 import node.define_nodes.Signal.DefSignalNode;
 import node.define_nodes.Signal.EnumNode;
 import node.define_nodes.Signal.RangeNode;
@@ -21,34 +23,40 @@ import java.util.ArrayList;
 /**
  * Generates classes representing custom type definitions of devices and signals
  */
-public class ClassGenerationVisitor extends ASTBaseVisitor<ClassBuilder> {
+public class ClassGenerationVisitor extends ASTBaseVisitor<CodeBuilder> {
 
     public static final String RANGE_UPPER_BOUND_ID = "UPPER_BOUND";
     public static final String RANGE_LOWER_BOUND_ID = "LOWER_BOUND";
     public static final String CURRENT_VALUE_ID = "currentValue";
 
-    ArrayList<ClassBuilder> classes = new ArrayList<>();
+    public static final String INPUT_SIGNAL_PREFIX = "input";
+    public static final String OUTPUT_SIGNAL_PREFIX = "output";
 
+
+    ArrayList<CodeBuilder> classes = new ArrayList<>();
+
+    /** Generates classes for signal declarations */
     @Override
-    public ClassBuilder visit(DeclsNode node) {
+    public CodeBuilder visit(DeclsNode node) {
         for (Node n : node.getChildren()) {
-            ClassBuilder classBuilder = visit(n);
-            if (classBuilder != null)
-                System.out.println(classBuilder.getClassCode());
+            CodeBuilder codeBuilder = visit(n);
+            if (codeBuilder != null)
+                JavaFileWriter.writeClass(codeBuilder);
         }
 
         return null;
     }
 
     @Override
-    public ClassBuilder visit(DefSignalNode signalNode) {
+    public CodeBuilder visit(DefSignalNode signalNode) {
+        // Todo : import statements
         if (signalNode.getSignalType() == SignalType.LITERALS)
             return generateLiteralSignal(signalNode);
         else
             return generateRangeSignal(signalNode);
     }
 
-    private ClassBuilder generateRangeSignal(DefSignalNode signalNode) {
+    private CodeBuilder generateRangeSignal(DefSignalNode signalNode) {
         JavaType rangeType;
         RangeNode rangeNode = signalNode.getRangeNode();
         String lowerBound, upperBound;
@@ -63,45 +71,48 @@ public class ClassGenerationVisitor extends ASTBaseVisitor<ClassBuilder> {
             upperBound = String.valueOf(((FloatNode) rangeNode.getUpperBoundNode()).getVal());
         }
 
-        ClassBuilder classBuilder = new ClassBuilder(ClassBuilder.SIGNAL_PACKAGE);
-        classBuilder.appendClassDef(signalNode.getID(), ClassBuilder.RANGE_SIGNAL_CLASS, rangeType.objectType);
+        CodeBuilder codeBuilder = new CodeBuilder();
+        codeBuilder.appendPackage(CodeBuilder.SIGNAL_PACKAGE);
+        codeBuilder.appendClassDef(signalNode.getID(), CodeBuilder.RANGE_SIGNAL_CLASS, rangeType.objectType);
 
-        appendRangeConstants(classBuilder, rangeType, upperBound, lowerBound);
+        appendRangeConstants(codeBuilder, rangeType, upperBound, lowerBound);
         // The default value variable of the range is set to the lower bound
-        classBuilder.appendPrimitiveDecl(rangeType, CURRENT_VALUE_ID, lowerBound).appendNewLine();
+        codeBuilder.appendPrimitiveDecl(rangeType, CURRENT_VALUE_ID, lowerBound).appendNewLine();
 
-        addRangeGetters(classBuilder, rangeType);
-        addCurrentValGetter(classBuilder, rangeType);
+        addRangeGetters(codeBuilder, rangeType);
+        addCurrentValGetter(codeBuilder, rangeType);
 
-        classBuilder.closeBlock(ClassBuilder.BlockType.CLASS);
+        codeBuilder.closeBlock(CodeBuilder.BlockType.CLASS);
 
-        return classBuilder;
+        return codeBuilder;
     }
 
-    private void addCurrentValGetter(ClassBuilder classBuilder, JavaType rangeType) {
-        classBuilder.appendGetMethod(rangeType.objectType, CURRENT_VALUE_ID).appendNewLine();
+    private void addCurrentValGetter(CodeBuilder codeBuilder, JavaType rangeType) {
+        codeBuilder.appendGetMethod(rangeType.objectType, CURRENT_VALUE_ID).appendNewLine();
     }
 
-    private void addRangeGetters(ClassBuilder classBuilder, JavaType rangeType) {
-        classBuilder.appendGetMethod(rangeType.objectType, RANGE_UPPER_BOUND_ID);
-        classBuilder.appendGetMethod(rangeType.objectType, RANGE_LOWER_BOUND_ID);
+    private void addRangeGetters(CodeBuilder codeBuilder, JavaType rangeType) {
+        codeBuilder.appendGetMethod(rangeType.objectType, RANGE_UPPER_BOUND_ID);
+        codeBuilder.appendGetMethod(rangeType.objectType, RANGE_LOWER_BOUND_ID);
     }
 
-    private void appendRangeConstants(ClassBuilder classBuilder, JavaType type, String lowerBound, String upperBound) {
-        classBuilder.appendPrimitiveDecl(type, RANGE_LOWER_BOUND_ID, lowerBound);
-        classBuilder.appendPrimitiveDecl(type, RANGE_UPPER_BOUND_ID, upperBound).appendNewLine();
+    private void appendRangeConstants(CodeBuilder codeBuilder, JavaType type, String lowerBound, String upperBound) {
+        codeBuilder.appendPrimitiveDecl(type, RANGE_LOWER_BOUND_ID, lowerBound);
+        codeBuilder.appendPrimitiveDecl(type, RANGE_UPPER_BOUND_ID, upperBound).appendNewLine();
     }
 
-    private ClassBuilder generateLiteralSignal(DefSignalNode signalNode) {
+    private CodeBuilder generateLiteralSignal(DefSignalNode signalNode) {
         JavaType signalValueType = getSignalValueType(signalNode);
 
-        ClassBuilder signalBuilder = new ClassBuilder(ClassBuilder.SIGNAL_PACKAGE);
-        signalBuilder.appendClassDef(signalNode.getID(), ClassBuilder.LITERAL_SIGNAL_CLASS, signalValueType.objectType);
+        CodeBuilder signalBuilder = new CodeBuilder();
+        signalBuilder.appendPackage(CodeBuilder.SIGNAL_PACKAGE);
+
+        signalBuilder.appendClassDef(signalNode.getID(), CodeBuilder.LITERAL_SIGNAL_CLASS, signalValueType.objectType);
 
         addEnumVars(signalBuilder, signalNode, signalValueType);
         addEnumVarGetters(signalBuilder, signalNode, signalValueType);
 
-        signalBuilder.closeBlock(ClassBuilder.BlockType.CLASS);
+        signalBuilder.closeBlock(CodeBuilder.BlockType.CLASS);
         return signalBuilder;
     }
 
@@ -119,9 +130,10 @@ public class ClassGenerationVisitor extends ASTBaseVisitor<ClassBuilder> {
         }
     }
 
-    private void addEnumVars(ClassBuilder classBuilder, DefSignalNode defSignalNode, JavaType type){
+    private void addEnumVars(CodeBuilder codeBuilder, DefSignalNode defSignalNode, JavaType type){
         for(EnumNode enumNode : defSignalNode.getEnumNodes()){
             String value;
+
             if(type == JavaType.STRING)
                 value = ((StringNode) enumNode.getLiteralValue()).getVal();
             else if (type == JavaType.INT)
@@ -129,19 +141,37 @@ public class ClassGenerationVisitor extends ASTBaseVisitor<ClassBuilder> {
             else
                 value = String.valueOf(((FloatNode) enumNode.getLiteralValue()).getVal());
 
-            classBuilder.appendPrimitiveDecl(type, enumNode.getID(), value);
+            codeBuilder.appendPrimitiveDecl(type, enumNode.getID(), value);
         }
-        classBuilder.appendNewLine();
+
+        codeBuilder.appendNewLine();
     }
 
-    private void addEnumVarGetters(ClassBuilder classBuilder, DefSignalNode defSignalNode, JavaType type){
+    private void addEnumVarGetters(CodeBuilder codeBuilder, DefSignalNode defSignalNode, JavaType type){
         for(EnumNode enumNode : defSignalNode.getEnumNodes()){
-            classBuilder.appendGetMethod(type.objectType, enumNode.getID());
+            codeBuilder.appendGetMethod(type.objectType, enumNode.getID());
         }
     }
 
+    /** Generates classes for device declarations */
+    @Override
+    public CodeBuilder visit(DefDeviceNode node) {
+        CodeBuilder codeBuilder = new CodeBuilder();
+        codeBuilder.appendPackage(CodeBuilder.DEVICE_PACKAGE);
+        // Todo : import statements
 
-    private void extractLiteralValue() {
+        codeBuilder.appendClassDef(node.getID(), CodeBuilder.DEVICE_SUPER_CLASS);
 
+        //for(Node n : node.getInputs())
+       //     codeBuilder.append(visit(n).toString());
+
+
+
+
+        return null;
     }
+
+
+
+
 }

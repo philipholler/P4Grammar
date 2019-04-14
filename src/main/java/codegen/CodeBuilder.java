@@ -3,10 +3,9 @@ package codegen;
 import exceptions.compilerside.CodeGenerationError;
 import exceptions.compilerside.MismatchedBracketException;
 
-import java.lang.reflect.Method;
 import java.util.Stack;
 
-public class ClassBuilder {
+public class CodeBuilder {
 
     private IndentedStringBuilder codeBuilder = new IndentedStringBuilder();
 
@@ -41,14 +40,17 @@ public class ClassBuilder {
     }
 
 
-    public ClassBuilder(String packageString) {
+    public CodeBuilder appendPackage(String packageString){
         codeBuilder.append("package ").append(packageString).append(LINE_END).newLine().newLine();
         this.packageName = packageString;
+        return this;
+    }
+
+    public void append(String s) {
     }
 
     /** Adds a standard public class definition to the builder */
-    public ClassBuilder appendClassDef(final String className){
-        this.className = className;
+    public CodeBuilder appendClassDef(String className){
         return appendClassDef(className, "", "");
     }
 
@@ -56,12 +58,13 @@ public class ClassBuilder {
      * Adds a public class extending a given super class to the builder
      * @param superClass The name of the class that this class should extend
      */
-    public ClassBuilder appendClassDef(String className, String superClass){
-        this.className = className;
+    public CodeBuilder appendClassDef(String className, String superClass){
         return appendClassDef(className, superClass, "");
     }
 
-    public ClassBuilder appendClassDef(String className, String superClass, String genericType){
+    public CodeBuilder appendClassDef(String className, String superClass, String genericType){
+        this.className = className;
+
         if(hasClassDefinition)
             throw new CodeGenerationError("Only one class definition is allowed per class generator. " +
                     "New class definitions should go in a separate file.");
@@ -113,7 +116,7 @@ public class ClassBuilder {
      * until the method body is closed using closeBlock
      * @param inputs Zero or more formal parameters
      */
-    public ClassBuilder appendMethod(String methodName, String returnType, JavaInputParameter...inputs){
+    public CodeBuilder appendMethod(String methodName, String returnType, JavaInputParameter...inputs){
         codeBuilder.append("public ").append(returnType).append(" ").append(methodName);
 
         codeBuilder.append(" (");
@@ -124,7 +127,7 @@ public class ClassBuilder {
         return this;
     }
 
-    public ClassBuilder appendGetMethod(String type, String varName){
+    public CodeBuilder appendGetMethod(String type, String varName){
         codeBuilder.append("public ").append(type).append(" ").append("get").append(varName);
         codeBuilder.append(START_PARAN).append(END_PARAN);
         openBlock(BlockType.METHOD);
@@ -147,7 +150,7 @@ public class ClassBuilder {
         }
     }
 
-    public ClassBuilder appendReturnStatement(String val){
+    public CodeBuilder appendReturnStatement(String val){
         codeBuilder.append("return ").append(val).append(LINE_END);
         return this;
     }
@@ -162,7 +165,7 @@ public class ClassBuilder {
      * Adds a method call. Must be inside a method body.
      * @param inputParams text to write as input parameters, can be literal values as well as variable IDs
      */
-    public ClassBuilder appendMethodCall(String methodName, String...inputParams){
+    public CodeBuilder appendMethodCall(String methodName, String...inputParams){
         checkStatementPlacement();
 
         codeBuilder.append(methodName).append(" ").append(START_PARAN);
@@ -187,12 +190,12 @@ public class ClassBuilder {
     }
 
 
-    public ClassBuilder appendPrimitiveDecl(JavaType type, String id){
+    public CodeBuilder appendPrimitiveDecl(JavaType type, String id){
         appendPrimitiveDecl(type, id, "");
         return this;
     }
 
-    public ClassBuilder appendPrimitiveDecl(JavaType type, String id, String value){
+    public CodeBuilder appendPrimitiveDecl(JavaType type, String id, String value){
         codeBuilder.append(type.keyword).append(" ").append(id);
 
         if(!value.isEmpty())
@@ -202,7 +205,7 @@ public class ClassBuilder {
         return this;
     }
 
-    public ClassBuilder appendObjectDecl(String type, String id, String...constructorInputs){
+    public CodeBuilder appendObjectDecl(String type, String id, String...constructorInputs){
         codeBuilder.append(type).append(" ").append(id);
 
         codeBuilder.append(" = new " + type + START_PARAN);
@@ -214,12 +217,12 @@ public class ClassBuilder {
     }
 
 
-    public ClassBuilder appendAssignment(String varID, String value){
+    public CodeBuilder appendAssignment(String varID, String value){
         codeBuilder.append(varID).append(" = ").append(value).append(LINE_END).newLine();
         return this;
     }
 
-    public ClassBuilder appendNewLine(){
+    public CodeBuilder appendNewLine(){
         codeBuilder.newLine();
         return this;
     }
@@ -236,13 +239,11 @@ public class ClassBuilder {
      * Requires all brackets within the class to be closed before returning the generated code.
      * @return a string containing all code generated in this class generator
      */
-    public String getClassCode(){
+    @Override
+    public String toString(){
         if(!blocks.empty())
             throw new MismatchedBracketException("Not all brackets has been closed. Last opened bracket : "
                     + blocks.peek().name());
-
-        if(!hasClassDefinition)
-            throw new CodeGenerationError("Generated class code does not contain a class definition");
 
         return codeBuilder.toString();
     }
