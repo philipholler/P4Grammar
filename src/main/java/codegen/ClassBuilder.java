@@ -73,7 +73,7 @@ public class ClassBuilder {
             codeBuilder.append("extends " + superClass).append(" ");
 
         if(!genericType.isEmpty())
-            codeBuilder.append(" <" + genericType + "> ");
+            codeBuilder.append("<" + genericType + "> ");
 
         openBlock(BlockType.CLASS);
         codeBuilder.newLine();

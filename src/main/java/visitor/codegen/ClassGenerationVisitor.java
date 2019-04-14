@@ -54,11 +54,11 @@ public class ClassGenerationVisitor extends ASTBaseVisitor<ClassBuilder> {
         if(rangeNode.getType().equals(SymbolTable.INT_TYPE_ID)){
             rangeType = JavaType.INT;
             lowerBound = String.valueOf(((IntegerNode) rangeNode.getLowerBoundNode()).getVal());
-            upperBound = String.valueOf(((IntegerNode) rangeNode.getLowerBoundNode()).getVal());
+            upperBound = String.valueOf(((IntegerNode) rangeNode.getUpperBoundNode()).getVal());
         }else{
             rangeType = JavaType.FLOAT;
             lowerBound = String.valueOf(((FloatNode) rangeNode.getLowerBoundNode()).getVal());
-            upperBound = String.valueOf(((FloatNode) rangeNode.getLowerBoundNode()).getVal());
+            upperBound = String.valueOf(((FloatNode) rangeNode.getUpperBoundNode()).getVal());
         }
 
         ClassBuilder classBuilder = new ClassBuilder(ClassBuilder.SIGNAL_PACKAGE);
@@ -89,7 +89,6 @@ public class ClassGenerationVisitor extends ASTBaseVisitor<ClassBuilder> {
         classBuilder.appendPrimitiveDecl(type, RANGE_LOWER_BOUND_ID, lowerBound);
         classBuilder.appendPrimitiveDecl(type, RANGE_UPPER_BOUND_ID, upperBound).appendNewLine();
     }
-
 
     private ClassBuilder generateLiteralSignal(DefSignalNode signalNode){
         return null;
