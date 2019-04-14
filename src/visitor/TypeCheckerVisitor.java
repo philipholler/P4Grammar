@@ -21,6 +21,11 @@ import semantics.*;
 
 import java.util.Optional;
 
+/**
+ * This visitor checks that all statements involving types are type correct.
+ * For example that a variable declaration of the type int also takes and expression, that evaluates an int.
+ * - Philip
+ */
 
 public class TypeCheckerVisitor extends ASTBaseVisitor<Void>{
     SymbolTable st;
@@ -36,20 +41,17 @@ public class TypeCheckerVisitor extends ASTBaseVisitor<Void>{
 
     @Override
     public Void visit(FuncCallNode node) {
+        // Get the function
         Optional<FunctionSymbol> sym = st.getFunctionSymbol(node.getID());
         if(sym.isPresent()) {
             FunctionSymbol funcSym = sym.get();
-
             // Check that the correct number of variables are parsed
             if (funcSym.getParameters().size() == node.getArguments().size()) {
                 // Check that all variables have the same type
                 for (int i = 0; i < node.getArguments().size(); ++i) {
-                    // If the argument is itself another function call, visit it first to make sure, that it's type
-                    // is declared
-                    if (node.getArguments().get(i) instanceof FuncCallNode) {
-                        super.visit(node);
-                    }
-                    if(!isExprTypeCorrect((ExpressionNode)node.getArguments().get(i), funcSym.getParameters().get(i).getTypeID())){
+                    // Every argument (an expr) should have the same type as the formal parameters gotten from the funcSym.
+                    // The order of the parameters MATTERS.
+                    if(!((ExpressionNode)node.getArguments().get(i)).getType().equals(funcSym.getParameters().get(i).getTypeID())){
                         throw new ArgumentWrongTypeException("Argument wrong type. Expected '" +
                                 funcSym.getParameters().get(i).getTypeID() +
                                 "' got: '" +
@@ -59,6 +61,13 @@ public class TypeCheckerVisitor extends ASTBaseVisitor<Void>{
                     }
                 }
             }
+        } else {
+            // if the function is not present in the symbol table, throw exception.
+            throw new FunctionNotDeclaredException("Function '" +
+                    node.getID() +
+                    "' not declared.",
+                    node.getLineNumber()
+            );
         }
 
         return super.visit(node);
@@ -69,8 +78,13 @@ public class TypeCheckerVisitor extends ASTBaseVisitor<Void>{
         Optional<Symbol> optSymbol = st.getSymbol(node.getID());
         if(optSymbol.isPresent()){
             FieldSymbol symbol = (FieldSymbol) optSymbol.get();
-            if(!isExprTypeCorrect(node.getExpr(), symbol.getTypeID())){
-                throw new ExpressionTypeException("Assigning expr to variable with different type", node.getLineNumber());
+            if(!symbol.getTypeID().equals(node.getExpr().getType())){
+                throw new ExpressionTypeException("Assigning expr to variable with different type. Expected '" +
+                        symbol.getTypeID() +
+                        "' got '" +
+                        node.getExpr().getType() +
+                        "'"
+                        , node.getLineNumber());
             }
         }
 
@@ -79,52 +93,12 @@ public class TypeCheckerVisitor extends ASTBaseVisitor<Void>{
 
     @Override
     public Void visit(VarDeclNode node) {
-        // Check if all values inside the expression have the same type and the type of the variable.
-        if(!isExprTypeCorrect(node.getExpr(), node.getVarType())){
+        // If the expression does not have the same type as the variable being declared, throw exception.
+        if(!node.getExpr().getType().equals(node.getVarType())){
             throw new ExpressionTypeException("Expression has more types in it or doesn't match variable type.", node.getLineNumber());
         }
 
         return super.visit(node);
-    }
-
-    /**
-     * Checks if an expression is type correct, meaning all values have the same type.
-     * @param expr An ExpressionNode
-     * @param expectedType the type, that all parts must have
-     * @return true, if all parts have the same type
-     */
-    public boolean isExprTypeCorrect(Node expr, String expectedType){
-        // Check addexpr and multiexpr by checking their children
-        if(expr instanceof AddExprNode || expr instanceof MultiExprNode){
-            for(Node n : expr.getChildren()){
-                // Check the children. Not if the child is a funcCall node, since they are already checked in the
-                // visit(FuncCallNode)
-                if(!(n instanceof FuncCallNode) && !isExprTypeCorrect(n, expectedType)){
-                    throw new ExpressionTypeException("Expression has different type than expected. Got: " +
-                            ((ExpressionNode) expr).getType() +
-                            " Expected: " +
-                            expectedType
-                            , expr.getLineNumber());
-                }
-            }
-        }
-
-        // If the ExpressionNode has one of the following types, it can simply check the type against the expected type
-        if(expr instanceof LiteralValueNode ||
-                expr instanceof FuncCallNode ||
-                expr instanceof GetFuncNode ||
-                expr instanceof SetFuncNode ||
-                expr instanceof IDNode
-        ){
-            if(!((ExpressionNode) expr).getType().equals(expectedType)){
-                throw new ExpressionTypeException("Expression has different type than expected. Got: " +
-                        ((ExpressionNode) expr).getType() +
-                        " Expected: " +
-                        expectedType
-                        , expr.getLineNumber());
-            }
-        }
-        return true;
     }
 
     @Override
@@ -145,23 +119,23 @@ public class TypeCheckerVisitor extends ASTBaseVisitor<Void>{
         if(symbol.isPresent()){
             SignalTypeSymbol signal = (SignalTypeSymbol) symbol.get();
             // If the signal is an int range and got an expression of the type int.
-            if(signal.getTYPE() == SignalTypeSymbol.SIGNAL_TYPE.INT_RANGE &&
-                    !isExprTypeCorrect(node.getExpr(), SymbolTable.INT_TYPE_ID)){
+            if(signal.getTYPE() == SignalTypeSymbol.SIGNAL_TYPE.INT_RANGE && !node.getExpr().getType().equals(SymbolTable.INT_TYPE_ID)){
                 throw new ExpressionTypeException("Expression does not match range type. Expected '" +
                         SymbolTable.INT_TYPE_ID +
                         "' got: '" +
-                        node.getType() +
-                        "'"
+                        node.getExpr().getType() +
+                        "'",
+                        node.getExpr().getLineNumber()
                         );
             }
             // Check if the node has a float range and the expr also evaluates a float
-            if(signal.getTYPE() == SignalTypeSymbol.SIGNAL_TYPE.FLOAT_RANGE &&
-                    !isExprTypeCorrect(node.getExpr(), SymbolTable.FLOAT_TYPE_ID)){
+            if(signal.getTYPE() == SignalTypeSymbol.SIGNAL_TYPE.FLOAT_RANGE && !node.getExpr().getType().equals(SymbolTable.FLOAT_TYPE_ID)){
                 throw new ExpressionTypeException("Expression does not match range type. Expected '" +
                         SymbolTable.FLOAT_TYPE_ID +
                         "' got: '" +
-                        node.getType() +
-                        "'"
+                        node.getExpr().getType() +
+                        "'",
+                        node.getExpr().getLineNumber()
                 );
             }
 

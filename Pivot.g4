@@ -58,7 +58,7 @@ block: BLCKBEG stmts BLCKEND;
 
 stmts: (waitStmt | assignment | ifstmt | whilestmt | funcCall SEMCOL | printStmt | declVar | brk | rtn)*; // Not finished
 
-printStmt: PRINT expr;
+printStmt: PRINT expr SEMCOL;
 
 waitStmt: WAIT expr timeFrame SEMCOL;
 
@@ -212,6 +212,6 @@ DATEnoYEAR: DIGIT DIGIT 'd' DIGIT DIGIT 'm';
 FLOAT: '-'? DIGIT+ '.' DIGIT+;
 TIME: DIGIT DIGIT COL DIGIT DIGIT;
 INTEGER: '-'? DIGIT+;
-STRING: '"' (LOWERCASE | UPPERCASE | SIGN | DIGIT)+ '"';
+STRING: '"' (LOWERCASE | UPPERCASE | SIGN | DIGIT )+ '"';
 ID: (LOWERCASE | UPPERCASE) (LOWERCASE| UPPERCASE| DIGIT)*;
-SIGN: ('_' | '-' | '!' | ' ' | '.' | ':');
+SIGN: ('_' | '-' | '!' | ' ' | '.' | ':' | '+' | '/' | '=');

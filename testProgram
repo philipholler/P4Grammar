@@ -3,10 +3,12 @@ define Signal toggle: On = 1, Off = 0, yo = 3;
 define Signal celsius:  1..60;
 define Signal open:  0.0..100.0;
 define Signal percentage: 0.0..100.0;
+define Signal percentInt: 0..100;
 
 // Define device types
 define Device Bulb input: toggle;
 define Device Window input: open;
+define Device IntWindow input: percentInt;
 // Define sensors
 define Device MovementSensor output: toggle & input: celsius;
 define Device Thermometer output: celsius;
@@ -15,6 +17,8 @@ define Device LawnMower input: toggle;
 // Variable definitions of every device in the house
 Bulb frontDoorLight = "129.6.18.1:12565";
 Window bedRoomWindow = "129.67.198.65:12565";
+
+IntWindow myIntWindow = "129.12.12.12:21000";
 
 LawnMower GardenMower = "129.10.10:10210";
 
@@ -28,13 +32,20 @@ float testFloat = 6.0;
 init(){
     int man = 2;
     int jkl = 2 + a + get GardenMower toggle + testFunctionInt("hej" + testFunction(5) + "i");
-    jkl = 2 + a + 2 + testInt;
+    jkl = 2 + a + 2;
+
+    int jak = testFunctionInt("hej") + 5;
+
+    // Not written by Philip
+    print "Philip Bicep = " + 100 + "cm";
+
+    set myIntWindow percentInt: 10 + man;
 
     // Optional code for initialization
     // Automatically run when the program is run for the first time
 
     // Arguments can now be nested returning functions.
-    string stringReturn = testFunction(testFunctionInt(testFunction(55)));
+    string stringReturn = testFunction(testFunctionInt(testFunction(55 + man)));
 }
 
 int testFunctionInt(string hej){
@@ -101,7 +112,7 @@ every 2 weeks starting 11:00 01d04m2019y{
     }
 
     int b = 3;
-    if(5 == 5 && (b == a || a == b)){
+    if((5 + b) == 5 && (b == a || a == b)){
         b = 5;
     }
 

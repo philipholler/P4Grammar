@@ -1,6 +1,7 @@
 package visitor;
 
 import exceptions.user_side.ExpressionTypeException;
+import exceptions.user_side.FunctionNotDeclaredException;
 import exceptions.user_side.TypeUndefinedCompileError;
 import exceptions.user_side.VariableNotInitialisedException;
 import node.BlockNode;
@@ -13,6 +14,7 @@ import node.Statements.Expression.LiteralValues.FloatNode;
 import node.Statements.Expression.LiteralValues.IntegerNode;
 import node.Statements.Expression.LiteralValues.StringNode;
 import node.Statements.Expression.MultiExprNode;
+import node.Statements.PrintNode;
 import node.base.Node;
 import semantics.*;
 
@@ -20,6 +22,7 @@ import java.util.Optional;
 
 /**
  * This class is meant for assigning types to all nodes of the type "ExpressionNode"
+ * - Philip
  */
 
 public class TypeAssignmentVisitor extends ASTBaseVisitor<String> {
@@ -39,6 +42,12 @@ public class TypeAssignmentVisitor extends ASTBaseVisitor<String> {
         Optional<FunctionSymbol> funcSymbol = st.getFunctionSymbol(node.getID());
         if(funcSymbol.isPresent()){
             node.setType(funcSymbol.get().getReturnType());
+        } else {
+            throw new FunctionNotDeclaredException("Function '" +
+                    node.getID() +
+                    "' not declared.",
+                    node.getLineNumber()
+                    );
         }
 
         // Make sure to visit all children to assign types to them as well.
@@ -148,7 +157,12 @@ public class TypeAssignmentVisitor extends ASTBaseVisitor<String> {
         String rightNodeType = visit(node.getRightChild());
 
         if(!leftNodeType.equals(rightNodeType)){
-            throw new ExpressionTypeException("Type mismatch", node.getLineNumber());
+            throw new ExpressionTypeException("Type mismatch. Cannot divide or multiply '" +
+                    leftNodeType +
+                    "' with '" +
+                    rightNodeType +
+                    "'"
+                    , node.getLineNumber());
         }
 
         node.setType(leftNodeType);
@@ -178,5 +192,9 @@ public class TypeAssignmentVisitor extends ASTBaseVisitor<String> {
         return null;
     }
 
-
+    // The printnode should accept many different types, so the expression does not have to be type correct.
+    @Override
+    public String visit(PrintNode node) {
+        return null;
+    }
 }

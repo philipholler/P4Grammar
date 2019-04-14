@@ -28,6 +28,11 @@ import semantics.*;
 
 import java.util.Optional;
 
+/**
+ * This visitor is responsible for finding all declarations and adding them to the symbol table.
+ * Functions should, however, be declared before using this visitor. This is done using the FunctionVisitor.
+ */
+
 public class DeclarationVisitor extends ASTBaseVisitor<Void> {
     SymbolTable st;
 
@@ -64,7 +69,14 @@ public class DeclarationVisitor extends ASTBaseVisitor<Void> {
         Optional<FunctionSymbol> functionSymbol = st.getFunctionSymbol(node.getId());
         if(functionSymbol.isPresent()){
             st.enterSymbols(functionSymbol.get().getParameters());
+        } else {
+            throw new FunctionNotDeclaredException("Function '" +
+                    node.getId() +
+                    "' not declared.",
+                    node.getLineNumber()
+            );
         }
+
 
         st.closeScope();
 
@@ -119,4 +131,6 @@ public class DeclarationVisitor extends ASTBaseVisitor<Void> {
         }
         return super.visit(node);
     }
+
+
 }
