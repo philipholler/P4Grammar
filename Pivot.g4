@@ -69,6 +69,7 @@ ifstmt: IF PARANBEG logical_expr PARANEND blck=block (ELSE elseblck=block)?;
 whilestmt: WHILE PARANBEG logical_expr PARANEND block;
 
 funcCall: id=ID PARANBEG arguments PARANEND                                 #funCall
+        //exprVal can also be an IDNode of a signal literal. This is done, since expr with ID Atom and regular ID cannot be distinguished.
         | SET deviceID=ID signalID=ID COL exprVal=expr                      #setFun
         | GET deviceID=ID signalID=ID                                       #getFun
         ;

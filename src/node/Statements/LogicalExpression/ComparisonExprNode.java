@@ -7,11 +7,15 @@ import utils.StringUtils;
 import visitor.ASTBaseVisitor;
 
 public class ComparisonExprNode extends LogicalExprNode {
-    ComparisonOperator op;
+    private ComparisonOperator op;
+    private Node leftChild;
+    private Node rightChild;
 
     public ComparisonExprNode(ParserRuleContext ctx, Node leftChild, Node rightChild, ComparisonOperator op) {
         super(ctx, leftChild, rightChild);
         this.op = op;
+        this.leftChild = leftChild;
+        this.rightChild = rightChild;
     }
 
     @Override
@@ -37,4 +41,12 @@ public class ComparisonExprNode extends LogicalExprNode {
     public <T> T accept(ASTBaseVisitor<? extends T> astBaseVisitor) {
     return astBaseVisitor.visit(this);
 }
+
+    public Node getLeftChild() {
+        return leftChild;
+    }
+
+    public Node getRightChild() {
+        return rightChild;
+    }
 }

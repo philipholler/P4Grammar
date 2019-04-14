@@ -28,8 +28,8 @@ float testFloat = 6.0;
 init(){
     int man = 2;
     int jkl = 2 + a + get GardenMower toggle + testFunctionInt("hej" + testFunction(5) + "i");
-    jkl = 1;
     jkl = 2 + a + 2 + testInt;
+
     // Optional code for initialization
     // Automatically run when the program is run for the first time
 
@@ -46,9 +46,10 @@ when frontDoorSensor toggle: on {
     if(now > 17:00 && now < 21:00){
         set frontDoorLight toggle: On;
     }
+
     wait 30 seconds;
 
-    while(get frontDoorSensor toggle == "On"){
+    while(get frontDoorSensor toggle == On){
         set frontDoorLight toggle: Off;
     }
 }
@@ -86,7 +87,7 @@ every 2 hours{
     string c = "Magnus";
     string godPerson = "hey";
 
-    if(a == 3){
+    if(a == ab){
         string mads = "hey";
     } else {
         string magnus = godPerson;

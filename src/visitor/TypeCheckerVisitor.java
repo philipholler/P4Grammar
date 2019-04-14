@@ -1,9 +1,6 @@
 package visitor;
 
-import exceptions.user_side.ArgumentWrongTypeException;
-import exceptions.user_side.DivideOrMultiStringExpection;
-import exceptions.user_side.ExpressionTypeException;
-import exceptions.user_side.SignalLiteralNotDeclaredException;
+import exceptions.user_side.*;
 import node.BlockNode;
 import node.Statements.AssignmentNode;
 import node.Statements.Expression.AddExprNode;
@@ -14,6 +11,10 @@ import node.Statements.Expression.FunctionCall.SetFuncNode;
 import node.Statements.Expression.IDNode;
 import node.Statements.Expression.LiteralValues.LiteralValueNode;
 import node.Statements.Expression.MultiExprNode;
+import node.Statements.LogicalExpression.ComparisonExprNode;
+import node.TimeNodes.DateNode;
+import node.TimeNodes.NowNode;
+import node.TimeNodes.TimeNode;
 import node.VarDeclNode;
 import node.base.Node;
 import semantics.*;
@@ -164,8 +165,9 @@ public class TypeCheckerVisitor extends ASTBaseVisitor<Void>{
                 );
             }
 
-            // If the signal uses signal Literals, check that the value set is also an enum for the given signal
-            // Since signal literal will still be an expr, it will just be a leaf IDNode from which, we can get the value.
+            // If the signal uses signal Literals, check that the signal literal set in the source code is actually
+            // present in the signal definition.
+            // Since ambiguity could not be avoided between Signal literal ID and expr, the signal literal is passed as an IDNode expr.
             if(signal.getTYPE() == SignalTypeSymbol.SIGNAL_TYPE.LITERALS){
                 String signalLiteral = ((IDNode)node.getExpr()).getID();
                 if(!signal.containsSymbol(signalLiteral)) {
@@ -182,6 +184,55 @@ public class TypeCheckerVisitor extends ASTBaseVisitor<Void>{
         if(node.getType().equals(SymbolTable.STRING_TYPE_ID)){
             throw new DivideOrMultiStringExpection("Cannot divide or multiply strings", node.getLineNumber());
         }
+        return super.visit(node);
+    }
+
+    @Override
+    public Void visit(ComparisonExprNode node) {
+        // If both sides are expressions.
+        if(node.getLeftChild() instanceof ExpressionNode && node.getRightChild() instanceof ExpressionNode){
+            // If the expressions do not have the same type throw error
+            if(!((ExpressionNode) node.getLeftChild()).getType().equals(((ExpressionNode) node.getRightChild()).getType())){
+                throw new DifferentTypesComparisonException("Cannot compare types: '" +
+                        ((ExpressionNode) node.getLeftChild()).getType() +
+                        "' with type '" +
+                        ((ExpressionNode) node.getRightChild()).getType(),
+                        node.getLineNumber()
+                        );
+            }
+            return super.visit(node);
+        }
+        // If the left node is a Timenode (nownode, timenode or datenode) and the right child is not.
+        if((node.getLeftChild() instanceof NowNode || node.getLeftChild() instanceof TimeNode || node.getLeftChild() instanceof DateNode) &&
+            !(node.getRightChild() instanceof NowNode || node.getRightChild() instanceof TimeNode || node.getRightChild() instanceof DateNode)){
+            throw new DifferentTypesComparisonException("Cannot compare type '" +
+                    node.getLeftChild().getClass().getSimpleName().replace("Node", "") +
+                    "' with type '" +
+                    node.getRightChild().getClass().getSimpleName().replace("Node", "") +
+                    "'",
+                    node.getLineNumber());
+        }
+        // If the left child is not a time node, but the right child is.
+        if(!(node.getLeftChild() instanceof NowNode || node.getLeftChild() instanceof TimeNode || node.getLeftChild() instanceof DateNode) &&
+                (node.getRightChild() instanceof NowNode || node.getRightChild() instanceof TimeNode || node.getRightChild() instanceof DateNode)){
+            throw new DifferentTypesComparisonException("Cannot compare type '" +
+                    node.getLeftChild().getClass().getSimpleName().replace("Node", "") +
+                    "' with type '" +
+                    node.getRightChild().getClass().getSimpleName().replace("Node", "") +
+                    "'",
+                    node.getLineNumber());
+        }
+
+        // Cannot compare now to now, since it will always be true.
+        if(node.getLeftChild() instanceof NowNode && node.getRightChild() instanceof NowNode){
+            throw new DifferentTypesComparisonException("Cannot compare type '" +
+                    node.getLeftChild().getClass().getSimpleName().replace("Node", "") +
+                    "' with type '" +
+                    node.getRightChild().getClass().getSimpleName().replace("Node", "") +
+                    "'. Comparing 'Now' to 'Now' will always be true.",
+                    node.getLineNumber());
+        }
+
         return super.visit(node);
     }
 }
