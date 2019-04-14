@@ -21,11 +21,9 @@ public class SignalTypeSymbol extends Symbol{
      *
      *  Note : One SignalType can contain literals of multiple different types (floats, ints and strings)
      */
-    public enum SIGNAL_TYPE{
-        INT_RANGE, FLOAT_RANGE, LITERALS;
-    }
 
-    private final SIGNAL_TYPE TYPE;
+
+    private final SignalType TYPE;
 
     private float floatLowerBound, floatUpperBound;
     private int intLowerBound, intUpperBound;
@@ -34,14 +32,14 @@ public class SignalTypeSymbol extends Symbol{
     // Constructor for SignalType with a list of literal values
     public SignalTypeSymbol(Node declarationNode, String id, ArrayList<FieldSymbol> signalLiterals) {
         super(id, declarationNode);
-        TYPE = SIGNAL_TYPE.LITERALS;
+        TYPE = SignalType.LITERALS;
         this.signalLiterals = signalLiterals;
     }
 
     // Constructor for SignalType with an integer range
     public SignalTypeSymbol(Node declarationNode, String id, int lowerBound, int upperBound) {
         super(id, declarationNode);
-        TYPE = SIGNAL_TYPE.INT_RANGE;
+        TYPE = SignalType.INT_RANGE;
         this.intLowerBound = lowerBound;
         this.intUpperBound = upperBound;
     }
@@ -49,7 +47,7 @@ public class SignalTypeSymbol extends Symbol{
     // Constructor for SignalType with a float range
     public SignalTypeSymbol(Node declarationNode, String id, float lowerBound, float upperBound) {
         super(id, declarationNode);
-        TYPE = SIGNAL_TYPE.FLOAT_RANGE;
+        TYPE = SignalType.FLOAT_RANGE;
         this.floatLowerBound = lowerBound;
         this.floatUpperBound = upperBound;
     }
@@ -60,13 +58,13 @@ public class SignalTypeSymbol extends Symbol{
         // For a signal type with a range
         if(declarationNode.getRangeNode() != null){
             if(declarationNode.getRangeNode().getType().equals("float")){
-                this.TYPE = SIGNAL_TYPE.FLOAT_RANGE;
+                this.TYPE = SignalType.FLOAT_RANGE;
                 if(declarationNode.getRangeNode().getLeftChild() instanceof FloatNode && declarationNode.getRangeNode().getLeftChild() instanceof FloatNode){
                     this.floatLowerBound = ((FloatNode) declarationNode.getRangeNode().getLeftChild()).getVal();
                     this.floatUpperBound = ((FloatNode) declarationNode.getRangeNode().getRightChild()).getVal();
                 }
             } else if (declarationNode.getRangeNode().getType().equals("int")){
-                this.TYPE = SIGNAL_TYPE.INT_RANGE;
+                this.TYPE = SignalType.INT_RANGE;
                 if(declarationNode.getRangeNode().getLeftChild() instanceof IntegerNode && declarationNode.getRangeNode().getLeftChild() instanceof IntegerNode){
                     this.floatLowerBound = ((IntegerNode) declarationNode.getRangeNode().getLeftChild()).getVal();
                     this.floatUpperBound = ((IntegerNode) declarationNode.getRangeNode().getRightChild()).getVal();
@@ -76,7 +74,7 @@ public class SignalTypeSymbol extends Symbol{
             }
         } // For a signal type with enum values
          else {
-             this.TYPE = SIGNAL_TYPE.LITERALS;
+             this.TYPE = SignalType.LITERALS;
              // Get the expected type of the first enum
             String expectedType = declarationNode.getEnumNodes().get(0).getType();
             for (EnumNode node: declarationNode.getEnumNodes()) {
@@ -99,7 +97,7 @@ public class SignalTypeSymbol extends Symbol{
      * @return true if the given value is within the defined range for this SignalType. Returns false otherwise.
      */
     public boolean isLegalSignalValue(int val){
-        if(TYPE == SIGNAL_TYPE.INT_RANGE)
+        if(TYPE == SignalType.INT_RANGE)
             return (val >= intLowerBound && val <= intUpperBound);
 
         return false;
@@ -109,7 +107,7 @@ public class SignalTypeSymbol extends Symbol{
      * @return true if the given value is within the defined range for this SignalType. Returns false otherwise.
      */
     public boolean isLegalSignalValue(float val){
-        if(TYPE == SIGNAL_TYPE.FLOAT_RANGE)
+        if(TYPE == SignalType.FLOAT_RANGE)
             return (val >= floatLowerBound && val <= floatUpperBound);
 
         return false;
@@ -120,7 +118,7 @@ public class SignalTypeSymbol extends Symbol{
      * @return true if the given ID is defined for this SignalType. False otherwise.
      */
     public boolean isLegalSignalValue(String ID){
-        if(TYPE == SIGNAL_TYPE.LITERALS)
+        if(TYPE == SignalType.LITERALS)
             for(FieldSymbol s : signalLiterals)
                 if(s.id.equals(ID)) return true;
 
@@ -132,9 +130,9 @@ public class SignalTypeSymbol extends Symbol{
     public String toString() {
         StringBuilder values = new StringBuilder();
 
-        if(TYPE == SIGNAL_TYPE.INT_RANGE){
+        if(TYPE == SignalType.INT_RANGE){
             values = new StringBuilder(intLowerBound + "..." + intUpperBound);
-        }else if(TYPE == SIGNAL_TYPE.FLOAT_RANGE){
+        }else if(TYPE == SignalType.FLOAT_RANGE){
             values = new StringBuilder(floatLowerBound + "..." + floatUpperBound);
         }else{
             for(FieldSymbol s : signalLiterals)
@@ -157,7 +155,7 @@ public class SignalTypeSymbol extends Symbol{
         return signalLiterals;
     }
 
-    public SIGNAL_TYPE getTYPE() {
+    public SignalType getTYPE() {
         return TYPE;
     }
 }

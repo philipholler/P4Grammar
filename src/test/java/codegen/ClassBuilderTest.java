@@ -16,14 +16,14 @@ class ClassBuilderTest {
     void addClassDefinition() { // todo not an actual test
         classBuilder.addClassDefinition("MyClass", "SuperClassSample");
 
-        classBuilder.appendMethod("setValues", JavaType.VOID,
-                new JavaInputParameter(JavaType.INT, "value1"),
-                new JavaInputParameter(JavaType.INT, "value2"));
+        classBuilder.appendMethod("setValues", JavaType.VOID.keyword,
+                new JavaInputParameter(JavaType.INT.keyword, "value1"),
+                new JavaInputParameter(JavaType.INT.keyword, "value2"));
 
-        classBuilder.appendVarDecl(JavaType.INT, "a");
+        classBuilder.appendPrimitiveDecl(JavaType.INT, "a");
         classBuilder.appendAssignment("a", "31435");
 
-        classBuilder.appendVarDecl(JavaType.INT, "b", "5");
+        classBuilder.appendPrimitiveDecl(JavaType.INT, "b", "5");
         classBuilder.appendMethodCall("setValues", "a", "b");
 
         classBuilder.closeBlock(ClassBuilder.BlockType.METHOD);

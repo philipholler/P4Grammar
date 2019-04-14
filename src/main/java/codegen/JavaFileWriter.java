@@ -10,17 +10,17 @@ public class JavaFileWriter { // todo very very temporary implementation
             File.separator + "compiled_code" + File.separator;
 
     public static void main(String[] args) {
-        ClassBuilder classBuilder = new ClassBuilder("standard");
+        ClassBuilder classBuilder = new ClassBuilder("device");
         classBuilder.addClassDefinition("TestClass", "SuperClassSample");
 
-        classBuilder.appendMethod("setValues", JavaType.VOID,
-                new JavaInputParameter(JavaType.INT, "value1"),
-                new JavaInputParameter(JavaType.INT, "value2"));
+        classBuilder.appendMethod("setValues", JavaType.VOID.keyword,
+                new JavaInputParameter(JavaType.INT.keyword, "value1"),
+                new JavaInputParameter(JavaType.INT.keyword, "value2"));
 
-        classBuilder.appendVarDecl(JavaType.INT, "a");
+        classBuilder.appendPrimitiveDecl(JavaType.INT, "a");
         classBuilder.appendAssignment("a", "31435");
 
-        classBuilder.appendVarDecl(JavaType.INT, "b", "5");
+        classBuilder.appendPrimitiveDecl(JavaType.INT, "b", "5");
         classBuilder.appendMethodCall("setValues", "a", "b");
 
         classBuilder.closeBlock(ClassBuilder.BlockType.METHOD);

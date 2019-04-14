@@ -11,6 +11,14 @@ public class ClassBuilder {
 
     private IndentedStringBuilder codeBuilder = new IndentedStringBuilder();
 
+    public static final String RANGE_SIGNAL_CLASS = "Signal";
+    public static final String LITERAL_SIGNAL_CLASS = "Signal";
+
+    public static final String DEVICE_SUPER_CLASS = "Device";
+
+    public static final String DEVICE_PACKAGE = "device";
+    public static final String SIGNAL_PACKAGE = "signal";
+
     private String className = "";
     private String packageName = "";
 
@@ -19,7 +27,6 @@ public class ClassBuilder {
     private static final String START_BRACKET = "{", END_BRACKET = "}";
     private static final String START_PARAN = "(", END_PARAN = ")";
     private static final String LINE_END = ";";
-
 
     private static final String TAB = "    ";
     private static final String COMMA = ",";
@@ -36,7 +43,7 @@ public class ClassBuilder {
 
 
     public ClassBuilder(String packageString) {
-        codeBuilder.append("package ").append(packageString);
+        codeBuilder.append("package ").append(packageString).append(LINE_END).newLine().newLine();
         this.packageName = packageString;
     }
 
@@ -103,13 +110,20 @@ public class ClassBuilder {
      * until the method body is closed using closeBlock
      * @param inputs Zero or more formal parameters
      */
-    public ClassBuilder appendMethod(String methodName, JavaType returnType, JavaInputParameter...inputs){
-        codeBuilder.append("public ").append(returnType.keyword).append(" ").append(methodName);
+    public ClassBuilder appendMethod(String methodName, String returnType, JavaInputParameter...inputs){
+        codeBuilder.append("public ").append(returnType).append(" ").append(methodName);
 
         codeBuilder.append(" (");
         appendFormalParameters(inputs);
         codeBuilder.append(") ");
 
+        openBlock(BlockType.METHOD);
+        return this;
+    }
+
+    public ClassBuilder appendGetMethod(String type, String varName){
+        codeBuilder.append("public ").append(type).append(" ").append("get").append(varName);
+        codeBuilder.append(START_PARAN).append(END_PARAN);
         openBlock(BlockType.METHOD);
         return this;
     }
@@ -120,7 +134,7 @@ public class ClassBuilder {
         // Add parameters to method definition
         for(int i = 0; i < inputs.length; i++){
             JavaInputParameter p = inputs[i];
-            codeBuilder.append(p.TYPE.keyword).append(" ").append(p.identifier);
+            codeBuilder.append(p.TYPE).append(" ").append(p.identifier);
 
             // Add comma separator after every parameter, except for the last one
             if(i != inputs.length - 1)
@@ -163,16 +177,27 @@ public class ClassBuilder {
     }
 
 
-    public ClassBuilder appendVarDecl(JavaType type, String id){
-        appendVarDecl(type, id, "");
+    public ClassBuilder appendPrimitiveDecl(JavaType type, String id){
+        appendPrimitiveDecl(type, id, "");
         return this;
     }
 
-    public ClassBuilder appendVarDecl(JavaType type, String id, String value){
+    public ClassBuilder appendPrimitiveDecl(JavaType type, String id, String value){
         codeBuilder.append(type.keyword).append(" ").append(id);
 
         if(!value.isEmpty())
             codeBuilder.append(" = ").append(value);
+
+        codeBuilder.append(LINE_END).newLine();
+        return this;
+    }
+
+    public ClassBuilder appendObjectDecl(String type, String id, String...constructorInputs){
+        codeBuilder.append(type).append(" ").append(id);
+
+        codeBuilder.append(" = new " + type + START_PARAN);
+        appendActualParameters(constructorInputs);
+        codeBuilder.append(END_PARAN).append(LINE_END).newLine();
 
         codeBuilder.append(LINE_END).newLine();
         return this;
@@ -183,6 +208,9 @@ public class ClassBuilder {
         codeBuilder.append(varID).append(" = ").append(value).append(LINE_END).newLine();
         return this;
     }
+
+
+
 
 
     public String getClassName() {
