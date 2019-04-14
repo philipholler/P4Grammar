@@ -13,9 +13,11 @@ import visitor.ASTBaseVisitor;
 
 public class EnumNode extends UnaryNode {
     private String ID;
+    private LiteralValueNode literalValue;
 
     public EnumNode(ParserRuleContext ctx, String ID, LiteralValueNode value) {
         super(ctx, value);
+        this.literalValue = value;
         this.ID = ID;
     }
 
@@ -39,6 +41,9 @@ public class EnumNode extends UnaryNode {
     return astBaseVisitor.visit(this);
 }
 
+    public LiteralValueNode getLiteralValue(){
+        return literalValue;
+    }
 
     public String getType(){
         Node val = super.getChildren().get(0);

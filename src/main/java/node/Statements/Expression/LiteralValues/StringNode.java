@@ -19,6 +19,10 @@ public class StringNode extends LiteralValueNode {
                 this.toString() + "\n";
     }
 
+    public String getVal() {
+        return val;
+    }
+
     @Override
     public String toString() {
         return "StringNode(" +
