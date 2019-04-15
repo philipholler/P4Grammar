@@ -43,6 +43,12 @@ public class Main {
             // Print the symbol table, which is found inside the first node of type ProgramNode
             System.out.println(((ProgramNode)ast).getSt());
 
+            // Optimise expressions
+            optimiseExpr(ast);
+
+            // Print new AST
+            System.out.println(ast.getTreeString(0));
+
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -57,5 +63,9 @@ public class Main {
         ast.accept(new TypeAssignmentVisitor());
 
         ast.accept(new TypeCheckerVisitor());
+    }
+
+    private static void optimiseExpr(Node ast){
+        ast.accept(new OptimiseExprVisitor());
     }
 }

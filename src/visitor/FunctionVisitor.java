@@ -15,17 +15,17 @@ public class FunctionVisitor extends ASTBaseVisitor<Object> {
     SymbolTable st;
 
     @Override
+    public Object visit(ProgramNode node) {
+        this.st = node.getSt();
+        return super.visit(node);
+    }
+
+    @Override
     public Object visit(FunctionNode node) {
         FunctionSymbol fs = new FunctionSymbol(node);
 
         st.enterSymbol(fs);
 
         return null;
-    }
-
-    @Override
-    public Object visit(ProgramNode node) {
-        this.st = node.getSt();
-        return super.visit(node);
     }
 }

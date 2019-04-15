@@ -180,29 +180,6 @@ public class AstBuilderVisitor extends PivotBaseVisitor<Node> {
         }
     }
 
-    /** Creates a SignalTypeNode with either a range or list of enums based on the given signal definition node */
-    private SignalTypeSymbol createSignalSymbol(DefSignalNode defSignalNode){
-        if(!defSignalNode.getEnumNodes().isEmpty()){
-            // Create signal symbol with a list of enum values
-            ArrayList<FieldSymbol> enums = new ArrayList<>();
-            for(EnumNode eNode : defSignalNode.getEnumNodes())
-                enums.add(createFieldSymbol(eNode));
-            return new SignalTypeSymbol(defSignalNode, defSignalNode.getID(), enums);
-        }
-
-        if(defSignalNode.getRangeNode().getType().equals(SymbolTable.INT_TYPE_ID)){
-            // Create int range signal symbol
-            int lowerBound = ((IntegerNode)(defSignalNode.getRangeNode().getLeftChild())).getVal();
-            int upperBound = ((IntegerNode)(defSignalNode.getRangeNode().getRightChild())).getVal();
-            return new SignalTypeSymbol(defSignalNode, defSignalNode.getID(), lowerBound, upperBound);
-        }else{
-            // Create float range signal symbol
-            float lowerBound = ((FloatNode)(defSignalNode.getRangeNode().getLeftChild())).getVal();
-            float upperBound = ((FloatNode)(defSignalNode.getRangeNode().getRightChild())).getVal();
-            return new SignalTypeSymbol(defSignalNode, defSignalNode.getID(), lowerBound, upperBound);
-        }
-    }
-
     private FieldSymbol createFieldSymbol(EnumNode node){
         return new FieldSymbol(node, node.getID(), node.getType());
     }
@@ -576,7 +553,7 @@ public class AstBuilderVisitor extends PivotBaseVisitor<Node> {
     @Override
     public Node visitAssignment(PivotParser.AssignmentContext ctx) {
         updateLineNumber(ctx);
-        return new AssignmentNode(ctx, visit(ctx.expr()), ctx.varID.getText());
+        return new AssignmentNode(ctx, (ExpressionNode)visit(ctx.expr()), ctx.varID.getText());
     }
 
     @Override
@@ -651,7 +628,7 @@ public class AstBuilderVisitor extends PivotBaseVisitor<Node> {
         if(ctx.expr() == null){
             return new ReturnNode(ctx);
         }
-        return new ReturnNode(ctx, visit(ctx.expr()));
+        return new ReturnNode(ctx, (ExpressionNode)visit(ctx.expr()));
     }
 
     @Override

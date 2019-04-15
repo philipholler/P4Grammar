@@ -49,4 +49,18 @@ public class ComparisonExprNode extends LogicalExprNode {
     public Node getRightChild() {
         return rightChild;
     }
+
+    public void setLeftChild(Node leftChild) {
+        this.leftChild = leftChild;
+        super.getChildren().clear();
+        super.getChildren().add(leftChild);
+        super.getChildren().add(this.rightChild);
+    }
+
+    public void setRightChild(Node rightChild) {
+        this.rightChild = rightChild;
+        super.getChildren().clear();
+        super.getChildren().add(this.leftChild);
+        super.getChildren().add(rightChild);
+    }
 }

@@ -9,10 +9,6 @@ import visitor.ASTBaseVisitor;
 public class ProgramNode extends UnaryNode {
     SymbolTable st;
 
-    public ProgramNode(ParserRuleContext ctx, Node child) {
-        super(ctx, child);
-    }
-
     public ProgramNode(ParserRuleContext ctx, Node child, SymbolTable st) {
         super(ctx, child);
         this.st = st;

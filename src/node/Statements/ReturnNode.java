@@ -7,9 +7,11 @@ import utils.StringUtils;
 import visitor.ASTBaseVisitor;
 
 public class ReturnNode extends Node {
+    private ExpressionNode returnVal = null;
 
     public ReturnNode(ParserRuleContext ctx, Node returnVal) {
         super(ctx, returnVal);
+        this.returnVal = (ExpressionNode) returnVal;
     }
 
     public ReturnNode(ParserRuleContext ctx) {
@@ -37,4 +39,14 @@ public class ReturnNode extends Node {
     public <T> T accept(ASTBaseVisitor<? extends T> astBaseVisitor) {
     return astBaseVisitor.visit(this);
 }
+
+    public void setExpr(ExpressionNode expr){
+        this.returnVal = expr;
+        super.getChildren().clear();
+        super.getChildren().add(expr);
+    }
+
+    public Node getReturnVal() {
+        return returnVal;
+    }
 }

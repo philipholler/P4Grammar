@@ -30,7 +30,22 @@ int testInt = 5;
 float testFloat = 6.0;
 
 init(){
-    int man = 2;
+    print "hej " + " hej " + " hej " + " Yooo " + "Magnus small bicep";
+    set myIntWindow percentInt: 10 + 15;
+
+    testFunction(5 + 5);
+    if(2 + 3 < 5 + 10 && true){
+
+    }
+    int man = 2 + 5;
+    man = 2 + 7 + 5 * 100;
+
+    float mann = 2.0 + 5.0;
+    mann = 2.0 + 7.0 + 1.0;
+
+    string mannn = "hej";
+    mannn = "hej" + "hej" + "hej";
+
     int jkl = 2 + a + get GardenMower toggle + testFunctionInt("hej" + testFunction(5) + "i") + testFunctionInt("Hej");
     jkl = 2 + a + 2;
 
@@ -49,7 +64,7 @@ init(){
 }
 
 int testFunctionInt(string hej){
-    return 5;
+    return 5 + 10;
 }
 
 // Events

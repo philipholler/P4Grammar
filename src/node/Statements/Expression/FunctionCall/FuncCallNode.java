@@ -51,4 +51,8 @@ public class FuncCallNode extends AbstractFuncCallNode{
         return arguments;
     }
 
+    public void setArgument(int index, Node argument) {
+        super.getChildren().set(index, argument);
+        this.getArguments().set(index, argument);
+    }
 }

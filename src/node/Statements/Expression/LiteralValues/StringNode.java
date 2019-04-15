@@ -34,4 +34,8 @@ public class StringNode extends LiteralValueNode {
     public <T> T accept(ASTBaseVisitor<? extends T> astBaseVisitor) {
     return astBaseVisitor.visit(this);
 }
+
+    public String getVal() {
+        return val;
+    }
 }

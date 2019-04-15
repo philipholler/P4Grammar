@@ -12,7 +12,7 @@ public class VarDeclNode extends UnaryNode {
     ExpressionNode expr;
 
     public VarDeclNode(ParserRuleContext ctx, String varType, String ID, Node expr) {
-        super(ctx, expr);
+        super(ctx, (ExpressionNode)expr);
         this.varType = varType;
         this.ID = ID;
         this.expr = (ExpressionNode) expr;
@@ -40,5 +40,10 @@ public class VarDeclNode extends UnaryNode {
 
     public <T> T accept(ASTBaseVisitor<? extends T> astBaseVisitor) {
         return astBaseVisitor.visit(this);
+    }
+
+    public void setExpr(ExpressionNode expr) {
+        this.expr = expr;
+        super.setChild(expr);
     }
 }

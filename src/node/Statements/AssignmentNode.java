@@ -35,4 +35,10 @@ public class AssignmentNode extends UnaryNode {
     public ExpressionNode getExpr() {
         return expr;
     }
+
+    public void setExpr(ExpressionNode expr) {
+        this.expr = expr;
+
+        super.setChild(expr);
+    }
 }
