@@ -56,6 +56,7 @@ timeFrame: (MONTHS | WEEKS | DAYS | HOURS | MINUTES | SECONDS | MS);
 
 block: BLCKBEG stmts BLCKEND;
 
+// The SEMCOL after the funcCall has to be there in the stmts, since it will not be needed if the funcCall is used in a variable decl.
 stmts: (waitStmt | assignment | ifstmt | whilestmt | funcCall SEMCOL | printStmt | declVar | brk | rtn)*; // Not finished
 
 printStmt: PRINT expr SEMCOL;
@@ -68,10 +69,10 @@ ifstmt: IF PARANBEG logical_expr PARANEND blck=block (ELSE elseblck=block)?;
 
 whilestmt: WHILE PARANBEG logical_expr PARANEND block;
 
-funcCall: id=ID PARANBEG arguments PARANEND                                 #funCall
+funcCall: id=ID PARANBEG arguments PARANEND                         #funCall
         //exprVal can also be an IDNode of a signal literal. This is done, since expr with ID Atom and regular ID cannot be distinguished.
-        | SET deviceID=ID signalID=ID COL exprVal=expr                      #setFun
-        | GET deviceID=ID signalID=ID                                       #getFun
+        | SET deviceID=ID signalID=ID COL exprVal=expr              #setFun
+        | GET deviceID=ID signalID=ID                               #getFun
         ;
 
     arguments: expr? (LISTSEP expr)*;

@@ -31,7 +31,7 @@ float testFloat = 6.0;
 
 init(){
     int man = 2;
-    int jkl = 2 + a + get GardenMower toggle + testFunctionInt("hej" + testFunction(5) + "i");
+    int jkl = 2 + a + get GardenMower toggle + testFunctionInt("hej" + testFunction(5) + "i") + testFunctionInt("Hej");
     jkl = 2 + a + 2;
 
     int jak = testFunctionInt("hej") + 5;

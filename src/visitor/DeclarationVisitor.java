@@ -1,15 +1,13 @@
 package visitor;
 
 import exceptions.user_side.*;
-import node.BlockNode;
-import node.DevDeclNode;
+import node.*;
 import node.Events.EventEveryNode;
 import node.Events.WhenNodes.EventInputNode;
 import node.Events.WhenNodes.EventRangeInputNode;
 import node.Events.WhenNodes.EventWhenTimeNode;
 import node.Function.FunctionNode;
 import node.Function.InputParamNode;
-import node.InitNode;
 import node.Statements.AssignmentNode;
 import node.Statements.Expression.AddExprNode;
 import node.Statements.Expression.ExpressionNode;
@@ -19,7 +17,6 @@ import node.Statements.Expression.IDNode;
 import node.Statements.Expression.MultiExprNode;
 import node.Statements.IfStmtNode;
 import node.Statements.WhileNode;
-import node.VarDeclNode;
 import node.base.Node;
 import node.define_nodes.Device.DefDeviceNode;
 import node.define_nodes.Signal.DefSignalNode;
@@ -36,15 +33,15 @@ import java.util.Optional;
 public class DeclarationVisitor extends ASTBaseVisitor<Void> {
     SymbolTable st;
 
-    public DeclarationVisitor(SymbolTable st) {
-        this.st = st;
-        this.st.resetScope();
+    public DeclarationVisitor() {
     }
 
-    public SymbolTable getSt() {
-        return st;
+    @Override
+    public Void visit(ProgramNode node) {
+        this.st = node.getSt();
+        st.resetScope();
+        return super.visit(node);
     }
-
 
     @Override
     public Void visit(DefDeviceNode node) {
@@ -131,6 +128,4 @@ public class DeclarationVisitor extends ASTBaseVisitor<Void> {
         }
         return super.visit(node);
     }
-
-
 }

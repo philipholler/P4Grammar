@@ -14,14 +14,6 @@ import semantics.SymbolTable;
 public class FunctionVisitor extends ASTBaseVisitor<Object> {
     SymbolTable st;
 
-    public FunctionVisitor() {
-        this.st = new SymbolTable();
-    }
-
-    public SymbolTable getSt() {
-        return st;
-    }
-
     @Override
     public Object visit(FunctionNode node) {
         FunctionSymbol fs = new FunctionSymbol(node);
@@ -29,5 +21,11 @@ public class FunctionVisitor extends ASTBaseVisitor<Object> {
         st.enterSymbol(fs);
 
         return null;
+    }
+
+    @Override
+    public Object visit(ProgramNode node) {
+        this.st = node.getSt();
+        return super.visit(node);
     }
 }

@@ -5,6 +5,7 @@ import exceptions.user_side.FunctionNotDeclaredException;
 import exceptions.user_side.TypeUndefinedCompileError;
 import exceptions.user_side.VariableNotInitialisedException;
 import node.BlockNode;
+import node.ProgramNode;
 import node.Statements.Expression.AddExprNode;
 import node.Statements.Expression.FunctionCall.FuncCallNode;
 import node.Statements.Expression.FunctionCall.GetFuncNode;
@@ -28,13 +29,14 @@ import java.util.Optional;
 public class TypeAssignmentVisitor extends ASTBaseVisitor<String> {
     SymbolTable st;
 
-    public TypeAssignmentVisitor(SymbolTable st) {
-        this.st = st;
-        st.resetScope();
+    public TypeAssignmentVisitor() {
     }
 
-    public SymbolTable getSt() {
-        return st;
+    @Override
+    public String visit(ProgramNode node) {
+        this.st = node.getSt();
+        st.resetScope();
+        return super.visit(node);
     }
 
     @Override

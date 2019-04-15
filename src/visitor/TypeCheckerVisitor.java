@@ -2,6 +2,7 @@ package visitor;
 
 import exceptions.user_side.*;
 import node.BlockNode;
+import node.ProgramNode;
 import node.Statements.AssignmentNode;
 import node.Statements.Expression.AddExprNode;
 import node.Statements.Expression.ExpressionNode;
@@ -30,13 +31,14 @@ import java.util.Optional;
 public class TypeCheckerVisitor extends ASTBaseVisitor<Void>{
     SymbolTable st;
 
-    public TypeCheckerVisitor(SymbolTable st) {
-        this.st = st;
-        this.st.resetScope();
+    public TypeCheckerVisitor() {
     }
 
-    public SymbolTable getSt() {
-        return st;
+    @Override
+    public Void visit(ProgramNode node) {
+        this.st = node.getSt();
+        st.resetScope();
+        return super.visit(node);
     }
 
     @Override

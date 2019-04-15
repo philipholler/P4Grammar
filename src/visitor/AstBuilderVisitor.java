@@ -57,7 +57,7 @@ public class AstBuilderVisitor extends PivotBaseVisitor<Node> {
     public Node visitProgram(PivotParser.ProgramContext ctx) {
         updateLineNumber(ctx);
 
-        return new ProgramNode(ctx, visit(ctx.decls()));
+        return new ProgramNode(ctx, visit(ctx.decls()), new SymbolTable());
     }
 
     @Override
@@ -655,12 +655,6 @@ public class AstBuilderVisitor extends PivotBaseVisitor<Node> {
     }
 
     @Override
-    public Node visitLogicalExpressionOr(PivotParser.LogicalExpressionOrContext ctx) {
-        updateLineNumber(ctx);
-        return new LogicalOrExprNode(ctx, visit(ctx.left), visit(ctx.right));
-    }
-
-    @Override
     public Node visitLogicalLiterals(PivotParser.LogicalLiteralsContext ctx) {
         updateLineNumber(ctx);
         switch(ctx.getText()){
@@ -681,12 +675,16 @@ public class AstBuilderVisitor extends PivotBaseVisitor<Node> {
     }
 
     @Override
+    public Node visitLogicalExpressionOr(PivotParser.LogicalExpressionOrContext ctx) {
+        updateLineNumber(ctx);
+        return new LogicalOrExprNode(ctx, visit(ctx.left), visit(ctx.right));
+    }
+
+    @Override
     public Node visitLogicalExpressionInParen(PivotParser.LogicalExpressionInParenContext ctx) {
         updateLineNumber(ctx);
         return visit(ctx.logical_expr());
     }
-
-
 
     @Override
     public Node visitComparisonExpressionWithOperator(PivotParser.ComparisonExpressionWithOperatorContext ctx) {
