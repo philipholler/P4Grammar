@@ -33,7 +33,7 @@ public class FuncCallNode extends AbstractFuncCallNode{
     @Override
     public String toString() {
         return "FuncCallNode(" +
-                "ID='" + ID + '\'' +
+                "SIGNAL_ID='" + ID + '\'' +
                 ", arguments=" + arguments +
                 ", type=" + super.getType() +
                 ')';

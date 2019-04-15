@@ -20,7 +20,7 @@ public class AssignmentNode extends UnaryNode {
     @Override
     public String toString() {
         return "AssignmentNode(" +
-                "ID='" + ID + '\'' +
+                "SIGNAL_ID='" + ID + '\'' +
                 ')';
     }
 

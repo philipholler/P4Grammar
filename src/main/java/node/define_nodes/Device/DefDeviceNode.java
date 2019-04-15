@@ -44,7 +44,7 @@ public class DefDeviceNode extends DefNode {
     @Override
     public String toString() {
         return "DefDeviceNode(" +
-                "ID='" + ID + '\'' +
+                "SIGNAL_ID='" + ID + '\'' +
                 ')';
     }
 

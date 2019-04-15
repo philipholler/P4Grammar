@@ -157,7 +157,7 @@ public class TypeCheckerVisitor extends ASTBaseVisitor<Void>{
 
     /**
      * Helper function for the isExprTypeCorrect
-     * Check if an ID node (i.e. a variable) is also of the same type as the expected type
+     * Check if an SIGNAL_ID node (i.e. a variable) is also of the same type as the expected type
      */
     private Boolean isIDSameType(Node IDNode, String expectedType) {
         if(IDNode instanceof IDNode){

@@ -75,7 +75,7 @@ public class PivotParser extends Parser {
 			"NOW", "ELSE", "RETURN", "BREAK", "STARTING", "PRINT", "PARANBEG", "PARANEND", 
 			"BLCKBEG", "BLCKEND", "EQUALS", "PLUS", "MINUS", "DIV", "MULT", "RANGESEP", 
 			"SEMCOL", "LISTSEP", "QUOT", "COL", "AMP", "DATE", "DATEnoYEAR", "FLOAT", 
-			"TIME", "INTEGER", "STRING", "ID", "SIGN"
+			"TIME", "INTEGER", "STRING", "SIGNAL_ID", "SIGN"
 		};
 	}
 	private static final String[] _SYMBOLIC_NAMES = makeSymbolicNames();

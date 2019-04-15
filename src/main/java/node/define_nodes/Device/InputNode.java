@@ -6,16 +6,16 @@ import visitor.ASTBaseVisitor;
 
 public class InputNode extends LeafNode {
 
-    public final String ID;
+    public final String SIGNAL_ID;
 
-    public InputNode(ParserRuleContext ctx, String ID) {
+    public InputNode(ParserRuleContext ctx, String signalTypeID) {
         super(ctx);
-        this.ID = ID;
+        this.SIGNAL_ID = signalTypeID;
     }
 
     @Override
     public String toString() {
-        return super.toString() + "(ID='" + ID + "')";
+        return super.toString() + "(SIGNAL_ID='" + SIGNAL_ID + "')";
     }
 
     public <T> T accept(ASTBaseVisitor<? extends T> astBaseVisitor) {

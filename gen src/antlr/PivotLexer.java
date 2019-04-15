@@ -45,7 +45,7 @@ public class PivotLexer extends Lexer {
 			"GET", "EXCEEDS", "DECEEDS", "NOW", "ELSE", "RETURN", "BREAK", "STARTING", 
 			"PRINT", "PARANBEG", "PARANEND", "BLCKBEG", "BLCKEND", "EQUALS", "PLUS", 
 			"MINUS", "DIV", "MULT", "RANGESEP", "SEMCOL", "LISTSEP", "QUOT", "COL", 
-			"AMP", "DATE", "DATEnoYEAR", "FLOAT", "TIME", "INTEGER", "STRING", "ID", 
+			"AMP", "DATE", "DATEnoYEAR", "FLOAT", "TIME", "INTEGER", "STRING", "SIGNAL_ID",
 			"SIGN"
 		};
 	}
@@ -74,7 +74,7 @@ public class PivotLexer extends Lexer {
 			"NOW", "ELSE", "RETURN", "BREAK", "STARTING", "PRINT", "PARANBEG", "PARANEND", 
 			"BLCKBEG", "BLCKEND", "EQUALS", "PLUS", "MINUS", "DIV", "MULT", "RANGESEP", 
 			"SEMCOL", "LISTSEP", "QUOT", "COL", "AMP", "DATE", "DATEnoYEAR", "FLOAT", 
-			"TIME", "INTEGER", "STRING", "ID", "SIGN"
+			"TIME", "INTEGER", "STRING", "SIGNAL_ID", "SIGN"
 		};
 	}
 	private static final String[] _SYMBOLIC_NAMES = makeSymbolicNames();

@@ -13,8 +13,8 @@ define Device Thermometer output: Celsius;
 define Device LawnMower input: Toggle;
 
 // Variable definitions of every device in the house
-Bulb frontDoorLight = "129.6.18.1:12565";
-Window bedRoomWindow = "129.67.198.65:12565";
+Bulb frontDoorLight = "id155321";
+Window bedRoomWindow = "353354";
 
 LawnMower GardenMower = "129.10.10:10210";
 

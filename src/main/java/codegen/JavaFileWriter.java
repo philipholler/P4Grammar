@@ -10,13 +10,13 @@ public class JavaFileWriter { // todo very very temporary implementation
             File.separator + "compiled_code" + File.separator;
 
 
-    public static void writeClass(CodeBuilder codeBuilder){
-        String packagePath = outDir + codeBuilder.getPackage() + File.separator;
+    public static void writeClass(ClassBuilder classBuilder){
+        String packagePath = outDir + classBuilder.getPackage() + File.separator;
         new File(packagePath).mkdirs();
 
         try (PrintWriter printWriter = new PrintWriter(packagePath +
-                codeBuilder.getClassName() + ".java")){
-            printWriter.print(codeBuilder.toString());
+                classBuilder.getClassName() + ".java")){
+            printWriter.print(classBuilder.toString());
         } catch (FileNotFoundException e) {
             // todo exception handling. Lol.
             e.printStackTrace();

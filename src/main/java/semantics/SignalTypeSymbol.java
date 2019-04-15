@@ -115,7 +115,7 @@ public class SignalTypeSymbol extends Symbol{
 
     /**
      * @param ID The literal id for the signal value
-     * @return true if the given ID is defined for this SignalType. False otherwise.
+     * @return true if the given SIGNAL_ID is defined for this SignalType. False otherwise.
      */
     public boolean isLegalSignalValue(String ID){
         if(TYPE == SignalType.LITERALS)

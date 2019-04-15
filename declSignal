@@ -11,8 +11,8 @@ define Device MovementSensor output: toggle & input: celsius, toggle;
 define Device Thermometer output: celsius;
 
 // Variable definitions of every device in the house
-Bulb frontDoorLight = "129.6.18.1:12565";
-Window bedRoomWindow = "129.67.198.65:12565";
+Bulb frontDoorLight = "id1654";
+Window bedRoomWindow = "id6584";
 
 MovementSensor frontDoorSensor = "Google.com";
 

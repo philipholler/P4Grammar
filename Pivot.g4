@@ -5,10 +5,10 @@ decls : defs=define* (vars=declVar | devVars=declDevice)* inFunc=init? (funcDecl
 
 define : DEFINEKW (signal | device) SEMCOL;
 
-signal: SIGNAL ID COL (range | enumerations);
+signal: SIGNAL SIGNAL_ID COL (range | enumerations);
 
     enumerations : enumeration (LISTSEP enumeration)*;
-    enumeration  : ID EQUALS enumVal=litVal;
+    enumeration  : SIGNAL_ID EQUALS enumVal=litVal;
 
     // Signal values
     range : lowerBound RANGESEP upperBound;
@@ -20,25 +20,25 @@ signal: SIGNAL ID COL (range | enumerations);
                | FLOAT   #floatupRange
                ;
 
-device: DEVICE ID ((inputs? (AMP outputs)?) | (outputs? (AMP inputs)?)); // The order of output and input can be switched around. That doesn't matter.
+device: DEVICE SIGNAL_ID ((inputs? (AMP outputs)?) | (outputs? (AMP inputs)?)); // The order of output and input can be switched around. That doesn't matter.
 
     // Inputs and outputs
-    inputs : INPUT COL input=ID (LISTSEP input=ID)*;
+    inputs : INPUT COL input=SIGNAL_ID (LISTSEP input=SIGNAL_ID)*;
 
-    outputs: OUTPUT COL output=ID (LISTSEP output=ID)*;
+    outputs: OUTPUT COL output=SIGNAL_ID (LISTSEP output=SIGNAL_ID)*;
 
-declDevice: devType=ID varID=ID EQUALS val=STRING SEMCOL;
+declDevice: devType=SIGNAL_ID varID=SIGNAL_ID EQUALS val=STRING SEMCOL;
 
 init : INITFUNCKW PARANBEG PARANEND block;
 
-funcDecl : (varType | VOID) id=ID PARANBEG params=fParams PARANEND block; // Function declaration
+funcDecl : (varType | VOID) id=SIGNAL_ID PARANBEG params=fParams PARANEND block; // Function declaration
 
     fParams : (param (LISTSEP param)*)?;
-    param   : varType localID=ID;
+    param   : varType localID=SIGNAL_ID;
 
 event: (atomEvent | repeatEvent);
 
-atomEvent : WHEN deviceID=ID signalID=ID COL (enumID=ID | EXCEEDS expr| DECEEDS expr) block #inputWhenEvent
+atomEvent : WHEN deviceID=SIGNAL_ID signalID=SIGNAL_ID COL (enumID=SIGNAL_ID | EXCEEDS expr| DECEEDS expr) block #inputWhenEvent
           | WHEN timeAndDate block                                                          #timeWhenEvent
           // when 18:00 21d03m2019y // when 14:00 // when 21d03m2019y
           ;
@@ -62,20 +62,20 @@ printStmt: PRINT expr;
 
 waitStmt: WAIT expr timeFrame SEMCOL;
 
-assignment : varID=ID EQUALS expr SEMCOL;
+assignment : varID=SIGNAL_ID EQUALS expr SEMCOL;
 
 ifstmt: IF PARANBEG logical_expr PARANEND blck=block (ELSE elseblck=block)?;
 
 whilestmt: WHILE PARANBEG logical_expr PARANEND block;
 
-funcCall: id=ID PARANBEG arguments PARANEND                     #funCall
-        | SET deviceID=ID signalID=ID COL expr                  #setFun
-        | GET deviceID=ID signalID=ID                           #getFun
+funcCall: id=SIGNAL_ID PARANBEG arguments PARANEND                     #funCall
+        | SET deviceID=SIGNAL_ID signalID=SIGNAL_ID COL expr                  #setFun
+        | GET deviceID=SIGNAL_ID signalID=SIGNAL_ID                           #getFun
         ;
 
     arguments: expr? (LISTSEP expr)*;
 
-declVar: varType ID EQUALS expr SEMCOL;
+declVar: varType SIGNAL_ID EQUALS expr SEMCOL;
 
 brk: BREAK SEMCOL;
 
@@ -120,7 +120,7 @@ comp_operator : GT // Greater than
               ;
 
 atom : litVal
-     | varID=ID
+     | varID=SIGNAL_ID
      | NOW
      ;
 
@@ -212,5 +212,5 @@ FLOAT: '-'? DIGIT+ '.' DIGIT+;
 TIME: DIGIT DIGIT COL DIGIT DIGIT;
 INTEGER: '-'? DIGIT+;
 STRING: '"' (LOWERCASE | UPPERCASE | SIGN | DIGIT)+ '"';
-ID: (LOWERCASE | UPPERCASE) (LOWERCASE| UPPERCASE| DIGIT)*;
+SIGNAL_ID: (LOWERCASE | UPPERCASE) (LOWERCASE| UPPERCASE| DIGIT)*;
 SIGN: ('_' | '-' | '!' | ' ' | '.' | ':');

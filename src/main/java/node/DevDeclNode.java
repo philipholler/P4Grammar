@@ -34,7 +34,7 @@ public class DevDeclNode extends LeafNode {
     public String toString() {
         return "DevDeclNode(" +
                 "type='" + type + '\'' +
-                ", ID='" + ID + '\'' +
+                ", SIGNAL_ID='" + ID + '\'' +
                 ", val='" + val + '\'' +
                 ')';
     }

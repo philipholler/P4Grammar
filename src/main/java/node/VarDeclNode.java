@@ -34,7 +34,7 @@ public class VarDeclNode extends UnaryNode {
     public java.lang.String toString() {
         return "VarDeclNode(" +
                 "varType=" + varType +
-                ", ID='" + ID + '\'' +
+                ", SIGNAL_ID='" + ID + '\'' +
                 ')';
     }
 

@@ -32,19 +32,19 @@ public class DeviceTypeSymbol extends Symbol{
     }
 
     private static SignalTypeSymbol getInputSymbol(InputNode inNode, SymbolTable symbolTable){
-        Optional<Symbol> retrievedSymbol = symbolTable.getSymbol(inNode.ID);
+        Optional<Symbol> retrievedSymbol = symbolTable.getSymbol(inNode.SIGNAL_ID);
         if(retrievedSymbol.isPresent() && retrievedSymbol.get() instanceof SignalTypeSymbol)
             return ((SignalTypeSymbol) retrievedSymbol.get());
         else
-            throw new NoSuchSignalCompileError(inNode.ID, inNode.getLineNumber());
+            throw new NoSuchSignalCompileError(inNode.SIGNAL_ID, inNode.getLineNumber());
     }
 
     private static SignalTypeSymbol getOutputSymbol(OutputNode outNode, SymbolTable symbolTable){
-        Optional<Symbol> retrievedSymbol = symbolTable.getSymbol(outNode.ID);
+        Optional<Symbol> retrievedSymbol = symbolTable.getSymbol(outNode.SIGNAL_ID);
         if(retrievedSymbol.isPresent() && retrievedSymbol.get() instanceof SignalTypeSymbol)
             return ((SignalTypeSymbol) retrievedSymbol.get());
         else
-            throw new NoSuchSignalCompileError(outNode.ID, outNode.getLineNumber());
+            throw new NoSuchSignalCompileError(outNode.SIGNAL_ID, outNode.getLineNumber());
     }
 
 

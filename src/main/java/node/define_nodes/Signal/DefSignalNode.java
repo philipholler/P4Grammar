@@ -75,7 +75,7 @@ public class DefSignalNode extends ListNode {
     @Override
     public String toString() {
         return "DefSignalNode(" +
-                "ID='" + ID + '\'' +
+                "SIGNAL_ID='" + ID + '\'' +
                 ')';
     }
 

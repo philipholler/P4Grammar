@@ -26,7 +26,7 @@ public class IDNode extends ExpressionNode {
     @Override
     public java.lang.String toString() {
         return "IDNode(" +
-                "ID='" + ID + '\'' +
+                "SIGNAL_ID='" + ID + '\'' +
                 ')';
     }
 

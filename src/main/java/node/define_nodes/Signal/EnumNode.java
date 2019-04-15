@@ -33,7 +33,7 @@ public class EnumNode extends UnaryNode {
     @Override
     public String toString() {
         return "EnumNode(" +
-                "ID='" + ID + '\'' +
+                "SIGNAL_ID='" + ID + '\'' +
                 ')';
     }
 
