@@ -150,6 +150,16 @@ public class SymbolTable {
         return symbolString.append(globalBlock.toString(1)).toString();
     }
 
+    public static boolean isPrimitiveDataType(String type){
+        return (type.equals(INT_TYPE_ID)
+                || type.equals(FLOAT_TYPE_ID)
+                || type.equals(STRING_TYPE_ID));
+    }
+
+
+
+
+
     public boolean isValidType(String type) {
         return definedTypeIDs.contains(type);
     }

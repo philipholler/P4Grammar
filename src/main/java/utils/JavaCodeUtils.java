@@ -1,5 +1,7 @@
 package utils;
 
+import codegen.JavaType;
+
 public class JavaCodeUtils {
 
     public static String primitiveToObject(String type){
@@ -13,7 +15,19 @@ public class JavaCodeUtils {
             default:
                 throw new RuntimeException("The value '" + type + "' is not a primitive in java");
         }
+    }
 
+    public static JavaType correspondingJavaType(String type){
+        switch (type){
+            case "int": return JavaType.INT;
+            case "float" : return JavaType.FLOAT;
+            case "String" : return JavaType.STRING;
+            // String technically isn't a primitive in Java, but is included because it behaves almost identically
+            // to other primitives
+            default:
+                throw new RuntimeException("The value '" + type +
+                        " does not have a corresponding primitive type in java");
+        }
     }
 
 }

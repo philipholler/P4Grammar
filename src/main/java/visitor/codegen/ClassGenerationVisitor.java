@@ -168,13 +168,11 @@ public class ClassGenerationVisitor extends ASTBaseVisitor<ClassBuilder> {
 
         classBuilder.appendClassDef(node.getID(), ClassBuilder.DEVICE_SUPER_CLASS);
 
-        // Add variables
+        // Add variables for signals
         addSignalVariables(classBuilder, node.getInputs(), node.getOutputs());
-        classBuilder.appendPrimitiveDecl(JavaType.STRING, HARDWARE_ID_VAR).appendNewLine();
 
         // Add constructor and methods
-        classBuilder.appendConstructor(new JavaInputParameter(JavaType.STRING.keyword, HARDWARE_ID_VAR));
-        classBuilder.appendGetMethod(JavaType.STRING.keyword, HARDWARE_ID_VAR);
+        classBuilder.appendSuperConstructor(new JavaInputParameter(JavaType.STRING.keyword, HARDWARE_ID_VAR));
         addSignalGetters(classBuilder, node.getInputs(), node.getOutputs());
 
         return classBuilder.closeBlock(ClassBuilder.BlockType.CLASS);

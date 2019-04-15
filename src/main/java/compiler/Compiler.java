@@ -8,6 +8,7 @@ import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.tree.ParseTree;
 import visitor.codegen.ClassGenerationVisitor;
+import visitor.codegen.MainGenerationVisitor;
 
 import java.io.IOException;
 
@@ -47,6 +48,8 @@ public class Compiler {
             // Generate java classes corresponding to the (device and signal) type definitions
             ClassGenerationVisitor classGenVisitor = new ClassGenerationVisitor();
             classGenVisitor.visit(ast);
+            MainGenerationVisitor mainGenVisitor = new MainGenerationVisitor();
+            mainGenVisitor.visit(ast);
 
         } catch (IOException e) {
             e.printStackTrace();

@@ -3,6 +3,7 @@ package codegen;
 import exceptions.compilerside.CodeGenerationError;
 import exceptions.compilerside.MismatchedBracketException;
 
+import java.util.ArrayList;
 import java.util.Stack;
 
 public class ClassBuilder {
@@ -55,9 +56,6 @@ public class ClassBuilder {
     public ClassBuilder appendImportAllFrom(String packge){
         codeBuilder.append("import ").append(packge).append(".*").append(LINE_END).newLine();
         return this;
-    }
-
-    public void append(String s) {
     }
 
     /** Adds a standard public class definition to the builder */
@@ -123,7 +121,7 @@ public class ClassBuilder {
     }
 
 
-    public ClassBuilder appendConstructor(JavaInputParameter...inputParameters){
+    public ClassBuilder appendSuperConstructor(JavaInputParameter...inputParameters){
         if(className.isEmpty())
             throw new CodeGenerationError("Attempted to add constructor but ClassBuilder has no class definition");
 
@@ -134,8 +132,12 @@ public class ClassBuilder {
 
         // Build body of constructor
         openBlock(BlockType.METHOD);
-        for(JavaInputParameter param : inputParameters)
-            appendAssignment("this." + param.identifier, param.identifier); // this.x = x;
+
+        codeBuilder.append("super").append(START_PARAN);
+
+        // Add all constructor inputs as actual parameters to super constructor
+        appendActualParameters(inputParameters);
+        codeBuilder.append(END_PARAN).append(LINE_END);
 
         return this.closeBlock(BlockType.METHOD);
     }
@@ -205,12 +207,26 @@ public class ClassBuilder {
         return this;
     }
 
-    // Appends comma-separated actual parameters with the form : "type paramID1, type paramID2"
+    // Appends comma-separated actual parameters with the form : "paramID1, paramID2" and so on
     // with no comma after the last parameter
     private void appendActualParameters(String...inputs) {
         // Add parameters to method definition
         for(int i = 0; i < inputs.length; i++){
             String id = inputs[i];
+            codeBuilder.append(id);
+
+            // Add comma separator after every parameter, except for the last one
+            if(i != inputs.length - 1)
+                codeBuilder.append(COMMA).append(" ");
+        }
+    }
+
+    // Appends comma-separated actual parameters with the form : "type paramID1, type paramID2"
+    // with no comma after the last parameter
+    private void appendActualParameters(JavaInputParameter...inputs) {
+        // Add parameters to method definition
+        for(int i = 0; i < inputs.length; i++){
+            String id = inputs[i].identifier;
             codeBuilder.append(id);
 
             // Add comma separator after every parameter, except for the last one
