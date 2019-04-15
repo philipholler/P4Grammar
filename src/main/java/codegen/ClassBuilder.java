@@ -52,6 +52,11 @@ public class ClassBuilder {
         return this;
     }
 
+    public ClassBuilder appendImportAllFrom(String packge){
+        codeBuilder.append("import ").append(packge).append(".*").append(LINE_END).newLine();
+        return this;
+    }
+
     public void append(String s) {
     }
 

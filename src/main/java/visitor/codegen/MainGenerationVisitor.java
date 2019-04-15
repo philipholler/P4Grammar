@@ -22,7 +22,6 @@ public class MainGenerationVisitor extends ASTBaseVisitor<ClassBuilder> {
     }
 
 
-
     @Override
     public ClassBuilder visit(DevDeclNode node) {
 

@@ -78,11 +78,12 @@ public class ClassGenerationVisitor extends ASTBaseVisitor<ClassBuilder> {
 
         ClassBuilder classBuilder = new ClassBuilder();
         classBuilder.appendPackage(ClassBuilder.SIGNAL_PACKAGE);
+        classBuilder.appendImportAllFrom(ClassBuilder.SIGNAL_PACKAGE).appendNewLine();
         classBuilder.appendClassDef(signalNode.getID(), ClassBuilder.RANGE_SIGNAL_CLASS, rangeType.objectType);
 
         appendRangeConstants(classBuilder, rangeType, upperBound, lowerBound);
         // The default value variable of the range is set to the lower bound
-        classBuilder.appendPrimitiveDecl(rangeType, CURRENT_VALUE_VAR, lowerBound).appendNewLine();
+        classBuilder.appendPrimitiveDecl(rangeType, CURRENT_VALUE_VAR, lowerBound).appendNewLine().appendNewLine();
 
         addRangeGetters(classBuilder, rangeType);
         addCurrentValGetter(classBuilder, rangeType);
@@ -162,6 +163,7 @@ public class ClassGenerationVisitor extends ASTBaseVisitor<ClassBuilder> {
     public ClassBuilder visit(DefDeviceNode node) {
         ClassBuilder classBuilder = new ClassBuilder();
         classBuilder.appendPackage(ClassBuilder.DEVICE_PACKAGE);
+        classBuilder.appendImportAllFrom(ClassBuilder.SIGNAL_PACKAGE).appendNewLine();
         // Todo : import statements
 
         classBuilder.appendClassDef(node.getID(), ClassBuilder.DEVICE_SUPER_CLASS);
@@ -172,8 +174,8 @@ public class ClassGenerationVisitor extends ASTBaseVisitor<ClassBuilder> {
 
         // Add constructor and methods
         classBuilder.appendConstructor(new JavaInputParameter(JavaType.STRING.keyword, HARDWARE_ID_VAR));
-        addSignalGetters(classBuilder, node.getInputs(), node.getOutputs());
         classBuilder.appendGetMethod(JavaType.STRING.keyword, HARDWARE_ID_VAR);
+        addSignalGetters(classBuilder, node.getInputs(), node.getOutputs());
 
         return classBuilder.closeBlock(ClassBuilder.BlockType.CLASS);
     }
