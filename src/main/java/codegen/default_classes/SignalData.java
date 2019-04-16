@@ -1,3 +1,5 @@
+package codegen.default_classes;
+
 public class SignalData {
 
     public final String hardwareId, signalType, data;

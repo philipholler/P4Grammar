@@ -36,6 +36,10 @@ public class MultiExprNode extends ExpressionNode {
                 ')';
     }
 
+    public Operator getOperator() {
+        return op;
+    }
+
     public <T> T accept(ASTBaseVisitor<? extends T> astBaseVisitor) {
     return astBaseVisitor.visit(this);
 }

@@ -21,7 +21,7 @@ public class JavaCodeUtils {
         switch (type){
             case "int": return JavaType.INT;
             case "float" : return JavaType.FLOAT;
-            case "String" : return JavaType.STRING;
+            case "string" : return JavaType.STRING;
             // String technically isn't a primitive in Java, but is included because it behaves almost identically
             // to other primitives
             default:

@@ -19,6 +19,18 @@ public class EventInputNode extends EventNode {
         this.enumID = enumID;
     }
 
+    public String getDeviceID() {
+        return deviceID;
+    }
+
+    public String getSignalID() {
+        return signalID;
+    }
+
+    public String getEnumID() {
+        return enumID;
+    }
+
     @Override
     public String toString() {
         return "EventInputNode(" +

@@ -31,8 +31,8 @@ public class ClassBuilder {
     private String className = "";
     private String packageName = "";
 
-    // Every time a new block is created it's type (method block, function block etc.)
-    // is pushed to the block stack. When a block type is closed it's asserted the it matches
+    // Every time a new block is created its type (method block, function block etc.)
+    // is pushed to the block stack. When a block type is closed it's asserted that it matches
     // the top element of the stack
     private Stack<BlockType> blocks = new Stack<BlockType>();
 
@@ -41,6 +41,8 @@ public class ClassBuilder {
     public String getPackage() {
         return packageName;
     }
+
+
 
     public enum BlockType{
         CLASS, METHOD, WHILE, IF, ELSE, FOR;
@@ -114,7 +116,7 @@ public class ClassBuilder {
             throw new MismatchedBracketException("Attempted to close a " + blockType.name() + " bracket but last " +
                     "opened bracket was a " + lastOpenedBlock + " bracket");
 
-        codeBuilder.newLine();
+
         codeBuilder.decremmentIndentation();
         codeBuilder.append(END_BRACKET).newLine().newLine();
         return this;
@@ -151,6 +153,7 @@ public class ClassBuilder {
      * @param inputs Zero or more formal parameters
      */
     public ClassBuilder appendMethod(String methodName, String returnType, JavaInputParameter...inputs){
+        codeBuilder.newLine();
         codeBuilder.append("public ").append(returnType).append(" ").append(methodName);
 
         codeBuilder.append(" (");
@@ -223,20 +226,6 @@ public class ClassBuilder {
         }
     }
 
-    // Appends comma-separated actual parameters with the form : "type paramID1, type paramID2"
-    // with no comma after the last parameter
-    private void appendActualParameters(JavaInputParameter...inputs) {
-        // Add parameters to method definition
-        for(int i = 0; i < inputs.length; i++){
-            String id = inputs[i].identifier;
-            codeBuilder.append(id);
-
-            // Add comma separator after every parameter, except for the last one
-            if(i != inputs.length - 1)
-                codeBuilder.append(COMMA).append(" ");
-        }
-    }
-
 
     public ClassBuilder appendPrimitiveDecl(JavaType type, String id){
         appendPrimitiveDecl(type, id, "");
@@ -249,6 +238,52 @@ public class ClassBuilder {
         if(!value.isEmpty())
             codeBuilder.append(" = ").append(value);
 
+        codeBuilder.append(LINE_END).newLine();
+        return this;
+    }
+
+    public ClassBuilder startParan(){
+        codeBuilder.append(START_PARAN);
+        return this;
+    }
+
+    public ClassBuilder endParan(){
+        codeBuilder.append(END_PARAN);
+        return this;
+    }
+
+    public ClassBuilder append(String string){
+        codeBuilder.append(string);
+        return this;
+    }
+
+    public ClassBuilder appendWord(String string){
+        codeBuilder.append(string).append(" ");
+        return this;
+    }
+
+    public ClassBuilder appendOperator(String op){
+        codeBuilder.append(" ").append(op).append(" ");
+        return this;
+    }
+
+    public ClassBuilder appendEquals(){
+        codeBuilder.append(" = ");
+        return this;
+    }
+
+    public ClassBuilder appendComma() {
+        codeBuilder.append(COMMA);
+        return this;
+    }
+
+    public ClassBuilder appendSpace(){
+        codeBuilder.append(" ");
+        return this;
+    }
+
+
+    public ClassBuilder endLine(){
         codeBuilder.append(LINE_END).newLine();
         return this;
     }

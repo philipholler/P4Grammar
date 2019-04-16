@@ -29,6 +29,13 @@ public class ReturnNode extends Node {
         return treeString.toString();
     }
 
+    public Node getReturnVal(){
+        if(getChildren().size() == 0)
+            return null;
+
+        return getChildren().get(0);
+    }
+
     @Override
     public String toString() {
         return "ReturnNode()";
