@@ -6,15 +6,18 @@ import node.ProgramNode;
 import semantics.FunctionSymbol;
 import semantics.SymbolTable;
 
+/**
+ * This visitor is a simple visitor for adding all functions to the symbol table.
+ * This must be done before the declaration visitor visits,
+ */
+
 public class FunctionVisitor extends ASTBaseVisitor<Object> {
     SymbolTable st;
 
-    public FunctionVisitor() {
-        this.st = new SymbolTable();
-    }
-
-    public SymbolTable getSt() {
-        return st;
+    @Override
+    public Object visit(ProgramNode node) {
+        this.st = node.getSt();
+        return super.visit(node);
     }
 
     @Override

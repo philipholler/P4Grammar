@@ -1,8 +1,11 @@
 package visitor;
 
 import exceptions.userside.ExpressionTypeException;
+import exceptions.user_side.FunctionNotDeclaredException;
 import exceptions.userside.TypeUndefinedCompileError;
+import exceptions.user_side.VariableNotInitialisedException;
 import node.BlockNode;
+import node.ProgramNode;
 import node.Statements.Expression.AddExprNode;
 import node.Statements.Expression.FunctionCall.FuncCallNode;
 import node.Statements.Expression.FunctionCall.GetFuncNode;
@@ -12,24 +15,28 @@ import node.Statements.Expression.LiteralValues.FloatNode;
 import node.Statements.Expression.LiteralValues.IntegerNode;
 import node.Statements.Expression.LiteralValues.StringNode;
 import node.Statements.Expression.MultiExprNode;
+import node.Statements.PrintNode;
+import node.base.Node;
 import semantics.*;
 
 import java.util.Optional;
 
 /**
  * This class is meant for assigning types to all nodes of the type "ExpressionNode"
+ * - Philip
  */
 
 public class TypeAssignmentVisitor extends ASTBaseVisitor<String> {
     SymbolTable st;
 
-    public TypeAssignmentVisitor(SymbolTable st) {
-        this.st = st;
-        st.resetScope();
+    public TypeAssignmentVisitor() {
     }
 
-    public SymbolTable getSt() {
-        return st;
+    @Override
+    public String visit(ProgramNode node) {
+        this.st = node.getSt();
+        st.resetScope();
+        return super.visit(node);
     }
 
     @Override
@@ -37,6 +44,12 @@ public class TypeAssignmentVisitor extends ASTBaseVisitor<String> {
         Optional<FunctionSymbol> funcSymbol = st.getFunctionSymbol(node.getID());
         if(funcSymbol.isPresent()){
             node.setType(funcSymbol.get().getReturnType());
+        } else {
+            throw new FunctionNotDeclaredException("Function '" +
+                    node.getID() +
+                    "' not declared.",
+                    node.getLineNumber()
+                    );
         }
 
         // Make sure to visit all children to assign types to them as well.
@@ -59,9 +72,11 @@ public class TypeAssignmentVisitor extends ASTBaseVisitor<String> {
             switch (signalSymb.getTYPE()){
                 case INT_RANGE:
                     node.setType(SymbolTable.INT_TYPE_ID);
+                    visit(node.getExpr());
                     break;
                 case FLOAT_RANGE:
                     node.setType(SymbolTable.FLOAT_TYPE_ID);
+                    visit(node.getExpr());
                     break;
                 case LITERALS:
                     node.setType(signalSymb.getSignalLiterals().get(0).getTypeID());
@@ -70,6 +85,7 @@ public class TypeAssignmentVisitor extends ASTBaseVisitor<String> {
                     throw new TypeUndefinedCompileError("Could not identify type", node.getLineNumber());
             }
         }
+
         return node.getType();
     }
 
@@ -143,7 +159,12 @@ public class TypeAssignmentVisitor extends ASTBaseVisitor<String> {
         String rightNodeType = visit(node.getRightChild());
 
         if(!leftNodeType.equals(rightNodeType)){
-            throw new ExpressionTypeException("Type mismatch", node.getLineNumber());
+            throw new ExpressionTypeException("Type mismatch. Cannot divide or multiply '" +
+                    leftNodeType +
+                    "' with '" +
+                    rightNodeType +
+                    "'"
+                    , node.getLineNumber());
         }
 
         node.setType(leftNodeType);
@@ -155,6 +176,8 @@ public class TypeAssignmentVisitor extends ASTBaseVisitor<String> {
         Optional<Symbol> varSymbol = st.getSymbol(node.getID());
         if(varSymbol.isPresent() && varSymbol.get() instanceof FieldSymbol){
             node.setType(((FieldSymbol) varSymbol.get()).getTypeID());
+        } else {
+            throw new VariableNotInitialisedException("Variable '" + node.getID() + "' not initialised.", node.getLineNumber());
         }
 
         return node.getType();
@@ -168,6 +191,12 @@ public class TypeAssignmentVisitor extends ASTBaseVisitor<String> {
 
         st.closeScope();
 
+        return null;
+    }
+
+    // The printnode should accept many different types, so the expression does not have to be type correct.
+    @Override
+    public String visit(PrintNode node) {
         return null;
     }
 }

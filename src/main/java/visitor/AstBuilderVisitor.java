@@ -57,7 +57,7 @@ public class AstBuilderVisitor extends PivotBaseVisitor<Node> {
     public Node visitProgram(PivotParser.ProgramContext ctx) {
         updateLineNumber(ctx);
 
-        return new ProgramNode(ctx, visit(ctx.decls()));
+        return new ProgramNode(ctx, visit(ctx.decls()), new SymbolTable());
     }
 
     @Override
@@ -177,29 +177,6 @@ public class AstBuilderVisitor extends PivotBaseVisitor<Node> {
         } else{
             throw new CompileErrorException("Signal definitions must have either a range or a list of values"
                     , getCurrentLineNumber());
-        }
-    }
-
-    /** Creates a SignalTypeNode with either a range or list of enums based on the given signal definition node */
-    private SignalTypeSymbol createSignalSymbol(DefSignalNode defSignalNode){
-        if(!defSignalNode.getEnumNodes().isEmpty()){
-            // Create signal symbol with a list of enum values
-            ArrayList<FieldSymbol> enums = new ArrayList<>();
-            for(EnumNode eNode : defSignalNode.getEnumNodes())
-                enums.add(createFieldSymbol(eNode));
-            return new SignalTypeSymbol(defSignalNode, defSignalNode.getID(), enums);
-        }
-
-        if(defSignalNode.getRangeNode().getType().equals(SymbolTable.INT_TYPE_ID)){
-            // Create int range signal symbol
-            int lowerBound = ((IntegerNode)(defSignalNode.getRangeNode().getLeftChild())).getVal();
-            int upperBound = ((IntegerNode)(defSignalNode.getRangeNode().getRightChild())).getVal();
-            return new SignalTypeSymbol(defSignalNode, defSignalNode.getID(), lowerBound, upperBound);
-        }else{
-            // Create float range signal symbol
-            float lowerBound = ((FloatNode)(defSignalNode.getRangeNode().getLeftChild())).getVal();
-            float upperBound = ((FloatNode)(defSignalNode.getRangeNode().getRightChild())).getVal();
-            return new SignalTypeSymbol(defSignalNode, defSignalNode.getID(), lowerBound, upperBound);
         }
     }
 
@@ -576,7 +553,7 @@ public class AstBuilderVisitor extends PivotBaseVisitor<Node> {
     @Override
     public Node visitAssignment(PivotParser.AssignmentContext ctx) {
         updateLineNumber(ctx);
-        return new AssignmentNode(ctx, visit(ctx.expr()), ctx.varID.getText());
+        return new AssignmentNode(ctx, (ExpressionNode)visit(ctx.expr()), ctx.varID.getText());
     }
 
     @Override
@@ -617,7 +594,7 @@ public class AstBuilderVisitor extends PivotBaseVisitor<Node> {
     @Override
     public Node visitSetFun(PivotParser.SetFunContext ctx) {
         updateLineNumber(ctx);
-        return new SetFuncNode(ctx, ctx.deviceID.getText(), ctx.signalID.getText(), (ExpressionNode) visit(ctx.expr()));
+        return new SetFuncNode(ctx, ctx.deviceID.getText(), ctx.signalID.getText(), (ExpressionNode) visit(ctx.exprVal));
     }
 
     @Override
@@ -651,13 +628,7 @@ public class AstBuilderVisitor extends PivotBaseVisitor<Node> {
         if(ctx.expr() == null){
             return new ReturnNode(ctx);
         }
-        return new ReturnNode(ctx, visit(ctx.expr()));
-    }
-
-    @Override
-    public Node visitLogicalExpressionOr(PivotParser.LogicalExpressionOrContext ctx) {
-        updateLineNumber(ctx);
-        return new LogicalOrExprNode(ctx, visit(ctx.left), visit(ctx.right));
+        return new ReturnNode(ctx, (ExpressionNode)visit(ctx.expr()));
     }
 
     @Override
@@ -681,12 +652,16 @@ public class AstBuilderVisitor extends PivotBaseVisitor<Node> {
     }
 
     @Override
+    public Node visitLogicalExpressionOr(PivotParser.LogicalExpressionOrContext ctx) {
+        updateLineNumber(ctx);
+        return new LogicalOrExprNode(ctx, visit(ctx.left), visit(ctx.right));
+    }
+
+    @Override
     public Node visitLogicalExpressionInParen(PivotParser.LogicalExpressionInParenContext ctx) {
         updateLineNumber(ctx);
         return visit(ctx.logical_expr());
     }
-
-
 
     @Override
     public Node visitComparisonExpressionWithOperator(PivotParser.ComparisonExpressionWithOperatorContext ctx) {

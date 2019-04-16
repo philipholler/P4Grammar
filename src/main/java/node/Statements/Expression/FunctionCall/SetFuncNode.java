@@ -54,4 +54,10 @@ public class SetFuncNode extends AbstractFuncCallNode {
     public ExpressionNode getExpr() {
         return expr;
     }
+
+    public void setExpr(Node expr){
+        this.expr = (ExpressionNode) expr;
+        super.getChildren().clear();
+        super.getChildren().add(expr);
+    }
 }

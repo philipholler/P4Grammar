@@ -5,10 +5,10 @@ decls : defs=define* (vars=declVar | devVars=declDevice)* inFunc=init? (funcDecl
 
 define : DEFINEKW (signal | device) SEMCOL;
 
-signal: SIGNAL SIGNAL_ID COL (range | enumerations);
+signal: SIGNAL ID COL (range | enumerations);
 
     enumerations : enumeration (LISTSEP enumeration)*;
-    enumeration  : SIGNAL_ID EQUALS enumVal=litVal;
+    enumeration  : ID EQUALS enumVal=litVal;
 
     // Signal values
     range : lowerBound RANGESEP upperBound;
@@ -20,25 +20,25 @@ signal: SIGNAL SIGNAL_ID COL (range | enumerations);
                | FLOAT   #floatupRange
                ;
 
-device: DEVICE SIGNAL_ID ((inputs? (AMP outputs)?) | (outputs? (AMP inputs)?)); // The order of output and input can be switched around. That doesn't matter.
+device: DEVICE ID ((inputs? (AMP outputs)?) | (outputs? (AMP inputs)?)); // The order of output and input can be switched around. That doesn't matter.
 
     // Inputs and outputs
-    inputs : INPUT COL input=SIGNAL_ID (LISTSEP input=SIGNAL_ID)*;
+    inputs : INPUT COL input=ID (LISTSEP input=ID)*;
 
-    outputs: OUTPUT COL output=SIGNAL_ID (LISTSEP output=SIGNAL_ID)*;
+    outputs: OUTPUT COL output=ID (LISTSEP output=ID)*;
 
-declDevice: devType=SIGNAL_ID varID=SIGNAL_ID EQUALS val=STRING SEMCOL;
+declDevice: devType=ID varID=ID EQUALS val=STRING SEMCOL;
 
 init : INITFUNCKW PARANBEG PARANEND block;
 
-funcDecl : (varType | VOID) id=SIGNAL_ID PARANBEG params=fParams PARANEND block; // Function declaration
+funcDecl : (varType | VOID) id=ID PARANBEG params=fParams PARANEND block; // Function declaration
 
     fParams : (param (LISTSEP param)*)?;
-    param   : varType localID=SIGNAL_ID;
+    param   : varType localID=ID;
 
 event: (atomEvent | repeatEvent);
 
-atomEvent : WHEN deviceID=SIGNAL_ID signalID=SIGNAL_ID COL (enumID=SIGNAL_ID | EXCEEDS expr| DECEEDS expr) block #inputWhenEvent
+atomEvent : WHEN deviceID=ID signalID=ID COL (enumID=ID | EXCEEDS expr| DECEEDS expr) block #inputWhenEvent
           | WHEN timeAndDate block                                                          #timeWhenEvent
           // when 18:00 21d03m2019y // when 14:00 // when 21d03m2019y
           ;
@@ -56,26 +56,28 @@ timeFrame: (MONTHS | WEEKS | DAYS | HOURS | MINUTES | SECONDS | MS);
 
 block: BLCKBEG stmts BLCKEND;
 
-stmts: (waitStmt | assignment | ifstmt | whilestmt | funcCall SEMCOL | printStmt | declVar | brk | rtn)*; // Not finished
+// The SEMCOL after the funcCall has to be there in the stmts, since it will not be needed if the funcCall is used in a variable decl.
+stmts: (waitStmt | assignment | ifstmt | whilestmt | funcCall SEMCOL | printStmt | declVar | brk | rtn)*;
 
-printStmt: PRINT expr;
+printStmt: PRINT expr SEMCOL;
 
 waitStmt: WAIT expr timeFrame SEMCOL;
 
-assignment : varID=SIGNAL_ID EQUALS expr SEMCOL;
+assignment : varID=ID EQUALS expr SEMCOL;
 
 ifstmt: IF PARANBEG logical_expr PARANEND blck=block (ELSE elseblck=block)?;
 
 whilestmt: WHILE PARANBEG logical_expr PARANEND block;
 
-funcCall: id=SIGNAL_ID PARANBEG arguments PARANEND                     #funCall
-        | SET deviceID=SIGNAL_ID signalID=SIGNAL_ID COL expr                  #setFun
-        | GET deviceID=SIGNAL_ID signalID=SIGNAL_ID                           #getFun
+funcCall: id=ID PARANBEG arguments PARANEND                         #funCall
+        //exprVal can also be an IDNode of a signal literal. This is done, since expr with ID Atom and regular ID cannot be distinguished.
+        | SET deviceID=ID signalID=ID COL exprVal=expr              #setFun
+        | GET deviceID=ID signalID=ID                               #getFun
         ;
 
     arguments: expr? (LISTSEP expr)*;
 
-declVar: varType SIGNAL_ID EQUALS expr SEMCOL;
+declVar: varType ID EQUALS expr SEMCOL;
 
 brk: BREAK SEMCOL;
 
@@ -120,7 +122,7 @@ comp_operator : GT // Greater than
               ;
 
 atom : litVal
-     | varID=SIGNAL_ID
+     | varID=ID
      | NOW
      ;
 
@@ -211,6 +213,6 @@ DATEnoYEAR: DIGIT DIGIT 'd' DIGIT DIGIT 'm';
 FLOAT: '-'? DIGIT+ '.' DIGIT+;
 TIME: DIGIT DIGIT COL DIGIT DIGIT;
 INTEGER: '-'? DIGIT+;
-STRING: '"' (LOWERCASE | UPPERCASE | SIGN | DIGIT)+ '"';
-SIGNAL_ID: (LOWERCASE | UPPERCASE) (LOWERCASE| UPPERCASE| DIGIT)*;
-SIGN: ('_' | '-' | '!' | ' ' | '.' | ':');
+STRING: '"' (LOWERCASE | UPPERCASE | SIGN | DIGIT )+ '"';
+ID: (LOWERCASE | UPPERCASE) (LOWERCASE| UPPERCASE| DIGIT)*;
+SIGN: ('_' | '-' | '!' | ' ' | '.' | ':' | '+' | '/' | '=');

@@ -1,20 +1,24 @@
 // Define signals
-define Signal Toggle: On = 1, Off = 0;
-define Signal Celsius:  1..60;
-define Signal Open:  0.0..100.0;
-define Signal Percentage: 0.0..100.0;
+define Signal toggle: On = 1, Off = 0, yo = 3;
+define Signal celsius:  1..60;
+define Signal open:  0.0..100.0;
+define Signal percentage: 0.0..100.0;
+define Signal percentInt: 0..100;
 
 // Define device types
-define Device Bulb input: Toggle;
-define Device Window input: Open;
+define Device Bulb input: toggle;
+define Device Window input: open;
+define Device IntWindow input: percentInt;
 // Define sensors
-define Device MovementSensor output: Toggle & input: Celsius;
-define Device Thermometer output: Celsius;
-define Device LawnMower input: Toggle;
+define Device MovementSensor output: toggle & input: celsius;
+define Device Thermometer output: celsius;
+define Device LawnMower input: toggle;
 
 // Variable definitions of every device in the house
-Bulb frontDoorLight = "id155321";
-Window bedRoomWindow = "353354";
+Bulb frontDoorLight = "129.6.18.1:12565";
+Window bedRoomWindow = "129.67.198.65:12565";
+
+IntWindow myIntWindow = "129.12.12.12:21000";
 
 LawnMower GardenMower = "129.10.10:10210";
 
@@ -26,41 +30,65 @@ int testInt = 5;
 float testFloat = 6.0;
 
 init(){
-    int man = 2;
-    int jkl = 2 + a + get GardenMower Toggle + testFunctionInt("hej" + testFunction(5) + "i");
-    jkl = 1;
-    jkl = 2 + a + 2 + testInt;
+    print "hej " + " hej " + " hej " + " Yooo " + "Magnus small bicep";
+    set myIntWindow percentInt: 10 + 15;
+
+    testFunction(5 + 5);
+    if(2 + 3 < 5 + 10 && true){
+
+    }
+    int man = 2 + 5;
+    man = 2 + 7 + 5 * 100;
+
+    float mann = 2.0 + 5.0;
+    mann = 2.0 + 7.0 + 1.0;
+
+    string mannn = "hej";
+    mannn = "hej" + "hej" + "hej";
+
+    int jkl = 2 + a + get GardenMower toggle + testFunctionInt("hej" + testFunction(5) + "i") + testFunctionInt("Hej");
+    jkl = 2 + a + 2;
+
+    int jak = testFunctionInt("hej") + 5;
+
+    // Not written by Philip
+    print "Philip Bicep = " + 100 + "cm";
+
+    set myIntWindow percentInt: 10 + man;
+
     // Optional code for initialization
     // Automatically run when the program is run for the first time
 
     // Arguments can now be nested returning functions.
-    string stringReturn = testFunction(testFunctionInt(testFunction(55)));
+    string stringReturn = testFunction(testFunctionInt(testFunction(55 + man)));
 }
 
 int testFunctionInt(string hej){
-    return 5;
+    return 5 + 10;
 }
 
 // Events
-when frontDoorSensor Toggle: on {
+when frontDoorSensor toggle: on {
     if(now > 17:00 && now < 21:00){
-        set frontDoorLight Toggle: On;
+        set frontDoorLight toggle: On;
     }
+
     wait 30 seconds;
 
-    while(get frontDoorSensor Toggle == "On"){
-        set frontDoorLight Toggle: Off;
+    while(get frontDoorSensor toggle == On){
+        set frontDoorLight toggle: Off;
     }
 }
 
-when mainThermometer Celsius: exceeds 22{
+when mainThermometer celsius: exceeds 22{
     setBedroomWindowsOpen(50.0); // Calling function defined further down
 }
 
 // Function
 string testFunction(int percent){
     string test = " ";
-    set bedRoomWindow Open: 15.0;
+    float procent = 15.0;
+    set bedRoomWindow open: procent;
     while(true){
         return;
     }
@@ -74,7 +102,7 @@ string testFunction(int percent){
 
 // Function
 void setBedroomWindowsOpen(float percent){
-    set bedRoomWindow Open: percent;
+    set bedRoomWindow open: percent;
 }
 
 // Repeating event
@@ -85,7 +113,7 @@ every 2 hours{
     string c = "Magnus";
     string godPerson = "hey";
 
-    if(a == 3){
+    if(a == ab){
         string mads = "hey";
     } else {
         string magnus = godPerson;
@@ -95,11 +123,11 @@ every 2 hours{
 // // Turn on lawn mower every 2 weeks at 11:00 every summer.
 every 2 weeks starting 11:00 01d04m2019y{
     if(01d04m < now && now < 30d09m){
-        set GardenMower Toggle: On;
+        set GardenMower toggle: yo;
     }
 
     int b = 3;
-    if(5 == 5 && (b == a || a == b)){
+    if((5 + b) == 5 && (b == a || a == b)){
         b = 5;
     }
 
@@ -108,12 +136,12 @@ every 2 weeks starting 11:00 01d04m2019y{
     }
 }
 
-when mainThermometer Celsius: exceeds 22{
+when mainThermometer celsius: exceeds 22{
     setBedroomWindowsOpen(50.0); // Calling function defined further down
 }
 
 // Events
-when frontDoorSensor Toggle: on {
+when frontDoorSensor toggle: on {
 
 }
 

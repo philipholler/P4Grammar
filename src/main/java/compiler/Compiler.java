@@ -2,6 +2,7 @@ package compiler;
 
 import antlr.PivotLexer;
 import antlr.PivotParser;
+import node.ProgramNode;
 import node.base.Node;
 import visitor.*;
 import org.antlr.v4.runtime.CommonTokenStream;
@@ -28,10 +29,6 @@ public class Compiler {
             CommonTokenStream token = new CommonTokenStream(lexer);
             PivotParser parser = new PivotParser(token);
 
-            // Print parse tree
-            //ParseTreePrinter parseTreePrinter = new ParseTreePrinter();
-            //parseTreePrinter.print(parser.program());
-
             // Create parse tree with parser
             ParseTree tree = parser.program();
 
@@ -42,8 +39,17 @@ public class Compiler {
             // Print ast. Use the Node.getTreeString() to pretty-print the AST.
             System.out.println(ast.getTreeString(0));
 
-            // Dispatch all AST-visitors and print out the symbol table
-            dispatchASTVisitors(ast);
+            // Decorate AST using all visitors
+            decorateAST(ast);
+
+            // Print the symbol table, which is found inside the first node of type ProgramNode
+            System.out.println(((ProgramNode)ast).getSt());
+
+            // Optimise expressions
+            optimiseExpr(ast);
+
+            // Print new AST
+            System.out.println(ast.getTreeString(0));
 
             // Generate java classes corresponding to the (device and signal) type definitions
             ClassGenerationVisitor classGenVisitor = new ClassGenerationVisitor();
@@ -57,19 +63,17 @@ public class Compiler {
 
     }
 
-    private static void dispatchASTVisitors(Node ast){
-        FunctionVisitor fv = new FunctionVisitor();
-        ast.accept(fv);
+    private static void decorateAST(Node ast){
+        ast.accept(new FunctionVisitor());
 
-        DeclarationVisitor dclVisitor = new DeclarationVisitor(fv.getSt());
-        ast.accept(dclVisitor);
+        ast.accept(new DeclarationVisitor());
 
-        TypeAssignmentVisitor typeAssignmentVisitor = new TypeAssignmentVisitor(dclVisitor.getSt());
-        ast.accept(typeAssignmentVisitor);
+        ast.accept(new TypeAssignmentVisitor());
 
-        TypeCheckerVisitor typeCheckVisitor = new TypeCheckerVisitor(typeAssignmentVisitor.getSt());
-        ast.accept(typeCheckVisitor);
+        ast.accept(new TypeCheckerVisitor());
+    }
 
-        System.out.println(typeCheckVisitor.getSt());
+    private static void optimiseExpr(Node ast){
+        ast.accept(new OptimiseExprVisitor());
     }
 }
