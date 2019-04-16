@@ -30,7 +30,7 @@ int testInt = 5;
 float testFloat = 6.0;
 
 init(){
-    print "hej " + " hej " + " hej " + " Yooo " + "Magnus small bicep";
+    print "hej " + "hej " + "Hej " + "Yooo " + "Magnus small bicep";
     set myIntWindow percentInt: 10 + 15;
 
     testFunction(5 + 5);
