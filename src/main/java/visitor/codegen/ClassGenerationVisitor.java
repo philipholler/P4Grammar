@@ -28,8 +28,10 @@ import java.util.ArrayList;
  */
 public class ClassGenerationVisitor extends ASTBaseVisitor<ClassBuilder> {
 
-    public static final String RANGE_UPPER_BOUND_ID = "UPPER_BOUND";
-    public static final String RANGE_LOWER_BOUND_ID = "LOWER_BOUND";
+    public static final String RANGE_UPPER_BOUND_VAR = "UPPER_BOUND";
+    public static final String RANGE_LOWER_BOUND_VAR = "LOWER_BOUND";
+    public static final String DEFAULT_VALUE_VAR = "defaultValue";
+
 
     public static final String CURRENT_VALUE_VAR = "currentValue";
     public static final String HARDWARE_ID_VAR = "hardwareID";
@@ -65,6 +67,7 @@ public class ClassGenerationVisitor extends ASTBaseVisitor<ClassBuilder> {
         JavaType rangeType;
         RangeNode rangeNode = signalNode.getRangeNode();
         String lowerBound, upperBound;
+        String defaultValue = "";
 
         if (rangeNode.getType().equals(SymbolTable.INT_TYPE_ID)) {
             rangeType = JavaType.INT;
@@ -81,30 +84,13 @@ public class ClassGenerationVisitor extends ASTBaseVisitor<ClassBuilder> {
         classBuilder.appendImportAllFrom(ClassBuilder.SIGNAL_PACKAGE).appendNewLine();
         classBuilder.appendClassDef(signalNode.getID(), ClassBuilder.RANGE_SIGNAL_CLASS, rangeType.objectType);
 
-        appendRangeConstants(classBuilder, rangeType, upperBound, lowerBound);
-        // The default value variable of the range is set to the lower bound
-        classBuilder.appendPrimitiveDecl(rangeType, CURRENT_VALUE_VAR, lowerBound).appendNewLine().appendNewLine();
-
-        addRangeGetters(classBuilder, rangeType);
-        addCurrentValGetter(classBuilder, rangeType);
+        // Create constructor calling the super constructor of RangeSignal
+        classBuilder.appendConstructor();
+        classBuilder.appendSuperConstructorCall(lowerBound, upperBound, defaultValue);
+        classBuilder.closeBlock(ClassBuilder.BlockType.METHOD);
 
         classBuilder.closeBlock(ClassBuilder.BlockType.CLASS);
-
         return classBuilder;
-    }
-
-    private void addCurrentValGetter(ClassBuilder classBuilder, JavaType rangeType) {
-        classBuilder.appendGetMethod(rangeType.objectType, CURRENT_VALUE_VAR).appendNewLine();
-    }
-
-    private void addRangeGetters(ClassBuilder classBuilder, JavaType rangeType) {
-        classBuilder.appendGetMethod(rangeType.objectType, RANGE_UPPER_BOUND_ID);
-        classBuilder.appendGetMethod(rangeType.objectType, RANGE_LOWER_BOUND_ID);
-    }
-
-    private void appendRangeConstants(ClassBuilder classBuilder, JavaType type, String lowerBound, String upperBound) {
-        classBuilder.appendPrimitiveDecl(type, RANGE_LOWER_BOUND_ID, lowerBound);
-        classBuilder.appendPrimitiveDecl(type, RANGE_UPPER_BOUND_ID, upperBound).appendNewLine();
     }
 
     private ClassBuilder generateLiteralSignal(DefSignalNode signalNode) {
@@ -171,8 +157,11 @@ public class ClassGenerationVisitor extends ASTBaseVisitor<ClassBuilder> {
         // Add variables for signals
         addSignalVariables(classBuilder, node.getInputs(), node.getOutputs());
 
-        // Add constructor and methods
-        classBuilder.appendSuperConstructor(new JavaInputParameter(JavaType.STRING.keyword, HARDWARE_ID_VAR));
+        // Add constructor calling super constructor with the hardwareID from the constructor parameter
+        classBuilder.appendConstructor(new JavaInputParameter(JavaType.STRING.keyword, HARDWARE_ID_VAR));
+        classBuilder.appendSuperConstructorCall(HARDWARE_ID_VAR);
+        classBuilder.closeBlock(ClassBuilder.BlockType.METHOD);
+
         addSignalGetters(classBuilder, node.getInputs(), node.getOutputs());
 
         return classBuilder.closeBlock(ClassBuilder.BlockType.CLASS);
@@ -195,3 +184,4 @@ public class ClassGenerationVisitor extends ASTBaseVisitor<ClassBuilder> {
     }
 
 }
+

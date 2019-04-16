@@ -121,7 +121,7 @@ public class ClassBuilder {
     }
 
 
-    public ClassBuilder appendSuperConstructor(JavaInputParameter...inputParameters){
+    public ClassBuilder appendConstructor(JavaInputParameter...inputParameters){
         if(className.isEmpty())
             throw new CodeGenerationError("Attempted to add constructor but ClassBuilder has no class definition");
 
@@ -132,14 +132,16 @@ public class ClassBuilder {
 
         // Build body of constructor
         openBlock(BlockType.METHOD);
+        return this;
+    }
 
+    public ClassBuilder appendSuperConstructorCall(String...parameters){
         codeBuilder.append("super").append(START_PARAN);
 
         // Add all constructor inputs as actual parameters to super constructor
-        appendActualParameters(inputParameters);
+        appendActualParameters(parameters);
         codeBuilder.append(END_PARAN).append(LINE_END);
-
-        return this.closeBlock(BlockType.METHOD);
+        return this;
     }
 
     /**
