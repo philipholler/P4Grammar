@@ -55,7 +55,10 @@ public class OptimiseExprVisitor extends ASTBaseVisitor<Object> {
         }
         if(visit(node.getLeftChild()) instanceof StringNode && visit(node.getRightChild()) instanceof StringNode){
             // Call recursively until a new StringNode is returned.
-            String newValue = "\"" + ((StringNode) visit(node.getLeftChild())).getVal() + ((StringNode) visit(node.getRightChild())).getVal() + "\"";
+            String newValue = "\"" +
+                    ((StringNode) visit(node.getLeftChild())).getStringVal() +
+                    ((StringNode) visit(node.getRightChild())).getStringVal() +
+                    "\"";
             newNode = new StringNode(node.getContext(), newValue);
             return newNode;
         }

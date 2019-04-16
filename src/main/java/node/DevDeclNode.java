@@ -6,7 +6,6 @@ import visitor.ASTBaseVisitor;
 
 
 public class DevDeclNode extends LeafNode {
-
     String type;
     String ID;
     String val;
@@ -28,6 +27,10 @@ public class DevDeclNode extends LeafNode {
 
     public String getVal() {
         return val;
+    }
+
+    public String getValWithoutQuotation(){
+        return val.substring(1, val.length() -1);
     }
 
     @Override

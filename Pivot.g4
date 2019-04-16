@@ -43,8 +43,8 @@ atomEvent : WHEN deviceID=ID signalID=ID COL (enumID=ID | EXCEEDS expr| DECEEDS 
           // when 18:00 21d03m2019y // when 14:00 // when 21d03m2019y
           ;
 
-repeatEvent : EVERY expr timeFrame block
-            | EVERY expr timeFrame STARTING timeAndDate block
+repeatEvent : EVERY INTEGER timeFrame block
+            | EVERY INTEGER timeFrame STARTING timeAndDate block
             ;
 
 timeAndDate : TIME (DATE | DATEnoYEAR)
