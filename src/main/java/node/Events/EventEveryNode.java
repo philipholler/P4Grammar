@@ -13,8 +13,8 @@ import visitor.ASTBaseVisitor;
 
 public class EventEveryNode extends EventNode {
     private TimeFrame timeframe;
-    private BlockNode blocK;
     private IntegerNode integer;
+    private BlockNode blocK;
 
     public EventEveryNode(ParserRuleContext ctx, IntegerNode integerNode, TimeFrame timeframe, TimeNode timeNode, DateNode dateNode, BlockNode block) {
         super(ctx, integerNode, timeNode, dateNode, block);
@@ -46,6 +46,14 @@ public class EventEveryNode extends EventNode {
         return "EventEveryNode(" +
                 "timeframe=" + timeframe +
                 ')';
+    }
+
+    public TimeFrame getTimeframe() {
+        return timeframe;
+    }
+
+    public IntegerNode getInteger() {
+        return integer;
     }
 
     public <T> T accept(ASTBaseVisitor<? extends T> astBaseVisitor) {

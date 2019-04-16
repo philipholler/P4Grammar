@@ -2,15 +2,16 @@ package codegen.default_classes.event;
 
 import codegen.default_classes.Server;
 import codegen.default_classes.SignalData;
+
 import java.util.concurrent.ConcurrentLinkedQueue;
 
-public class EventManager {
+public class SignalEventManager extends Thread {
 
     // Queue of events that should be executed
     ConcurrentLinkedQueue<Runnable> events = new ConcurrentLinkedQueue<>();
 
     public void run(){
-        Server server = new Server();
+        Server server = new Server(); // Todo: Server should be passed in constructor when integrated
 
         while(true){
             SignalData signalData = server.pollSignal();
@@ -35,14 +36,6 @@ public class EventManager {
         //
 
     }
-
-
-
-
-
-
-
-
 
 
 }

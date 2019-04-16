@@ -23,7 +23,6 @@ public class SignalTypeSymbol extends Symbol{
      *  Note : One SignalType can contain literals of multiple different types (floats, ints and strings)
      */
 
-
     private final SignalType TYPE;
 
     private float floatLowerBound, floatUpperBound;

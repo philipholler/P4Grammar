@@ -1,12 +1,20 @@
 package codegen;
 
+import codegen.default_classes.event.TimeEvent;
+import codegen.default_classes.event.TimeEventManager;
+import codegen.default_classes.event.TimeIntervalEvent;
+import node.Events.EventEveryNode;
+import node.Statements.Expression.LiteralValues.IntegerNode;
+import node.Statements.Wait.TimeFrame;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import utils.TimeUtils;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.Month;
 import java.time.MonthDay;
+import java.util.ArrayList;
 
 class ClassBuilderTest {
 
@@ -18,11 +26,24 @@ class ClassBuilderTest {
     }
 
     @Test
-    void addClassDefinition() { // todo not an actual test
+    void addClassDefinition() throws InterruptedException { // todo not an actual test
 
-        System.out.println(MonthDay.now());
-        System.out.println(LocalTime.now().getHour() + "H" +LocalTime.now().getMinute() + "M");
-        System.out.println(LocalDate.now().toString().replaceAll("-", "_"));
+        TimeEvent timeEventOne = new TimeIntervalEvent(new EventEveryNode(null,
+                new IntegerNode(null, "5"), TimeFrame.SECOND, null),
+                () -> System.out.println("timed event one : 5 sec interval"));
+
+        TimeEvent timeEventTwo = new TimeIntervalEvent(new EventEveryNode(null,
+                new IntegerNode(null, "10"), TimeFrame.SECOND, null),
+                () -> System.out.println("timed event two : 10 sec interval"));
+
+        ArrayList<TimeEvent> timeEvents = new ArrayList<>();
+        timeEvents.add(timeEventOne);
+        timeEvents.add(timeEventTwo);
+
+        Thread testThread = new TimeEventManager(timeEvents);
+        testThread.run();
+
+        Thread.sleep(5000 * 10);
 
         /*
         classBuilder.appendClassDef("MyClass", "SuperClassSample");
@@ -45,6 +66,8 @@ class ClassBuilderTest {
 
         System.out.println(classBuilder.toString());*/
     }
+
+
 
     @Test
     void addClassDefinition1() {
