@@ -53,7 +53,4 @@ public class ReturnNode extends Node {
         super.getChildren().add(expr);
     }
 
-    public Node getReturnVal() {
-        return returnVal;
-    }
 }

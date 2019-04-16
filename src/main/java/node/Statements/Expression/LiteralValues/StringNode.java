@@ -39,7 +39,4 @@ public class StringNode extends LiteralValueNode {
     return astBaseVisitor.visit(this);
 }
 
-    public String getVal() {
-        return val;
-    }
 }

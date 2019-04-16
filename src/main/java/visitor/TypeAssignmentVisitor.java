@@ -1,9 +1,9 @@
 package visitor;
 
 import exceptions.userside.ExpressionTypeException;
-import exceptions.user_side.FunctionNotDeclaredException;
+import exceptions.userside.FunctionNotDeclaredException;
 import exceptions.userside.TypeUndefinedCompileError;
-import exceptions.user_side.VariableNotInitialisedException;
+import exceptions.userside.VariableNotInitialisedException;
 import node.BlockNode;
 import node.ProgramNode;
 import node.Statements.Expression.AddExprNode;

@@ -1,9 +1,6 @@
 package visitor;
 
-import exceptions.userside.ArgumentWrongTypeException;
-import exceptions.userside.DivideOrMultiStringExpection;
-import exceptions.userside.ExpressionTypeException;
-import exceptions.user_side.*;
+import exceptions.userside.*;
 import node.BlockNode;
 import node.ProgramNode;
 import node.Statements.AssignmentNode;
@@ -216,7 +213,7 @@ public class TypeCheckerVisitor extends ASTBaseVisitor<Void>{
         if(symbol.isPresent()){
             SignalTypeSymbol signal = (SignalTypeSymbol) symbol.get();
             // If the signal is an int range and got an expression of the type int.
-            if(signal.getTYPE() == SignalTypeSymbol.SIGNAL_TYPE.INT_RANGE && !node.getExpr().getType().equals(SymbolTable.INT_TYPE_ID)){
+            if(signal.getTYPE() == SignalType.INT_RANGE && !node.getExpr().getType().equals(SymbolTable.INT_TYPE_ID)){
                 throw new ExpressionTypeException("Expression does not match range type. Expected '" +
                         SymbolTable.INT_TYPE_ID +
                         "' got: '" +
@@ -226,7 +223,7 @@ public class TypeCheckerVisitor extends ASTBaseVisitor<Void>{
                         );
             }
             // Check if the node has a float range and the expr also evaluates a float
-            if(signal.getTYPE() == SignalTypeSymbol.SIGNAL_TYPE.FLOAT_RANGE && !node.getExpr().getType().equals(SymbolTable.FLOAT_TYPE_ID)){
+            if(signal.getTYPE() == SignalType.FLOAT_RANGE && !node.getExpr().getType().equals(SymbolTable.FLOAT_TYPE_ID)){
                 throw new ExpressionTypeException("Expression does not match range type. Expected '" +
                         SymbolTable.FLOAT_TYPE_ID +
                         "' got: '" +
@@ -239,7 +236,7 @@ public class TypeCheckerVisitor extends ASTBaseVisitor<Void>{
             // If the signal uses signal Literals, check that the signal literal set in the source code is actually
             // present in the signal definition.
             // Since ambiguity could not be avoided between Signal literal ID and expr, the signal literal is passed as an IDNode expr.
-            if(signal.getTYPE() == SignalTypeSymbol.SIGNAL_TYPE.LITERALS){
+            if(signal.getTYPE() == SignalType.LITERALS){
                 String signalLiteral = ((IDNode)node.getExpr()).getID();
                 if(!signal.containsSymbol(signalLiteral)) {
                     throw new SignalLiteralNotDeclaredException("Signal literal '" + signalLiteral + "' not declared", node.getLineNumber());

@@ -1,11 +1,11 @@
 package exceptions.userside;
 
-import compiler.Compiler;
+import main.Main;
 
 public class NoSuchSignalCompileError extends CompileErrorException{
 
     public NoSuchSignalCompileError(String signalID, int lineNumber) {
         super("The signal : " + signalID + " has not been defined\n     at " +
-                getLineReference(Compiler.SOURCE_FILE, lineNumber));
+                getLineReference(Main.SOURCE_FILE, lineNumber));
     }
 }
