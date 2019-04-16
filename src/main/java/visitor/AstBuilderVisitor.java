@@ -389,7 +389,7 @@ public class AstBuilderVisitor extends PivotBaseVisitor<Node> {
         // For interval events with starting time. Example "every 2 hours"
         if(ctx.timeAndDate() == null){
             return new EventEveryNode(ctx,
-                    (ExpressionNode) visit(ctx.expr()),
+                    new IntegerNode(ctx, ctx.INTEGER().getText()),
                     getTimeFrame(ctx.timeFrame()),
                     (BlockNode) visit(ctx.block()));
 
@@ -400,7 +400,7 @@ public class AstBuilderVisitor extends PivotBaseVisitor<Node> {
         // if both time an date are present. Index 0 is time and index 1 is date.
         if(timeAndDate.size() == 2){
             return new EventEveryNode(ctx,
-                    (ExpressionNode) visit(ctx.expr()),
+                    new IntegerNode(ctx, ctx.INTEGER().getText()),
                     getTimeFrame(ctx.timeFrame()),
                     (TimeNode) timeAndDate.get(0),
                     (DateNode) timeAndDate.get(1),
@@ -409,7 +409,7 @@ public class AstBuilderVisitor extends PivotBaseVisitor<Node> {
         // If only time is present
         if(timeAndDate.get(0) instanceof TimeNode){
             return new EventEveryNode(ctx,
-                    (ExpressionNode) visit(ctx.expr()),
+                    new IntegerNode(ctx, ctx.INTEGER().getText()),
                     getTimeFrame(ctx.timeFrame()),
                     (TimeNode) timeAndDate.get(0),
                     (BlockNode) visit(ctx.block()));
@@ -417,7 +417,7 @@ public class AstBuilderVisitor extends PivotBaseVisitor<Node> {
         // If only date is present
         if(timeAndDate.get(0) instanceof DateNode){
             return new EventEveryNode(ctx,
-                    (ExpressionNode) visit(ctx.expr()),
+                    new IntegerNode(ctx, ctx.INTEGER().getText()),
                     getTimeFrame(ctx.timeFrame()),
                     (DateNode) timeAndDate.get(0),
                     (BlockNode) visit(ctx.block()));
