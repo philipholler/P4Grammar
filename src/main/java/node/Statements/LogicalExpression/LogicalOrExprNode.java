@@ -6,6 +6,7 @@ import utils.StringUtils;
 import visitor.ASTBaseVisitor;
 
 public class LogicalOrExprNode extends LogicalExprNode {
+    private LogicalOperators op = LogicalOperators.OR;
 
     public LogicalOrExprNode(ParserRuleContext ctx, Node leftChild, Node rightChild) {
         super(ctx, leftChild, rightChild);
@@ -32,4 +33,16 @@ public class LogicalOrExprNode extends LogicalExprNode {
     public <T> T accept(ASTBaseVisitor<? extends T> astBaseVisitor) {
     return astBaseVisitor.visit(this);
 }
+
+    public LogicalOperators getOp() {
+        return op;
+    }
+
+    public Node getLeftChild(){
+        return super.getChildren().get(0);
+    }
+
+    public Node getRightChild(){
+        return super.getChildren().get(1);
+    }
 }

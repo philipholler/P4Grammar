@@ -23,8 +23,12 @@ import node.Statements.Expression.LiteralValues.IntegerNode;
 import node.Statements.Expression.LiteralValues.StringNode;
 import node.Statements.Expression.MultiExprNode;
 import node.Statements.IfStmtNode;
+import node.Statements.LogicalExpression.ComparisonExprNode;
+import node.Statements.LogicalExpression.LogicalAndExprNode;
+import node.Statements.LogicalExpression.LogicalOrExprNode;
 import node.Statements.PrintNode;
 import node.Statements.ReturnNode;
+import node.TimeNodes.NowNode;
 import node.base.Node;
 import node.define_nodes.Device.DefDeviceNode;
 import node.define_nodes.Signal.DefSignalNode;
@@ -32,12 +36,17 @@ import semantics.SymbolTable;
 import utils.JavaCodeUtils;
 import visitor.ASTBaseVisitor;
 
+import java.time.LocalDateTime;
+
 public class MainGenerationVisitor extends ASTBaseVisitor<Void> {
 
     ClassBuilder classBuilder;
     public static final String MAIN_CLASS_NAME = "Main";
     public static final String INIT_FUNC_NAME = "init";
     public static final String PRINT_STMT_PREFIX = "System.out.println";
+    public static final String IF_PREFIX = "if";
+    public static final String ELSE_PREFIX = "else";
+    public static final String NOW_KEYWORD = "LocalDateTime.now()";
 
 
     @Override
@@ -260,4 +269,53 @@ public class MainGenerationVisitor extends ASTBaseVisitor<Void> {
         return null; // Don't do anything for definitions
     }
 
+    @Override
+    public Void visit(IfStmtNode node) {
+        classBuilder.append(IF_PREFIX);
+        classBuilder.startParan();
+        visit(node.getLogicalExprNode());
+        classBuilder.endParan();
+        classBuilder.openBlock(ClassBuilder.BlockType.IF);
+        visit(node.getIfBlock());
+        classBuilder.closeBlock(ClassBuilder.BlockType.IF);
+
+        if(node.getElseBlock() != null){
+            classBuilder.append(ELSE_PREFIX);
+            classBuilder.openBlock(ClassBuilder.BlockType.ELSE);
+            visit(node.getElseBlock());
+            classBuilder.closeBlock(ClassBuilder.BlockType.ELSE);
+        }
+
+        return null;
+    }
+
+    @Override
+    public Void visit(LogicalAndExprNode node) {
+        visit(node.getLeftChild());
+        classBuilder.appendOperator(node.getOp().logOp);
+        visit(node.getRightChild());
+        return null;
+    }
+
+    @Override
+    public Void visit(LogicalOrExprNode node) {
+        visit(node.getLeftChild());
+        classBuilder.appendOperator(node.getOp().logOp);
+        visit(node.getRightChild());
+        return null;
+    }
+
+    @Override
+    public Void visit(ComparisonExprNode node) {
+        visit(node.getLeftChild());
+        classBuilder.appendOperator(node.getOp().opString);
+        visit(node.getRightChild());
+        return null;
+    }
+
+    @Override
+    public Void visit(NowNode node) {
+        classBuilder.append(NOW_KEYWORD);
+        return null;
+    }
 }

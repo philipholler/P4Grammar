@@ -563,13 +563,12 @@ public class AstBuilderVisitor extends PivotBaseVisitor<Node> {
         ArrayList<Node> children = new ArrayList<>();
         Node logicalExpr = visit(ctx.logical_expr());
         Node ifBlock = visit(ctx.blck);
+        children.add(logicalExpr);
+        children.add(ifBlock);
         if(ctx.elseblck != null){
             Node elseBlocK = visit(ctx.elseblck);
             children.add(elseBlocK);
         }
-
-        children.add(logicalExpr);
-        children.add(ifBlock);
 
         return new IfStmtNode(ctx, children);
     }

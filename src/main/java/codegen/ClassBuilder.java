@@ -98,7 +98,7 @@ public class ClassBuilder {
 
 
     // Open a block by pushing the type to the block stack and appending a starting bracket
-    private void openBlock(BlockType blockType){
+    public void openBlock(BlockType blockType){
         blocks.push(blockType);
         codeBuilder.append(START_BRACKET).newLine();
         codeBuilder.incrementIndentation();
