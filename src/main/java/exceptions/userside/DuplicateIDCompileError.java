@@ -1,12 +1,12 @@
 package exceptions.userside;
 
-import main.Main;
+import compiler.Compiler;
 
 public class DuplicateIDCompileError extends CompileErrorException {
 
     public DuplicateIDCompileError(String id, int newIdLineNumber, int oldIdLineNummber) {
-        super("The id : '" + id + "' at" + getLineReference(Main.SOURCE_FILE, newIdLineNumber)
-                + " \n has already been defined at " + getLineReference(Main.SOURCE_FILE, oldIdLineNummber));
+        super("The id : '" + id + "' at" + getLineReference(Compiler.SOURCE_FILE, newIdLineNumber)
+                + " \n has already been defined at " + getLineReference(Compiler.SOURCE_FILE, oldIdLineNummber));
     }
 
 }

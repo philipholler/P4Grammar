@@ -2,6 +2,7 @@ package semantics;
 
 import exceptions.userside.CompileErrorException;
 import exceptions.user_side.SignalLiteralDuplicateException;
+import exceptions.userside.SignalLiteralDuplicateException;
 import exceptions.userside.SignalLiteralWrongTypeException;
 import node.Statements.Expression.LiteralValues.FloatNode;
 import node.Statements.Expression.LiteralValues.IntegerNode;
