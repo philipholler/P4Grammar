@@ -4,7 +4,7 @@ import codegen.ClassBuilder;
 import codegen.JavaFileWriter;
 import codegen.JavaInputParameter;
 import codegen.JavaType;
-import node.DevDeclNode;
+import node.*;
 import node.Events.EventEveryNode;
 import node.Events.EventNode;
 import node.Events.WhenNodes.EventInputNode;
@@ -12,8 +12,6 @@ import node.Events.WhenNodes.EventRangeInputNode;
 import node.Events.WhenNodes.EventWhenTimeNode;
 import node.Function.FunctionNode;
 import node.Function.InputParamNode;
-import node.InitNode;
-import node.ProgramNode;
 import node.Statements.AssignmentNode;
 import node.Statements.Expression.AddExprNode;
 import node.Statements.Expression.FunctionCall.FuncCallNode;
@@ -24,9 +22,10 @@ import node.Statements.Expression.LiteralValues.FloatNode;
 import node.Statements.Expression.LiteralValues.IntegerNode;
 import node.Statements.Expression.LiteralValues.StringNode;
 import node.Statements.Expression.MultiExprNode;
+import node.Statements.IfStmtNode;
 import node.Statements.PrintNode;
 import node.Statements.ReturnNode;
-import node.VarDeclNode;
+import node.base.Node;
 import node.define_nodes.Device.DefDeviceNode;
 import node.define_nodes.Signal.DefSignalNode;
 import semantics.SymbolTable;
@@ -54,6 +53,16 @@ public class MainGenerationVisitor extends ASTBaseVisitor<Void> {
         classBuilder.closeBlock(ClassBuilder.BlockType.CLASS);
 
         JavaFileWriter.writeClass(classBuilder);
+        return null;
+    }
+
+    @Override
+    public Void visit(BlockNode node) {
+        for(Node statement : node.getChildren()){
+            visit(statement);
+            if(statement instanceof FuncCallNode) classBuilder.endLine().appendNewLine();
+        }
+
         return null;
     }
 
@@ -240,9 +249,6 @@ public class MainGenerationVisitor extends ASTBaseVisitor<Void> {
         classBuilder.endParan().endLine().appendNewLine();
         return null;
     }
-
-
-
 
     @Override
     public Void visit(DefDeviceNode node) {
