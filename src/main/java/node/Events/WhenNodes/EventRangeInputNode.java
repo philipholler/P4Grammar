@@ -29,6 +29,18 @@ public class EventRangeInputNode extends EventNode {
                 ')';
     }
 
+    public String getDeviceID() {
+        return deviceID;
+    }
+
+    public String getSignalID() {
+        return signalID;
+    }
+
+    public ExceedsAndDeceedsEnum getExceedsAndDeceedsEnum() {
+        return exceedsAndDeceedsEnum;
+    }
+
     public <T> T accept(ASTBaseVisitor<? extends T> astBaseVisitor) {
     return astBaseVisitor.visit(this);
 }

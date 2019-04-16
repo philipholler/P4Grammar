@@ -3,6 +3,11 @@ package codegen;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.Month;
+import java.time.MonthDay;
+
 class ClassBuilderTest {
 
     private ClassBuilder classBuilder;
@@ -14,6 +19,12 @@ class ClassBuilderTest {
 
     @Test
     void addClassDefinition() { // todo not an actual test
+
+        System.out.println(MonthDay.now());
+        System.out.println(LocalTime.now().getHour() + "H" +LocalTime.now().getMinute() + "M");
+        System.out.println(LocalDate.now().toString().replaceAll("-", "_"));
+
+        /*
         classBuilder.appendClassDef("MyClass", "SuperClassSample");
 
         classBuilder.appendMethod("setValues", JavaType.VOID.keyword,
@@ -32,7 +43,7 @@ class ClassBuilderTest {
         classBuilder.closeBlock(ClassBuilder.BlockType.CLASS);
 
 
-        System.out.println(classBuilder.toString());
+        System.out.println(classBuilder.toString());*/
     }
 
     @Test

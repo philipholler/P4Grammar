@@ -6,6 +6,7 @@ import codegen.JavaInputParameter;
 import codegen.JavaType;
 import node.DevDeclNode;
 import node.Events.EventEveryNode;
+import node.Events.EventNode;
 import node.Events.WhenNodes.EventInputNode;
 import node.Events.WhenNodes.EventRangeInputNode;
 import node.Events.WhenNodes.EventWhenTimeNode;
@@ -89,7 +90,7 @@ public class MainGenerationVisitor extends ASTBaseVisitor<Void> {
     public Void visit(ReturnNode node) {
         classBuilder.appendWord("return");
 
-        if(node.getReturnVal() != null)
+        if (node.getReturnVal() != null)
             visit(node.getReturnVal());
 
         classBuilder.endLine();
@@ -118,10 +119,10 @@ public class MainGenerationVisitor extends ASTBaseVisitor<Void> {
     public Void visit(FuncCallNode node) {
         classBuilder.append(node.getID()).startParan();
 
-        for(int i = 0; i < node.getArguments().size(); i++){
+        for (int i = 0; i < node.getArguments().size(); i++) {
             visit(node.getArguments().get(i));
 
-            if(i != node.getArguments().size() - 1)
+            if (i != node.getArguments().size() - 1)
                 classBuilder.appendComma().appendSpace();
         }
 
@@ -181,12 +182,12 @@ public class MainGenerationVisitor extends ASTBaseVisitor<Void> {
     public Void visit(FunctionNode node) {
         // Create an array of java method input parameters (formal parameters)
         JavaInputParameter[] inputParams = new JavaInputParameter[node.getInputParams().size()];
-        for(int i = 0; i < inputParams.length; i++){
+        for (int i = 0; i < inputParams.length; i++) {
             InputParamNode inNode = node.getInputParams().get(i);
 
             // Convert type from pivot type to java type
             String type = inNode.getType();
-            if(SymbolTable.isPrimitiveDataType(type))
+            if (SymbolTable.isPrimitiveDataType(type))
                 type = JavaCodeUtils.correspondingJavaType(inNode.getType()).keyword;
 
             inputParams[i] = new JavaInputParameter(type, inNode.getId());
@@ -198,6 +199,35 @@ public class MainGenerationVisitor extends ASTBaseVisitor<Void> {
 
         return null;
     }
+
+
+    @Override
+    public Void visit(EventRangeInputNode node) {
+        visitGeneralEventNode(node);
+        return null;
+    }
+
+    @Override
+    public Void visit(EventWhenTimeNode node) {
+        visitGeneralEventNode(node);
+        return null;
+    }
+
+    @Override
+    public Void visit(EventEveryNode node) {
+        visitGeneralEventNode(node);
+        return null;
+    }
+
+    private void visitGeneralEventNode(EventNode node) {
+        String methodName = node.accept(new MethodSignatureVisitor());
+        assert !methodName.isEmpty(); // Sanity check
+
+        classBuilder.appendMethod(methodName, JavaType.VOID.keyword);
+        visit(node.getBlockNode());
+        classBuilder.closeBlock(ClassBuilder.BlockType.METHOD);
+    }
+
 
     @Override
     public Void visit(DefDeviceNode node) {
@@ -214,18 +244,4 @@ public class MainGenerationVisitor extends ASTBaseVisitor<Void> {
         return null;
     }
 
-    @Override
-    public Void visit(EventRangeInputNode node) {
-        return null;
-    }
-
-    @Override
-    public Void visit(EventWhenTimeNode node) {
-        return null;
-    }
-
-    @Override
-    public Void visit(EventEveryNode node) {
-        return null;
-    }
 }

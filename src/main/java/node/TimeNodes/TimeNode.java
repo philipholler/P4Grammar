@@ -22,6 +22,10 @@ public class TimeNode extends LogicalExprNode {
                 this.toString() + "\n";
     }
 
+    public LocalTime getTime() {
+        return time;
+    }
+
     @Override
     public String toString() {
         return "TimeNode(" +

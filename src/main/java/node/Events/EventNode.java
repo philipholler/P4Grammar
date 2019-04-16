@@ -1,5 +1,6 @@
 package node.Events;
 
+import node.BlockNode;
 import node.base.ListNode;
 import node.base.Node;
 import node.base.UnaryNode;
@@ -16,4 +17,7 @@ public abstract class EventNode extends ListNode {
     public EventNode(ParserRuleContext context, Node... children) {
         super(context, children);
     }
+
+    public abstract BlockNode getBlockNode();
+
 }
