@@ -27,13 +27,10 @@ import node.Statements.Expression.MultiExprNode;
 import node.Statements.ReturnNode;
 import node.VarDeclNode;
 import node.define_nodes.Device.DefDeviceNode;
-import node.define_nodes.Device.InputNode;
 import node.define_nodes.Signal.DefSignalNode;
 import semantics.SymbolTable;
 import utils.JavaCodeUtils;
 import visitor.ASTBaseVisitor;
-
-import java.util.ArrayList;
 
 public class MainGenerationVisitor extends ASTBaseVisitor<Void> {
 
@@ -219,13 +216,19 @@ public class MainGenerationVisitor extends ASTBaseVisitor<Void> {
         return null;
     }
 
+    @Override
+    public Void visit(EventInputNode node) {
+        visitGeneralEventNode(node);
+        return null;
+    }
+
     private void visitGeneralEventNode(EventNode node) {
         String methodName = node.accept(new MethodSignatureVisitor());
         assert !methodName.isEmpty(); // Sanity check
 
         classBuilder.appendMethod(methodName, JavaType.VOID.keyword);
         visit(node.getBlockNode());
-        classBuilder.closeBlock(ClassBuilder.BlockType.METHOD);
+        classBuilder.appendNewLine().closeBlock(ClassBuilder.BlockType.METHOD);
     }
 
 
@@ -237,11 +240,6 @@ public class MainGenerationVisitor extends ASTBaseVisitor<Void> {
     @Override
     public Void visit(DefSignalNode node) {
         return null; // Don't do anything for definitions
-    }
-
-    @Override
-    public Void visit(EventInputNode node) {
-        return null;
     }
 
 }
