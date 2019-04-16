@@ -16,11 +16,16 @@ public class PrintNode extends UnaryNode {
     }
 
     public ExpressionNode getPrintValue(){
-        return expressionNode;
+        return (ExpressionNode) super.getChild();
     }
 
     public <T> T accept(ASTBaseVisitor<? extends T> astBaseVisitor) {
         return astBaseVisitor.visit(this);
     }
 
+    public void setExpressionNode(ExpressionNode expressionNode) {
+        super.getChildren().clear();
+        super.getChildren().add(expressionNode);
+        this.expressionNode = expressionNode;
+    }
 }

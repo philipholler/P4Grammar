@@ -33,9 +33,13 @@ init(){
     print "hej " + "hej " + "Hej " + "Yooo " + "Magnus small bicep";
     set myIntWindow percentInt: 10 + 15;
 
+    if(a == 5){
+
+    }
+
     testFunction(5 + 5);
     if(2 + 3 < 5 + 10 && true){
-
+        a = 5;
     }
     int man = 2 + 5;
     man = 2 + 7 + 5 * 100;

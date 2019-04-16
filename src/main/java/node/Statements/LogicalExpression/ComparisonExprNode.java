@@ -63,4 +63,8 @@ public class ComparisonExprNode extends LogicalExprNode {
         super.getChildren().add(this.leftChild);
         super.getChildren().add(rightChild);
     }
+
+    public ComparisonOperator getOp() {
+        return op;
+    }
 }
