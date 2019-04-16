@@ -24,6 +24,7 @@ import node.Statements.Expression.LiteralValues.FloatNode;
 import node.Statements.Expression.LiteralValues.IntegerNode;
 import node.Statements.Expression.LiteralValues.StringNode;
 import node.Statements.Expression.MultiExprNode;
+import node.Statements.PrintNode;
 import node.Statements.ReturnNode;
 import node.VarDeclNode;
 import node.define_nodes.Device.DefDeviceNode;
@@ -37,6 +38,7 @@ public class MainGenerationVisitor extends ASTBaseVisitor<Void> {
     ClassBuilder classBuilder;
     public static final String MAIN_CLASS_NAME = "Main";
     public static final String INIT_FUNC_NAME = "init";
+    public static final String PRINT_STMT_PREFIX = "System.out.println";
 
 
     @Override
@@ -137,12 +139,12 @@ public class MainGenerationVisitor extends ASTBaseVisitor<Void> {
 
     @Override
     public Void visit(GetFuncNode node) {
-        return super.visit(node);
+        return null;
     }
 
     @Override
     public Void visit(SetFuncNode node) {
-        return super.visit(node);
+        return null;
     }
 
     @Override
@@ -230,6 +232,16 @@ public class MainGenerationVisitor extends ASTBaseVisitor<Void> {
         visit(node.getBlockNode());
         classBuilder.appendNewLine().closeBlock(ClassBuilder.BlockType.METHOD);
     }
+
+    @Override
+    public Void visit(PrintNode node) {
+        classBuilder.append(PRINT_STMT_PREFIX).startParan();
+        visit(node.getPrintValue());
+        classBuilder.endParan().endLine().appendNewLine();
+        return null;
+    }
+
+
 
 
     @Override

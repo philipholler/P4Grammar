@@ -10,7 +10,7 @@ public class StringNode extends LiteralValueNode {
 
     public StringNode(ParserRuleContext ctx, String val) {
         super(ctx);
-        this.val = val.substring(1, val.length() - 1);
+        this.val = val;
     }
 
     @Override

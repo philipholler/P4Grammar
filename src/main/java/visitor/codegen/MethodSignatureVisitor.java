@@ -14,6 +14,7 @@ public class MethodSignatureVisitor extends ASTBaseVisitor<String> {
 
     private static final String EVENT_SIGNATURE_PREFIX = "on";
     private static final String EVERY_SIGNATURE_PREFIX = "every";
+    private static final String WHEN_SIGNATURE_PREFIX = "when";
 
     @Override
     public String visit(EventInputNode node) {
@@ -28,14 +29,13 @@ public class MethodSignatureVisitor extends ASTBaseVisitor<String> {
 
     @Override
     public String visit(EventWhenTimeNode node) {
-        return EVERY_SIGNATURE_PREFIX + visit(node.getDateNode()) + visit(node.getTimeNode());
+        return WHEN_SIGNATURE_PREFIX + visit(node.getDateNode()) + visit(node.getTimeNode());
     }
 
     @Override
     public String visit(EventEveryNode node) {
         return EVERY_SIGNATURE_PREFIX + visit(node.getDateNode()) + visit(node.getTimeNode());
     }
-
 
     @Override
     public String visit(DateNode node) {
