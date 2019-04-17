@@ -6,20 +6,23 @@ import codegen.default_classes.SignalData;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.SortedSet;
 import java.util.TreeSet;
 import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.function.Consumer;
 
 public class TimeEventManager extends Thread {
 
-    TreeSet<TimeEvent> eventExecutions = new TreeSet<>();
+    private TreeSet<TimeEvent> eventExecutions = new TreeSet<>();
 
-    public TimeEventManager(ArrayList<TimeEvent> eventExecutions) {
-        this.eventExecutions.addAll(eventExecutions);
+    public TimeEventManager(ArrayList<TimeEvent> events) {
+        this.eventExecutions.addAll(events);
     }
 
     @Override
     public void run(){
+
         while (true){
             LocalDateTime now;
             TimeEvent nextEvent = eventExecutions.first();
@@ -33,8 +36,8 @@ public class TimeEventManager extends Thread {
                 }
             }
 
-            nextEvent.executeEventThread();
             eventExecutions.remove(nextEvent);
+            nextEvent.executeEventThread();
             nextEvent.rescheduleEvent();
             eventExecutions.add(nextEvent);
         }

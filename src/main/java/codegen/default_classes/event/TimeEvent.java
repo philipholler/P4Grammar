@@ -12,6 +12,12 @@ public interface TimeEvent extends Comparable<TimeEvent> {
 
     @Override
     default int compareTo(TimeEvent timeEvent){
-        return this.getNextExecutionTime().compareTo(timeEvent.getNextExecutionTime());
+        int result = this.getNextExecutionTime().compareTo(timeEvent.getNextExecutionTime());
+
+        if(result == 0){ // Compare object hash
+            if(this.equals(timeEvent)) result = 0;
+            else result = (this.hashCode() > timeEvent.hashCode()) ? 1 : -1;
+        }
+        return result;
     }
 }

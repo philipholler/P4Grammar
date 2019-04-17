@@ -1,5 +1,6 @@
 package codegen;
 
+import codegen.default_classes.event.ScheduledEvent;
 import codegen.default_classes.event.TimeEvent;
 import codegen.default_classes.event.TimeEventManager;
 import codegen.default_classes.event.TimeIntervalEvent;
@@ -29,16 +30,15 @@ class ClassBuilderTest {
     void addClassDefinition() throws InterruptedException { // todo not an actual test
         ArrayList<TimeEvent> timeEvents = new ArrayList<>();
 
-        timeEvents.add(new TimeIntervalEvent(TimeFrame.SECOND, 6, () -> System.out.println("6 second delay event"), null, null));
-        timeEvents.add(new TimeIntervalEvent(TimeFrame.SECOND, 5, () -> System.out.println("5 second delay event"), null, null));
-        timeEvents.add(new TimeIntervalEvent(TimeFrame.SECOND, 4, () -> System.out.println("4 second delay event"), null, null));
-        timeEvents.add(new TimeIntervalEvent(TimeFrame.SECOND, 3, () -> System.out.println("3 second delay event"), null, null));
-        timeEvents.add(new TimeIntervalEvent(TimeFrame.SECOND, 2, () -> System.out.println("2 second delay event"), null, null));
+        timeEvents.add(new TimeIntervalEvent(TimeFrame.SECOND, 10, () -> System.out.println("6 second delay event"), null, null));
+        timeEvents.add(new TimeIntervalEvent(TimeFrame.SECOND, 6, () -> System.out.println("5 second delay event"), null, null));
 
-        Thread testThread = new TimeEventManager(timeEvents);
-        testThread.run();
+        timeEvents.add(new ScheduledEvent(12, 40, () -> System.out.println("1")));
+        timeEvents.add(new ScheduledEvent(12, 41, () -> System.out.println("2")));
+        timeEvents.add(new ScheduledEvent(12, 42, () -> System.out.println("3")));
 
-        Thread.sleep(5000 * 10);
+        TimeEventManager timeEventManager = new TimeEventManager(timeEvents);
+        timeEventManager.run();
         /*
         classBuilder.appendClassDef("MyClass", "SuperClassSample");
 
