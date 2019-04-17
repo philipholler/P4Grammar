@@ -123,4 +123,35 @@ public class DeclarationVisitor extends ASTBaseVisitor<Void> {
         }
         return super.visit(node);
     }
+
+    @Override
+    public Void visit(GetFuncNode node) {
+        Optional<Symbol> dev = st.getSymbol(node.getDeviceID());
+        // Find device and check, that it is declared
+        if(dev.isPresent()){
+            FieldSymbol device = (FieldSymbol) dev.get();
+
+            // Get the type of the device and check that is is declared
+            Optional<Symbol> type = st.getSymbol(device.getTypeID());
+            if(type.isPresent()){
+                DeviceTypeSymbol deviceType = (DeviceTypeSymbol) type.get();
+
+                // If the node getter is configured as output, but the type doesn't have that output signal. Throw.
+                if(node.isOutput() && !deviceType.hasOutputSignal(node.getSignalID())){
+                    throw new SignalIsNotOutputException("The signal '" + node.getSignalID() + "' is not defined in device '" + node.getDeviceID()  + "' as output", node.getLineNumber());
+                }
+
+                // if the node getter is configured as input, but the type doesn't have that input signal. throw.
+                if(!node.isOutput() && !deviceType.hasInputSignal(node.getSignalID())){
+                    throw new SignalIsNotOutputException("The signal '" + node.getSignalID() + "' is not defined in device '" + node.getDeviceID()  + "' as input", node.getLineNumber());
+                }
+
+            } else {
+                throw new TypeUndefinedCompileError(device.getTypeID(), node.getLineNumber());
+            }
+        } else {
+            throw new VariableNotInitialisedException("Device with name '" +node.getDeviceID() + "' not declared", node.getLineNumber());
+        }
+        return null;
+    }
 }

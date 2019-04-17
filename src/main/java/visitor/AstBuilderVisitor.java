@@ -249,7 +249,7 @@ public class AstBuilderVisitor extends PivotBaseVisitor<Node> {
 
         if(ctx.inputs() != null){
             // Start at index 2 to skip initial 'input' and ':' tokens
-            for(int i = 1; i < ctx.inputs().children.size(); i++){
+            for(int i = 2; i < ctx.inputs().children.size(); i++){
                 ParseTree childCtx = ctx.inputs().getChild(i);
                 if(isSeparatorSymbol(childCtx)) continue;
                 inputs.add(new InputNode(ctx, (ctx.inputs().children.get(i)).getText()));
@@ -258,7 +258,7 @@ public class AstBuilderVisitor extends PivotBaseVisitor<Node> {
 
         if(ctx.outputs() != null){
             // Start at index 2 to skip initial 'output' and ':' keyword tokens
-            for(int i = 1; i < ctx.outputs().getChildCount(); i++){
+            for(int i = 2; i < ctx.outputs().getChildCount(); i++){
                 ParseTree childCtx = ctx.outputs().getChild(i);
                 if(isSeparatorSymbol(childCtx)) continue;
                 outputs.add(new OutputNode(ctx, (ctx.outputs().children.get(i)).getText()));
@@ -599,7 +599,13 @@ public class AstBuilderVisitor extends PivotBaseVisitor<Node> {
     @Override
     public Node visitGetFun(PivotParser.GetFunContext ctx) {
         updateLineNumber(ctx);
-        return new GetFuncNode(ctx, ctx.deviceID.getText(), ctx.signalID.getText());
+        // It it is not defined to be an input, it will be an output.
+        // The user can, however, also define it to be an output, but this makes no difference.
+        if(ctx.INPUT() == null){
+            return new GetFuncNode(ctx, ctx.deviceID.getText(), ctx.signalID.getText());
+        } else {
+            return new GetFuncNode(ctx, ctx.deviceID.getText(), ctx.signalID.getText(), false);
+        }
     }
 
     private ArrayList<Node> findArguments(PivotParser.FunCallContext ctx){

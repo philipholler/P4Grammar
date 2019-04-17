@@ -26,6 +26,7 @@ public class ClassBuilder {
 
     private static final String TAB = "    ";
     private static final String COMMA = ",";
+    private static final String DOT = ".";
     /* --------------------------------------------------------------------- */
 
     private String className = "";
@@ -169,6 +170,7 @@ public class ClassBuilder {
         codeBuilder.append(START_PARAN).append(END_PARAN);
         openBlock(BlockType.METHOD);
         appendReturnStatement(varName);
+        codeBuilder.newLine();
         closeBlock(BlockType.METHOD);
         return this;
     }
@@ -288,6 +290,11 @@ public class ClassBuilder {
         return this;
     }
 
+    public ClassBuilder appendDot(){
+        codeBuilder.append(DOT);
+        return this;
+    }
+
     /**
      * Appends a new object declaration with instantiation
      * @param type The type of the object
@@ -330,8 +337,4 @@ public class ClassBuilder {
 
         return codeBuilder.toString();
     }
-
-
-
-
 }

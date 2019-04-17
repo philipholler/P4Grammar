@@ -20,7 +20,7 @@ signal: SIGNAL ID COL (range | enumerations);
                | FLOAT   #floatupRange
                ;
 
-device: DEVICE ID ((inputs? (AMP outputs)?) | (outputs? (AMP inputs)?)); // The order of output and input can be switched around. That doesn't matter.
+device: DEVICE ID (inputs? outputs? | outputs? inputs?); // The order of output and input can be switched around. That doesn't matter.
 
     // Inputs and outputs
     inputs : INPUT COL input=ID (LISTSEP input=ID)*;
@@ -72,7 +72,7 @@ whilestmt: WHILE PARANBEG logical_expr PARANEND block;
 funcCall: id=ID PARANBEG arguments PARANEND                         #funCall
         //exprVal can also be an IDNode of a signal literal. This is done, since expr with ID Atom and regular ID cannot be distinguished.
         | SET deviceID=ID signalID=ID COL exprVal=expr              #setFun
-        | GET deviceID=ID signalID=ID                               #getFun
+        | GET (INPUT | OUTPUT)? deviceID=ID signalID=ID             #getFun
         ;
 
     arguments: expr? (LISTSEP expr)*;
