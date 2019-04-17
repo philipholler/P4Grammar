@@ -5,7 +5,7 @@ import node.Events.WhenNodes.EventWhenTimeNode;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
-public class ScheduledEvent implements TimeEvent{
+public class TimeConditionEvent implements TimeEvent{
 
     private LocalDateTime nextExecutionTime;
     private EventWhenTimeNode node;
@@ -18,7 +18,7 @@ public class ScheduledEvent implements TimeEvent{
 
     private boolean atomEvent = false; // Will this event only be executed one time?
 
-    public ScheduledEvent(int year, int month, int day, int hour, int minute, Runnable eventAction) {
+    public TimeConditionEvent(int year, int month, int day, int hour, int minute, Runnable eventAction) {
         this.year = year;
         this.month = month;
         this.day = day;
@@ -28,15 +28,15 @@ public class ScheduledEvent implements TimeEvent{
         initNextExecutionTime();
     }
 
-    public ScheduledEvent(int month, int day, int hour, int minute, Runnable eventAction) {
+    public TimeConditionEvent(int month, int day, int hour, int minute, Runnable eventAction) {
         this(UNSPECIFIED, month, day, hour, minute, eventAction);
     }
 
-    public ScheduledEvent(int day, int hour, int minute, Runnable eventAction) {
+    public TimeConditionEvent(int day, int hour, int minute, Runnable eventAction) {
         this(UNSPECIFIED, UNSPECIFIED, day, hour, minute, eventAction);
     }
 
-    public ScheduledEvent(int hour, int minute, Runnable eventAction) {
+    public TimeConditionEvent(int hour, int minute, Runnable eventAction) {
         this(UNSPECIFIED, UNSPECIFIED, UNSPECIFIED, hour, minute, eventAction);
     }
 

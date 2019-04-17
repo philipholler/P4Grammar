@@ -7,4 +7,8 @@ public abstract class Device {
     public Device(String networkID) {
         this.networkID = networkID;
     }
+
+    public String getNetworkID() {
+        return networkID;
+    }
 }
