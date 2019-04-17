@@ -4,17 +4,9 @@ import codegen.default_classes.event.ScheduledEvent;
 import codegen.default_classes.event.TimeEvent;
 import codegen.default_classes.event.TimeEventManager;
 import codegen.default_classes.event.TimeIntervalEvent;
-import node.Events.EventEveryNode;
-import node.Statements.Expression.LiteralValues.IntegerNode;
 import node.Statements.Wait.TimeFrame;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import utils.TimeUtils;
-
-import java.time.LocalDate;
-import java.time.LocalTime;
-import java.time.Month;
-import java.time.MonthDay;
 import java.util.ArrayList;
 
 class ClassBuilderTest {
@@ -30,15 +22,19 @@ class ClassBuilderTest {
     void addClassDefinition() throws InterruptedException { // todo not an actual test
         ArrayList<TimeEvent> timeEvents = new ArrayList<>();
 
-        timeEvents.add(new TimeIntervalEvent(TimeFrame.SECOND, 10, () -> System.out.println("6 second delay event"), null, null));
-        timeEvents.add(new TimeIntervalEvent(TimeFrame.SECOND, 6, () -> System.out.println("5 second delay event"), null, null));
 
-        timeEvents.add(new ScheduledEvent(12, 40, () -> System.out.println("1")));
-        timeEvents.add(new ScheduledEvent(12, 41, () -> System.out.println("2")));
-        timeEvents.add(new ScheduledEvent(12, 42, () -> System.out.println("3")));
+        Thread thread = new Thread(() -> {
+            while (true){
+                System.out.println("hey");
+            }
+        });
+        thread.start();
 
-        TimeEventManager timeEventManager = new TimeEventManager(timeEvents);
-        timeEventManager.run();
+        Thread.sleep(1000);
+        thread.interrupt();
+        Thread.sleep(50000);
+
+
         /*
         classBuilder.appendClassDef("MyClass", "SuperClassSample");
 

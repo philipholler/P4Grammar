@@ -24,7 +24,7 @@ public abstract class RangeSignal<T extends Number> implements Signal<T> {
 
     @Override
     public T getCurrentValue() {
-        return null;
+        return currentValue;
     }
 
     @Override

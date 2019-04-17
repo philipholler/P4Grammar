@@ -10,4 +10,6 @@ public class SignalData {
         this.data = data;
     }
 
+
+
 }
