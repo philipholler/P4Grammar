@@ -1,4 +1,4 @@
-import codegen.default_classes.SignalData;
+import codegen.default_classes.defaultGeneration.SignalData;
 
 import java.util.Queue;
 import java.util.concurrent.SynchronousQueue;

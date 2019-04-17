@@ -6,6 +6,7 @@ import codegen.JavaInputParameter;
 import codegen.JavaType;
 import exceptions.compilerside.CodeGenerationError;
 import node.DeclsNode;
+import node.ProgramNode;
 import node.Statements.Expression.LiteralValues.FloatNode;
 import node.Statements.Expression.LiteralValues.IntegerNode;
 import node.Statements.Expression.LiteralValues.StringNode;
@@ -16,10 +17,17 @@ import node.define_nodes.Device.OutputNode;
 import node.define_nodes.Signal.DefSignalNode;
 import node.define_nodes.Signal.EnumNode;
 import node.define_nodes.Signal.RangeNode;
+import org.apache.commons.io.FileUtils;
 import semantics.SignalType;
 import semantics.SymbolTable;
 import visitor.ASTBaseVisitor;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 
 
@@ -41,6 +49,21 @@ public class ClassGenerationVisitor extends ASTBaseVisitor<ClassBuilder> {
 
 
     ArrayList<ClassBuilder> classes = new ArrayList<>();
+
+    @Override
+    public ClassBuilder visit(ProgramNode node) {
+        String sourceLocation = System.getProperty("user.dir");
+        File sourceFile= new File(sourceLocation +"/src/main/java/codegen/default_classes/defaultGeneration");
+        File targetFile = new File("compiled_code");
+
+        try {
+            FileUtils.copyDirectory(sourceFile, targetFile);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return super.visit(node);
+    }
 
     /** Generates classes for signal declarations */
     @Override

@@ -1,10 +1,6 @@
 package codegen;
 
-import codegen.default_classes.event.ScheduledEvent;
-import codegen.default_classes.event.TimeEvent;
-import codegen.default_classes.event.TimeEventManager;
-import codegen.default_classes.event.TimeIntervalEvent;
-import node.Statements.Wait.TimeFrame;
+import codegen.default_classes.defaultGeneration.event.TimeEvent;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import java.util.ArrayList;

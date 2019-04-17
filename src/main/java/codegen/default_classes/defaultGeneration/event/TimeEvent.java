@@ -1,4 +1,4 @@
-package codegen.default_classes.event;
+package codegen.default_classes.defaultGeneration.event;
 
 import java.time.LocalDateTime;
 

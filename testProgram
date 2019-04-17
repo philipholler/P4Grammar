@@ -1,18 +1,18 @@
 // Define signals
-define Signal toggle: On = 1, Off = 0, yo = 3;
-define Signal celsius:  1..60;
-define Signal open:  0.0..100.0;
-define Signal percentage: 0.0..100.0;
-define Signal percentInt: 0..100;
+define Signal Toggle: On = 1, Off = 0, yo = 3;
+define Signal Celsius:  1..60;
+define Signal Open:  0.0..100.0;
+define Signal Percentage: 0.0..100.0;
+define Signal PercentInt: 0..100;
 
 // Define device types
-define Device Bulb input: toggle;
-define Device Window input: open;
-define Device IntWindow input: percentInt;
+define Device Bulb input: Toggle;
+define Device Window input: Open;
+define Device IntWindow input: PercentInt;
 // Define sensors
-define Device MovementSensor output: toggle input: celsius, toggle;
-define Device Thermometer output: celsius;
-define Device LawnMower input: toggle;
+define Device MovementSensor output: Toggle input: Celsius, Toggle;
+define Device Thermometer output: Celsius;
+define Device LawnMower input: Toggle;
 
 // Variable definitions of every device in the house
 Bulb frontDoorLight = "129.6.18.1:12565";
@@ -20,7 +20,7 @@ Window bedRoomWindow = "129.67.198.65:12565";
 
 IntWindow myIntWindow = "129.12.12.12:21000";
 
-LawnMower GardenMower = "129.10.10:10210";
+LawnMower gardenMower = "129.10.10:10210";
 
 MovementSensor frontDoorSensor = "Google.com";
 
@@ -33,11 +33,11 @@ float testFloat = 6.0;
 
 init(){
     print "hej " + "hej " + "Hej " + "Yooo " + "Magnus small bicep";
-    set myIntWindow percentInt: 10 + 15;
+    set myIntWindow PercentInt: 10 + 15;
 
-    get input frontDoorSensor toggle;
-    get output frontDoorSensor toggle;
-    get frontDoorSensor toggle;
+    get input frontDoorSensor Toggle;
+    get output frontDoorSensor Toggle;
+    get frontDoorSensor Toggle;
 
     if(a == 5){
 
@@ -56,7 +56,7 @@ init(){
     string mannn = "hej";
     mannn = "hej" + "hej" + "hej";
 
-    int jkl = 2 + a + get input GardenMower toggle + testFunctionInt("hej" + testFunction(5) + "i") + testFunctionInt("Hej");
+    int jkl = 2 + a + get input gardenMower Toggle + testFunctionInt("hej" + testFunction(5) + "i") + testFunctionInt("Hej");
     jkl = 2 + a + 2;
 
     int jak = testFunctionInt("hej") + 5;
@@ -64,7 +64,7 @@ init(){
     // Not written by Philip
     print "Philip Bicep = " + 100 + "cm";
 
-    set myIntWindow percentInt: 10 + man;
+    set myIntWindow PercentInt: 10 + man;
 
     // Optional code for initialization
     // Automatically run when the program is run for the first time
@@ -78,19 +78,19 @@ int testFunctionInt(string hej){
 }
 
 // Events
-when frontDoorSensor toggle: on {
+when frontDoorSensor Toggle: on {
     if(now > 17:00 && now < 21:00){
-        set frontDoorLight toggle: On;
+        set frontDoorLight Toggle: On;
     }
 
     wait 30 seconds;
 
-    while(get frontDoorSensor toggle == On){
-        set frontDoorLight toggle: Off;
+    while(get frontDoorSensor Toggle == On){
+        set frontDoorLight Toggle: Off;
     }
 }
 
-when mainThermometer celsius: exceeds 22{
+when mainThermometer Celsius: exceeds 22{
     setBedroomWindowsOpen(50.0); // Calling function defined further down
 }
 
@@ -98,7 +98,7 @@ when mainThermometer celsius: exceeds 22{
 string testFunction(int percent){
     string test = " ";
     float procent = 15.0;
-    set bedRoomWindow open: procent;
+    set bedRoomWindow Open: procent;
     while(true){
         return;
     }
@@ -112,7 +112,7 @@ string testFunction(int percent){
 
 // Function
 void setBedroomWindowsOpen(float percent){
-    set bedRoomWindow open: percent;
+    set bedRoomWindow Open: percent;
 }
 
 // Repeating event
@@ -133,7 +133,7 @@ every 2 hours{
 // // Turn on lawn mower every 2 weeks at 11:00 every summer.
 every 2 weeks starting 11:00 01d04m2019y{
     if(01d04m < now && now < 30d09m){
-        set GardenMower toggle: yo;
+        set gardenMower Toggle: yo;
     }
 
     int b = 3;
@@ -146,12 +146,12 @@ every 2 weeks starting 11:00 01d04m2019y{
     }
 }
 
-when mainThermometer celsius: exceeds 22{
+when mainThermometer Celsius: exceeds 22{
     setBedroomWindowsOpen(50.0); // Calling function defined further down
 }
 
 // Events
-when frontDoorSensor toggle: on {
+when frontDoorSensor Toggle: on {
 
 }
 

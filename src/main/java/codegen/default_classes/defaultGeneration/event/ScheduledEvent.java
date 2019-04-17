@@ -1,10 +1,9 @@
-package codegen.default_classes.event;
+package codegen.default_classes.defaultGeneration.event;
 
 import node.Events.WhenNodes.EventWhenTimeNode;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Objects;
 
 public class ScheduledEvent implements TimeEvent{
 

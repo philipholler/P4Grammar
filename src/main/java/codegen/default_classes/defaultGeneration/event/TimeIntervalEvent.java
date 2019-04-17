@@ -1,6 +1,5 @@
-package codegen.default_classes.event;
+package codegen.default_classes.defaultGeneration.event;
 
-import node.Events.EventEveryNode;
 import node.Statements.Wait.TimeFrame;
 
 import java.time.LocalDate;

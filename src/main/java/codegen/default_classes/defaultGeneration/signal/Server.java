@@ -1,4 +1,6 @@
-package codegen.default_classes;
+package codegen.default_classes.defaultGeneration.signal;
+
+import codegen.default_classes.defaultGeneration.SignalData;
 
 public class Server {
 

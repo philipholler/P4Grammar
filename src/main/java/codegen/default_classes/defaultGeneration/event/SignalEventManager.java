@@ -1,7 +1,7 @@
-package codegen.default_classes.event;
+package codegen.default_classes.defaultGeneration.event;
 
-import codegen.default_classes.Server;
-import codegen.default_classes.SignalData;
+import codegen.default_classes.defaultGeneration.signal.Server;
+import codegen.default_classes.defaultGeneration.SignalData;
 
 import java.util.concurrent.ConcurrentLinkedQueue;
 

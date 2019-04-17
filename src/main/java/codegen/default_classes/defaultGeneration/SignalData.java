@@ -1,4 +1,4 @@
-package codegen.default_classes;
+package codegen.default_classes.defaultGeneration;
 
 public class SignalData {
 

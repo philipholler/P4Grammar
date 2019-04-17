@@ -1,4 +1,4 @@
-package codegen.default_classes;
+package codegen.default_classes.defaultGeneration.signal;
 
 public abstract class RangeSignal<T extends Number> implements Signal<T> {
 
