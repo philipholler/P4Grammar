@@ -22,7 +22,6 @@ public class SimpleSignalEvent<T> implements SignalEvent {
 
         // The value that will trigger this event
         expectedData = new SignalData(device.getNetworkID(), signal.getClass().getSimpleName(), String.valueOf(value));
-        System.out.println(expectedData);
     }
 
     @Override

@@ -45,6 +45,7 @@ public class ClassGenerationVisitor extends ASTBaseVisitor<ClassBuilder> {
 
     public static final String INPUT_SIGNAL_PREFIX = "input";
     public static final String OUTPUT_SIGNAL_PREFIX = "output";
+    public static final String SET_CURRENT_VALUE_METHOD = "setCurrentValue";
 
 
     ArrayList<ClassBuilder> classes = new ArrayList<>();
@@ -110,6 +111,13 @@ public class ClassGenerationVisitor extends ASTBaseVisitor<ClassBuilder> {
         // Create constructor calling the super constructor of RangeSignal
         classBuilder.appendConstructor();
         classBuilder.appendSuperConstructorCall(lowerBound, upperBound, lowerBound);
+        classBuilder.closeBlock(ClassBuilder.BlockType.METHOD);
+
+        // Creates the setCurrentValue(String val) method
+        classBuilder.appendMethod(SET_CURRENT_VALUE_METHOD, JavaType.VOID.keyword,
+                new JavaInputParameter(JavaType.STRING.keyword, "value"));
+        classBuilder.append(SET_CURRENT_VALUE_METHOD).startParan().append(rangeType.objectType).appendDot()
+                .append("valueOf").startParan().append("value").endParan().endParan().endLine();
         classBuilder.closeBlock(ClassBuilder.BlockType.METHOD);
 
         classBuilder.closeBlock(ClassBuilder.BlockType.CLASS);
