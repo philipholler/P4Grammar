@@ -1,18 +1,7 @@
 package codegen;
 
-import default_classes.SignalData;
-import default_classes.device.Window;
-import default_classes.event.RangeSignalEvent;
-import default_classes.event.SignalEvent;
-import default_classes.event.SignalEventManager;
-import default_classes.event.SimpleSignalEvent;
-import default_classes.signal.OpenSignal;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
-import java.util.ArrayList;
-import java.util.concurrent.LinkedBlockingQueue;
-
 class ClassBuilderTest {
 
     private ClassBuilder classBuilder;
@@ -24,7 +13,7 @@ class ClassBuilderTest {
 
     @Test
     void addClassDefinition() throws InterruptedException { // todo not an actual test
-        OpenSignal percent = new OpenSignal(0, 100);
+   /*     OpenSignal percent = new OpenSignal(0, 100);
         OpenSignal percent2 = new OpenSignal(0, 100);
 
         Window window = new Window("101");
@@ -73,7 +62,7 @@ class ClassBuilderTest {
         signalQueue.add(new SignalData("101", "OpenSignal", "50"));
         Thread.sleep(5000);
 
-
+*/
 
 
         /*

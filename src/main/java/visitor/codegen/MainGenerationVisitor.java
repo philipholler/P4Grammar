@@ -73,6 +73,7 @@ public class MainGenerationVisitor extends ASTBaseVisitor<Void> {
         classBuilder.appendPackage(ClassBuilder.SERVER_PACKAGE);
         classBuilder.appendImportAllFrom(ClassBuilder.SIGNAL_PACKAGE);
         classBuilder.appendImportAllFrom(ClassBuilder.DEVICE_PACKAGE);
+        classBuilder.appendImportAllFrom(ClassBuilder.DEFAULT_CLASSES_PACKAGE).appendNewLine();
 
         classBuilder.appendClassDef(MAIN_CLASS_NAME);
         addMainMethod();

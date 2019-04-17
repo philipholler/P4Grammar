@@ -14,6 +14,10 @@ public class ClassBuilder {
 
     public static final String DEVICE_SUPER_CLASS = "Device";
 
+    public static final String DEFAULT_CLASSES_PACKAGE = "default_classes";
+    public static final String DEFAULT_SIGNAL_PACKAGE = "default_classes.signal";
+    public static final String DEFAULT_DEVICE_PACKAGE = "default_classes.device";
+
     public static final String DEVICE_PACKAGE = "device";
     public static final String SIGNAL_PACKAGE = "signal";
     public static final String SERVER_PACKAGE = "server";

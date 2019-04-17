@@ -80,7 +80,6 @@ public class ClassGenerationVisitor extends ASTBaseVisitor<ClassBuilder> {
 
     @Override
     public ClassBuilder visit(DefSignalNode signalNode) {
-        // Todo : import statements
         if (signalNode.getSignalType() == SignalType.LITERALS)
             return generateLiteralSignal(signalNode);
         else
@@ -105,7 +104,7 @@ public class ClassGenerationVisitor extends ASTBaseVisitor<ClassBuilder> {
 
         ClassBuilder classBuilder = new ClassBuilder();
         classBuilder.appendPackage(ClassBuilder.SIGNAL_PACKAGE);
-        classBuilder.appendImportAllFrom(ClassBuilder.SIGNAL_PACKAGE).appendNewLine();
+        classBuilder.appendImportAllFrom(ClassBuilder.DEFAULT_SIGNAL_PACKAGE).appendNewLine();
         classBuilder.appendClassDef(signalNode.getID(), ClassBuilder.RANGE_SIGNAL_CLASS, rangeType.objectType);
 
         // Create constructor calling the super constructor of RangeSignal
@@ -129,6 +128,7 @@ public class ClassGenerationVisitor extends ASTBaseVisitor<ClassBuilder> {
 
         ClassBuilder signalBuilder = new ClassBuilder();
         signalBuilder.appendPackage(ClassBuilder.SIGNAL_PACKAGE);
+        signalBuilder.appendImportAllFrom(ClassBuilder.DEFAULT_SIGNAL_PACKAGE).appendNewLine();
 
         signalBuilder.appendClassDef(signalNode.getID(), ClassBuilder.LITERAL_SIGNAL_CLASS, signalValueType.objectType);
 
