@@ -182,6 +182,5 @@ public class ClassGenerationVisitor extends ASTBaseVisitor<ClassBuilder> {
         for(OutputNode outNode : outputs)
             classBuilder.appendGetMethod(outNode.SIGNAL_ID, OUTPUT_SIGNAL_PREFIX + outNode.SIGNAL_ID);
     }
-
 }
 

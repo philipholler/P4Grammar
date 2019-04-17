@@ -50,6 +50,9 @@ public class MainGenerationVisitor extends ASTBaseVisitor<Void> {
     public static final String SET_KEYWORD = "set";
     public static final String INPUT_KEYWORD = "input";
     public static final String OUTPUT_KEYWORD = "output";
+    public static final String BREAK_KEYWORD = "break";
+    public static final String TRUE_KEYWORD = "true";
+    public static final String FALSE_KEYWORD = "false";
 
 
     @Override
@@ -109,12 +112,14 @@ public class MainGenerationVisitor extends ASTBaseVisitor<Void> {
 
     @Override
     public Void visit(ReturnNode node) {
-        classBuilder.appendWord("return");
+        classBuilder.append("return");
 
-        if (node.getReturnVal() != null)
+        if(node.getReturnVal() != null){
+            classBuilder.appendSpace();
             visit(node.getReturnVal());
+        }
 
-        classBuilder.endLine();
+        classBuilder.append(";");
         return null;
     }
 
@@ -350,10 +355,16 @@ public class MainGenerationVisitor extends ASTBaseVisitor<Void> {
     @Override
     public Void visit(LogicalLiteralNode node) {
         if(node.isVal()){
-            classBuilder.append("true");
+            classBuilder.append(TRUE_KEYWORD);
         } else {
-            classBuilder.append("false");
+            classBuilder.append(FALSE_KEYWORD);
         }
         return null;
+    }
+
+    @Override
+    public Void visit(BreakNode node) {
+        classBuilder.append(BREAK_KEYWORD + ";");
+        return super.visit(node);
     }
 }
