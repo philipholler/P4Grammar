@@ -54,8 +54,8 @@ public class ClassGenerationVisitor extends ASTBaseVisitor<ClassBuilder> {
     public ClassBuilder visit(ProgramNode node) {
         // Create all the default classes.
         String sourceLocation = System.getProperty("user.dir");
-        File sourceFile= new File(sourceLocation +"/src/main/java/codegen/default_classes/defaultGeneration");
-        File targetFile = new File("compiled_code");
+        File sourceFile= new File(sourceLocation +"/src/main/java/default_classes/");
+        File targetFile = new File("compiled_code/default_classes");
 
         try {
             FileUtils.copyDirectory(sourceFile, targetFile);
