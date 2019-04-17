@@ -1,10 +1,8 @@
-package codegen.default_classes.defaultGeneration.event;
+package default_classes.event;
 
-import codegen.default_classes.defaultGeneration.signal.Server;
-import codegen.default_classes.defaultGeneration.SignalData;
+import default_classes.SignalData;
 
 import java.util.ArrayList;
-import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
 public class SignalEventManager extends Thread {

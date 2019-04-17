@@ -1,6 +1,6 @@
-package codegen.default_classes.defaultGeneration.device;
+package default_classes.device;
 
-import codegen.default_classes.defaultGeneration.signal.OpenSignal;
+import default_classes.signal.OpenSignal;
 
 public class Window extends Device{
 

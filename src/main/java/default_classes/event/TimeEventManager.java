@@ -1,4 +1,4 @@
-package codegen.default_classes.defaultGeneration.event;
+package default_classes.event;
 
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;

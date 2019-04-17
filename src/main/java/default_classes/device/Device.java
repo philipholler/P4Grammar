@@ -1,4 +1,4 @@
-package codegen.default_classes.defaultGeneration.device;
+package default_classes.device;
 
 public abstract class Device {
 

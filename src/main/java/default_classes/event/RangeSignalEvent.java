@@ -1,10 +1,9 @@
-package codegen.default_classes.defaultGeneration.event;
+package default_classes.event;
 
-import codegen.default_classes.defaultGeneration.SignalData;
-import codegen.default_classes.defaultGeneration.device.Device;
-import codegen.default_classes.defaultGeneration.signal.RangeSignal;
-import codegen.default_classes.defaultGeneration.signal.Signal;
-import node.Statements.Expression.LiteralValues.FloatNode;
+import default_classes.SignalData;
+import default_classes.device.Device;
+import default_classes.signal.RangeSignal;
+import default_classes.signal.Signal;
 
 public class RangeSignalEvent<T extends Number> implements SignalEvent{
 

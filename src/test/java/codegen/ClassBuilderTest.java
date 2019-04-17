@@ -1,18 +1,16 @@
 package codegen;
 
-import codegen.default_classes.defaultGeneration.SignalData;
-import codegen.default_classes.defaultGeneration.device.Device;
-import codegen.default_classes.defaultGeneration.device.Window;
-import codegen.default_classes.defaultGeneration.event.RangeSignalEvent;
-import codegen.default_classes.defaultGeneration.event.SignalEvent;
-import codegen.default_classes.defaultGeneration.event.SignalEventManager;
-import codegen.default_classes.defaultGeneration.event.SimpleSignalEvent;
-import codegen.default_classes.defaultGeneration.signal.OpenSignal;
+import default_classes.SignalData;
+import default_classes.device.Window;
+import default_classes.event.RangeSignalEvent;
+import default_classes.event.SignalEvent;
+import default_classes.event.SignalEventManager;
+import default_classes.event.SimpleSignalEvent;
+import default_classes.signal.OpenSignal;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
-import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
 class ClassBuilderTest {

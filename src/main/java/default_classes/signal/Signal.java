@@ -1,4 +1,4 @@
-package codegen.default_classes.defaultGeneration.signal;
+package default_classes.signal;
 
 public interface Signal <T> {
 

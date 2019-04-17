@@ -1,4 +1,4 @@
-package codegen.default_classes.defaultGeneration;
+package default_classes;
 
 import java.util.Objects;
 
