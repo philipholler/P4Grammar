@@ -7,11 +7,20 @@ import visitor.ASTBaseVisitor;
 public class GetFuncNode extends AbstractFuncCallNode{
     private String deviceID;
     private String signalID;
+    private boolean isOutput;
 
     public GetFuncNode(ParserRuleContext ctx, String deviceID, String signalID) {
         super(ctx);
         this.deviceID = deviceID;
         this.signalID = signalID;
+        this.isOutput = true;
+    }
+
+    public GetFuncNode(ParserRuleContext ctx, String deviceID, String signalID, boolean isOutput) {
+        super(ctx);
+        this.deviceID = deviceID;
+        this.signalID = signalID;
+        this.isOutput = isOutput;
     }
 
     @Override
@@ -25,6 +34,7 @@ public class GetFuncNode extends AbstractFuncCallNode{
         return "GetFuncNode(" +
                 "deviceID='" + deviceID + '\'' +
                 ", signalID='" + signalID + '\'' +
+                ", isOutput='" + isOutput + '\'' +
                 ')';
     }
 
@@ -38,5 +48,9 @@ public class GetFuncNode extends AbstractFuncCallNode{
 
     public String getSignalID() {
         return signalID;
+    }
+
+    public boolean isOutput() {
+        return isOutput;
     }
 }

@@ -12,7 +12,7 @@ import node.Events.WhenNodes.EventRangeInputNode;
 import node.Events.WhenNodes.EventWhenTimeNode;
 import node.Function.FunctionNode;
 import node.Function.InputParamNode;
-import node.Statements.AssignmentNode;
+import node.Statements.*;
 import node.Statements.Expression.AddExprNode;
 import node.Statements.Expression.FunctionCall.FuncCallNode;
 import node.Statements.Expression.FunctionCall.GetFuncNode;
@@ -22,12 +22,10 @@ import node.Statements.Expression.LiteralValues.FloatNode;
 import node.Statements.Expression.LiteralValues.IntegerNode;
 import node.Statements.Expression.LiteralValues.StringNode;
 import node.Statements.Expression.MultiExprNode;
-import node.Statements.IfStmtNode;
 import node.Statements.LogicalExpression.ComparisonExprNode;
 import node.Statements.LogicalExpression.LogicalAndExprNode;
+import node.Statements.LogicalExpression.LogicalLiteralNode;
 import node.Statements.LogicalExpression.LogicalOrExprNode;
-import node.Statements.PrintNode;
-import node.Statements.ReturnNode;
 import node.TimeNodes.NowNode;
 import node.base.Node;
 import node.define_nodes.Device.DefDeviceNode;
@@ -44,9 +42,17 @@ public class MainGenerationVisitor extends ASTBaseVisitor<Void> {
     public static final String MAIN_CLASS_NAME = "Main";
     public static final String INIT_FUNC_NAME = "init";
     public static final String PRINT_STMT_PREFIX = "System.out.println";
+    public static final String WHILE_PREFIX = "while";
     public static final String IF_PREFIX = "if";
     public static final String ELSE_PREFIX = "else";
     public static final String NOW_KEYWORD = "LocalDateTime.now()";
+    public static final String GET_KEYWORD = "get";
+    public static final String SET_KEYWORD = "set";
+    public static final String INPUT_KEYWORD = "input";
+    public static final String OUTPUT_KEYWORD = "output";
+    public static final String BREAK_KEYWORD = "break";
+    public static final String TRUE_KEYWORD = "true";
+    public static final String FALSE_KEYWORD = "false";
 
 
     @Override
@@ -70,6 +76,7 @@ public class MainGenerationVisitor extends ASTBaseVisitor<Void> {
         for(Node statement : node.getChildren()){
             visit(statement);
             if(statement instanceof FuncCallNode) classBuilder.endLine().appendNewLine();
+            if(statement instanceof GetFuncNode) classBuilder.endLine().appendNewLine();
         }
 
         return null;
@@ -105,12 +112,14 @@ public class MainGenerationVisitor extends ASTBaseVisitor<Void> {
 
     @Override
     public Void visit(ReturnNode node) {
-        classBuilder.appendWord("return");
+        classBuilder.append("return");
 
-        if (node.getReturnVal() != null)
+        if(node.getReturnVal() != null){
+            classBuilder.appendSpace();
             visit(node.getReturnVal());
+        }
 
-        classBuilder.endLine();
+        classBuilder.append(";");
         return null;
     }
 
@@ -157,6 +166,18 @@ public class MainGenerationVisitor extends ASTBaseVisitor<Void> {
 
     @Override
     public Void visit(GetFuncNode node) {
+        classBuilder.append(node.getDeviceID());
+        classBuilder.appendDot();
+        classBuilder.append(GET_KEYWORD);
+        if(node.isOutput()){
+            classBuilder.append(OUTPUT_KEYWORD);
+        } else {
+            classBuilder.append(INPUT_KEYWORD);
+        }
+        classBuilder.append(node.getSignalID());
+        classBuilder.startParan();
+        classBuilder.endParan();
+
         return null;
     }
 
@@ -290,6 +311,18 @@ public class MainGenerationVisitor extends ASTBaseVisitor<Void> {
     }
 
     @Override
+    public Void visit(WhileNode node) {
+        classBuilder.append(WHILE_PREFIX);
+        classBuilder.startParan();
+        visit(node.getLeftChild());
+        classBuilder.endParan();
+        classBuilder.openBlock(ClassBuilder.BlockType.WHILE);
+        visit(node.getRightChild());
+        classBuilder.closeBlock(ClassBuilder.BlockType.WHILE);
+        return null;
+    }
+
+    @Override
     public Void visit(LogicalAndExprNode node) {
         visit(node.getLeftChild());
         classBuilder.appendOperator(node.getOp().logOp);
@@ -317,5 +350,21 @@ public class MainGenerationVisitor extends ASTBaseVisitor<Void> {
     public Void visit(NowNode node) {
         classBuilder.append(NOW_KEYWORD);
         return null;
+    }
+
+    @Override
+    public Void visit(LogicalLiteralNode node) {
+        if(node.isVal()){
+            classBuilder.append(TRUE_KEYWORD);
+        } else {
+            classBuilder.append(FALSE_KEYWORD);
+        }
+        return null;
+    }
+
+    @Override
+    public Void visit(BreakNode node) {
+        classBuilder.append(BREAK_KEYWORD + ";");
+        return super.visit(node);
     }
 }

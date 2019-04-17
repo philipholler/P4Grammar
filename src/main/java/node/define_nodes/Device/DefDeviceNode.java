@@ -19,11 +19,6 @@ public class DefDeviceNode extends DefNode {
         this.ID = ID;
         if(outputs != null) this.outputs = outputs;
         if(inputs != null) this.inputs = inputs;
-
-        for (Node n : this.inputs)
-            addChild(n);
-        for (Node n : this.outputs)
-            addChild(n);
     }
 
 

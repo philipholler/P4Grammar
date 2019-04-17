@@ -55,7 +55,7 @@ public class DeviceTypeSymbol extends Symbol{
     }
 
     public boolean hasOutputSignal(String ID) {
-        for(SignalTypeSymbol s : inputSignals)
+        for(SignalTypeSymbol s : outputSignals)
             if(s.id.equals(ID)) return true;
         return false;
     }

@@ -24,6 +24,7 @@ public class ClassBuilder {
 
     private static final String TAB = "    ";
     private static final String COMMA = ",";
+    private static final String DOT = ".";
     /* --------------------------------------------------------------------- */
 
     private String className = "";
@@ -113,6 +114,7 @@ public class ClassBuilder {
 
 
         codeBuilder.decremmentIndentation();
+        codeBuilder.newLine();
         codeBuilder.append(END_BRACKET).newLine().newLine();
         return this;
     }
@@ -283,6 +285,11 @@ public class ClassBuilder {
         return this;
     }
 
+    public ClassBuilder appendDot(){
+        codeBuilder.append(DOT);
+        return this;
+    }
+
     /**
      * Appends a new object declaration with instantiation
      * @param type The type of the object
@@ -325,8 +332,4 @@ public class ClassBuilder {
 
         return codeBuilder.toString();
     }
-
-
-
-
 }

@@ -28,4 +28,8 @@ public class LogicalLiteralNode extends LogicalExprNode {
     public <T> T accept(ASTBaseVisitor<? extends T> astBaseVisitor) {
     return astBaseVisitor.visit(this);
 }
+
+    public boolean isVal() {
+        return val;
+    }
 }
