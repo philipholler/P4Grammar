@@ -47,9 +47,9 @@ repeatEvent : EVERY INTEGER timeFrame block
             | EVERY INTEGER timeFrame STARTING timeAndDate block
             ;
 
-timeAndDate : TIME (DATE | DATEnoYEAR)
+timeAndDate : TIME (DAY | DATEnoYEAR | DATE)
             | TIME
-            | (DATE | DATEnoYEAR)
+            | (DAY | DATEnoYEAR | DATE)
             ;
 
 timeFrame: (MONTHS | WEEKS | DAYS | HOURS | MINUTES | SECONDS | MS);
@@ -209,6 +209,7 @@ AMP : '&';
 
 // Primitives
 DATE: DIGIT DIGIT 'd' DIGIT DIGIT 'm' DIGIT DIGIT DIGIT DIGIT 'y';
+DAY : DIGIT DIGIT 'd';
 DATEnoYEAR: DIGIT DIGIT 'd' DIGIT DIGIT 'm';
 FLOAT: '-'? DIGIT+ '.' DIGIT+;
 TIME: DIGIT DIGIT COL DIGIT DIGIT;

@@ -149,7 +149,12 @@ when frontDoorSensor toggle: on {
 
 }
 
-when 14:00{
+when 14:00 01d{
+
+}
+
+
+when 14:00 {
 
 }
 
@@ -157,7 +162,7 @@ when 01d01m2000y{
 
 }
 
-when 01d01m{
+when 01d{
 
 }
 

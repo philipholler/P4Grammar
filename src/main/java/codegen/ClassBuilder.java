@@ -2,8 +2,6 @@ package codegen;
 
 import exceptions.compilerside.CodeGenerationError;
 import exceptions.compilerside.MismatchedBracketException;
-
-import java.util.ArrayList;
 import java.util.Stack;
 
 public class ClassBuilder {
@@ -42,12 +40,9 @@ public class ClassBuilder {
         return packageName;
     }
 
-
-
     public enum BlockType{
         CLASS, METHOD, WHILE, IF, ELSE, FOR;
     }
-
 
     public ClassBuilder appendPackage(String packageString){
         codeBuilder.append("package ").append(packageString).append(LINE_END).newLine().newLine();

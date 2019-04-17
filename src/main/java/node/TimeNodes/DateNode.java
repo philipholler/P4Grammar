@@ -13,6 +13,7 @@ import java.time.MonthDay;
 public class DateNode extends LogicalExprNode {
     LocalDate date;
     MonthDay monthDay;
+    private int day = -1;
 
     public DateNode(ParserRuleContext ctx, int day, int month, int year) {
         super(ctx);
@@ -24,6 +25,11 @@ public class DateNode extends LogicalExprNode {
         this.monthDay = TimeUtils.getMonthDay(day, month);
     }
 
+    public DateNode(ParserRuleContext ctx, int day) {
+        super(ctx);
+        this.day = day;
+    }
+
     @Override
     public String getTreeString(int indentation) {
         return StringUtils.getIndentedString(indentation) +
@@ -32,16 +38,32 @@ public class DateNode extends LogicalExprNode {
 
     @Override
     public String toString() {
-        if(date == null){
-            return "DateNode(" +
-                    "monthDay=" + monthDay +
-                    ')';
-        } else {
+        if(date != null){
             return "DateNode(" +
                     "date=" + date +
                     ')';
+        } else if (monthDay != null){
+            return "DateNode(" +
+                    "monthday=" + monthDay +
+                    ')';
+        } else {
+            return "DateNode(" +
+                    "day=" + day +
+                    ')';
         }
 
+    }
+
+    public boolean hasDate(){
+        return date != null;
+    }
+
+    public boolean hasMonthDay(){
+        return date != null;
+    }
+
+    public boolean hasday(){
+        return day != 1;
     }
 
     public LocalDate getDate() {
@@ -50,6 +72,10 @@ public class DateNode extends LogicalExprNode {
 
     public MonthDay getMonthDay() {
         return monthDay;
+    }
+
+    public int getDay(){
+        return day;
     }
 
     public <T> T accept(ASTBaseVisitor<? extends T> astBaseVisitor) {

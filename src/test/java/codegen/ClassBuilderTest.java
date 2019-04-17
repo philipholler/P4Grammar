@@ -27,24 +27,18 @@ class ClassBuilderTest {
 
     @Test
     void addClassDefinition() throws InterruptedException { // todo not an actual test
-
-        TimeEvent timeEventOne = new TimeIntervalEvent(new EventEveryNode(null,
-                new IntegerNode(null, "5"), TimeFrame.SECOND, null),
-                () -> System.out.println("timed event one : 5 sec interval"));
-
-        TimeEvent timeEventTwo = new TimeIntervalEvent(new EventEveryNode(null,
-                new IntegerNode(null, "10"), TimeFrame.SECOND, null),
-                () -> System.out.println("timed event two : 10 sec interval"));
-
         ArrayList<TimeEvent> timeEvents = new ArrayList<>();
-        timeEvents.add(timeEventOne);
-        timeEvents.add(timeEventTwo);
+
+        timeEvents.add(new TimeIntervalEvent(TimeFrame.SECOND, 6, () -> System.out.println("6 second delay event"), null, null));
+        timeEvents.add(new TimeIntervalEvent(TimeFrame.SECOND, 5, () -> System.out.println("5 second delay event"), null, null));
+        timeEvents.add(new TimeIntervalEvent(TimeFrame.SECOND, 4, () -> System.out.println("4 second delay event"), null, null));
+        timeEvents.add(new TimeIntervalEvent(TimeFrame.SECOND, 3, () -> System.out.println("3 second delay event"), null, null));
+        timeEvents.add(new TimeIntervalEvent(TimeFrame.SECOND, 2, () -> System.out.println("2 second delay event"), null, null));
 
         Thread testThread = new TimeEventManager(timeEvents);
         testThread.run();
 
         Thread.sleep(5000 * 10);
-
         /*
         classBuilder.appendClassDef("MyClass", "SuperClassSample");
 
