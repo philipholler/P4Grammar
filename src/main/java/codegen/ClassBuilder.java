@@ -119,6 +119,7 @@ public class ClassBuilder {
 
 
         codeBuilder.decremmentIndentation();
+        codeBuilder.newLine();
         codeBuilder.append(END_BRACKET).newLine().newLine();
         return this;
     }
@@ -170,7 +171,6 @@ public class ClassBuilder {
         codeBuilder.append(START_PARAN).append(END_PARAN);
         openBlock(BlockType.METHOD);
         appendReturnStatement(varName);
-        codeBuilder.newLine();
         closeBlock(BlockType.METHOD);
         return this;
     }
