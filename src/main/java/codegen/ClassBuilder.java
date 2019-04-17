@@ -9,7 +9,7 @@ public class ClassBuilder {
     private IndentedStringBuilder codeBuilder = new IndentedStringBuilder();
 
     /* --------------------- Syntax & naming constants --------------------- */
-    public static final String RANGE_SIGNAL_CLASS = "Signal";
+    public static final String RANGE_SIGNAL_CLASS = "RangeSignal";
     public static final String LITERAL_SIGNAL_CLASS = "Signal";
 
     public static final String DEVICE_SUPER_CLASS = "Device";

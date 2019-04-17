@@ -3,6 +3,7 @@ package semantics;
 import exceptions.userside.DuplicateIDCompileError;
 import exceptions.userside.TypeUndefinedCompileError;
 import node.base.Node;
+import node.define_nodes.Signal.EnumNode;
 import utils.StringUtils;
 
 import java.util.ArrayList;
@@ -35,6 +36,11 @@ public class SymbolTable {
     public boolean isDeviceTypeDefined(String ID){
         Optional<Symbol> symbol = globalBlock.getSymbol(ID);
         return symbol.isPresent() && symbol.get() instanceof DeviceTypeSymbol;
+    }
+
+    public boolean isSignalLiteral(String ID){
+        Optional<Symbol> symbol = globalBlock.getSymbol(ID);
+        return symbol.isPresent() && symbol.get().declarationNode instanceof EnumNode;
     }
 
     public boolean isSignalTypeDefined(String ID){
