@@ -143,6 +143,13 @@ public class ClassBuilder {
         return this;
     }
 
+    public ClassBuilder appendMainMethod(){
+        codeBuilder.newLine();
+        codeBuilder.append("public static void main(String[] args)");
+        openBlock(BlockType.METHOD);
+        return this;
+    }
+
     /**
      * Appends a new method definition to the class
      * Any subsequent appends will be added inside the method body

@@ -75,11 +75,17 @@ public class MainGenerationVisitor extends ASTBaseVisitor<Void> {
         classBuilder.appendImportAllFrom(ClassBuilder.DEVICE_PACKAGE);
 
         classBuilder.appendClassDef(MAIN_CLASS_NAME);
+        addMainMethod();
         visitChildren(node);
         classBuilder.closeBlock(ClassBuilder.BlockType.CLASS);
 
         JavaFileWriter.writeClass(classBuilder);
         return null;
+    }
+
+    private void addMainMethod(){
+        classBuilder.appendMainMethod().appendMethodCall(INIT_FUNC_NAME);
+        classBuilder.closeBlock(ClassBuilder.BlockType.METHOD);
     }
 
     @Override
