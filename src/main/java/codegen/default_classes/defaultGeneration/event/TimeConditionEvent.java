@@ -10,7 +10,8 @@ public class TimeConditionEvent implements TimeEvent{
     private LocalDateTime nextExecutionTime;
     private EventWhenTimeNode node;
 
-    private Thread eventhread;
+    private Thread eventThread;
+    private final Runnable eventAction;
 
     private static final int UNSPECIFIED = -1;
     private final int year, month, day, hour, minute;
@@ -24,7 +25,7 @@ public class TimeConditionEvent implements TimeEvent{
         this.day = day;
         this.hour = hour;
         this.minute = minute;
-        this.eventhread = new Thread(eventAction);
+        this.eventAction = eventAction;
         initNextExecutionTime();
     }
 
@@ -75,10 +76,13 @@ public class TimeConditionEvent implements TimeEvent{
 
     @Override
     public void executeEventThread() {
-        if(eventhread.isAlive()){ // todo Should maybe
-            eventhread.interrupt();
+        // Stop previous thread if it's still running
+        while(eventThread != null && eventThread.isAlive()){
+            eventThread.interrupt();
         }
-        eventhread.start();
+
+        eventThread = new Thread(eventAction);
+        eventThread.start();
     }
 
     @Override

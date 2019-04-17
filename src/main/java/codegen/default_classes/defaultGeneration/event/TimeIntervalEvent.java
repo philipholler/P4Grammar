@@ -10,6 +10,7 @@ public class TimeIntervalEvent implements TimeEvent {
 
     private LocalDateTime nextExecutionTime;
     private Thread eventThread;
+    private final Runnable eventAction;
 
     private TimeFrame timeFrame; // Include TimeFrame in the compiled code
     private int delay;
@@ -23,6 +24,7 @@ public class TimeIntervalEvent implements TimeEvent {
         this.delay = delay;
         this.startTime = startTime;
         this.startDate = startDate;
+        this.eventAction = eventAction;
         eventThread = new Thread(eventAction);
         initExecutionTime();
     }
@@ -43,14 +45,13 @@ public class TimeIntervalEvent implements TimeEvent {
     // Runs the code that should be executed when the condition is fulfilled
     @Override
     public void executeEventThread() {
-        if(eventThread.isAlive()){
+        // Stop previous thread if it's still running
+        while(eventThread != null && eventThread.isAlive()){
             eventThread.interrupt();
-
-            System.out.println("\nEvent thread for time interval node interrupted.");
-            // todo specify node
         }
 
-        eventThread.run();
+        eventThread = new Thread(eventAction);
+        eventThread.start();
     }
 
     // Updates the nextExecutionTime to be the current execution time plus whatever delay is specified in the

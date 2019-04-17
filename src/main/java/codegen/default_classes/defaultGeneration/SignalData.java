@@ -26,4 +26,13 @@ public class SignalData {
     public int hashCode() {
         return Objects.hash(hardwareId, signalType, value);
     }
+
+    @Override
+    public String toString() {
+        return "SignalData{" +
+                "hardwareId='" + hardwareId + '\'' +
+                ", signalType='" + signalType + '\'' +
+                ", value='" + value + '\'' +
+                '}';
+    }
 }

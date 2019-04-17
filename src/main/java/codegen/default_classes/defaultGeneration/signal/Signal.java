@@ -6,6 +6,8 @@ public interface Signal <T> {
 
     void setCurrentValue(T newVal);
 
+    void setCurrentValue(String newVal);
+
 
 
     default String getName(){

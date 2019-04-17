@@ -40,7 +40,6 @@ public class ClassGenerationVisitor extends ASTBaseVisitor<ClassBuilder> {
     public static final String RANGE_LOWER_BOUND_VAR = "LOWER_BOUND";
     public static final String DEFAULT_VALUE_VAR = "defaultValue";
 
-
     public static final String CURRENT_VALUE_VAR = "currentValue";
     public static final String HARDWARE_ID_VAR = "hardwareID";
 

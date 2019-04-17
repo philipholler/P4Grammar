@@ -11,17 +11,18 @@ public class SimpleSignalEvent<T> implements SignalEvent {
     private final T value;
 
     private final SignalData expectedData;
-    private final Thread eventThread;
+    private final Runnable eventAction;
+    private Thread eventThread;
 
     public SimpleSignalEvent(Device device, Signal<T> signal, T value, Runnable eventAction) {
         this.device = device;
         this.signal = signal;
         this.value = value;
-
-        eventThread = new Thread(eventAction);
+        this.eventAction = eventAction;
 
         // The value that will trigger this event
-        expectedData = new SignalData(device.getNetworkID(), signal.getClass().getName(), String.valueOf(value));
+        expectedData = new SignalData(device.getNetworkID(), signal.getClass().getSimpleName(), String.valueOf(value));
+        System.out.println(expectedData);
     }
 
     @Override
@@ -31,11 +32,12 @@ public class SimpleSignalEvent<T> implements SignalEvent {
 
     @Override
     public void executeEvent() {
-        // Kill the old event thread if it's still running
-        while(eventThread.isAlive()){
-            eventThread.interrupt(); // Todo Should this sleep for a short period to allow the thread to stop?
+        // Stop previous thread if it's still running
+        while(eventThread != null && eventThread.isAlive()){
+            eventThread.interrupt();
         }
 
+        eventThread = new Thread(eventAction);
         eventThread.start();
     }
 

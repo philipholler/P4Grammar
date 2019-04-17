@@ -1,9 +1,19 @@
 package codegen;
 
-import codegen.default_classes.defaultGeneration.event.TimeEvent;
+import codegen.default_classes.defaultGeneration.SignalData;
+import codegen.default_classes.defaultGeneration.device.Device;
+import codegen.default_classes.defaultGeneration.device.Window;
+import codegen.default_classes.defaultGeneration.event.RangeSignalEvent;
+import codegen.default_classes.defaultGeneration.event.SignalEvent;
+import codegen.default_classes.defaultGeneration.event.SignalEventManager;
+import codegen.default_classes.defaultGeneration.event.SimpleSignalEvent;
+import codegen.default_classes.defaultGeneration.signal.OpenSignal;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
 import java.util.ArrayList;
+import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.LinkedBlockingQueue;
 
 class ClassBuilderTest {
 
@@ -16,19 +26,56 @@ class ClassBuilderTest {
 
     @Test
     void addClassDefinition() throws InterruptedException { // todo not an actual test
-        ArrayList<TimeEvent> timeEvents = new ArrayList<>();
+        OpenSignal percent = new OpenSignal(0, 100);
+        OpenSignal percent2 = new OpenSignal(0, 100);
+
+        Window window = new Window("101");
+        Window window2 = new Window("102");
 
 
-        Thread thread = new Thread(() -> {
-            while (true){
-                System.out.println("hey");
-            }
-        });
-        thread.start();
+        RangeSignalEvent<Integer> rangeEvent = new RangeSignalEvent<Integer>(window, percent, 25,
+                RangeSignalEvent.PassType.EXCEEDS, () -> System.out.println("Signal exceeded 25!"));
 
+        RangeSignalEvent<Integer> rangeEvent2 = new RangeSignalEvent<Integer>(window2, percent, 35,
+                RangeSignalEvent.PassType.DECEEDS, () -> System.out.println("Signal exceeded 35!"));
+
+        SimpleSignalEvent<Integer> normalEvent = new SimpleSignalEvent<Integer>(window, percent2, 50, () -> System.out.println("recieved signal 50"));
+
+        ArrayList<SignalEvent> events = new ArrayList<>();
+        events.add(rangeEvent);
+        events.add(rangeEvent2);
+        events.add(normalEvent);
+
+        SignalEventManager signalEventManager = new SignalEventManager(events);
+        LinkedBlockingQueue<SignalData> signalQueue = signalEventManager.getEventsQueue();
+
+        signalEventManager.start();
+
+        System.out.println("_________________________");
+        signalQueue.add(new SignalData("101", "OpenSignal", "24"));
         Thread.sleep(1000);
-        thread.interrupt();
-        Thread.sleep(50000);
+        signalQueue.add(new SignalData("101", "OpenSignal", "23"));
+        Thread.sleep(1000);
+        System.out.println("_________________________");
+        signalQueue.add(new SignalData("101", "OpenSignal", "26"));
+        Thread.sleep(1000);
+        System.out.println("_________________________");
+        signalQueue.add(new SignalData("101", "OpenSignal", "27"));
+        Thread.sleep(1000);
+        System.out.println("_________________________");
+        signalQueue.add(new SignalData("101", "OpenSignal", "24"));
+        Thread.sleep(1000);
+        System.out.println("_________________________");
+        signalQueue.add(new SignalData("101", "OpenSignal", "26"));
+        Thread.sleep(1000);
+        System.out.println("_________________________");
+        signalQueue.add(new SignalData("101", "OpenSignal", "50"));
+        Thread.sleep(1000);
+        System.out.println("_________________________");
+        signalQueue.add(new SignalData("101", "OpenSignal", "50"));
+        Thread.sleep(5000);
+
+
 
 
         /*

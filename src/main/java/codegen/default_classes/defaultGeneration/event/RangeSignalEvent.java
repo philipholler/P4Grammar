@@ -15,57 +15,62 @@ public class RangeSignalEvent<T extends Number> implements SignalEvent{
     private final Device device;
     private final Signal<T> signal;
     private final T thresHold;
+    private T previousValue;
 
-    private final Thread eventThread;
+    private Thread eventThread;
     private final PassType passType;
+
+    private final Runnable eventAction;
 
     public RangeSignalEvent(Device device, RangeSignal<T> signal, T thresHold, PassType passType, Runnable eventAction) {
         this.device = device;
         this.signal = signal;
         this.thresHold = thresHold;
         this.passType = passType;
-        eventThread = new Thread(eventAction);
-
-
+        this.eventAction = eventAction;
+        previousValue = signal.getCurrentValue();
     }
 
     @Override
     public boolean satisfiesCondition(SignalData data) {
+        boolean result = false;
         // If the device and signal type matches, then check if signal exceeds/deceeds
         if(device.getNetworkID().equals(data.hardwareId) && signal.getName().equals(data.signalType)){
-            if(passType == PassType.EXCEEDS){
 
-                // The event can only be triggered if the current value is below the threshold
-                // and the new value is at or above the treshold
-                if(compareSignalValue(signal.getCurrentValue(), thresHold) < 0 && compareSignalValue(data.value, thresHold) >= 0){
-                    signal.setCurrentValue(data.value);
-                    return true;
+            if(passType == PassType.EXCEEDS){
+                // The 'exceeds' event can only be triggered if the current value is at or below the threshold
+                // and the new value is at or above the threshold
+                if(compareSignalValue(previousValue, thresHold) <= 0
+                        && compareSignalValue(data.value, thresHold) > 0){
+                    result = true;
                 }
 
-                /**
-                 * implement so that currentval < thresHold and
-                 */
-
-
-
             }else{
-                // PassType must be deceeds
-
+                // The 'deceeds' event can only be triggered if the current value is at or above the threshold
+                // and the new value is below the threshold
+                if(compareSignalValue(previousValue, thresHold) >= 0
+                        && compareSignalValue(data.value, thresHold) < 0){
+                    result = true;
+                }
             }
+
+            // Update the current signal value to reflect the newly received value
+            signal.setCurrentValue(data.value);
+            previousValue = signal.getCurrentValue();
         }
 
-        return false;
+        return result;
     }
 
     private int compareSignalValue(String num, T val){
         // A range signal can either be a float range or an int range
         if(val instanceof Integer){
-            Integer x = (Integer) val;
-            Integer y = Integer.parseInt(num);
+            Integer x = Integer.parseInt(num);
+            Integer y = (Integer) val;
             return x.compareTo(y);
         }else{
-            Float x = (Float) val;
-            Float y = Float.parseFloat(num);
+            Float x = Float.parseFloat(num);
+            Float y = (Float) val;
             return x.compareTo(y);
         }
     }
@@ -83,22 +88,15 @@ public class RangeSignalEvent<T extends Number> implements SignalEvent{
         }
     }
 
-    @SuppressWarnings("unchecked") // Actually is checked
-    private T toSignalValue(String stringVal){
-        if(signal.getCurrentValue() instanceof Integer)
-            return (T) (Integer.valueOf(stringVal));
-        else
-            return (T) (Float.valueOf(stringVal));
-    }
-
 
     @Override
     public void executeEvent() {
-        while(eventThread.isAlive()){
+        // Stop previous thread if it's still running
+        while(eventThread != null && eventThread.isAlive()){
             eventThread.interrupt();
         }
 
+        eventThread = new Thread(eventAction);
         eventThread.start();
-
     }
 }
