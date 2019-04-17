@@ -52,6 +52,7 @@ public class ClassGenerationVisitor extends ASTBaseVisitor<ClassBuilder> {
 
     @Override
     public ClassBuilder visit(ProgramNode node) {
+        // Create all the default classes.
         String sourceLocation = System.getProperty("user.dir");
         File sourceFile= new File(sourceLocation +"/src/main/java/codegen/default_classes/defaultGeneration");
         File targetFile = new File("compiled_code");
@@ -109,7 +110,7 @@ public class ClassGenerationVisitor extends ASTBaseVisitor<ClassBuilder> {
 
         // Create constructor calling the super constructor of RangeSignal
         classBuilder.appendConstructor();
-        classBuilder.appendSuperConstructorCall(lowerBound, upperBound, defaultValue);
+        classBuilder.appendSuperConstructorCall(lowerBound, upperBound, lowerBound);
         classBuilder.closeBlock(ClassBuilder.BlockType.METHOD);
 
         classBuilder.closeBlock(ClassBuilder.BlockType.CLASS);

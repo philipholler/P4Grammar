@@ -30,11 +30,15 @@ import node.TimeNodes.NowNode;
 import node.base.Node;
 import node.define_nodes.Device.DefDeviceNode;
 import node.define_nodes.Signal.DefSignalNode;
+import node.define_nodes.Signal.EnumNode;
+import semantics.FieldSymbol;
+import semantics.Symbol;
 import semantics.SymbolTable;
 import utils.JavaCodeUtils;
 import visitor.ASTBaseVisitor;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 public class MainGenerationVisitor extends ASTBaseVisitor<Void> {
 
@@ -53,10 +57,17 @@ public class MainGenerationVisitor extends ASTBaseVisitor<Void> {
     public static final String BREAK_KEYWORD = "break";
     public static final String TRUE_KEYWORD = "true";
     public static final String FALSE_KEYWORD = "false";
+    public static final String SET_METHOD_NAME = "setCurrentValue";
+    public static final String GET_METHOD_NAME = "getCurrentValue";
+
+    SymbolTable st;
 
 
     @Override
     public Void visit(ProgramNode node) {
+        st = node.getSt();
+        st.resetScope();
+
         classBuilder = new ClassBuilder();
 
         classBuilder.appendPackage(ClassBuilder.SERVER_PACKAGE);
@@ -73,12 +84,15 @@ public class MainGenerationVisitor extends ASTBaseVisitor<Void> {
 
     @Override
     public Void visit(BlockNode node) {
+        st.openScope(node);
         for(Node statement : node.getChildren()){
             visit(statement);
             if(statement instanceof FuncCallNode) classBuilder.endLine().appendNewLine();
             if(statement instanceof GetFuncNode) classBuilder.endLine().appendNewLine();
+            if(statement instanceof SetFuncNode) classBuilder.endLine().appendNewLine();
         }
 
+        st.closeScope();
         return null;
     }
 
@@ -125,7 +139,7 @@ public class MainGenerationVisitor extends ASTBaseVisitor<Void> {
 
     @Override
     public Void visit(FloatNode node) {
-        classBuilder.append(String.valueOf(node.getVal()));
+        classBuilder.append(String.valueOf(node.getVal()) + 'f');
         return null;
     }
 
@@ -166,23 +180,53 @@ public class MainGenerationVisitor extends ASTBaseVisitor<Void> {
 
     @Override
     public Void visit(GetFuncNode node) {
+        // Make sure to cast the value to the correct type
+        if(node.getType().equals(SymbolTable.INT_TYPE_ID)){
+            classBuilder.append("(Integer)");
+        } else if (node.getType().equals(SymbolTable.FLOAT_TYPE_ID)){
+            classBuilder.append("(Float");
+        }
+
+        // device.
         classBuilder.append(node.getDeviceID());
         classBuilder.appendDot();
+
+        // device.getInputSignalID() || device.getOutputSignalID()
         classBuilder.append(GET_KEYWORD);
         if(node.isOutput()){
             classBuilder.append(OUTPUT_KEYWORD);
         } else {
             classBuilder.append(INPUT_KEYWORD);
         }
-        classBuilder.append(node.getSignalID());
-        classBuilder.startParan();
-        classBuilder.endParan();
+        classBuilder.append(node.getSignalID() + "()");
+        classBuilder.appendDot();
+
+        // device.getInputSignalID().getCurrentValue()
+        classBuilder.append(GET_METHOD_NAME + "()");
 
         return null;
     }
 
     @Override
     public Void visit(SetFuncNode node) {
+        // call dot operator on the device
+        // device.
+        classBuilder.append(node.getDeviceID());
+        classBuilder.appendDot();
+
+        // device.getInputSignalID().
+        classBuilder.append(GET_KEYWORD);
+        classBuilder.append(INPUT_KEYWORD);
+        classBuilder.append(node.getSignalID() + "()");
+        classBuilder.appendDot();
+
+        // Use the set function on the method.
+        // device.getInputSignalID().setCurrentValue( 'expr' )
+        classBuilder.append(SET_METHOD_NAME);
+        classBuilder.startParan();
+        // Find the 'expr'
+        visit(node.getExpr());
+        classBuilder.endParan();
         return null;
     }
 
@@ -211,7 +255,17 @@ public class MainGenerationVisitor extends ASTBaseVisitor<Void> {
 
     @Override
     public Void visit(IDNode node) {
-        classBuilder.append(node.getID());
+        if(st.isSignalLiteral(node.getID())){
+            Optional<Symbol> sigLit = st.getSymbol(node.getID());
+            if(sigLit.isPresent()){
+                FieldSymbol signalLiteral = (FieldSymbol) sigLit.get();
+                EnumNode enumNode = (EnumNode) signalLiteral.getDelcarationNode();
+                classBuilder.append("" + ((IntegerNode)enumNode.getLiteralValue()).getVal());
+            }
+        } else {
+            classBuilder.append(node.getID());
+        }
+
         return null;
     }
 
@@ -231,7 +285,12 @@ public class MainGenerationVisitor extends ASTBaseVisitor<Void> {
             inputParams[i] = new JavaInputParameter(type, inNode.getId());
         }
 
-        classBuilder.appendMethod(node.getId(), node.getReturnType(), inputParams);
+        if(node.getReturnType().equals("string")){
+            classBuilder.appendMethod(node.getId(), "String", inputParams);
+        } else {
+            classBuilder.appendMethod(node.getId(), node.getReturnType(), inputParams);
+        }
+
         visit(node.getBlock());
         classBuilder.closeBlock(ClassBuilder.BlockType.METHOD);
 
