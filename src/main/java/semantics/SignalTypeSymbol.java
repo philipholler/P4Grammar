@@ -57,13 +57,13 @@ public class SignalTypeSymbol extends Symbol{
 
         // For a signal type with a range
         if(declarationNode.getRangeNode() != null){
-            if(declarationNode.getRangeNode().getType().equals("float")){
+            if(declarationNode.getRangeNode().getType().equals(SymbolTable.FLOAT_TYPE_ID)){
                 this.TYPE = SignalType.FLOAT_RANGE;
                 if(declarationNode.getRangeNode().getLeftChild() instanceof FloatNode && declarationNode.getRangeNode().getLeftChild() instanceof FloatNode){
                     this.floatLowerBound = ((FloatNode) declarationNode.getRangeNode().getLeftChild()).getVal();
                     this.floatUpperBound = ((FloatNode) declarationNode.getRangeNode().getRightChild()).getVal();
                 }
-            } else if (declarationNode.getRangeNode().getType().equals("int")){
+            } else if (declarationNode.getRangeNode().getType().equals(SymbolTable.INT_TYPE_ID)){
                 this.TYPE = SignalType.INT_RANGE;
                 if(declarationNode.getRangeNode().getLeftChild() instanceof IntegerNode && declarationNode.getRangeNode().getLeftChild() instanceof IntegerNode){
                     this.floatLowerBound = ((IntegerNode) declarationNode.getRangeNode().getLeftChild()).getVal();

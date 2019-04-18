@@ -49,6 +49,11 @@ public class DeclarationVisitor extends ASTBaseVisitor<Void> {
     @Override
     public Void visit(DefSignalNode node) {
         SignalTypeSymbol signalType = new SignalTypeSymbol(node);
+        for (FieldSymbol sym : signalType.getSignalLiterals()) {
+            if(st.containsID(sym.getID())){
+                throw new SignalLiteralDuplicateException("signal '" + sym.getID() + "' already defined.", node.getLineNumber());
+            }
+        }
         st.enterSymbol(signalType);
         super.visit(node);
         return null;

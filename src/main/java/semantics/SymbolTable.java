@@ -56,8 +56,26 @@ public class SymbolTable {
     /** Adds the given symbol to the currently opened scope */
     public void enterSymbol(Symbol s){
         if(s instanceof FunctionSymbol) enterFunctionSymbol((FunctionSymbol) s);
-        else if(s instanceof FieldSymbol) enterFieldSymbol((FieldSymbol)s);
+        else if(s instanceof FieldSymbol) enterFieldSymbol((FieldSymbol) s);
+        else if(s instanceof SignalTypeSymbol) enterSignalSymbol((SignalTypeSymbol) s);
         else enterRegularSymbol(s);
+    }
+
+    private void enterSignalSymbol(SignalTypeSymbol s){
+        // check if the signal is already defined
+        Optional<Symbol> existingSymbol = currentBlock.getSymbol(s.id);
+        if(existingSymbol.isPresent()){
+            throw new DuplicateIDCompileError(s.id, s.declarationNode.getLineNumber(),
+                    existingSymbol.get().declarationNode.getLineNumber());
+        }
+
+        // Add all the literals as field symbols
+        for (FieldSymbol symb : s.getSignalLiterals()) {
+            enterFieldSymbol(symb);
+        }
+
+        // If it gets to here, add the Signal Type
+        currentBlock.addSymbol(s);
     }
 
     private void enterFieldSymbol(FieldSymbol s){
@@ -73,7 +91,6 @@ public class SymbolTable {
             throw new DuplicateIDCompileError(s.id, s.declarationNode.getLineNumber(),
                     existingSymbol.get().declarationNode.getLineNumber());
         }
-
         // ...otherwise add the symbol to the current scope
         currentBlock.addSymbol(s);
 
