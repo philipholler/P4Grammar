@@ -10,8 +10,13 @@ import node.Events.WhenNodes.EventInputNode;
 import node.Events.WhenNodes.EventRangeInputNode;
 import node.Events.WhenNodes.EventWhenTimeNode;
 import node.ProgramNode;
+import node.TimeNodes.DateNode;
+import node.TimeNodes.TimeNode;
 import semantics.SymbolTable;
 import visitor.ASTBaseVisitor;
+
+import java.time.LocalDate;
+import java.time.LocalTime;
 
 public class EventInitializationVisitor extends ASTBaseVisitor<Void> {
 
@@ -19,7 +24,6 @@ public class EventInitializationVisitor extends ASTBaseVisitor<Void> {
 
     public static final String EVENT_INIT_CLASS_NAME = "EventInitializer";
     public static final String START_EVENTMANAGERS_METHOD = "startEventManagers";
-
 
     private static final String MAIN_REFERENCE_NAME = "main";
     private static final String ADD_EVENTS_METHOD = "fillEventLists";
@@ -71,8 +75,11 @@ public class EventInitializationVisitor extends ASTBaseVisitor<Void> {
         classBuilder.appendImportAllFrom(ClassBuilder.DEFAULT_DEVICE_PACKAGE);
         classBuilder.appendImportAllFrom(ClassBuilder.DEVICE_PACKAGE);
         classBuilder.appendImportAllFrom(ClassBuilder.SIGNAL_PACKAGE);
-        classBuilder.appendImportAllFrom(ClassBuilder.SERVER_PACKAGE);
-        classBuilder.appendImport(ClassBuilder.ARRAYLIST_PACKAGE).appendNewLine();
+        classBuilder.appendImportAllFrom(ClassBuilder.SERVER_PACKAGE).appendNewLine();
+        classBuilder.appendImport(ClassBuilder.ARRAYLIST_PACKAGE);
+        classBuilder.appendImport("java.time.LocalDate");
+        classBuilder.appendImport("java.time.LocalTime").appendNewLine();
+
     }
 
     private void addLocalVars(){
@@ -182,6 +189,62 @@ public class EventInitializationVisitor extends ASTBaseVisitor<Void> {
 
     @Override
     public Void visit(EventEveryNode node) {
+        String timeFrame = '"' + node.getTimeframe().name() + '"';
+        String delay = String.valueOf(node.getInteger().getVal()) ;
+        String startDate, startTime;
+        String runnable = MAIN_REFERENCE_NAME + "." + new MethodSignatureVisitor().visit(node);
+
+        if(node.getDateNode() != null)
+            startDate = addLocalDateDeclaration("date_node" + node.getLineNumber(), node.getDateNode().getDate());
+        else
+            startDate = "null";
+
+
+        if(node.getTimeNode() != null)
+            startTime = addLocalTimeDeclaration("time_node" + node.getLineNumber(), node.getTimeNode().getTime());
+        else
+            startTime = "null";
+
+        addTimeIntervalEventDef(timeFrame, delay, startDate, startTime, runnable);
         return super.visit(node);
     }
+
+    private void addTimeIntervalEventDef(String timeFrame, String delay, String startDate, String startTime, String runnable) {
+        // Example gen "timeEvens.add(new TimeIntervalEvent("
+        classBuilder.append(TIME_EVENT_LIST).appendDot().append("add").startParan();
+        classBuilder.append("new ").append(TimeIntervalEvent.class.getSimpleName()).startParan();
+
+        // Example gen "25, "SECONDS",  null, null, () ->"
+        classBuilder.appendCommaSeparated(timeFrame, delay, startDate, startTime).appendComma();
+        classBuilder.startParan().endParan().appendLambdaArrow();
+
+        // Example gen "main.eventFunc21()"
+        classBuilder.append(runnable).startParan().endParan();
+
+        classBuilder.endParan().endParan().endLine();
+    }
+
+    // Delcares a LocalDate and returns the name of the declared variable
+    public String addLocalDateDeclaration(String varName, LocalDate date){
+        // Example gen "LocalDate varName = LocalDate.of("
+        classBuilder.append("LocalDate ").append(varName).appendEquals().append("LocalDate.of").startParan();
+
+        classBuilder.appendCommaSeparated(String.valueOf(date.getYear()),
+                String.valueOf(date.getMonthValue()), String.valueOf(date.getDayOfMonth()));
+
+        classBuilder.endParan().endLine();
+        return varName;
+    }
+
+    // Delcares a LocalTime and returns the name of the declared variable
+    public String addLocalTimeDeclaration(String varName, LocalTime time){
+        classBuilder.append("LocalTime ").append(varName).appendEquals().append("LocalTime.of").startParan();
+
+        classBuilder.appendCommaSeparated(String.valueOf(time.getHour()),
+                String.valueOf(time.getMinute()), String.valueOf(time.getSecond()));
+
+        classBuilder.endParan().endLine();
+        return varName;
+    }
+
 }

@@ -33,6 +33,10 @@ when 21:39 18d04m{
     printFunction("MAGICAL");
 }
 
+every 5 seconds starting 21:45 18d04m2019y{
+    printFunction("5 Seconds passed");
+}
+
 void printFunction(string s){
     print s;
 }

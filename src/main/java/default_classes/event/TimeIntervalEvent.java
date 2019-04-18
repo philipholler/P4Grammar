@@ -17,8 +17,7 @@ public class TimeIntervalEvent implements TimeEvent {
     private LocalDate startDate; // todo : run initExecutionTime at the start of every year
     private LocalTime startTime;
 
-    public TimeIntervalEvent(String timeFrame, int delay, Runnable eventAction,
-                             LocalDate startDate, LocalTime startTime){
+    public TimeIntervalEvent(String timeFrame, int delay, LocalDate startDate, LocalTime startTime, Runnable eventAction){
         this.timeFrame = timeFrame;
         this.delay = delay;
         this.startTime = startTime;
@@ -57,6 +56,7 @@ public class TimeIntervalEvent implements TimeEvent {
     // event definition
     @Override
     public void rescheduleEvent() {
+        nextExecutionTime = LocalDateTime.now();
         switch (timeFrame){
             case "MONTH":
                 nextExecutionTime = nextExecutionTime.plusMonths(delay);
