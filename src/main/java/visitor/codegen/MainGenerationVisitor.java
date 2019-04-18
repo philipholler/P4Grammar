@@ -84,7 +84,12 @@ public class MainGenerationVisitor extends ASTBaseVisitor<Void> {
     }
 
     private void addMainMethod(){
-        classBuilder.appendMainMethod().appendMethodCall(INIT_FUNC_NAME);
+
+        classBuilder.appendMainMethod();
+        classBuilder.appendNewObjectDecl(MAIN_CLASS_NAME, "main");
+        classBuilder.append("main.").appendMethodCall(INIT_FUNC_NAME);
+
+
         classBuilder.closeBlock(ClassBuilder.BlockType.METHOD);
     }
 
