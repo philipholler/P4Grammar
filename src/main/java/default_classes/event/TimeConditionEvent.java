@@ -1,14 +1,11 @@
 package default_classes.event;
 
-import node.Events.WhenNodes.EventWhenTimeNode;
-
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 public class TimeConditionEvent implements TimeEvent{
 
     private LocalDateTime nextExecutionTime;
-    private EventWhenTimeNode node;
 
     private Thread eventThread;
     private final Runnable eventAction;

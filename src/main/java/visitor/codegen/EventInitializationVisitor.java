@@ -4,8 +4,7 @@ import codegen.ClassBuilder;
 import codegen.JavaFileWriter;
 import codegen.JavaInputParameter;
 import codegen.JavaType;
-import default_classes.event.SignalEvent;
-import default_classes.event.TimeEvent;
+import default_classes.event.*;
 import node.Events.EventEveryNode;
 import node.Events.WhenNodes.EventInputNode;
 import node.Events.WhenNodes.EventRangeInputNode;
@@ -18,15 +17,42 @@ public class EventInitializationVisitor extends ASTBaseVisitor<Void> {
     ClassBuilder classBuilder;
 
     public static final String EVENT_INIT_CLASS_NAME = "EventInitializer";
+    public static final String START_EVENTMANAGERS_METHOD = "startEventManagers";
     private static final String MAIN_REFERENCE_NAME = "main";
     private static final String ADD_EVENTS_METHOD = "fillEventLists";
     private static final String TIME_EVENT_LIST = "timeEvents";
     private static final String SIGNAL_EVENT_LIST = "signalEvents";
+    private static final String SIGNAL_EVENT_MANAGER = "signalEventManager";
+    private static final String TIME_EVENT_MANAGER = "timeEventManager";
 
     @Override
     public Void visit(ProgramNode node) {
         classBuilder = new ClassBuilder();
         classBuilder.appendPackage(ClassBuilder.EVENT_PACKAGE);
+        addImports();
+
+        classBuilder.appendClassDef(EVENT_INIT_CLASS_NAME);
+
+        addLocalVars();
+        addConsructor();
+
+        // Add method for starting event managers
+        classBuilder.appendMethod(START_EVENTMANAGERS_METHOD, JavaType.VOID.keyword);
+        classBuilder.append(SIGNAL_EVENT_MANAGER).appendDot().append("start()").endLine().appendNewLine();
+        classBuilder.append(TIME_EVENT_MANAGER).appendDot().append("start()").endLine().appendNewLine();
+        classBuilder.closeBlock(ClassBuilder.BlockType.METHOD);
+
+        // Method for adding events to their respective lists
+        classBuilder.appendMethod(ADD_EVENTS_METHOD, JavaType.VOID.keyword);
+        visitChildren(node);
+        classBuilder.closeBlock(ClassBuilder.BlockType.METHOD);
+
+        classBuilder.closeBlock(ClassBuilder.BlockType.CLASS);
+        JavaFileWriter.writeClass(classBuilder);
+        return null;
+    }
+
+    private void addImports() {
         classBuilder.appendImportAllFrom(ClassBuilder.DEFAULT_SIGNAL_PACKAGE);
         classBuilder.appendImportAllFrom(ClassBuilder.DEFAULT_EVENT_PACKAGE);
         classBuilder.appendImportAllFrom(ClassBuilder.DEFAULT_DEVICE_PACKAGE);
@@ -34,19 +60,6 @@ public class EventInitializationVisitor extends ASTBaseVisitor<Void> {
         classBuilder.appendImportAllFrom(ClassBuilder.SIGNAL_PACKAGE);
         classBuilder.appendImportAllFrom(ClassBuilder.SERVER_PACKAGE);
         classBuilder.appendImport(ClassBuilder.ARRAYLIST_PACKAGE).appendNewLine();
-        classBuilder.appendClassDef(EVENT_INIT_CLASS_NAME);
-
-        addLocalVars();
-        addConsructor();
-
-        classBuilder.appendMethod(ADD_EVENTS_METHOD, JavaType.VOID.keyword);
-        visitChildren(node);
-        classBuilder.closeBlock(ClassBuilder.BlockType.METHOD);
-
-        classBuilder.closeBlock(ClassBuilder.BlockType.CLASS);
-        JavaFileWriter.writeClass(classBuilder);
-
-        return null;
     }
 
     private void addLocalVars(){
@@ -54,12 +67,21 @@ public class EventInitializationVisitor extends ASTBaseVisitor<Void> {
 
         classBuilder.appendNewObjectDecl("ArrayList<" + TimeEvent.class.getSimpleName() + ">", TIME_EVENT_LIST);
         classBuilder.appendNewObjectDecl("ArrayList<" + SignalEvent.class.getSimpleName() + ">", SIGNAL_EVENT_LIST);
+        classBuilder.appendObjectDecl(TimeEventManager.class.getSimpleName(), TIME_EVENT_MANAGER);
+        classBuilder.appendObjectDecl(SignalEventManager.class.getSimpleName(), SIGNAL_EVENT_MANAGER).appendNewLine();
     }
 
     private void addConsructor() {
         classBuilder.appendConstructor(new JavaInputParameter(MainGenerationVisitor.MAIN_CLASS_NAME
                 , MAIN_REFERENCE_NAME));
         classBuilder.appendAssignment("this." + MAIN_REFERENCE_NAME, MAIN_REFERENCE_NAME);
+        classBuilder.appendMethodCall(ADD_EVENTS_METHOD);
+
+        classBuilder.appendAssignment(TIME_EVENT_MANAGER, "new " + TimeEventManager.class.getSimpleName()
+                + "(" + TIME_EVENT_LIST + ")");
+        classBuilder.appendAssignment(SIGNAL_EVENT_MANAGER, "new " + SignalEventManager.class.getSimpleName()
+                + "(" + SIGNAL_EVENT_LIST + ")");
+
         classBuilder.closeBlock(ClassBuilder.BlockType.METHOD);
     }
 
@@ -76,6 +98,10 @@ public class EventInitializationVisitor extends ASTBaseVisitor<Void> {
 
     @Override
     public Void visit(EventWhenTimeNode node) {
+        /*classBuilder.append(TIME_EVENT_LIST).appendDot().append("add").startParan();
+        classBuilder.append("new ").append(TimeConditionEvent.class.getSimpleName()).append(" ").startParan();
+
+        classBuilder.endParan().endLine().appendNewLine();*/
         return super.visit(node);
     }
 
