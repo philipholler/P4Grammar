@@ -13,6 +13,7 @@ import node.Statements.Expression.IDNode;
 import node.Statements.Expression.LiteralValues.LiteralValueNode;
 import node.Statements.Expression.MultiExprNode;
 import node.Statements.LogicalExpression.ComparisonExprNode;
+import node.Statements.Wait.WaitNode;
 import node.TimeNodes.DateNode;
 import node.TimeNodes.NowNode;
 import node.TimeNodes.TimeNode;
@@ -88,6 +89,8 @@ public class TypeCheckerVisitor extends ASTBaseVisitor<Void>{
                         "'"
                         , node.getLineNumber());
             }
+        } else {
+            throw new VariableNotInitialisedException("Variable with '" + node.getID() + "' not initialised.", node.getLineNumber());
         }
 
         return super.visit(node);
@@ -209,6 +212,15 @@ public class TypeCheckerVisitor extends ASTBaseVisitor<Void>{
                     node.getLineNumber());
         }
 
+        return super.visit(node);
+    }
+
+    @Override
+    public Void visit(WaitNode node) {
+        // Wait can only be used with integers.
+        if(!node.getExpr().getType().equals(SymbolTable.INT_TYPE_ID)){
+            throw new ExpressionTypeException("Wait node can only take '" + SymbolTable.INT_TYPE_ID + "' as input.", node.getLineNumber());
+        }
         return super.visit(node);
     }
 }
