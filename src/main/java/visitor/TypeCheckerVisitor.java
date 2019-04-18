@@ -2,6 +2,11 @@ package visitor;
 
 import exceptions.userside.*;
 import node.BlockNode;
+import node.Events.EventEveryNode;
+import node.Events.WhenNodes.EventInputNode;
+import node.Events.WhenNodes.EventRangeInputNode;
+import node.Events.WhenNodes.EventWhenTimeNode;
+import node.Function.FunctionNode;
 import node.ProgramNode;
 import node.Statements.AssignmentNode;
 import node.Statements.Expression.AddExprNode;
@@ -13,6 +18,7 @@ import node.Statements.Expression.IDNode;
 import node.Statements.Expression.LiteralValues.LiteralValueNode;
 import node.Statements.Expression.MultiExprNode;
 import node.Statements.LogicalExpression.ComparisonExprNode;
+import node.Statements.ReturnNode;
 import node.Statements.Wait.WaitNode;
 import node.TimeNodes.DateNode;
 import node.TimeNodes.NowNode;
@@ -30,7 +36,8 @@ import java.util.Optional;
  */
 
 public class TypeCheckerVisitor extends ASTBaseVisitor<Void>{
-    SymbolTable st;
+    private SymbolTable st;
+    private String lastFunctionVisitedReturnType;
 
     public TypeCheckerVisitor() {
     }
@@ -221,6 +228,66 @@ public class TypeCheckerVisitor extends ASTBaseVisitor<Void>{
         if(!node.getExpr().getType().equals(SymbolTable.INT_TYPE_ID)){
             throw new ExpressionTypeException("Wait node can only take '" + SymbolTable.INT_TYPE_ID + "' as input.", node.getLineNumber());
         }
+        return super.visit(node);
+    }
+
+    @Override
+    public Void visit(ReturnNode node) {
+        System.out.println(node.getLineNumber());
+
+        // If the return value is not specified, but the function is not void, throw.
+        if(node.getReturnVal() == null){
+            if(!lastFunctionVisitedReturnType.equals("void")){
+                throw new WrongReturnTypeException("Wrong return type. Expected '" +
+                        lastFunctionVisitedReturnType +
+                        "', got '" +
+                        null +
+                        "'",
+                        node.getLineNumber()
+                );
+            }
+        }
+        // If the return value is not null, compare the type to the last visited function
+        // (i.e. the current function scope)
+        else if(!node.getReturnVal().getType().equals(lastFunctionVisitedReturnType)){
+            throw new WrongReturnTypeException("Wrong return type. Expected '" +
+                    lastFunctionVisitedReturnType +
+                    "', got '" +
+                    node.getReturnVal().getType() +
+                    "'",
+                    node.getLineNumber()
+                    );
+        }
+        return super.visit(node);
+    }
+
+    @Override
+    public Void visit(FunctionNode node) {
+        lastFunctionVisitedReturnType = node.getReturnType();
+        return super.visit(node);
+    }
+
+    @Override
+    public Void visit(EventInputNode node) {
+        lastFunctionVisitedReturnType = node.getReturnType();
+        return super.visit(node);
+    }
+
+    @Override
+    public Void visit(EventRangeInputNode node) {
+        lastFunctionVisitedReturnType = node.getReturnType();
+        return super.visit(node);
+    }
+
+    @Override
+    public Void visit(EventWhenTimeNode node) {
+        lastFunctionVisitedReturnType = node.getReturnType();
+        return super.visit(node);
+    }
+
+    @Override
+    public Void visit(EventEveryNode node) {
+        lastFunctionVisitedReturnType = node.getReturnType();
         return super.visit(node);
     }
 }
