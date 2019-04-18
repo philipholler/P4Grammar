@@ -81,6 +81,7 @@ public class MainGenerationVisitor extends ASTBaseVisitor<Void> {
         classBuilder.appendPackage(ClassBuilder.SERVER_PACKAGE);
         classBuilder.appendImportAllFrom(ClassBuilder.SIGNAL_PACKAGE);
         classBuilder.appendImportAllFrom(ClassBuilder.DEVICE_PACKAGE);
+        classBuilder.appendImportAllFrom(ClassBuilder.EVENT_PACKAGE);
         classBuilder.appendImportAllFrom(ClassBuilder.DEFAULT_CLASSES_PACKAGE).appendNewLine();
 
         classBuilder.appendClassDef(MAIN_CLASS_NAME);
@@ -139,6 +140,7 @@ public class MainGenerationVisitor extends ASTBaseVisitor<Void> {
     @Override
     public Void visit(DevDeclNode node) {
         // The only other types derive from Device with constructor (String hardwareID)
+        classBuilder.appendPublicKeyWord();
         classBuilder.appendNewObjectDecl(node.getType(), node.getID(), node.getVal());
         return null;
     }
@@ -211,6 +213,14 @@ public class MainGenerationVisitor extends ASTBaseVisitor<Void> {
     @Override
     public Void visit(InitNode node) {
         classBuilder.appendMethod(INIT_FUNC_NAME, JavaType.VOID.keyword);
+
+        // Default init behaviour - Initialize events and run event managers
+        classBuilder.append("new ").append(EventInitializationVisitor.EVENT_INIT_CLASS_NAME)
+                .startParan().append("this").endParan()
+                .appendDot().append(EventInitializationVisitor.START_EVENTMANAGERS_METHOD).startParan().endParan()
+                .endLine().appendNewLine();
+
+        // User-programmed init
         visit(node.getBlock());
         classBuilder.closeBlock(ClassBuilder.BlockType.METHOD);
         return null;

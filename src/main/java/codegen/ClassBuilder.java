@@ -49,6 +49,11 @@ public class ClassBuilder {
         return packageName;
     }
 
+    public ClassBuilder appendPublicKeyWord() {
+        codeBuilder.append("public ");
+        return this;
+    }
+
     public enum BlockType{
         CLASS, METHOD, WHILE, IF, ELSE, FOR, TRY, CATCH;
     }
@@ -367,6 +372,12 @@ public class ClassBuilder {
         codeBuilder.newLine();
         return this;
     }
+
+    public ClassBuilder appendLambdaArrow(){
+        codeBuilder.append(" -> ");
+        return this;
+    }
+
 
     public String getClassName() {
         return className;

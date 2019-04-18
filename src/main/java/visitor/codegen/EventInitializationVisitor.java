@@ -25,6 +25,8 @@ public class EventInitializationVisitor extends ASTBaseVisitor<Void> {
     private static final String SIGNAL_EVENT_MANAGER = "signalEventManager";
     private static final String TIME_EVENT_MANAGER = "timeEventManager";
 
+    private final MethodSignatureVisitor methodSignatureVisitor = new MethodSignatureVisitor();
+
     @Override
     public Void visit(ProgramNode node) {
         classBuilder = new ClassBuilder();
@@ -34,7 +36,7 @@ public class EventInitializationVisitor extends ASTBaseVisitor<Void> {
         classBuilder.appendClassDef(EVENT_INIT_CLASS_NAME);
 
         addLocalVars();
-        addConsructor();
+        addConstructor();
 
         // Add method for starting event managers
         classBuilder.appendMethod(START_EVENTMANAGERS_METHOD, JavaType.VOID.keyword);
@@ -71,7 +73,7 @@ public class EventInitializationVisitor extends ASTBaseVisitor<Void> {
         classBuilder.appendObjectDecl(SignalEventManager.class.getSimpleName(), SIGNAL_EVENT_MANAGER).appendNewLine();
     }
 
-    private void addConsructor() {
+    private void addConstructor() {
         classBuilder.appendConstructor(new JavaInputParameter(MainGenerationVisitor.MAIN_CLASS_NAME
                 , MAIN_REFERENCE_NAME));
         classBuilder.appendAssignment("this." + MAIN_REFERENCE_NAME, MAIN_REFERENCE_NAME);
@@ -87,8 +89,31 @@ public class EventInitializationVisitor extends ASTBaseVisitor<Void> {
 
     @Override
     public Void visit(EventInputNode node) {
+        String eventFunctionName = methodSignatureVisitor.visit(node);
 
-        return super.visit(node);
+        classBuilder.append(TIME_EVENT_LIST).appendDot().append("add").startParan();
+        classBuilder.append("new ").append(SimpleSignalEvent.class.getSimpleName()).append(" ").startParan();
+
+        // Defnition of parameters for simpleSignalEvent constructor :
+
+        // device
+        classBuilder.append(MAIN_REFERENCE_NAME).appendDot().append(node.getDeviceID()).appendComma();
+
+        // device.getOutputSignal
+        classBuilder.append(MAIN_REFERENCE_NAME).appendDot().append(node.getDeviceID()).appendDot()
+                .append(MainGenerationVisitor.GET_KEYWORD)
+                .append(ClassGenerationVisitor.OUTPUT_SIGNAL_PREFIX).append(node.getSignalID())
+                .startParan().endParan().appendComma().appendSpace();
+
+        //classBuilder.append(node.get)
+        classBuilder.appendComma().appendSpace();
+
+        // the runnable  () -> main.eventFunction()
+        classBuilder.startParan().endParan().appendLambdaArrow().append(MAIN_REFERENCE_NAME).appendDot()
+                .append(eventFunctionName).startParan().endParan();
+
+        classBuilder.endParan().endParan().endLine().appendNewLine();
+        return null;
     }
 
     @Override
