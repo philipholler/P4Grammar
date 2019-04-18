@@ -123,6 +123,7 @@ public class MainGenerationVisitor extends ASTBaseVisitor<Void> {
             } else {
                 visit(statement);
             }
+            if(statement instanceof ReturnNode) classBuilder.endLine().appendNewLine();
             if(statement instanceof FuncCallNode) classBuilder.endLine().appendNewLine();
             if(statement instanceof SetFuncNode) classBuilder.endLine().appendNewLine();
         }
@@ -167,8 +168,6 @@ public class MainGenerationVisitor extends ASTBaseVisitor<Void> {
             classBuilder.appendSpace();
             visit(node.getReturnVal());
         }
-
-        classBuilder.append(";");
         return null;
     }
 
