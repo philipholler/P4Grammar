@@ -12,7 +12,6 @@ import node.Statements.Expression.LiteralValues.IntegerNode;
 import node.Statements.Expression.LiteralValues.StringNode;
 import node.Statements.Expression.MultiExprNode;
 import node.Statements.LogicalExpression.ComparisonExprNode;
-import node.Statements.LogicalExpression.LogicalLiteralNode;
 import node.Statements.PrintNode;
 import node.Statements.ReturnNode;
 import node.VarDeclNode;
@@ -155,11 +154,6 @@ public class OptimiseExprVisitor extends ASTBaseVisitor<Object> {
         }
 
         return super.visit(node);
-    }
-
-    @Override
-    public Object visit(LogicalLiteralNode node) {
-        return node;
     }
 
     @Override

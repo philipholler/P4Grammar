@@ -25,7 +25,6 @@ import node.Statements.Expression.LiteralValues.StringNode;
 import node.Statements.Expression.MultiExprNode;
 import node.Statements.LogicalExpression.ComparisonExprNode;
 import node.Statements.LogicalExpression.LogicalAndExprNode;
-import node.Statements.LogicalExpression.LogicalLiteralNode;
 import node.Statements.LogicalExpression.LogicalOrExprNode;
 import node.Statements.Wait.TimeFrame;
 import node.Statements.Wait.WaitNode;
@@ -118,6 +117,7 @@ public class MainGenerationVisitor extends ASTBaseVisitor<Void> {
     public Void visit(BlockNode node) {
         st.openScope(node);
         for(Node statement : node.getChildren()){
+            // Get functions can stand alone, therefor remove.
             if(statement instanceof GetFuncNode){
                 continue;
             } else {
@@ -448,16 +448,6 @@ public class MainGenerationVisitor extends ASTBaseVisitor<Void> {
     @Override
     public Void visit(NowNode node) {
         classBuilder.append(NOW_KEYWORD);
-        return null;
-    }
-
-    @Override
-    public Void visit(LogicalLiteralNode node) {
-        if(node.isVal()){
-            classBuilder.append(TRUE_KEYWORD);
-        } else {
-            classBuilder.append(FALSE_KEYWORD);
-        }
         return null;
     }
 
