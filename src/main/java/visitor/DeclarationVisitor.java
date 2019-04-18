@@ -2,6 +2,7 @@ package visitor;
 
 import exceptions.userside.*;
 import node.*;
+import node.Events.WhenNodes.EventInputNode;
 import node.Function.FunctionNode;
 import node.Function.InputParamNode;
 import node.Statements.AssignmentNode;
@@ -158,5 +159,17 @@ public class DeclarationVisitor extends ASTBaseVisitor<Void> {
             throw new VariableNotInitialisedException("Device with name '" +node.getDeviceID() + "' not declared", node.getLineNumber());
         }
         return null;
+    }
+
+    @Override
+    public Void visit(EventInputNode node) {
+        if(!st.isSignalLiteral(node.getEnumID())){
+            throw new SignalLiteralNotDeclaredException("Signal literal '" +
+                    node.getEnumID() +
+                    "' not declared",
+                    node.getLineNumber()
+            );
+        }
+        return super.visit(node);
     }
 }
