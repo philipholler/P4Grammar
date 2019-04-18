@@ -10,6 +10,8 @@ import node.Events.WhenNodes.EventInputNode;
 import node.Events.WhenNodes.EventRangeInputNode;
 import node.Events.WhenNodes.EventWhenTimeNode;
 import node.ProgramNode;
+import semantics.FieldSymbol;
+import semantics.SymbolTable;
 import visitor.ASTBaseVisitor;
 
 public class EventInitializationVisitor extends ASTBaseVisitor<Void> {
@@ -27,8 +29,12 @@ public class EventInitializationVisitor extends ASTBaseVisitor<Void> {
 
     private final MethodSignatureVisitor methodSignatureVisitor = new MethodSignatureVisitor();
 
+    private SymbolTable symbolTable;
+
+
     @Override
     public Void visit(ProgramNode node) {
+        this.symbolTable = node.getSt();
         classBuilder = new ClassBuilder();
         classBuilder.appendPackage(ClassBuilder.EVENT_PACKAGE);
         addImports();
@@ -106,6 +112,7 @@ public class EventInitializationVisitor extends ASTBaseVisitor<Void> {
                 .startParan().endParan().appendComma().appendSpace();
 
         //classBuilder.append(node.get)
+        classBuilder.append(symbolTable.getEnumStringValue(node.getEnumID()));
         classBuilder.appendComma().appendSpace();
 
         // the runnable  () -> main.eventFunction()

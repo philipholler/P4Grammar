@@ -2,6 +2,9 @@ package semantics;
 
 import exceptions.userside.DuplicateIDCompileError;
 import exceptions.userside.TypeUndefinedCompileError;
+import node.Statements.Expression.LiteralValues.FloatNode;
+import node.Statements.Expression.LiteralValues.IntegerNode;
+import node.Statements.Expression.LiteralValues.StringNode;
 import node.base.Node;
 import node.define_nodes.Signal.EnumNode;
 import utils.StringUtils;
@@ -168,6 +171,18 @@ public class SymbolTable {
 
     public boolean isValidType(String type) {
         return definedTypeIDs.contains(type);
+    }
+
+    // Finds and extracts a string representing the value of the given enumID
+    public String getEnumStringValue(String enumID) {
+        EnumNode enumNode = (EnumNode) (((FieldSymbol) getSymbol(enumID).get()).declarationNode);
+        if(enumNode.getType().equals(STRING_TYPE_ID)){
+            return ((StringNode) enumNode.getLiteralValue()).getVal();
+        }else if (enumNode.getType().equals(INT_TYPE_ID)){
+            return String.valueOf(((IntegerNode) enumNode.getLiteralValue()).getVal());
+        }else{
+            return String.valueOf(((FloatNode) enumNode.getLiteralValue()).getVal());
+        }
     }
 
     private class Block {
