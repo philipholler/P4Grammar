@@ -55,7 +55,7 @@ public class ClassGenerationVisitor extends ASTBaseVisitor<ClassBuilder> {
         // Create all the default classes.
         String sourceLocation = System.getProperty("user.dir");
         File sourceFile= new File(sourceLocation + "/src/main/java/default_classes/");
-        File targetFile = new File(sourceLocation + "/GeneratedModule/src/main/java");
+        File targetFile = new File(sourceLocation + "/GeneratedModule/src/main/java/default_classes/");
 
         try {
             FileUtils.copyDirectory(sourceFile, targetFile);
