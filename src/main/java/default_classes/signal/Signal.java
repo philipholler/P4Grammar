@@ -12,9 +12,7 @@ public abstract class Signal <T> {
         currentValue = newVal;
     }
 
-    abstract void setCurrentValue(String newVal);
-
-
+    public abstract void setCurrentValue(String newVal);
 
     public String getName(){
         return getClass().getSimpleName();

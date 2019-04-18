@@ -1,14 +1,13 @@
 package default_classes.signal;
 
-public abstract class RangeSignal<T extends Number> implements Signal<T> {
+public abstract class RangeSignal<T extends Number> extends Signal<T> {
 
     private T lowerBound, upperBound;
-    private T currentValue;
 
     public RangeSignal(T lowerBound, T upperBound, T defaultValue){
         this.lowerBound = lowerBound;
         this.upperBound = upperBound;
-        this.currentValue = defaultValue;
+        setCurrentValue(defaultValue);
     }
 
     public T getUpperBound(){
@@ -19,16 +18,19 @@ public abstract class RangeSignal<T extends Number> implements Signal<T> {
         return upperBound;
     }
 
-    abstract boolean isValueInRange(T value);
-
-
-    @Override
-    public T getCurrentValue() {
-        return currentValue;
+    public boolean isValueInRange(T value){
+        if(value instanceof Integer){
+            Integer low = (Integer) lowerBound;
+            Integer high = (Integer) upperBound;
+            return (((Integer) value) >= low && ((Integer) value) <= high);
+        }else if(value instanceof Float){
+            Float low = (Float) lowerBound;
+            Float high = (Float) upperBound;
+            return (((Float) value) >= low && ((Float) value) <= high);
+        }else{
+            throw new RuntimeException("A range signal should only ever be of type Float or Integer, but signal "
+                    + RangeSignal.class.getSimpleName() + " is of type " + value.getClass().getSimpleName());
+        }
     }
 
-    @Override
-    public void setCurrentValue(T newVal) {
-        this.currentValue = newVal;
-    }
 }

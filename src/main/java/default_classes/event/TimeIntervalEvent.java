@@ -1,6 +1,5 @@
 package default_classes.event;
 
-import node.Statements.Wait.TimeFrame;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -12,13 +11,13 @@ public class TimeIntervalEvent implements TimeEvent {
     private Thread eventThread;
     private final Runnable eventAction;
 
-    private TimeFrame timeFrame; // Include TimeFrame in the compiled code
+    private String timeFrame; // Include TimeFrame in the compiled code
     private int delay;
 
     private LocalDate startDate; // todo : run initExecutionTime at the start of every year
     private LocalTime startTime;
 
-    public TimeIntervalEvent(TimeFrame timeFrame, int delay, Runnable eventAction,
+    public TimeIntervalEvent(String timeFrame, int delay, Runnable eventAction,
                              LocalDate startDate, LocalTime startTime){
         this.timeFrame = timeFrame;
         this.delay = delay;
@@ -59,25 +58,25 @@ public class TimeIntervalEvent implements TimeEvent {
     @Override
     public void rescheduleEvent() {
         switch (timeFrame){
-            case MONTH:
+            case "MONTH":
                 nextExecutionTime = nextExecutionTime.plusMonths(delay);
                 break;
-            case WEEK:
+            case "WEEK":
                 nextExecutionTime = nextExecutionTime.plusWeeks(delay);
                 break;
-            case DAY:
+            case "DAY":
                 nextExecutionTime = nextExecutionTime.plusDays(delay);
                 break;
-            case HOUR:
+            case "HOUR":
                 nextExecutionTime = nextExecutionTime.plusHours(delay);
                 break;
-            case MINUTES:
+            case "MINUTES":
                 nextExecutionTime = nextExecutionTime.plusMinutes(delay);
                 break;
-            case SECOND:
+            case "SECOND":
                 nextExecutionTime = nextExecutionTime.plusSeconds(delay);
                 break;
-            case MILLISECONDS:
+            case "MILLISECONDS":
                 nextExecutionTime = nextExecutionTime.plusNanos(delay * 1000000L); // convert millis to nanos
                 break;
         }

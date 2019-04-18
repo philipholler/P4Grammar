@@ -135,7 +135,7 @@ public class ClassBuilder {
         codeBuilder.newLine();
         codeBuilder.append(END_BRACKET);
         if(blockType != BlockType.TRY) {
-            codeBuilder.newLine().newLine();
+            codeBuilder.newLine();
         }
         return this;
     }

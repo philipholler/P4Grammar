@@ -98,8 +98,8 @@ public class ClassGenerationVisitor extends ASTBaseVisitor<ClassBuilder> {
             upperBound = String.valueOf(((IntegerNode) rangeNode.getUpperBoundNode()).getVal());
         } else {
             rangeType = JavaType.FLOAT;
-            lowerBound = String.valueOf(((FloatNode) rangeNode.getLowerBoundNode()).getVal());
-            upperBound = String.valueOf(((FloatNode) rangeNode.getUpperBoundNode()).getVal());
+            lowerBound = String.valueOf(((FloatNode) rangeNode.getLowerBoundNode()).getVal()) + "f";
+            upperBound = String.valueOf(((FloatNode) rangeNode.getUpperBoundNode()).getVal()) + "f";
         }
 
         ClassBuilder classBuilder = new ClassBuilder();
@@ -114,14 +114,28 @@ public class ClassGenerationVisitor extends ASTBaseVisitor<ClassBuilder> {
         classBuilder.closeBlock(ClassBuilder.BlockType.METHOD);
 
         // Creates the setCurrentValue(String val) method
-        classBuilder.appendMethod(SET_CURRENT_VALUE_METHOD, JavaType.VOID.keyword,
-                new JavaInputParameter(JavaType.STRING.keyword, "value"));
-        classBuilder.append(SET_CURRENT_VALUE_METHOD).startParan().append(rangeType.objectType).appendDot()
-                .append("valueOf").startParan().append("value").endParan().endParan().endLine();
-        classBuilder.closeBlock(ClassBuilder.BlockType.METHOD);
+        createSetCurrentSignalMetod(classBuilder, rangeType);
 
         classBuilder.closeBlock(ClassBuilder.BlockType.CLASS);
         return classBuilder;
+    }
+
+    private void createSetCurrentSignalMetod(ClassBuilder classBuilder, JavaType type){
+        // Creates the setCurrentValue(String val) method
+        classBuilder.appendMethod(SET_CURRENT_VALUE_METHOD, JavaType.VOID.keyword,
+                new JavaInputParameter(JavaType.STRING.keyword, "value"));
+        classBuilder.append(SET_CURRENT_VALUE_METHOD).startParan();
+
+        if(type == JavaType.STRING){
+            // No need to convert value if the signal type is string
+            classBuilder.append("value");
+        }else{
+            // Convert value to correct type using Integer.valueOf() og Float.valueOf()
+            classBuilder.append(type.objectType).appendDot()
+                    .append("valueOf").startParan().append("value").endParan();
+        }
+
+        classBuilder.endParan().endLine().closeBlock(ClassBuilder.BlockType.METHOD);
     }
 
     private ClassBuilder generateLiteralSignal(DefSignalNode signalNode) {
@@ -134,6 +148,7 @@ public class ClassGenerationVisitor extends ASTBaseVisitor<ClassBuilder> {
         signalBuilder.appendClassDef(signalNode.getID(), ClassBuilder.LITERAL_SIGNAL_CLASS, signalValueType.objectType);
 
         addEnumVars(signalBuilder, signalNode, signalValueType);
+        createSetCurrentSignalMetod(signalBuilder, signalValueType);
         addEnumVarGetters(signalBuilder, signalNode, signalValueType);
 
         signalBuilder.closeBlock(ClassBuilder.BlockType.CLASS);
