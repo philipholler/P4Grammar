@@ -78,7 +78,7 @@ int testFunctionInt(string hej){
 }
 
 // Events
-when frontDoorSensor Toggle: on {
+when frontDoorSensor Toggle: On {
     if(now > 17:00 && now < 21:00){
         set frontDoorLight Toggle: On;
     }
@@ -146,7 +146,7 @@ when mainThermometer Celsius: exceeds 22{
 }
 
 // Events
-when frontDoorSensor Toggle: on {
+when frontDoorSensor Toggle: On {
 
 }
 

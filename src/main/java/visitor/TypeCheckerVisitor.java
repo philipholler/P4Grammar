@@ -275,8 +275,11 @@ public class TypeCheckerVisitor extends ASTBaseVisitor<Void>{
     @Override
     public Void visit(EventRangeInputNode node) {
         Optional<Symbol> sym = st.getSymbol(node.getSignalID());
+
+        // Check that the signal is actually defined...
         if(sym.isPresent() && sym.get() instanceof SignalTypeSymbol){
             SignalType type = ((SignalTypeSymbol) sym.get()).getTYPE();
+            // Check that the type of the signal range is the same as value it should "exceeds" or "deceeds".
             switch (type){
                 case INT_RANGE:
                     if(!node.getExprNode().getType().equals(SymbolTable.INT_TYPE_ID)){
