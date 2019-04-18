@@ -10,7 +10,7 @@ public class TimeConditionEvent implements TimeEvent{
     private Thread eventThread;
     private final Runnable eventAction;
 
-    private static final int UNSPECIFIED = -1;
+    public static final int UNSPECIFIED = -1;
     private final int year, month, day, hour, minute;
 
 

@@ -56,6 +56,14 @@ public class ClassBuilder {
         return this;
     }
 
+    public ClassBuilder appendCommaSeparated(String...items) {
+        for(int i = 0; i < items.length; i++){
+            codeBuilder.append(items[i]);
+            if(i != items.length - 1) appendComma();
+        }
+        return this;
+    }
+
     public enum BlockType{
         CLASS, METHOD, WHILE, IF, ELSE, FOR, TRY, CATCH;
     }

@@ -10,7 +10,6 @@ import node.Events.WhenNodes.EventInputNode;
 import node.Events.WhenNodes.EventRangeInputNode;
 import node.Events.WhenNodes.EventWhenTimeNode;
 import node.ProgramNode;
-import semantics.FieldSymbol;
 import semantics.SymbolTable;
 import visitor.ASTBaseVisitor;
 
@@ -136,12 +135,50 @@ public class EventInitializationVisitor extends ASTBaseVisitor<Void> {
 
     @Override
     public Void visit(EventWhenTimeNode node) {
-        /*classBuilder.append(TIME_EVENT_LIST).appendDot().append("add").startParan();
-        classBuilder.append("new ").append(TimeConditionEvent.class.getSimpleName()).append(" ").startParan();
+        // Find input parameters for TimeConditionEvent
+        final String UNSPECIFIED = String.valueOf(TimeConditionEvent.UNSPECIFIED);
 
-        classBuilder.endParan().endLine().appendNewLine();*/
-        return super.visit(node);
+        String year = UNSPECIFIED, month = UNSPECIFIED, day = UNSPECIFIED;
+        String hour = UNSPECIFIED, minute = UNSPECIFIED;
+
+        if(node.getDateNode().getDate() != null){ // The event definition specifies year, month and day
+            year = String.valueOf(node.getDateNode().getDate().getYear());
+            month = String.valueOf(node.getDateNode().getDate().getMonthValue());
+            day = String.valueOf(node.getDateNode().getDate().getDayOfMonth());
+        }else if(node.getDateNode().getMonthDay() != null){ // Only month and day are specified in event
+            month = String.valueOf(node.getDateNode().getMonthDay().getMonthValue());
+            day = String.valueOf(node.getDateNode().getMonthDay().getDayOfMonth());
+        }else if(node.getDateNode().getDay() != -1){ // Only day of the month is specified in event
+            day = String.valueOf(node.getDateNode().getDay());
+        }// Otherwise all date values are unspecified
+
+        hour = String.valueOf(node.getTimeNode().getTime().getHour());
+        minute = String.valueOf(node.getTimeNode().getTime().getMinute());
+
+
+        // Generate code (example) : "timeEvents.add(2019, 11, 27, 23, 59, 59, () -> main.when21d02h());"
+        addTimeConditionEventDef(year, month, day, hour, minute, new MethodSignatureVisitor().visit(node));
+
+        return null;
     }
+
+    private void addTimeConditionEventDef(String year, String month, String day, String hour,
+                                          String minute, String eventFunction) {
+
+        // Example gen "timeEvens.add(new TimeCondition("
+        classBuilder.append(TIME_EVENT_LIST).appendDot().append("add").startParan();
+        classBuilder.append("new ").append(TimeConditionEvent.class.getSimpleName()).startParan();
+
+        // Example gen "2019, 12, 31, 23, 59, 59, () ->"
+        classBuilder.appendCommaSeparated(year, month, day, hour, minute).appendComma();
+        classBuilder.startParan().endParan().appendLambdaArrow();
+
+        // Example gen "main.eventFunc21()"
+        classBuilder.append(MAIN_REFERENCE_NAME).appendDot().append(eventFunction).startParan().endParan();
+
+        classBuilder.endParan().endParan().endLine();
+    }
+
 
     @Override
     public Void visit(EventEveryNode node) {

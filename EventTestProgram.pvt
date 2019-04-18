@@ -29,6 +29,11 @@ when frontDoorLight2 Toggle : Off{
     printFunction("bulb2 has been turned off");
 }
 
+when 21:39 18d04m{
+    printFunction("MAGICAL");
+}
+
 void printFunction(string s){
     print s;
 }
+
