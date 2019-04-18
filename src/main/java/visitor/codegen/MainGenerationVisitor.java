@@ -28,7 +28,9 @@ import node.Statements.LogicalExpression.LogicalAndExprNode;
 import node.Statements.LogicalExpression.LogicalOrExprNode;
 import node.Statements.Wait.TimeFrame;
 import node.Statements.Wait.WaitNode;
+import node.TimeNodes.DateNode;
 import node.TimeNodes.NowNode;
+import node.TimeNodes.TimeNode;
 import node.base.Node;
 import node.define_nodes.Device.DefDeviceNode;
 import node.define_nodes.Signal.DefSignalNode;
@@ -389,8 +391,6 @@ public class MainGenerationVisitor extends ASTBaseVisitor<Void> {
 
     @Override
     public Void visit(IfStmtNode node) {
-        if(true) return null; // todo REMOVE and add full functionality
-
         classBuilder.append(IF_PREFIX);
         classBuilder.startParan();
         visit(node.getLogicalExprNode());
@@ -418,6 +418,18 @@ public class MainGenerationVisitor extends ASTBaseVisitor<Void> {
         classBuilder.openBlock(ClassBuilder.BlockType.WHILE);
         visit(node.getRightChild());
         classBuilder.closeBlock(ClassBuilder.BlockType.WHILE);
+        return null;
+    }
+
+    @Override
+    public Void visit(TimeNode node) {
+        LocalDateTime time = LocalDateTime.now().plusMinutes(5);
+        return null;
+    }
+
+    @Override
+    public Void visit(DateNode node) {
+        LocalDateTime time = LocalDateTime.now().plusMinutes(5);
         return null;
     }
 

@@ -38,10 +38,14 @@ funcDecl : (varType | VOID) id=ID PARANBEG params=fParams PARANEND block; // Fun
 
 event: (atomEvent | repeatEvent);
 
-atomEvent : WHEN deviceID=ID signalID=ID COL (enumID=ID | EXCEEDS expr| DECEEDS expr) block #inputWhenEvent
-          | WHEN timeAndDate block                                                          #timeWhenEvent
+atomEvent : WHEN deviceID=ID signalID=ID COL (enumID=ID | (EXCEEDS | DECEEDS) number) block     #inputWhenEvent
+          | WHEN timeAndDate block                                                              #timeWhenEvent
           // when 18:00 21d03m2019y // when 14:00 // when 21d03m2019y
           ;
+
+number : INTEGER
+       | FLOAT
+       ;
 
 repeatEvent : EVERY INTEGER timeFrame block
             | EVERY INTEGER timeFrame STARTING timeAndDate block

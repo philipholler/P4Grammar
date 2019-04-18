@@ -233,7 +233,6 @@ public class TypeCheckerVisitor extends ASTBaseVisitor<Void>{
 
     @Override
     public Void visit(ReturnNode node) {
-        System.out.println(node.getLineNumber());
 
         // If the return value is not specified, but the function is not void, throw.
         if(node.getReturnVal() == null){
@@ -275,6 +274,34 @@ public class TypeCheckerVisitor extends ASTBaseVisitor<Void>{
 
     @Override
     public Void visit(EventRangeInputNode node) {
+        Optional<Symbol> sym = st.getSymbol(node.getSignalID());
+        if(sym.isPresent() && sym.get() instanceof SignalTypeSymbol){
+            SignalType type = ((SignalTypeSymbol) sym.get()).getTYPE();
+            switch (type){
+                case INT_RANGE:
+                    if(!node.getExprNode().getType().equals(SymbolTable.INT_TYPE_ID)){
+                        throw new IllegalRangeTypeException("Illegal range type. Expected '" +
+                                SymbolTable.INT_TYPE_ID +
+                                "', got '" +
+                                node.getExprNode().getType() +
+                                "'",
+                                node.getLineNumber()
+                        );
+                    }
+                    break;
+                case FLOAT_RANGE:
+                    if(!node.getExprNode().getType().equals(SymbolTable.FLOAT_TYPE_ID)){
+                        throw new IllegalRangeTypeException("Illegal range type. Expected '" +
+                                SymbolTable.FLOAT_TYPE_ID +
+                                "', got '" +
+                                node.getExprNode().getType() +
+                                "'",
+                                node.getLineNumber()
+                        );
+                    }
+                    break;
+            }
+        }
         lastFunctionVisitedReturnType = node.getReturnType();
         return super.visit(node);
     }
