@@ -123,7 +123,11 @@ public class MainGenerationVisitor extends ASTBaseVisitor<Void> {
             } else {
                 visit(statement);
             }
-            if(statement instanceof ReturnNode) classBuilder.endLine().appendNewLine();
+            if(statement instanceof ReturnNode){
+                classBuilder.endLine().appendNewLine();
+                st.closeScope();
+                return null;
+            }
             if(statement instanceof FuncCallNode) classBuilder.endLine().appendNewLine();
             if(statement instanceof SetFuncNode) classBuilder.endLine().appendNewLine();
         }
