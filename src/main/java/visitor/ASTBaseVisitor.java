@@ -20,7 +20,6 @@ import node.Statements.Expression.LiteralValues.StringNode;
 import node.Statements.Expression.MultiExprNode;
 import node.Statements.LogicalExpression.ComparisonExprNode;
 import node.Statements.LogicalExpression.LogicalAndExprNode;
-import node.Statements.LogicalExpression.LogicalLiteralNode;
 import node.Statements.LogicalExpression.LogicalOrExprNode;
 import node.Statements.Wait.WaitNode;
 import node.TimeNodes.DateNode;
@@ -154,10 +153,6 @@ public abstract class ASTBaseVisitor<T> {
     }
 
     public T visit(LogicalAndExprNode node) {
-        return visitChildren(node);
-    }
-
-    public T visit(LogicalLiteralNode node) {
         return visitChildren(node);
     }
 

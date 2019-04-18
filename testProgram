@@ -44,7 +44,7 @@ init(){
     }
 
     testFunction(5 + 5);
-    if(2 + 3 < 5 + 10 && true){
+    if(2 + 3 < 5 + 10){
         a = 5;
     }
     int man = 2 + 5;
@@ -99,15 +99,8 @@ string testFunction(int percent){
     string test = " ";
     float procent = 15.0;
     set bedRoomWindow Open: procent;
-    while(true){
-        return "";
-    }
 
     return "";
-
-    while(false){
-        break;
-    }
 
     return "hej";
 }
@@ -145,10 +138,6 @@ every 2 weeks starting 11:00 01d04m2019y{
     int b = 3;
     if((5 + b) == 5 && (b == a || a == b)){
         b = 5;
-    }
-
-    while(true){
-
     }
 }
 

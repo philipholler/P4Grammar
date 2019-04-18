@@ -101,7 +101,6 @@ logical_expr
             | left=logical_expr OR right=logical_expr      #logicalExpressionOr
             | comparison_expr                              #comparisonExpression
             | PARANBEG logical_expr PARANEND               #logicalExpressionInParen
-            | (TRUE | FALSE)                               #logicalLiterals
             ;
 
 comparison_expr : left=comparison_operand op=comp_operator right=comparison_operand  #comparisonExpressionWithOperator
@@ -155,8 +154,6 @@ EQ : '==' ;
 NE : '!=' ;
 
 // Keywords
-TRUE : 'true';
-FALSE : 'false';
 SIGNAL : 'Signal';
 INPUT : 'input';
 OUTPUT : 'output';

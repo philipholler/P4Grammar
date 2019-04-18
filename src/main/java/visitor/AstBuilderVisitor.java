@@ -660,20 +660,6 @@ public class AstBuilderVisitor extends PivotBaseVisitor<Node> {
     }
 
     @Override
-    public Node visitLogicalLiterals(PivotParser.LogicalLiteralsContext ctx) {
-        updateLineNumber(ctx);
-        switch(ctx.getText()){
-            case "true":
-                return new LogicalLiteralNode(ctx, true);
-            case "false":
-                return new LogicalLiteralNode(ctx, false);
-            default:
-                throw new CompileErrorException("Error in visitLogicalLiterals. Could not identify literal: " +
-                        ctx.getText(), getCurrentLineNumber());
-        }
-    }
-
-    @Override
     public Node visitLogicalExpressionAnd(PivotParser.LogicalExpressionAndContext ctx) {
         updateLineNumber(ctx);
         return new LogicalAndExprNode(ctx, visit(ctx.left), visit(ctx.right));
