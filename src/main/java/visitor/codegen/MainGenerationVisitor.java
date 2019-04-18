@@ -386,6 +386,8 @@ public class MainGenerationVisitor extends ASTBaseVisitor<Void> {
 
     @Override
     public Void visit(IfStmtNode node) {
+        if(true) return null; // todo REMOVE and add full functionality
+
         classBuilder.append(IF_PREFIX);
         classBuilder.startParan();
         visit(node.getLogicalExprNode());

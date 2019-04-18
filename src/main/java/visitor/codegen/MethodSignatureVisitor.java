@@ -18,7 +18,8 @@ public class MethodSignatureVisitor extends ASTBaseVisitor<String> {
 
     @Override
     public String visit(EventInputNode node) {
-        return EVENT_SIGNATURE_PREFIX + node.getDeviceID() + node.getSignalID() + node.getEnumID();
+        return EVENT_SIGNATURE_PREFIX + node.getDeviceID() + node.getSignalID() + node.getEnumID()
+                + "_line" + node.getLineNumber();
     }
 
     @Override

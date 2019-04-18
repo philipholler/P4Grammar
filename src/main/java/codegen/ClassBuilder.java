@@ -21,6 +21,7 @@ public class ClassBuilder {
     public static final String DEVICE_PACKAGE = "device";
     public static final String SIGNAL_PACKAGE = "signal";
     public static final String SERVER_PACKAGE = "server";
+    public static final String EVENT_PACKAGE  = "event";
 
     private static final String START_BRACKET = "{", END_BRACKET = "}";
     private static final String START_PARAN = "(", END_PARAN = ")";
@@ -339,6 +340,12 @@ public class ClassBuilder {
         codeBuilder.append(" = new " + type + START_PARAN);
         appendActualParameters(constructorInputs);
         codeBuilder.append(END_PARAN).append(LINE_END).newLine().newLine();
+
+        return this;
+    }
+
+    public ClassBuilder appendObjectDecl(String type, String id){
+        codeBuilder.append(type).append(" ").append(id).append(LINE_END).newLine();
 
         return this;
     }
