@@ -27,6 +27,8 @@ import node.Statements.LogicalExpression.ComparisonExprNode;
 import node.Statements.LogicalExpression.LogicalAndExprNode;
 import node.Statements.LogicalExpression.LogicalLiteralNode;
 import node.Statements.LogicalExpression.LogicalOrExprNode;
+import node.Statements.Wait.TimeFrame;
+import node.Statements.Wait.WaitNode;
 import node.TimeNodes.NowNode;
 import node.base.Node;
 import node.define_nodes.Device.DefDeviceNode;
@@ -39,6 +41,9 @@ import utils.JavaCodeUtils;
 import visitor.ASTBaseVisitor;
 
 import java.lang.reflect.Method;
+
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.Optional;
 
 public class MainGenerationVisitor extends ASTBaseVisitor<Void> {
@@ -113,9 +118,12 @@ public class MainGenerationVisitor extends ASTBaseVisitor<Void> {
     public Void visit(BlockNode node) {
         st.openScope(node);
         for(Node statement : node.getChildren()){
-            visit(statement);
+            if(statement instanceof GetFuncNode){
+                continue;
+            } else {
+                visit(statement);
+            }
             if(statement instanceof FuncCallNode) classBuilder.endLine().appendNewLine();
-            if(statement instanceof GetFuncNode) classBuilder.endLine().appendNewLine();
             if(statement instanceof SetFuncNode) classBuilder.endLine().appendNewLine();
         }
 
@@ -452,5 +460,40 @@ public class MainGenerationVisitor extends ASTBaseVisitor<Void> {
     public Void visit(BreakNode node) {
         classBuilder.append(BREAK_KEYWORD + ";");
         return super.visit(node);
+    }
+
+    @Override
+    public Void visit(WaitNode node) {
+        classBuilder.append("sleep(");
+        visit(node.getExpr());
+
+        long i = 1L;
+        switch(node.getTimeframe()){
+            case MONTH:
+                i = 2592000000L;//MS in a month
+                break;
+            case WEEK:
+                i = 604800000L; // ms in a week
+                break;
+            case DAY:
+                i = 86400000L; // ms in a day
+                break;
+            case HOUR:
+                i = 3600000L; // ms in an hour
+                break;
+            case MINUTES:
+                i = 60000L; // ms in a minute
+                break;
+            case SECOND:
+                i = 1000L; // ms in a second
+                break;
+            case MILLISECONDS:
+        }
+
+        classBuilder.append("*" + i);
+        classBuilder.endParan();
+        classBuilder.endLine();
+
+        return null;
     }
 }
