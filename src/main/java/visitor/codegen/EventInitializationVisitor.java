@@ -97,7 +97,7 @@ public class EventInitializationVisitor extends ASTBaseVisitor<Void> {
     public Void visit(EventInputNode node) {
         String eventFunctionName = methodSignatureVisitor.visit(node);
 
-        classBuilder.append(TIME_EVENT_LIST).appendDot().append("add").startParan();
+        classBuilder.append(SIGNAL_EVENT_LIST).appendDot().append("add").startParan();
         classBuilder.append("new ").append(SimpleSignalEvent.class.getSimpleName()).append(" ").startParan();
 
         // Defnition of parameters for simpleSignalEvent constructor :

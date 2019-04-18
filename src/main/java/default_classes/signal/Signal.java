@@ -1,16 +1,22 @@
 package default_classes.signal;
 
-public interface Signal <T> {
+public abstract class Signal <T> {
 
-    T getCurrentValue();
+    private T currentValue;
 
-    void setCurrentValue(T newVal);
+    public T getCurrentValue(){
+        return currentValue;
+    }
 
-    void setCurrentValue(String newVal);
+    public void setCurrentValue(T newVal){
+        currentValue = newVal;
+    }
+
+    abstract void setCurrentValue(String newVal);
 
 
 
-    default String getName(){
+    public String getName(){
         return getClass().getSimpleName();
     }
 

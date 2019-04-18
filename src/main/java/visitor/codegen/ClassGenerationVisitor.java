@@ -104,7 +104,8 @@ public class ClassGenerationVisitor extends ASTBaseVisitor<ClassBuilder> {
 
         ClassBuilder classBuilder = new ClassBuilder();
         classBuilder.appendPackage(ClassBuilder.SIGNAL_PACKAGE);
-        classBuilder.appendImportAllFrom(ClassBuilder.DEFAULT_SIGNAL_PACKAGE).appendNewLine();
+        classBuilder.appendImportAllFrom(ClassBuilder.DEFAULT_SIGNAL_PACKAGE);
+        classBuilder.appendImportAllFrom(ClassBuilder.DEFAULT_DEVICE_PACKAGE).appendNewLine();
         classBuilder.appendClassDef(signalNode.getID(), ClassBuilder.RANGE_SIGNAL_CLASS, rangeType.objectType);
 
         // Create constructor calling the super constructor of RangeSignal
@@ -181,6 +182,7 @@ public class ClassGenerationVisitor extends ASTBaseVisitor<ClassBuilder> {
         ClassBuilder classBuilder = new ClassBuilder();
         classBuilder.appendPackage(ClassBuilder.DEVICE_PACKAGE);
         classBuilder.appendImportAllFrom(ClassBuilder.SIGNAL_PACKAGE).appendNewLine();
+        classBuilder.appendImportAllFrom(ClassBuilder.DEFAULT_DEVICE_PACKAGE).appendNewLine();
         // Todo : import statements
 
         classBuilder.appendClassDef(node.getID(), ClassBuilder.DEVICE_SUPER_CLASS);
