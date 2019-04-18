@@ -46,7 +46,7 @@ public class ClassBuilder {
     }
 
     public enum BlockType{
-        CLASS, METHOD, WHILE, IF, ELSE, FOR;
+        CLASS, METHOD, WHILE, IF, ELSE, FOR, TRY, CATCH;
     }
 
     public ClassBuilder appendPackage(String packageString){
@@ -119,7 +119,10 @@ public class ClassBuilder {
 
         codeBuilder.decremmentIndentation();
         codeBuilder.newLine();
-        codeBuilder.append(END_BRACKET).newLine().newLine();
+        codeBuilder.append(END_BRACKET);
+        if(blockType != BlockType.TRY) {
+            codeBuilder.newLine().newLine();
+        }
         return this;
     }
 
@@ -217,6 +220,29 @@ public class ClassBuilder {
         appendActualParameters(inputParams);
         codeBuilder.append(END_PARAN).append(LINE_END).newLine();
 
+        return this;
+    }
+
+    public ClassBuilder appendThrow(String exceptionName){
+        codeBuilder.append("throw new ").append(exceptionName)
+                .append(START_PARAN).append(END_PARAN).append(LINE_END).newLine();
+
+        return this;
+
+    }
+
+    public ClassBuilder appendTryStatement (){
+        codeBuilder.append("try");
+        openBlock(BlockType.TRY);
+        return this;
+    }
+
+    public ClassBuilder appendCatch (String execptionType, String exceptionName){
+        codeBuilder.append("catch").append(" ").append(START_PARAN).append(" ")
+                .append(execptionType).append(" ").append(exceptionName)
+                .append(END_PARAN);
+
+        openBlock(BlockType.CATCH);
         return this;
     }
 

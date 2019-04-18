@@ -37,6 +37,8 @@ import semantics.Symbol;
 import semantics.SymbolTable;
 import utils.JavaCodeUtils;
 import visitor.ASTBaseVisitor;
+
+import java.lang.reflect.Method;
 import java.util.Optional;
 
 public class MainGenerationVisitor extends ASTBaseVisitor<Void> {
@@ -58,6 +60,9 @@ public class MainGenerationVisitor extends ASTBaseVisitor<Void> {
     public static final String FALSE_KEYWORD = "false";
     public static final String SET_METHOD_NAME = "setCurrentValue";
     public static final String GET_METHOD_NAME = "getCurrentValue";
+    public static final String SLEEP_METHOD_NAME = "sleep";
+
+    public static final String THREAD_DEATH_ERROR_NAME = "ThreadDeath";
 
     SymbolTable st;
 
@@ -76,6 +81,7 @@ public class MainGenerationVisitor extends ASTBaseVisitor<Void> {
 
         classBuilder.appendClassDef(MAIN_CLASS_NAME);
         addMainMethod();
+        addSleepMethod();
         visitChildren(node);
         classBuilder.closeBlock(ClassBuilder.BlockType.CLASS);
 
@@ -84,12 +90,22 @@ public class MainGenerationVisitor extends ASTBaseVisitor<Void> {
     }
 
     private void addMainMethod(){
-
         classBuilder.appendMainMethod();
         classBuilder.appendNewObjectDecl(MAIN_CLASS_NAME, "main");
         classBuilder.append("main.").appendMethodCall(INIT_FUNC_NAME);
 
+        classBuilder.closeBlock(ClassBuilder.BlockType.METHOD);
+    }
 
+    private void addSleepMethod() {
+        classBuilder.appendMethod(SLEEP_METHOD_NAME, JavaType.VOID.keyword, new JavaInputParameter(JavaType.LONG.keyword, "millis"));
+
+        classBuilder.appendTryStatement();
+        classBuilder.appendMethodCall("Thread.sleep", "millis");
+        classBuilder.closeBlock(ClassBuilder.BlockType.TRY);
+
+        classBuilder.appendCatch("InterruptedException", "e");
+        classBuilder.appendThrow(THREAD_DEATH_ERROR_NAME).closeBlock(ClassBuilder.BlockType.CATCH);
         classBuilder.closeBlock(ClassBuilder.BlockType.METHOD);
     }
 

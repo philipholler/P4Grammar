@@ -2,6 +2,9 @@ package codegen;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
+import java.time.LocalDateTime;
+
 class ClassBuilderTest {
 
     private ClassBuilder classBuilder;
@@ -13,6 +16,7 @@ class ClassBuilderTest {
 
     @Test
     void addClassDefinition() throws InterruptedException { // todo not an actual test
+
    /*     OpenSignal percent = new OpenSignal(0, 100);
         OpenSignal percent2 = new OpenSignal(0, 100);
 
