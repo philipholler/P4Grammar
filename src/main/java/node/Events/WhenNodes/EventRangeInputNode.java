@@ -3,6 +3,8 @@ package node.Events.WhenNodes;
 import node.BlockNode;
 import node.Events.EventNode;
 import node.Statements.Expression.ExpressionNode;
+import node.Statements.Expression.LiteralValues.FloatNode;
+import node.Statements.Expression.LiteralValues.IntegerNode;
 import node.base.Node;
 import org.antlr.v4.runtime.ParserRuleContext;
 import utils.StringUtils;
@@ -27,6 +29,13 @@ public class EventRangeInputNode extends EventNode {
                 ", signalID='" + signalID + '\'' +
                 ", exceedsAndDeceedsEnum=" + exceedsAndDeceedsEnum +
                 ')';
+    }
+
+    public String getThresholdString(){
+        if(getExprNode() instanceof IntegerNode)
+            return String.valueOf(((IntegerNode) getExprNode()).getVal());
+        else
+            return String.valueOf(((FloatNode) getExprNode()).getVal());
     }
 
     public String getDeviceID() {

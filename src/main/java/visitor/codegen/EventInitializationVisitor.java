@@ -5,10 +5,12 @@ import codegen.JavaFileWriter;
 import codegen.JavaInputParameter;
 import codegen.JavaType;
 import default_classes.event.*;
+import default_classes.signal.RangeSignal;
 import node.Events.EventEveryNode;
 import node.Events.WhenNodes.EventInputNode;
 import node.Events.WhenNodes.EventRangeInputNode;
 import node.Events.WhenNodes.EventWhenTimeNode;
+import node.Events.WhenNodes.ExceedsAndDeceedsEnum;
 import node.ProgramNode;
 import node.TimeNodes.DateNode;
 import node.TimeNodes.TimeNode;
@@ -137,7 +139,39 @@ public class EventInitializationVisitor extends ASTBaseVisitor<Void> {
 
     @Override
     public Void visit(EventRangeInputNode node) {
+        String device = MAIN_REFERENCE_NAME + "." + node.getDeviceID();
+        String signal = MAIN_REFERENCE_NAME + "." + node.getDeviceID() + "."
+                + ClassBuilder.GET_METHOD_PREFIX + ClassGenerationVisitor.OUTPUT_SIGNAL_PREFIX
+                + node.getSignalID() + "()";
+
+        String threshold = node.getThresholdString();
+        String passType;
+        if(node.getExceedsAndDeceedsEnum() == ExceedsAndDeceedsEnum.EXCEEDS)
+            passType = RangeSignalEvent.EXCEEDS;
+        else
+            passType = RangeSignalEvent.DECEEDS;
+
+        passType = '"' + passType + '"'; // Turn into string
+
+        String runnable = MAIN_REFERENCE_NAME + "." + new MethodSignatureVisitor().visit(node) + "()";
+
+        addRangeEvent(device, signal, threshold, passType, runnable);
         return super.visit(node);
+    }
+
+    private void addRangeEvent(String device, String signal, String threshold, String passType, String runnable) {
+        // Example gen "timeEvens.add(new TimeCondition("
+        classBuilder.append(SIGNAL_EVENT_LIST).appendDot().append("add").startParan();
+        classBuilder.append("new ").append(RangeSignalEvent.class.getSimpleName()).startParan();
+
+        // Example gen "2019, 12, 31, 23, 59, 59, () ->"
+        classBuilder.appendCommaSeparated(device, signal, threshold, passType).appendComma();
+        classBuilder.startParan().endParan().appendLambdaArrow();
+
+        // Example gen "main.eventFunc21()"
+        classBuilder.append(runnable);
+
+        classBuilder.endParan().endParan().endLine();
     }
 
     @Override

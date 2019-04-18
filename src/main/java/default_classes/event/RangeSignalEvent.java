@@ -7,21 +7,18 @@ import default_classes.signal.Signal;
 
 public class RangeSignalEvent<T extends Number> implements SignalEvent{
 
-    public enum PassType {
-            EXCEEDS, DECEEDS;
-    }
-
     private final Device device;
     private final Signal<T> signal;
     private final T thresHold;
     private T previousValue;
 
     private Thread eventThread;
-    private final PassType passType;
+    private final String passType;
+    public static final String EXCEEDS = "EXCEEDS", DECEEDS = "DECEEDS";
 
     private final Runnable eventAction;
 
-    public RangeSignalEvent(Device device, RangeSignal<T> signal, T thresHold, PassType passType, Runnable eventAction) {
+    public RangeSignalEvent(Device device, RangeSignal<T> signal, T thresHold, String passType, Runnable eventAction) {
         this.device = device;
         this.signal = signal;
         this.thresHold = thresHold;
@@ -36,7 +33,7 @@ public class RangeSignalEvent<T extends Number> implements SignalEvent{
         // If the device and signal type matches, then check if signal exceeds/deceeds
         if(device.getNetworkID().equals(data.hardwareId) && signal.getName().equals(data.signalType)){
 
-            if(passType == PassType.EXCEEDS){
+            if(passType.equals("EXCEEDS")){
                 // The 'exceeds' event can only be triggered if the current value is at or below the threshold
                 // and the new value is at or above the threshold
                 if(compareSignalValue(previousValue, thresHold) <= 0
