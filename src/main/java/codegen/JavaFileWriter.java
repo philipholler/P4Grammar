@@ -7,7 +7,7 @@ import java.io.PrintWriter;
 public class JavaFileWriter { // todo very very temporary implementation
 
     private static final String outDir = System.getProperty("user.dir") +
-            File.separator + "compiled_code" + File.separator;
+            "/GeneratedModule/src/main/java/";
 
 
     public static void writeClass(ClassBuilder classBuilder){
