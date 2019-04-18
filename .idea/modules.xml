@@ -2,6 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/GeneratedModule/GeneratedModule.iml" filepath="$PROJECT_DIR$/GeneratedModule/GeneratedModule.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/P4_Pivot.iml" filepath="$PROJECT_DIR$/.idea/P4_Pivot.iml" />
     </modules>
   </component>
