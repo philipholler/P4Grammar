@@ -5,6 +5,7 @@ import codegen.JavaFileWriter;
 import codegen.JavaInputParameter;
 import codegen.JavaType;
 
+import default_classes.server.Server;
 import node.*;
 import node.Events.EventEveryNode;
 import node.Events.EventNode;
@@ -67,6 +68,7 @@ public class MainGenerationVisitor extends ASTBaseVisitor<Void> {
     public static final String SET_METHOD_NAME = "setCurrentValue";
     public static final String GET_METHOD_NAME = "getCurrentValue";
     public static final String SLEEP_METHOD_NAME = "sleep";
+    public static final String SERVER_VAR_NAME = "server";
 
     public static final String THREAD_DEATH_ERROR_NAME = "ThreadDeath";
 
@@ -84,9 +86,12 @@ public class MainGenerationVisitor extends ASTBaseVisitor<Void> {
         classBuilder.appendImportAllFrom(ClassBuilder.SIGNAL_PACKAGE);
         classBuilder.appendImportAllFrom(ClassBuilder.DEVICE_PACKAGE);
         classBuilder.appendImportAllFrom(ClassBuilder.EVENT_PACKAGE);
+        classBuilder.appendImportAllFrom(ClassBuilder.DEFAULT_SERVER_PACKAGE);
+
         classBuilder.appendImportAllFrom(ClassBuilder.DEFAULT_CLASSES_PACKAGE).appendNewLine();
 
         classBuilder.appendClassDef(MAIN_CLASS_NAME);
+        addServerVar(); // Todo Should be thread safe
         addMainMethod();
         addSleepMethod();
         visitChildren(node);
@@ -94,6 +99,10 @@ public class MainGenerationVisitor extends ASTBaseVisitor<Void> {
 
         JavaFileWriter.writeClass(classBuilder);
         return null;
+    }
+
+    private void addServerVar(){
+        classBuilder.appendObjectDecl(Server.class.getSimpleName(), SERVER_VAR_NAME);
     }
 
     private void addMainMethod(){
@@ -121,11 +130,11 @@ public class MainGenerationVisitor extends ASTBaseVisitor<Void> {
         st.openScope(node);
         for(Node statement : node.getChildren()){
             // Get functions can stand alone, therefor remove.
-            if(statement instanceof GetFuncNode){
+            if(statement instanceof GetFuncNode)
                 continue;
-            } else {
+            else
                 visit(statement);
-            }
+
             if(statement instanceof ReturnNode){
                 classBuilder.endLine().appendNewLine();
                 st.closeScope();
@@ -216,16 +225,44 @@ public class MainGenerationVisitor extends ASTBaseVisitor<Void> {
     public Void visit(InitNode node) {
         classBuilder.appendMethod(INIT_FUNC_NAME, JavaType.VOID.keyword);
 
-        // Default init behaviour - Initialize events and run event managers
-        classBuilder.append("new ").append(EventInitializationVisitor.EVENT_INIT_CLASS_NAME)
-                .startParan().append("this").endParan()
-                .appendDot().append(EventInitializationVisitor.START_EVENTMANAGERS_METHOD).startParan().endParan()
-                .endLine().appendNewLine();
+        addDefaultInitBehaviour();
 
         // User-programmed init
         visit(node.getBlock());
         classBuilder.closeBlock(ClassBuilder.BlockType.METHOD);
         return null;
+    }
+
+    // Default init behaviour - Initialize events and server + and run event managers
+    private void addDefaultInitBehaviour(){
+        String eventInitName = "eventInit";
+
+        // "EventInitializer eventInit = "
+        classBuilder.append(EventInitializationVisitor.EVENT_INIT_CLASS_NAME).appendSpace().append(eventInitName)
+                .appendEquals();
+
+        // "new EventInitializer(this);
+        classBuilder.append("new ").append(EventInitializationVisitor.EVENT_INIT_CLASS_NAME)
+                .startParan().append("this").endParan().endLine();
+
+        // eventInit.startEventManagers
+        classBuilder.append(eventInitName).appendDot().append(EventInitializationVisitor.START_EVENTMANAGERS_METHOD)
+                .startParan().endParan().endLine();
+
+        // "server = new Server("
+        classBuilder.append(SERVER_VAR_NAME).appendEquals()
+                .append("new ").append(Server.class.getSimpleName()).startParan();
+
+        // "eventInit.getSignalEventManager());
+        classBuilder.append(eventInitName).appendDot().append(ClassBuilder.GET_METHOD_PREFIX)
+                .append(EventInitializationVisitor.SIGNAL_EVENT_MANAGER).startParan().endParan();
+        classBuilder.endParan().endLine();
+
+        //server.start();
+        classBuilder.append(SERVER_VAR_NAME).appendDot().appendMethodCall("start");
+
+
+
     }
 
     @Override
@@ -385,7 +422,7 @@ public class MainGenerationVisitor extends ASTBaseVisitor<Void> {
     public Void visit(PrintNode node) {
         classBuilder.append(PRINT_STMT_PREFIX).startParan();
         visit(node.getPrintValue());
-        classBuilder.endParan().endLine().appendNewLine();
+        classBuilder.endParan().endLine();
         return null;
     }
 
@@ -401,6 +438,7 @@ public class MainGenerationVisitor extends ASTBaseVisitor<Void> {
 
     @Override
     public Void visit(IfStmtNode node) {
+        if(true) return null; // todo Remove
         classBuilder.append(IF_PREFIX);
         classBuilder.startParan();
         visit(node.getLogicalExprNode());

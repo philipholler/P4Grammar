@@ -20,11 +20,13 @@ public class EventInitializationVisitor extends ASTBaseVisitor<Void> {
 
     public static final String EVENT_INIT_CLASS_NAME = "EventInitializer";
     public static final String START_EVENTMANAGERS_METHOD = "startEventManagers";
+
+
     private static final String MAIN_REFERENCE_NAME = "main";
     private static final String ADD_EVENTS_METHOD = "fillEventLists";
     private static final String TIME_EVENT_LIST = "timeEvents";
     private static final String SIGNAL_EVENT_LIST = "signalEvents";
-    private static final String SIGNAL_EVENT_MANAGER = "signalEventManager";
+    public static final String SIGNAL_EVENT_MANAGER = "signalEventManager";
     private static final String TIME_EVENT_MANAGER = "timeEventManager";
 
     private final MethodSignatureVisitor methodSignatureVisitor = new MethodSignatureVisitor();
@@ -50,7 +52,11 @@ public class EventInitializationVisitor extends ASTBaseVisitor<Void> {
         classBuilder.append(TIME_EVENT_MANAGER).appendDot().append("start()").endLine().appendNewLine();
         classBuilder.closeBlock(ClassBuilder.BlockType.METHOD);
 
-        // Method for adding events to their respective lists
+        classBuilder.appendGetMethod(TimeEventManager.class.getSimpleName(), TIME_EVENT_MANAGER);
+        classBuilder.appendGetMethod(SignalEventManager.class.getSimpleName(), SIGNAL_EVENT_MANAGER);
+
+
+        // Create method for adding events to their respective lists
         classBuilder.appendMethod(ADD_EVENTS_METHOD, JavaType.VOID.keyword);
         visitChildren(node);
         classBuilder.closeBlock(ClassBuilder.BlockType.METHOD);

@@ -40,4 +40,7 @@ public class SignalEventManager extends Thread {
     }
 
 
+    public void addSignal(SignalData signalData) {
+        getEventsQueue().add(signalData);
+    }
 }

@@ -92,4 +92,7 @@ public class IndentedStringBuilder {
     }
 
 
+    public boolean isLineEmpty() {
+        return freshLine;
+    }
 }

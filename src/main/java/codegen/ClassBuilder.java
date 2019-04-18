@@ -11,6 +11,7 @@ public class ClassBuilder {
     /* --------------------- Syntax & naming constants --------------------- */
     public static final String RANGE_SIGNAL_CLASS = "RangeSignal";
     public static final String LITERAL_SIGNAL_CLASS = "Signal";
+    public static final String GET_METHOD_PREFIX = "get";
 
     public static final String DEVICE_SUPER_CLASS = "Device";
 
@@ -18,6 +19,7 @@ public class ClassBuilder {
     public static final String DEFAULT_SIGNAL_PACKAGE = "default_classes.signal";
     public static final String DEFAULT_DEVICE_PACKAGE = "default_classes.device";
     public static final String DEFAULT_EVENT_PACKAGE = "default_classes.event";
+    public static final String DEFAULT_SERVER_PACKAGE = "default_classes.server";
 
     public static final String DEVICE_PACKAGE = "device";
     public static final String SIGNAL_PACKAGE = "signal";
@@ -132,7 +134,8 @@ public class ClassBuilder {
 
 
         codeBuilder.decremmentIndentation();
-        codeBuilder.newLine();
+        if(!codeBuilder.isLineEmpty()) codeBuilder.newLine();
+
         codeBuilder.append(END_BRACKET);
         if(blockType != BlockType.TRY) {
             codeBuilder.newLine();

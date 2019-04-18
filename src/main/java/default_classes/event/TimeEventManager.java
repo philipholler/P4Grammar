@@ -15,6 +15,8 @@ public class TimeEventManager extends Thread {
 
     @Override
     public void run(){
+        if(eventExecutions.isEmpty()) return; // No time events in the program
+
         while (true){
             LocalDateTime now;
             TimeEvent nextEvent = eventExecutions.first();

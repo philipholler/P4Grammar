@@ -47,6 +47,11 @@ public class ClassGenerationVisitor extends ASTBaseVisitor<ClassBuilder> {
     public static final String OUTPUT_SIGNAL_PREFIX = "output";
     public static final String SET_CURRENT_VALUE_METHOD = "setCurrentValue";
 
+    public static String getDefaultSignalValue(JavaType type){
+        if(type == JavaType.FLOAT) return "0.0f";
+        if(type == JavaType.INT) return "0";
+        else return "\"null\"";
+    }
 
     ArrayList<ClassBuilder> classes = new ArrayList<>();
 
@@ -146,6 +151,9 @@ public class ClassGenerationVisitor extends ASTBaseVisitor<ClassBuilder> {
         signalBuilder.appendImportAllFrom(ClassBuilder.DEFAULT_SIGNAL_PACKAGE).appendNewLine();
 
         signalBuilder.appendClassDef(signalNode.getID(), ClassBuilder.LITERAL_SIGNAL_CLASS, signalValueType.objectType);
+        signalBuilder.appendConstructor();
+        signalBuilder.appendMethodCall(SET_CURRENT_VALUE_METHOD, getDefaultSignalValue(signalValueType));
+        signalBuilder.closeBlock(ClassBuilder.BlockType.METHOD);
 
         addEnumVars(signalBuilder, signalNode, signalValueType);
         createSetCurrentSignalMetod(signalBuilder, signalValueType);
