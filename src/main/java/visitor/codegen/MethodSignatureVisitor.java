@@ -24,30 +24,32 @@ public class MethodSignatureVisitor extends ASTBaseVisitor<String> {
     @Override
     public String visit(EventRangeInputNode node) {
         return EVENT_SIGNATURE_PREFIX + node.getDeviceID() + node.getSignalID()
-                + node.getExceedsAndDeceedsEnum().name() + "line" + node.getLineNumber();
+                + node.getExceedsAndDeceedsEnum().name() + "_line" + node.getLineNumber();
     }
 
     @Override
     public String visit(EventWhenTimeNode node) {
-        return WHEN_SIGNATURE_PREFIX + visit(node.getDateNode()) + visit(node.getTimeNode());
+        return WHEN_SIGNATURE_PREFIX + visit(node.getDateNode()) + visit(node.getTimeNode())
+                + "_line" + node.getLineNumber();
     }
 
     @Override
     public String visit(EventEveryNode node) {
-        return EVERY_SIGNATURE_PREFIX + visit(node.getDateNode()) + visit(node.getTimeNode());
+        return EVERY_SIGNATURE_PREFIX + node.getInteger().getVal() + node.getTimeframe().name().toLowerCase()
+                + visit(node.getDateNode()) + visit(node.getTimeNode())
+                + "_line" + node.getLineNumber();
     }
 
     @Override
     public String visit(DateNode node) {
-        if(node == null) return  "";
-        String s = "";
-
-        if (node.getDate() != null)
-            s += node.getDate().toString().replaceAll("-", "_");
-        if(node.getMonthDay() != null)
-            s += "day_" + node.getMonthDay().toString().replaceAll("-", "_");
-
-        return s;
+        if(node == null) return "";
+        if(node.getDay() != -1){
+            return node.getDay() + "d";
+        }else if(node.getMonthDay() != null){
+            return node.getMonthDay().getDayOfMonth() + "d" + node.getMonthDay().getMonthValue() + "m";
+        }else{
+            return node.getDate().getDayOfMonth() + "d" + node.getDate().getMonthValue() + "m" + node.getDate().getYear() + "y";
+        }
     }
 
     @Override
