@@ -5,6 +5,7 @@ import node.base.ListNode;
 import node.base.Node;
 import node.base.UnaryNode;
 import org.antlr.v4.runtime.ParserRuleContext;
+import semantics.SymbolTable;
 
 import java.util.ArrayList;
 
@@ -19,5 +20,9 @@ public abstract class EventNode extends ListNode {
     }
 
     public abstract BlockNode getBlockNode();
+
+    public String getReturnType(){
+        return SymbolTable.VOID_TYPE_ID;
+    }
 
 }

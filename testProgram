@@ -100,14 +100,20 @@ string testFunction(int percent){
     float procent = 15.0;
     set bedRoomWindow Open: procent;
     while(true){
-        return;
+        return "";
     }
+
+    return "";
 
     while(false){
         break;
     }
 
     return "hej";
+}
+
+every 2 seconds{
+    return;
 }
 
 // Function
