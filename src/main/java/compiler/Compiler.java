@@ -9,9 +9,12 @@ import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.tree.ParseTree;
 import visitor.codegen.ClassGenerationVisitor;
+import visitor.codegen.EventInitializationVisitor;
 import visitor.codegen.MainGenerationVisitor;
+import visitor.codegen.MethodSignatureVisitor;
 
 import java.io.IOException;
+import java.lang.reflect.Method;
 
 import static org.antlr.v4.runtime.CharStreams.fromFileName;
 
@@ -51,11 +54,13 @@ public class Compiler {
             // Print new AST
             System.out.println(ast.getTreeString(0));
 
-            // Generate java classes corresponding to the (device and signal) type definitions
+            // Generate java classes corresponding to the (device and signal) type definitions// Todo move to seperate function
             ClassGenerationVisitor classGenVisitor = new ClassGenerationVisitor();
             classGenVisitor.visit(ast);
             MainGenerationVisitor mainGenVisitor = new MainGenerationVisitor();
             mainGenVisitor.visit(ast);
+            EventInitializationVisitor eventInitGen = new EventInitializationVisitor();
+            eventInitGen.visit(ast);
 
         } catch (IOException e) {
             e.printStackTrace();

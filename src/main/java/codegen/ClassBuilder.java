@@ -17,11 +17,14 @@ public class ClassBuilder {
     public static final String DEFAULT_CLASSES_PACKAGE = "default_classes";
     public static final String DEFAULT_SIGNAL_PACKAGE = "default_classes.signal";
     public static final String DEFAULT_DEVICE_PACKAGE = "default_classes.device";
+    public static final String DEFAULT_EVENT_PACKAGE = "default_classes.event";
 
     public static final String DEVICE_PACKAGE = "device";
     public static final String SIGNAL_PACKAGE = "signal";
     public static final String SERVER_PACKAGE = "server";
     public static final String EVENT_PACKAGE  = "event";
+
+    public static final String ARRAYLIST_PACKAGE  = "java.util.ArrayList";
 
     private static final String START_BRACKET = "{", END_BRACKET = "}";
     private static final String START_PARAN = "(", END_PARAN = ")";
@@ -58,6 +61,11 @@ public class ClassBuilder {
 
     public ClassBuilder appendImportAllFrom(String packge){
         codeBuilder.append("import ").append(packge).append(".*").append(LINE_END).newLine();
+        return this;
+    }
+
+    public ClassBuilder appendImport(String packge){
+        codeBuilder.append("import ").append(packge).append(LINE_END).newLine();
         return this;
     }
 
