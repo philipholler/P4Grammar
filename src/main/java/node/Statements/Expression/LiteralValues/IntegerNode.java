@@ -13,11 +13,6 @@ public class IntegerNode extends LiteralValueNode {
         this.val = Integer.parseInt(val);
     }
 
-    public IntegerNode(ParserRuleContext ctx, String type, String val) {
-        super(ctx, type);
-        this.val = Integer.parseInt(val);
-    }
-
     public int getVal() {
         return val;
     }

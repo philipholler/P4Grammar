@@ -13,7 +13,7 @@ public class EventRangeInputNode extends EventNode {
     private String signalID;
     private ExceedsAndDeceedsEnum exceedsAndDeceedsEnum;
 
-    public EventRangeInputNode(ParserRuleContext ctx, BlockNode block, String deviceID, String signalID, ExceedsAndDeceedsEnum exceedsAndDeceedsEnum, ExpressionNode expr) {
+    public EventRangeInputNode(ParserRuleContext ctx, BlockNode block, String deviceID, String signalID, ExceedsAndDeceedsEnum exceedsAndDeceedsEnum, Node expr) {
         super(ctx, block, expr);
         this.deviceID = deviceID;
         this.signalID = signalID;
