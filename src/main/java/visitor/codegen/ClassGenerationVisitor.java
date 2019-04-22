@@ -4,6 +4,7 @@ import codegen.ClassBuilder;
 import codegen.JavaFileWriter;
 import codegen.JavaInputParameter;
 import codegen.JavaType;
+import default_classes.signal.Signal;
 import exceptions.compilerside.CodeGenerationError;
 import node.DeclsNode;
 import node.ProgramNode;
@@ -24,10 +25,6 @@ import visitor.ASTBaseVisitor;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 
 
@@ -43,11 +40,12 @@ public class ClassGenerationVisitor extends ASTBaseVisitor<ClassBuilder> {
     public static final String CURRENT_VALUE_VAR = "currentValue";
     public static final String HARDWARE_ID_VAR = "hardwareID";
 
+    public static final String GET_SIGNAL_METHOD = "getSignal";
+
     public static final String INPUT_SIGNAL_PREFIX = "input";
     public static final String OUTPUT_SIGNAL_PREFIX = "output";
     public static final String SET_CURRENT_VALUE_METHOD = "setCurrentValue";
 
-    public static final String GET_SIGNAL_METHOD = "getSignal";
 
     ArrayList<ClassBuilder> classes = new ArrayList<>();
 
@@ -105,8 +103,8 @@ public class ClassGenerationVisitor extends ASTBaseVisitor<ClassBuilder> {
             upperBound = String.valueOf(((IntegerNode) rangeNode.getUpperBoundNode()).getVal());
         } else {
             rangeType = JavaType.FLOAT;
-            lowerBound = String.valueOf(((FloatNode) rangeNode.getLowerBoundNode()).getVal()) + "f";
-            upperBound = String.valueOf(((FloatNode) rangeNode.getUpperBoundNode()).getVal()) + "f";
+            lowerBound = (((FloatNode) rangeNode.getLowerBoundNode()).getVal()) + "f";
+            upperBound = (((FloatNode) rangeNode.getUpperBoundNode()).getVal()) + "f";
         }
 
         ClassBuilder classBuilder = new ClassBuilder();
@@ -208,6 +206,7 @@ public class ClassGenerationVisitor extends ASTBaseVisitor<ClassBuilder> {
         classBuilder.appendPackage(ClassBuilder.DEVICE_PACKAGE);
         classBuilder.appendImportAllFrom(ClassBuilder.SIGNAL_PACKAGE).appendNewLine();
         classBuilder.appendImportAllFrom(ClassBuilder.DEFAULT_DEVICE_PACKAGE).appendNewLine();
+        classBuilder.appendImportAllFrom(ClassBuilder.DEFAULT_SIGNAL_PACKAGE).appendNewLine();
         // Todo : import statements
 
         classBuilder.appendClassDef(node.getID(), ClassBuilder.DEVICE_SUPER_CLASS);
@@ -221,6 +220,7 @@ public class ClassGenerationVisitor extends ASTBaseVisitor<ClassBuilder> {
         classBuilder.closeBlock(ClassBuilder.BlockType.METHOD);
 
         addSignalGetters(classBuilder, node.getInputs(), node.getOutputs());
+        addSignalStringGetter(classBuilder, node);
 
         return classBuilder.closeBlock(ClassBuilder.BlockType.CLASS);
     }
@@ -239,6 +239,40 @@ public class ClassGenerationVisitor extends ASTBaseVisitor<ClassBuilder> {
 
         for(OutputNode outNode : outputs)
             classBuilder.appendGetMethod(outNode.SIGNAL_ID, OUTPUT_SIGNAL_PREFIX + outNode.SIGNAL_ID);
+    }
+
+    // Adds the getSignal(String hardwareID)
+    private void addSignalStringGetter(ClassBuilder classBuilder,
+                                       DefDeviceNode node){
+        String inputString = "id";
+
+        classBuilder.appendMethod(GET_SIGNAL_METHOD, Signal.class.getSimpleName(),
+                new JavaInputParameter(JavaType.STRING.keyword, inputString));
+
+        for(String signalID : getAllSignalVarIDs(node)){
+            String quotedID = '"' + signalID + '"';
+            classBuilder.append("if").startParan().append(inputString).append(".equals").startParan()
+                    .append(quotedID).endParan().endParan()
+                    .openBlock(ClassBuilder.BlockType.IF);
+
+            classBuilder.appendReturnStatement(signalID);
+            classBuilder.closeBlock(ClassBuilder.BlockType.IF);;
+        }
+
+        classBuilder.appendReturnStatement("null");
+        classBuilder.closeBlock(ClassBuilder.BlockType.METHOD);
+    }
+
+    private ArrayList<String> getAllSignalVarIDs(DefDeviceNode node){
+        ArrayList<String> allSignals = new ArrayList<>();
+
+        for(InputNode inNode : node.getInputs())
+            allSignals.add(INPUT_SIGNAL_PREFIX + inNode.SIGNAL_ID);
+
+        for(OutputNode outNode : node.getOutputs())
+            allSignals.add(OUTPUT_SIGNAL_PREFIX + outNode.SIGNAL_ID);
+
+        return allSignals;
     }
 }
 

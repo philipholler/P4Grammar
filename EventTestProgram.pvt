@@ -23,11 +23,20 @@ init(){
 }
 
 when frontDoorLight Toggle : On{
-    printFunction("bulb1 has been turned off");
+    print "hey";
+    if(get frontDoorLight2 Toggle == 0){
+        printFunction("light two  off");
+    }else{
+        printFunction("light two  on");
+    }
 }
 
 when frontDoorLight2 Toggle : Off{
     printFunction("bulb2 has been turned off");
+}
+
+when frontDoorLight2 Toggle : On{
+    printFunction("bulb2 has been turned on");
 }
 
 when 21:39 18d04m{

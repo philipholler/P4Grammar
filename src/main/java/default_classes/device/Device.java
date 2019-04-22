@@ -1,5 +1,7 @@
 package default_classes.device;
 
+import default_classes.signal.Signal;
+
 public abstract class Device {
 
     private String networkID;
@@ -11,4 +13,8 @@ public abstract class Device {
     public String getNetworkID() {
         return networkID;
     }
+
+    public abstract Signal getSignal(String name);
+
+
 }

@@ -2,6 +2,7 @@ package default_classes.event;
 
 import default_classes.SignalData;
 import default_classes.device.Device;
+import default_classes.signal.Signal;
 
 import java.util.ArrayList;
 import java.util.concurrent.LinkedBlockingQueue;
@@ -33,6 +34,7 @@ public class SignalEventManager extends Thread {
                 e.printStackTrace(); // todo : exception handling lol
             }
             parseSignal(signalData);
+            //updateCurrentValue(signalData);
         }
     }
 
@@ -43,10 +45,14 @@ public class SignalEventManager extends Thread {
         }
     }
 
+    // Update the current value variable inside the device signal object
     private void updateCurrentValue(SignalData signalData){
         for(Device dev : devices){
             if(dev.getNetworkID().equals(signalData.hardwareId)){
-                
+                Signal signal = dev.getSignal(signalData.signalType);
+                if(signal != null){
+                    signal.setCurrentValue(signalData.value);
+                }
             }
         }
 
