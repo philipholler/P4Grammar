@@ -35,7 +35,7 @@ public class EventRangeInputNode extends EventNode {
         if(getExprNode() instanceof IntegerNode)
             return String.valueOf(((IntegerNode) getExprNode()).getVal());
         else
-            return String.valueOf(((FloatNode) getExprNode()).getVal());
+            return String.valueOf(((FloatNode) getExprNode()).getVal()) + "f";
     }
 
     public String getDeviceID() {

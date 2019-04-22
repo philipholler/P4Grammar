@@ -11,10 +11,7 @@ import org.antlr.v4.runtime.tree.ParseTree;
 import visitor.codegen.ClassGenerationVisitor;
 import visitor.codegen.EventInitializationVisitor;
 import visitor.codegen.MainGenerationVisitor;
-import visitor.codegen.MethodSignatureVisitor;
-
 import java.io.IOException;
-import java.lang.reflect.Method;
 
 import static org.antlr.v4.runtime.CharStreams.fromFileName;
 

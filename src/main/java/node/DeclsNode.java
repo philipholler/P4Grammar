@@ -21,4 +21,11 @@ public class DeclsNode extends ListNode {
     public <T> T accept(ASTBaseVisitor<? extends T> astBaseVisitor) {
     return astBaseVisitor.visit(this);
 }
+
+    public boolean hasInitNode(){
+        for(Node child : getChildren()){
+            if(child instanceof InitNode) return true;
+        }
+        return false;
+    }
 }

@@ -1,6 +1,7 @@
 package default_classes.event;
 
 import default_classes.SignalData;
+import default_classes.device.Device;
 
 import java.util.ArrayList;
 import java.util.concurrent.LinkedBlockingQueue;
@@ -11,9 +12,12 @@ public class SignalEventManager extends Thread {
     private LinkedBlockingQueue<SignalData> signalQueue = new LinkedBlockingQueue<>();
 
     private ArrayList<SignalEvent> signalEvents = new ArrayList<>();
+    private ArrayList<Device> devices = new ArrayList<>();
 
-    public SignalEventManager(ArrayList<SignalEvent> signalEvents){
+
+    public SignalEventManager(ArrayList<SignalEvent> signalEvents, ArrayList<Device> devices){
         this.signalEvents.addAll(signalEvents);
+        this.devices.addAll(devices);
     }
 
     public LinkedBlockingQueue<SignalData> getEventsQueue(){
@@ -32,11 +36,21 @@ public class SignalEventManager extends Thread {
         }
     }
 
-    public void parseSignal(SignalData signalData){
+    private void parseSignal(SignalData signalData){
         for(SignalEvent event : signalEvents){
             if(event.satisfiesCondition(signalData))
                 event.executeEvent();
         }
+    }
+
+    private void updateCurrentValue(SignalData signalData){
+        for(Device dev : devices){
+            if(dev.getNetworkID().equals(signalData.hardwareId)){
+                
+            }
+        }
+
+
     }
 
 

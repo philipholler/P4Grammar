@@ -20,6 +20,8 @@ import visitor.ASTBaseVisitor;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
+import static codegen.ClassBuilder.GET_METHOD_PREFIX;
+
 public class EventInitializationVisitor extends ASTBaseVisitor<Void> {
 
     ClassBuilder classBuilder;
@@ -101,8 +103,14 @@ public class EventInitializationVisitor extends ASTBaseVisitor<Void> {
 
         classBuilder.appendAssignment(TIME_EVENT_MANAGER, "new " + TimeEventManager.class.getSimpleName()
                 + "(" + TIME_EVENT_LIST + ")");
-        classBuilder.appendAssignment(SIGNAL_EVENT_MANAGER, "new " + SignalEventManager.class.getSimpleName()
-                + "(" + SIGNAL_EVENT_LIST + ")");
+
+        // Initialize signalEventManager
+        classBuilder.append(SIGNAL_EVENT_MANAGER).appendEquals();
+        classBuilder.append("new ").append(SignalEventManager.class.getSimpleName()).startParan()
+                .append(SIGNAL_EVENT_LIST).appendComma().appendSpace()
+                .append(MAIN_REFERENCE_NAME).appendDot()
+                .append(GET_METHOD_PREFIX + MainGenerationVisitor.DEVICE_LIST_NAME).startParan().endParan()
+                .endParan().endLine();
 
         classBuilder.closeBlock(ClassBuilder.BlockType.METHOD);
     }
@@ -114,7 +122,7 @@ public class EventInitializationVisitor extends ASTBaseVisitor<Void> {
         classBuilder.append(SIGNAL_EVENT_LIST).appendDot().append("add").startParan();
         classBuilder.append("new ").append(SimpleSignalEvent.class.getSimpleName()).append(" ").startParan();
 
-        // Defnition of parameters for simpleSignalEvent constructor :
+        // Definition of parameters for simpleSignalEvent constructor :
 
         // device
         classBuilder.append(MAIN_REFERENCE_NAME).appendDot().append(node.getDeviceID()).appendComma();
@@ -141,7 +149,7 @@ public class EventInitializationVisitor extends ASTBaseVisitor<Void> {
     public Void visit(EventRangeInputNode node) {
         String device = MAIN_REFERENCE_NAME + "." + node.getDeviceID();
         String signal = MAIN_REFERENCE_NAME + "." + node.getDeviceID() + "."
-                + ClassBuilder.GET_METHOD_PREFIX + ClassGenerationVisitor.OUTPUT_SIGNAL_PREFIX
+                + GET_METHOD_PREFIX + ClassGenerationVisitor.OUTPUT_SIGNAL_PREFIX
                 + node.getSignalID() + "()";
 
         String threshold = node.getThresholdString();

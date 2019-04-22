@@ -47,13 +47,15 @@ public class ClassGenerationVisitor extends ASTBaseVisitor<ClassBuilder> {
     public static final String OUTPUT_SIGNAL_PREFIX = "output";
     public static final String SET_CURRENT_VALUE_METHOD = "setCurrentValue";
 
+    public static final String GET_SIGNAL_METHOD = "getSignal";
+
+    ArrayList<ClassBuilder> classes = new ArrayList<>();
+
     public static String getDefaultSignalValue(JavaType type){
         if(type == JavaType.FLOAT) return "0.0f";
         if(type == JavaType.INT) return "0";
         else return "\"null\"";
     }
-
-    ArrayList<ClassBuilder> classes = new ArrayList<>();
 
     @Override
     public ClassBuilder visit(ProgramNode node) {

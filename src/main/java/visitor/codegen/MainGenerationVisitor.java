@@ -27,7 +27,6 @@ import node.Statements.Expression.MultiExprNode;
 import node.Statements.LogicalExpression.ComparisonExprNode;
 import node.Statements.LogicalExpression.LogicalAndExprNode;
 import node.Statements.LogicalExpression.LogicalOrExprNode;
-import node.Statements.Wait.TimeFrame;
 import node.Statements.Wait.WaitNode;
 import node.TimeNodes.DateNode;
 import node.TimeNodes.NowNode;
@@ -42,15 +41,14 @@ import semantics.SymbolTable;
 import utils.JavaCodeUtils;
 import visitor.ASTBaseVisitor;
 
-import java.lang.reflect.Method;
-
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.util.Optional;
 
 public class MainGenerationVisitor extends ASTBaseVisitor<Void> {
 
     ClassBuilder classBuilder;
+    ClassBuilder eventListBuilder;
+
     public static final String MAIN_CLASS_NAME = "Main";
     public static final String INIT_FUNC_NAME = "init";
     public static final String PRINT_STMT_PREFIX = "System.out.println";
@@ -69,6 +67,10 @@ public class MainGenerationVisitor extends ASTBaseVisitor<Void> {
     public static final String GET_METHOD_NAME = "getCurrentValue";
     public static final String SLEEP_METHOD_NAME = "sleep";
     public static final String SERVER_VAR_NAME = "server";
+    public static final String EVENT_INIT_METHOD = "eventInit";
+    public static final String DEVICE_LIST_NAME = "devices";
+    public static final String DEVICE_LIST_FILL_METHOD = "fillDeviceList";
+
 
     public static final String THREAD_DEATH_ERROR_NAME = "ThreadDeath";
 
@@ -81,35 +83,64 @@ public class MainGenerationVisitor extends ASTBaseVisitor<Void> {
         st.resetScope();
 
         classBuilder = new ClassBuilder();
+        eventListBuilder = new ClassBuilder();
 
         classBuilder.appendPackage(ClassBuilder.SERVER_PACKAGE);
-        classBuilder.appendImportAllFrom(ClassBuilder.SIGNAL_PACKAGE);
-        classBuilder.appendImportAllFrom(ClassBuilder.DEVICE_PACKAGE);
-        classBuilder.appendImportAllFrom(ClassBuilder.EVENT_PACKAGE);
-        classBuilder.appendImportAllFrom(ClassBuilder.DEFAULT_SERVER_PACKAGE);
-
-        classBuilder.appendImportAllFrom(ClassBuilder.DEFAULT_CLASSES_PACKAGE).appendNewLine();
+        addImports();
 
         classBuilder.appendClassDef(MAIN_CLASS_NAME);
-        addServerVar(); // Todo Should be thread safe
-        addMainMethod();
+        addStandardVars(); // Todo Should be thread safe
+        addMainMethod(node.getDeclsNode());
+        addEventInitMethod();
         addSleepMethod();
-        visitChildren(node);
-        classBuilder.closeBlock(ClassBuilder.BlockType.CLASS);
+        visitChildren(node); // Todo maybe visit vardecl children seperately in order to have var decls at the top of generated code
+        addDeviceListFill();
+        classBuilder.appendGetMethod("ArrayList<Device>", DEVICE_LIST_NAME);
 
+        classBuilder.closeBlock(ClassBuilder.BlockType.CLASS);
         JavaFileWriter.writeClass(classBuilder);
         return null;
     }
 
-    private void addServerVar(){
-        classBuilder.appendObjectDecl(Server.class.getSimpleName(), SERVER_VAR_NAME);
+    private void addDeviceListFill() {
+        classBuilder.appendMethod(DEVICE_LIST_FILL_METHOD, JavaType.VOID.keyword);
+        // Add devices to the device list
+        classBuilder.append(eventListBuilder.toString());
+        classBuilder.closeBlock(ClassBuilder.BlockType.METHOD);
     }
 
-    private void addMainMethod(){
+    private void addImports(){
+        classBuilder.appendImportAllFrom(ClassBuilder.SIGNAL_PACKAGE);
+        classBuilder.appendImportAllFrom(ClassBuilder.DEVICE_PACKAGE);
+        classBuilder.appendImportAllFrom(ClassBuilder.EVENT_PACKAGE);
+        classBuilder.appendImportAllFrom(ClassBuilder.DEFAULT_SERVER_PACKAGE);
+        classBuilder.appendImportAllFrom(ClassBuilder.DEFAULT_DEVICE_PACKAGE);
+        classBuilder.appendImport(ClassBuilder.ARRAYLIST_PACKAGE);
+        classBuilder.appendImportAllFrom(ClassBuilder.DEFAULT_CLASSES_PACKAGE).appendNewLine();
+    }
+
+    private void addStandardVars(){
+        classBuilder.appendObjectDecl(Server.class.getSimpleName(), SERVER_VAR_NAME);
+        classBuilder.appendNewObjectDecl("ArrayList<Device>", DEVICE_LIST_NAME);
+    }
+
+    private void addMainMethod(DeclsNode node){
         classBuilder.appendMainMethod();
         classBuilder.appendNewObjectDecl(MAIN_CLASS_NAME, "main");
-        classBuilder.append("main.").appendMethodCall(INIT_FUNC_NAME);
 
+        // Add call to add all method a list
+        classBuilder.append("main.").appendMethodCall(DEVICE_LIST_FILL_METHOD);
+
+        // Todo call init server before init (Since the init method can call server-dependant methods)
+        // afasfsadfsd
+
+        // Call user-defined init function if it's defined
+        if(node.hasInitNode()) classBuilder.append("main.").appendMethodCall(INIT_FUNC_NAME);
+
+        // Todo
+        // mslgkjdsflgjdflgjdsflkjgldfk
+
+        classBuilder.append("main.").appendMethodCall(EVENT_INIT_METHOD);
         classBuilder.closeBlock(ClassBuilder.BlockType.METHOD);
     }
 
@@ -153,6 +184,10 @@ public class MainGenerationVisitor extends ASTBaseVisitor<Void> {
         // The only other types derive from Device with constructor (String hardwareID)
         classBuilder.appendPublicKeyWord();
         classBuilder.appendNewObjectDecl(node.getType(), node.getID(), node.getVal());
+
+        // Add device to device list
+        eventListBuilder.append(DEVICE_LIST_NAME).appendDot().append("add");
+        eventListBuilder.startParan().append(node.getID()).endParan().endLine();
         return null;
     }
 
@@ -225,8 +260,6 @@ public class MainGenerationVisitor extends ASTBaseVisitor<Void> {
     public Void visit(InitNode node) {
         classBuilder.appendMethod(INIT_FUNC_NAME, JavaType.VOID.keyword);
 
-        addDefaultInitBehaviour();
-
         // User-programmed init
         visit(node.getBlock());
         classBuilder.closeBlock(ClassBuilder.BlockType.METHOD);
@@ -234,7 +267,8 @@ public class MainGenerationVisitor extends ASTBaseVisitor<Void> {
     }
 
     // Default init behaviour - Initialize events and server + and run event managers
-    private void addDefaultInitBehaviour(){
+    private void addEventInitMethod(){
+        classBuilder.appendMethod(EVENT_INIT_METHOD, JavaType.VOID.keyword);
         String eventInitName = "eventInit";
 
         // "EventInitializer eventInit = "
@@ -261,8 +295,7 @@ public class MainGenerationVisitor extends ASTBaseVisitor<Void> {
         //server.start();
         classBuilder.append(SERVER_VAR_NAME).appendDot().appendMethodCall("start");
 
-
-
+        classBuilder.closeBlock(ClassBuilder.BlockType.METHOD);
     }
 
     @Override

@@ -1,6 +1,6 @@
 // Define signals
 define Signal Toggle: On = 1, Off = 0, yo = 3;
-define Signal Celsius:  1..60;
+define Signal Celsius:  1.0..60.0;
 define Signal Open:  0.0..100.0;
 define Signal Percentage: 0.0..100.0;
 define Signal PercentInt: 0..100;
@@ -38,7 +38,7 @@ every 25 seconds starting 21:45 18d04m2019y{
     printFunction("25 Seconds passed");
 }
 
-when kitchenTherm Celsius: exceeds 31{
+when kitchenTherm Celsius: exceeds 31.0{
     printFunction("Its too hot in the kitchen");
 }
 
