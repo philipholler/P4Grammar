@@ -11,6 +11,12 @@ public class Utils {
         int month = monthDay.getMonth().getValue();
         int day = monthDay.getDayOfMonth();
 
+        // If they are identical
+        if(month == MonthDay.now().getMonthValue() && day == MonthDay.now().getDayOfMonth()){
+            return 0;
+        }
+
+
         // If localDate month smaller than now
         if(month < MonthDay.now().getMonthValue()){
             return 1;
@@ -19,11 +25,6 @@ public class Utils {
         // If localDate month is the same, but the day is smaller
         if(month == MonthDay.now().getMonthValue() && day < MonthDay.now().getDayOfMonth()){
             return 1;
-        }
-
-        // If they are identical
-        if(month == MonthDay.now().getMonthValue() && day == MonthDay.now().getDayOfMonth()){
-            return 0;
         }
 
         // Else monthDay must be bigger
@@ -38,6 +39,11 @@ public class Utils {
         int day = localDateTime.getDayOfMonth();
         int month = localDateTime.getMonthValue();
         int year = localDateTime.getYear();
+
+        // If both day, month and year are the same. They are considered equal
+        if(year == LocalDateTime.now().getYear() && month == LocalDateTime.now().getMonthValue() && day == LocalDateTime.now().getDayOfMonth()){
+            return 0;
+        }
 
         // If now has a higher year, it is obviously bigger
         if(year < LocalDateTime.now().getYear()){
@@ -54,11 +60,6 @@ public class Utils {
             return 1;
         }
 
-        // If both day, month and year are the same. They are considered equal
-        if(year == LocalDateTime.now().getYear() && month == LocalDateTime.now().getMonthValue() && day == LocalDateTime.now().getDayOfMonth()){
-            return 0;
-        }
-
         return -1;
     }
 
@@ -70,13 +71,13 @@ public class Utils {
         int hour = localTime.getHour();
         int minute = localTime.getMinute();
 
-        // If now's hour is bigger, or the hours are identical, but now's minutes are bigger, return 1.
-        if(hour < LocalTime.now().getHour() || (hour == LocalTime.now().getHour() && minute < LocalTime.now().getMinute())){
-            return 1;
-        }
         // If identical return 0;
-        else if (hour == LocalTime.now().getHour() && minute == LocalTime.now().getMinute()){
+        if (hour == LocalTime.now().getHour() && minute == LocalTime.now().getMinute()){
             return 0;
+        }
+        // If now's hour is bigger, or the hours are identical, but now's minutes are bigger, return 1.
+        else if(hour < LocalTime.now().getHour() || (hour == LocalTime.now().getHour() && minute < LocalTime.now().getMinute())){
+            return 1;
         }
         // Else localTime must be bigger. return -1
         else {
@@ -88,13 +89,13 @@ public class Utils {
      * @return 1 if now is bigger, 0 if identical and -1 if day is bigger than now.
      */
     public static int compareDayToNow(int day){
-        // If now's day is bigger, return 1
-        if(day < LocalDate.now().getDayOfMonth()){
-            return 1;
-        }
         // If they are identical, return 0;
-        else if (day == LocalDate.now().getDayOfMonth()){
+        if (day == LocalDate.now().getDayOfMonth()){
             return 0;
+        }
+        // If now's day is bigger, return 1
+        else if(day < LocalDate.now().getDayOfMonth()){
+            return 1;
         }
         // Else day must be bigger
         else {

@@ -61,7 +61,7 @@ every 10 seconds starting 10:45 19d04m2019y{
         printFunction("virker4");
     }
 
-    while(14:26 > now){
+    while(14:45 > now){
         printFunction("YOOO");
         wait 1 seconds;
     }

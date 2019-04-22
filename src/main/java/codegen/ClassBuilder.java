@@ -280,23 +280,28 @@ public class ClassBuilder {
      * For this reason the logical comparison should be negated.
      */
     public ClassBuilder appendTimeComparison(TimeNode timeNode, NowNode nowNode, ComparisonOperator op){
+        int expectedValue = 0;
+        if(op == ComparisonOperator.GREATERTHAN){
+            expectedValue = 1;
+        }
+
         // if the timenode is an instance of localtime the time can be compared using the Utils class.
         // For example if(now < 14:00)
         if(timeNode instanceof LocalTimeNode){
             int hour = ((LocalTimeNode) timeNode).getTime().getHour();
             int minute = ((LocalTimeNode) timeNode).getTime().getMinute();
-            codeBuilder.append("!(Utils.compareTimeToNow(LocalTime.of(" + hour + ", " + minute + ", 0)) " + op.opString + " 0)");
+            codeBuilder.append("!(Utils.compareTimeToNow(LocalTime.of(" + hour + ", " + minute + ", 0)) " + op.opString + expectedValue + ")");
             return this;
         }
 
         if(timeNode instanceof DateNode){
-            // If the timenode cotains an entire date
+            // If the timenode contains an entire date
             // example if(now < 13d14m2019y) do something
             if(((DateNode) timeNode).hasDate()){
                 int year = ((DateNode) timeNode).getDate().getYear();
                 int month = ((DateNode) timeNode).getDate().getMonth().getValue();
                 int day = ((DateNode) timeNode).getDate().getDayOfMonth();
-                codeBuilder.append("!(Utils.compareDateToNow(LocalDateTime.of(" + year + ", " + month + ", " + day + ",0 , 0" + ")) " + op.opString + " 0)");
+                codeBuilder.append("!(Utils.compareDateToNow(LocalDateTime.of(" + year + ", " + month + ", " + day + ", 0, 0" + ")) " + op.opString + " 0)");
                 return this;
             }
             // If the TimeNode contains a month day.
