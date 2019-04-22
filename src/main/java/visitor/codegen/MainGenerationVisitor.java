@@ -27,9 +27,9 @@ import node.Statements.Expression.MultiExprNode;
 import node.Statements.LogicalExpression.ComparisonExprNode;
 import node.Statements.LogicalExpression.LogicalAndExprNode;
 import node.Statements.LogicalExpression.LogicalOrExprNode;
-import node.Statements.Wait.TimeFrame;
 import node.Statements.Wait.WaitNode;
 import node.TimeNodes.DateNode;
+import node.TimeNodes.LocalTimeNode;
 import node.TimeNodes.NowNode;
 import node.TimeNodes.TimeNode;
 import node.base.Node;
@@ -42,10 +42,8 @@ import semantics.SymbolTable;
 import utils.JavaCodeUtils;
 import visitor.ASTBaseVisitor;
 
-import java.lang.reflect.Method;
-
+import java.sql.Time;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.util.Optional;
 
 public class MainGenerationVisitor extends ASTBaseVisitor<Void> {
@@ -87,6 +85,7 @@ public class MainGenerationVisitor extends ASTBaseVisitor<Void> {
         classBuilder.appendImportAllFrom(ClassBuilder.DEVICE_PACKAGE);
         classBuilder.appendImportAllFrom(ClassBuilder.EVENT_PACKAGE);
         classBuilder.appendImportAllFrom(ClassBuilder.DEFAULT_SERVER_PACKAGE);
+        classBuilder.appendImport("java.time.*");
 
         classBuilder.appendImportAllFrom(ClassBuilder.DEFAULT_CLASSES_PACKAGE).appendNewLine();
 
@@ -438,7 +437,6 @@ public class MainGenerationVisitor extends ASTBaseVisitor<Void> {
 
     @Override
     public Void visit(IfStmtNode node) {
-        if(true) return null; // todo Remove
         classBuilder.append(IF_PREFIX);
         classBuilder.startParan();
         visit(node.getLogicalExprNode());
@@ -470,7 +468,7 @@ public class MainGenerationVisitor extends ASTBaseVisitor<Void> {
     }
 
     @Override
-    public Void visit(TimeNode node) {
+    public Void visit(LocalTimeNode node) {
         LocalDateTime time = LocalDateTime.now().plusMinutes(5);
         return null;
     }
@@ -499,6 +497,15 @@ public class MainGenerationVisitor extends ASTBaseVisitor<Void> {
 
     @Override
     public Void visit(ComparisonExprNode node) {
+        if(node.getLeftChild() instanceof NowNode && node.getRightChild() instanceof TimeNode){
+            classBuilder.appendTimeComparison((NowNode) node.getLeftChild(), (TimeNode) node.getRightChild() ,node.getOp());
+            return null;
+        }
+        if(node.getLeftChild() instanceof TimeNode && node.getRightChild() instanceof NowNode){
+            classBuilder.appendTimeComparison((TimeNode) node.getLeftChild(), (NowNode) node.getRightChild(), node.getOp());
+            return null;
+        }
+
         visit(node.getLeftChild());
         classBuilder.appendOperator(node.getOp().opString);
         visit(node.getRightChild());

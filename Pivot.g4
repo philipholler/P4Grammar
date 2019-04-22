@@ -51,9 +51,9 @@ repeatEvent : EVERY INTEGER timeFrame block
             | EVERY INTEGER timeFrame STARTING timeAndDate block
             ;
 
-timeAndDate : TIME (DAY | DATEnoYEAR | DATE)
+timeAndDate : TIME (DATEnoYEARnoMonth | DATEnoYEAR | DATE)
             | TIME
-            | (DAY | DATEnoYEAR | DATE)
+            | (DATEnoYEARnoMonth | DATEnoYEAR | DATE)
             ;
 
 timeFrame: (MONTHS | WEEKS | DAYS | HOURS | MINUTES | SECONDS | MS);
@@ -111,9 +111,9 @@ comparison_expr : left=comparison_operand op=comp_operator right=comparison_oper
                 | PARANBEG comparison_expr PARANEND                                  #comparisonExpressionParens
                 ;
 
-comparison_operand : TIME                   #compOperandTime
-                   | (DATE | DATEnoYEAR)    #comOperandDate
-                   | expr                   #comOperandExpr
+comparison_operand : TIME                                       #compOperandTime
+                   | (DATE | DATEnoYEAR | DATEnoYEARnoMonth)    #comOperandDate
+                   | expr                                       #comOperandExpr
                    ;
 
 comp_operator : GT // Greater than
@@ -210,8 +210,8 @@ AMP : '&';
 
 // Primitives
 DATE: DIGIT DIGIT 'd' DIGIT DIGIT 'm' DIGIT DIGIT DIGIT DIGIT 'y';
-DAY : DIGIT DIGIT 'd';
 DATEnoYEAR: DIGIT DIGIT 'd' DIGIT DIGIT 'm';
+DATEnoYEARnoMonth: DIGIT DIGIT 'd';
 FLOAT: '-'? DIGIT+ '.' DIGIT+;
 TIME: DIGIT DIGIT COL DIGIT DIGIT;
 INTEGER: '-'? DIGIT+;

@@ -23,19 +23,52 @@ init(){
 }
 
 when frontDoorLight Toggle : On{
-    printFunction("bulb1 has been turned off");
+    printFunction("bulb1 has been turned on");
 }
 
 when frontDoorLight2 Toggle : Off{
     printFunction("bulb2 has been turned off");
 }
 
-when 21:39 18d04m{
+when 09:05 22d04m{
     printFunction("MAGICAL");
 }
 
-every 25 seconds starting 21:45 18d04m2019y{
+every 10 seconds starting 10:45 19d04m2019y{
     printFunction("25 Seconds passed");
+
+    if(now < 13:10){
+        printFunction("virker2");
+    }
+
+    if(13:10 > now){
+        printFunction("Virker2 ny");
+    }
+
+    if(23d04m2019y > now){
+        printFunction("Endnu en");
+    }
+
+    if(now < 14:15){
+        printFunction("New");
+    }
+
+    if(now < 28d04m2020y){
+        printFunction("virker3");
+    }
+
+    if(now == 22d){
+        printFunction("virker4");
+    }
+
+    while(14:26 > now){
+        printFunction("YOOO");
+        wait 1 seconds;
+    }
+
+    if(now > 28d04m2019y){
+        printFunction("Should not print");
+    }
 }
 
 when kitchenTherm Celsius: exceeds 31{

@@ -5,7 +5,7 @@ import node.Events.WhenNodes.EventInputNode;
 import node.Events.WhenNodes.EventRangeInputNode;
 import node.Events.WhenNodes.EventWhenTimeNode;
 import node.TimeNodes.DateNode;
-import node.TimeNodes.TimeNode;
+import node.TimeNodes.LocalTimeNode;
 import visitor.ASTBaseVisitor;
 
 import java.time.LocalTime;
@@ -54,7 +54,7 @@ public class MethodSignatureVisitor extends ASTBaseVisitor<String> {
     }
 
     @Override
-    public String visit(TimeNode node) {
+    public String visit(LocalTimeNode node) {
         if(node == null) return "";
         LocalTime t = node.getTime();
         return t.getHour() + "h" + t.getMinute() + "m" + t.getSecond() + "s";

@@ -1,9 +1,8 @@
 package utils;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
-import java.time.MonthDay;
+import node.TimeNodes.NowNode;
+
+import java.time.*;
 
 public class TimeUtils {
 
@@ -33,6 +32,7 @@ public class TimeUtils {
     }
 
     public static MonthDay getMonthDay(int day, int month){
+        System.out.println("day: " + day + " month" + month);
         String stringDay = "" + day;
         String stringMonth = "" + month;
 

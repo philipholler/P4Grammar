@@ -6,11 +6,12 @@ import utils.StringUtils;
 import utils.TimeUtils;
 import visitor.ASTBaseVisitor;
 
+import java.sql.Time;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.MonthDay;
 
-public class DateNode extends LogicalExprNode {
+public class DateNode extends TimeNode {
     LocalDate date;
     MonthDay monthDay;
     private int day = -1;
@@ -59,7 +60,7 @@ public class DateNode extends LogicalExprNode {
     }
 
     public boolean hasMonthDay(){
-        return date != null;
+        return monthDay != null;
     }
 
     public boolean hasday(){
