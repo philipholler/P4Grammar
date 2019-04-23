@@ -283,6 +283,18 @@ public class TypeCheckerVisitor extends ASTBaseVisitor<Void>{
 
     @Override
     public Void visit(EventRangeInputNode node) {
+        // Fetch device from symbol table
+        Optional<Symbol> dev = st.getSymbol(node.getDeviceID());
+
+        // Check that the device is present in the symbol table
+        if(dev.isPresent() && dev.get() instanceof FieldSymbol){
+            FieldSymbol device = (FieldSymbol) dev.get();
+        } else {
+            throw new TypeUndefinedCompileError(node.getDeviceID(), node.getLineNumber());
+        }
+
+
+        // Fetch signal from symbol table
         Optional<Symbol> sym = st.getSymbol(node.getSignalID());
 
         // Check that the signal is actually defined...
@@ -313,7 +325,11 @@ public class TypeCheckerVisitor extends ASTBaseVisitor<Void>{
                     }
                     break;
             }
+        } else {
+            // If not present, throw exception
+            throw new NoSuchSignalCompileError(node.getSignalID(), node.getLineNumber());
         }
+
         lastFunctionVisitedReturnType = node.getReturnType();
         return super.visit(node);
     }
