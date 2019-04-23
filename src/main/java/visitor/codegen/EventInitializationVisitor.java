@@ -11,11 +11,13 @@ import node.Events.WhenNodes.EventRangeInputNode;
 import node.Events.WhenNodes.EventWhenTimeNode;
 import node.Events.WhenNodes.ExceedsAndDeceedsEnum;
 import node.ProgramNode;
+import node.TimeNodes.DateNode;
 import semantics.SymbolTable;
 import visitor.ASTBaseVisitor;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.time.Month;
 
 import static codegen.ClassBuilder.GET_METHOD_PREFIX;
 
@@ -83,7 +85,7 @@ public class EventInitializationVisitor extends ASTBaseVisitor<Void> {
 
     }
 
-    private void addLocalVars(){
+    private void addLocalVars() {
         classBuilder.appendObjectDecl(MainGenerationVisitor.MAIN_CLASS_NAME, MAIN_REFERENCE_NAME);
 
         classBuilder.appendNewObjectDecl("ArrayList<" + TimeEvent.class.getSimpleName() + ">", TIME_EVENT_LIST);
@@ -151,7 +153,7 @@ public class EventInitializationVisitor extends ASTBaseVisitor<Void> {
 
         String threshold = node.getThresholdString();
         String passType;
-        if(node.getExceedsAndDeceedsEnum() == ExceedsAndDeceedsEnum.EXCEEDS)
+        if (node.getExceedsAndDeceedsEnum() == ExceedsAndDeceedsEnum.EXCEEDS)
             passType = RangeSignalEvent.EXCEEDS;
         else
             passType = RangeSignalEvent.DECEEDS;
@@ -187,19 +189,26 @@ public class EventInitializationVisitor extends ASTBaseVisitor<Void> {
         String year = UNSPECIFIED, month = UNSPECIFIED, day = UNSPECIFIED;
         String hour = UNSPECIFIED, minute = UNSPECIFIED;
 
-        if(node.getDateNode().getDate() != null){ // The event definition specifies year, month and day
-            year = String.valueOf(node.getDateNode().getDate().getYear());
-            month = String.valueOf(node.getDateNode().getDate().getMonthValue());
-            day = String.valueOf(node.getDateNode().getDate().getDayOfMonth());
-        }else if(node.getDateNode().getMonthDay() != null){ // Only month and day are specified in event
-            month = String.valueOf(node.getDateNode().getMonthDay().getMonthValue());
-            day = String.valueOf(node.getDateNode().getMonthDay().getDayOfMonth());
-        }else if(node.getDateNode().getDay() != -1){ // Only day of the month is specified in event
-            day = String.valueOf(node.getDateNode().getDay());
-        }// Otherwise all date values are unspecified
 
-        hour = String.valueOf(node.getTimeNode().getTime().getHour());
-        minute = String.valueOf(node.getTimeNode().getTime().getMinute());
+        if (node.getDateNode() != null) { // If the date node is null all date values are unspecified
+            if (node.getDateNode().getDate() != null) { // The event definition specifies year, month and day
+                year = String.valueOf(node.getDateNode().getDate().getYear());
+                month = String.valueOf(node.getDateNode().getDate().getMonthValue());
+                day = String.valueOf(node.getDateNode().getDate().getDayOfMonth());
+
+            } else if (node.getDateNode().getMonthDay() != null) { // Only month and day are specified in event
+                month = String.valueOf(node.getDateNode().getMonthDay().getMonthValue());
+                day = String.valueOf(node.getDateNode().getMonthDay().getDayOfMonth());
+
+            } else if (node.getDateNode().getDay() != -1) { // Only day of the month is specified in event
+                day = String.valueOf(node.getDateNode().getDay());
+            } // Otherwise all date values are unspecified
+        }
+
+        if (node.getTimeNode() != null) {
+            hour = String.valueOf(node.getTimeNode().getTime().getHour());
+            minute = String.valueOf(node.getTimeNode().getTime().getMinute());
+        }
 
 
         // Generate code (example) : "timeEvents.add(2019, 11, 27, 23, 59, 59, () -> main.when21d02h());"
@@ -229,17 +238,17 @@ public class EventInitializationVisitor extends ASTBaseVisitor<Void> {
     @Override
     public Void visit(EventEveryNode node) {
         String timeFrame = '"' + node.getTimeframe().name() + '"';
-        String delay = String.valueOf(node.getInteger().getVal()) ;
+        String delay = String.valueOf(node.getInteger().getVal());
         String startDate, startTime;
         String runnable = MAIN_REFERENCE_NAME + "." + new MethodSignatureVisitor().visit(node);
 
-        if(node.getDateNode() != null)
-            startDate = addLocalDateDeclaration("date_node" + node.getLineNumber(), node.getDateNode().getDate());
+        if (node.getDateNode() != null)
+            startDate = addLocalDateDeclaration("date_node" + node.getLineNumber(), node.getDateNode());
         else
             startDate = "null";
 
 
-        if(node.getTimeNode() != null)
+        if (node.getTimeNode() != null)
             startTime = addLocalTimeDeclaration("time_node" + node.getLineNumber(), node.getTimeNode().getTime());
         else
             startTime = "null";
@@ -264,19 +273,76 @@ public class EventInitializationVisitor extends ASTBaseVisitor<Void> {
     }
 
     // Delcares a LocalDate and returns the name of the declared variable
-    public String addLocalDateDeclaration(String varName, LocalDate date){
+    public String addLocalDateDeclaration(String varName, DateNode dateNode) { // todo test functionality of postponing event start date to next 'longenoughmonth'
         // Example gen "LocalDate varName = LocalDate.of("
-        classBuilder.append("LocalDate ").append(varName).appendEquals().append("LocalDate.of").startParan();
 
-        classBuilder.appendCommaSeparated(String.valueOf(date.getYear()),
-                String.valueOf(date.getMonthValue()), String.valueOf(date.getDayOfMonth()));
 
-        classBuilder.endParan().endLine();
+        if (dateNode.hasDate()) {
+            addLocalDateDeclaration(varName, dateNode.getDate());
+        } else if (dateNode.hasMonthDay()) {
+            LocalDate date =
+                    LocalDate.of(LocalDate.now().getYear(), dateNode.getMonthDay().getMonth().getValue()
+                            , dateNode.getMonthDay().getDayOfMonth());
+
+            // If the date has already been passed then start next month
+            if (LocalDate.now().compareTo(date) < 0)
+                date = date.plusYears(1L);
+
+            addLocalDateDeclaration(varName, date);
+        } else if (dateNode.hasday()) {
+            int month = LocalDate.now().getMonthValue();
+            int day = dateNode.getDay();
+
+            // If this month is not long enough to support the date in dateNode
+            // Then find the next suitable month
+            if (LocalDate.now().getMonth().maxLength() < dateNode.getDate().getDayOfMonth()) {
+                month = getLongEnoughMonth(day, LocalDate.now());
+            }
+
+            LocalDate date = // Create a nextSuitableMonth(LocalDate, int minimumDayNumber)
+                    LocalDate.of(LocalDate.now().getYear(), month, dateNode.getDay());
+
+            // If the date has already been passed then start next month
+            while (LocalDate.now().compareTo(date) < 0)
+                date = date.plusMonths(1L);
+
+            addLocalDateDeclaration(varName, date);
+        } else {
+            throw new RuntimeException("Cannot add dateNode since it doesn't contain any date info: \n"
+                    + dateNode.getTreeString(0));
+        }
+
         return varName;
     }
 
+    // Generates a LocalDate in code with attributes identical to the given LocalDate
+    private void addLocalDateDeclaration(String varName, LocalDate date) {
+        classBuilder.append("LocalDate ").append(varName).appendEquals().append("LocalDate.of").startParan();
+        classBuilder.appendCommaSeparated(String.valueOf(date.getYear()),
+                String.valueOf(date.getMonthValue()), String.valueOf(date.getDayOfMonth()));
+        classBuilder.endParan().endLine();
+    }
+
+    private int getLongEnoughMonth(int minimumDays) {
+        return getLongEnoughMonth(minimumDays, LocalDate.now());
+    }
+
+    private int getLongEnoughMonth(int minimumDays, LocalDate startingPoint) {
+        if (minimumDays > 31 || minimumDays < 0)
+            throw new RuntimeException("Attempted to find month with more than: " + minimumDays + " days");
+
+        LocalDate date = startingPoint;
+        Month month = date.getMonth();
+        while (month.maxLength() > minimumDays) {
+            date = date.plusMonths(1);
+            month = date.getMonth();
+        }
+
+        return month.getValue();
+    }
+
     // Delcares a LocalTime and returns the name of the declared variable
-    public String addLocalTimeDeclaration(String varName, LocalTime time){
+    public String addLocalTimeDeclaration(String varName, LocalTime time) {
         classBuilder.append("LocalTime ").append(varName).appendEquals().append("LocalTime.of").startParan();
 
         classBuilder.appendCommaSeparated(String.valueOf(time.getHour()),

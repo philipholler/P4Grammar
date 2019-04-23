@@ -123,7 +123,6 @@ public class MainGenerationVisitor extends ASTBaseVisitor<Void> {
         classBuilder.appendImport("java.time.LocalTime");
         classBuilder.appendImport("java.time.MonthDay");
         classBuilder.appendImport("java.time.LocalDateTime");
-
     }
 
     private void addStandardVars(){
