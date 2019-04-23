@@ -20,7 +20,8 @@ import static org.antlr.v4.runtime.CharStreams.fromFileName;
 
 public class Compiler {
 
-    public static final String SOURCE_FILE = "EventTestProgram.pvt";
+    public static final String SOURCE_FILE_DIR = "testProgramsPivot/";
+    public static final String SOURCE_FILE = SOURCE_FILE_DIR + "testProgram.pvt";
     public static final boolean COMPILER_DEBUG_MODE = true;
 
     public static void main(String[] args) {
