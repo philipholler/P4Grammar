@@ -22,8 +22,8 @@ import node.Statements.Expression.LiteralValues.LiteralValueNode;
 import node.Statements.Expression.LiteralValues.StringNode;
 import node.Statements.LogicalExpression.*;
 import node.TimeNodes.DateNode;
+import node.TimeNodes.LocalTimeNode;
 import node.TimeNodes.NowNode;
-import node.TimeNodes.TimeNode;
 import node.Statements.Wait.TimeFrame;
 import node.Statements.Wait.WaitNode;
 import node.base.Node;
@@ -380,11 +380,11 @@ public class AstBuilderVisitor extends PivotBaseVisitor<Node> {
 
         // if both time an date are present. Index 0 is time and index 1 is date.
         if(timeAndDate.size() == 2){
-            return new EventWhenTimeNode(ctx, (TimeNode) timeAndDate.get(0), (DateNode) timeAndDate.get(1), visit(ctx.block()));
+            return new EventWhenTimeNode(ctx, (LocalTimeNode) timeAndDate.get(0), (DateNode) timeAndDate.get(1), visit(ctx.block()));
         }
         // If only time is present
-        if(timeAndDate.get(0) instanceof TimeNode){
-            return new EventWhenTimeNode(ctx, (TimeNode) timeAndDate.get(0), visit(ctx.block()));
+        if(timeAndDate.get(0) instanceof LocalTimeNode){
+            return new EventWhenTimeNode(ctx, (LocalTimeNode) timeAndDate.get(0), visit(ctx.block()));
         }
         // If only date is present
         if(timeAndDate.get(0) instanceof DateNode){
@@ -413,16 +413,16 @@ public class AstBuilderVisitor extends PivotBaseVisitor<Node> {
             return new EventEveryNode(ctx,
                     new IntegerNode(ctx, ctx.INTEGER().getText()),
                     getTimeFrame(ctx.timeFrame()),
-                    (TimeNode) timeAndDate.get(0),
+                    (LocalTimeNode) timeAndDate.get(0),
                     (DateNode) timeAndDate.get(1),
                     (BlockNode) visit(ctx.block()));
         }
         // If only time is present
-        if(timeAndDate.get(0) instanceof TimeNode){
+        if(timeAndDate.get(0) instanceof LocalTimeNode){
             return new EventEveryNode(ctx,
                     new IntegerNode(ctx, ctx.INTEGER().getText()),
                     getTimeFrame(ctx.timeFrame()),
-                    (TimeNode) timeAndDate.get(0),
+                    (LocalTimeNode) timeAndDate.get(0),
                     (BlockNode) visit(ctx.block()));
         }
         // If only date is present
@@ -451,10 +451,10 @@ public class AstBuilderVisitor extends PivotBaseVisitor<Node> {
             hours = ctx.TIME().getText().substring(0,2);
             minutes = ctx.TIME().getText().substring(3,5);
 
-            timeAndDate.add(new TimeNode(ctx, Integer.parseInt(hours), Integer.parseInt(minutes)));
+            timeAndDate.add(new LocalTimeNode(ctx, Integer.parseInt(hours), Integer.parseInt(minutes)));
         }else{
             // Otherwise default time is 00:00
-            timeAndDate.add(new TimeNode(ctx, 0, 0));
+            timeAndDate.add(new LocalTimeNode(ctx, 0, 0));
         }
 
         if(ctx.DATE() != null){
@@ -466,8 +466,8 @@ public class AstBuilderVisitor extends PivotBaseVisitor<Node> {
             day = ctx.DATEnoYEAR().getText().substring(0,2);
             month = ctx.DATEnoYEAR().getText().substring(3,5);
             timeAndDate.add(new DateNode(ctx, Integer.parseInt(day), Integer.parseInt(month)));
-        }else if(ctx.DAY() != null){
-            day = ctx.DAY().getText().substring(0,2);
+        }else if(ctx.DATEnoYEARnoMonth() != null){
+            day = ctx.DATEnoYEARnoMonth().getText().substring(0,2);
             timeAndDate.add(new DateNode(ctx, Integer.parseInt(day)));
         }
 
@@ -476,7 +476,7 @@ public class AstBuilderVisitor extends PivotBaseVisitor<Node> {
 //        if(ctx.DATE() != null && ctx.TIME() != null){
 //            hours = ctx.TIME().getText().substring(0,2);
 //            minutes = ctx.TIME().getText().substring(3,5);
-//            timeAndDate.add(new TimeNode(ctx, Integer.parseInt(hours), Integer.parseInt(minutes)));
+//            timeAndDate.add(new LocalTimeNode(ctx, Integer.parseInt(hours), Integer.parseInt(minutes)));
 //
 //            day = ctx.DATE().getText().substring(0,2);
 //            month = ctx.DATE().getText().substring(3,5);
@@ -490,7 +490,7 @@ public class AstBuilderVisitor extends PivotBaseVisitor<Node> {
 //        if (ctx.DATEnoYEAR() != null && ctx.TIME() != null){
 //            hours = ctx.TIME().getText().substring(0,2);
 //            minutes = ctx.TIME().getText().substring(3,5);
-//            timeAndDate.add(new TimeNode(ctx, Integer.parseInt(hours), Integer.parseInt(minutes)));
+//            timeAndDate.add(new LocalTimeNode(ctx, Integer.parseInt(hours), Integer.parseInt(minutes)));
 //
 //            day = ctx.DATEnoYEAR().getText().substring(0,2);
 //            month = ctx.DATEnoYEAR().getText().substring(3,5);
@@ -503,7 +503,7 @@ public class AstBuilderVisitor extends PivotBaseVisitor<Node> {
 //        if(ctx.TIME() != null){
 //            hours = ctx.TIME().getText().substring(0,2);
 //            minutes = ctx.TIME().getText().substring(3,5);
-//            timeAndDate.add(new TimeNode(ctx, Integer.parseInt(hours), Integer.parseInt(minutes)));
+//            timeAndDate.add(new LocalTimeNode(ctx, Integer.parseInt(hours), Integer.parseInt(minutes)));
 //
 //            return timeAndDate;
 //        }
@@ -715,13 +715,13 @@ public class AstBuilderVisitor extends PivotBaseVisitor<Node> {
         updateLineNumber(ctx);
         java.lang.String hours = ctx.TIME().getText().substring(0,2);
         java.lang.String minutes = ctx.TIME().getText().substring(3,5);
-        return new TimeNode(ctx, Integer.parseInt(hours),Integer.parseInt(minutes));
+        return new LocalTimeNode(ctx, Integer.parseInt(hours),Integer.parseInt(minutes));
     }
 
     @Override
     public Node visitComOperandDate(PivotParser.ComOperandDateContext ctx) {
         updateLineNumber(ctx);
-        java.lang.String day, month, year;
+        String day, month, year;
 
         // If the date has year also for one time events.
         if(ctx.DATE() != null){
@@ -735,7 +735,13 @@ public class AstBuilderVisitor extends PivotBaseVisitor<Node> {
             day = ctx.DATEnoYEAR().getText().substring(0,2);
             month = ctx.DATEnoYEAR().getText().substring(3,5);
             return new DateNode(ctx, Integer.parseInt(day), Integer.parseInt(month));
-        } else {
+        }
+        // If the event is a specific day a month. For example if(now < 03d) do something.
+        else if (ctx.DATEnoYEARnoMonth() != null){
+            day = ctx.DATEnoYEARnoMonth().getText().substring(0,2);
+            return new DateNode(ctx, Integer.parseInt(day));
+        }
+        else {
             throw new CompileErrorException("Error in visitComOperandDate. Could not identify date or date without year",
                     getCurrentLineNumber());
         }

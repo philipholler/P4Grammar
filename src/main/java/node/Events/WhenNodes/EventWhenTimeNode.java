@@ -3,21 +3,18 @@ package node.Events.WhenNodes;
 import node.BlockNode;
 import node.Events.EventNode;
 import node.TimeNodes.DateNode;
-import node.TimeNodes.TimeNode;
+import node.TimeNodes.LocalTimeNode;
 import node.base.Node;
 import org.antlr.v4.runtime.ParserRuleContext;
-import utils.StringUtils;
 import visitor.ASTBaseVisitor;
-
-import java.time.MonthDay;
 
 public class EventWhenTimeNode extends EventNode {
 
-    public EventWhenTimeNode(ParserRuleContext ctx, TimeNode time, DateNode date, Node block) {
+    public EventWhenTimeNode(ParserRuleContext ctx, LocalTimeNode time, DateNode date, Node block) {
         super(ctx, time, date, block);
     }
 
-    public EventWhenTimeNode(ParserRuleContext ctx, TimeNode time, Node block) {
+    public EventWhenTimeNode(ParserRuleContext ctx, LocalTimeNode time, Node block) {
         super(ctx, time, block);
     }
 
@@ -34,10 +31,10 @@ public class EventWhenTimeNode extends EventNode {
     return astBaseVisitor.visit(this);
 }
 
-    public TimeNode getTimeNode(){
+    public LocalTimeNode getTimeNode(){
         for (Node node: super.getChildren()) {
-            if(node instanceof TimeNode){
-                return (TimeNode) node;
+            if(node instanceof LocalTimeNode){
+                return (LocalTimeNode) node;
             }
         }
         return null;

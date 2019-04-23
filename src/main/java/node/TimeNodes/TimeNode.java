@@ -1,39 +1,23 @@
 package node.TimeNodes;
 
 import node.Statements.LogicalExpression.LogicalExprNode;
+import node.base.Node;
 import org.antlr.v4.runtime.ParserRuleContext;
-import utils.StringUtils;
-import utils.TimeUtils;
-import visitor.ASTBaseVisitor;
 
-import java.time.LocalTime;
+import java.util.ArrayList;
 
-public class TimeNode extends LogicalExprNode {
-    LocalTime time;
+public abstract class TimeNode extends LogicalExprNode {
 
-    public TimeNode(ParserRuleContext ctx, int hours, int minutes) {
-        super(ctx);
-        this.time = TimeUtils.getTime(hours, minutes);
+    public TimeNode(ParserRuleContext context, ArrayList<Node> children) {
+        super(context, children);
+    }
+
+    public TimeNode(ParserRuleContext context, Node... children) {
+        super(context, children);
     }
 
     @Override
     public String getTreeString(int indentation) {
-        return StringUtils.getIndentedString(indentation) +
-                this.toString() + "\n";
+        return null;
     }
-
-    public LocalTime getTime() {
-        return time;
-    }
-
-    @Override
-    public String toString() {
-        return "TimeNode(" +
-                "time=" + time +
-                ')';
-    }
-
-    public <T> T accept(ASTBaseVisitor<? extends T> astBaseVisitor) {
-    return astBaseVisitor.visit(this);
-}
 }

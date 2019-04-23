@@ -1,14 +1,12 @@
 package node.Events;
 
 import node.BlockNode;
-import node.Statements.Expression.ExpressionNode;
 import node.Statements.Expression.LiteralValues.IntegerNode;
 import node.Statements.Wait.TimeFrame;
 import node.TimeNodes.DateNode;
-import node.TimeNodes.TimeNode;
+import node.TimeNodes.LocalTimeNode;
 import node.base.Node;
 import org.antlr.v4.runtime.ParserRuleContext;
-import utils.StringUtils;
 import visitor.ASTBaseVisitor;
 
 public class EventEveryNode extends EventNode {
@@ -16,8 +14,8 @@ public class EventEveryNode extends EventNode {
     private IntegerNode integer;
     private BlockNode blocK;
 
-    public EventEveryNode(ParserRuleContext ctx, IntegerNode integerNode, TimeFrame timeframe, TimeNode timeNode, DateNode dateNode, BlockNode block) {
-        super(ctx, integerNode, timeNode, dateNode, block);
+    public EventEveryNode(ParserRuleContext ctx, IntegerNode integerNode, TimeFrame timeframe, LocalTimeNode localTimeNode, DateNode dateNode, BlockNode block) {
+        super(ctx, integerNode, localTimeNode, dateNode, block);
         this.timeframe = timeframe;
         this.blocK = block;
         this.integer = integerNode;
@@ -29,8 +27,8 @@ public class EventEveryNode extends EventNode {
         this.integer = integerNode;
     }
 
-    public EventEveryNode(ParserRuleContext ctx, IntegerNode integerNode, TimeFrame timeframe, TimeNode timeNode, BlockNode block) {
-        super(ctx, integerNode, timeNode, block);
+    public EventEveryNode(ParserRuleContext ctx, IntegerNode integerNode, TimeFrame timeframe, LocalTimeNode localTimeNode, BlockNode block) {
+        super(ctx, integerNode, localTimeNode, block);
         this.timeframe = timeframe;
         this.integer = integerNode;
     }
@@ -60,10 +58,10 @@ public class EventEveryNode extends EventNode {
     return astBaseVisitor.visit(this);
 }
 
-    public TimeNode getTimeNode(){
+    public LocalTimeNode getTimeNode(){
         for (Node node: super.getChildren()) {
-            if(node instanceof TimeNode){
-                return (TimeNode) node;
+            if(node instanceof LocalTimeNode){
+                return (LocalTimeNode) node;
             }
         }
         return null;

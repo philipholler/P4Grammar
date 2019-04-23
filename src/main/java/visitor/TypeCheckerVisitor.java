@@ -9,22 +9,19 @@ import node.Events.WhenNodes.EventWhenTimeNode;
 import node.Function.FunctionNode;
 import node.ProgramNode;
 import node.Statements.AssignmentNode;
-import node.Statements.Expression.AddExprNode;
 import node.Statements.Expression.ExpressionNode;
 import node.Statements.Expression.FunctionCall.FuncCallNode;
-import node.Statements.Expression.FunctionCall.GetFuncNode;
 import node.Statements.Expression.FunctionCall.SetFuncNode;
 import node.Statements.Expression.IDNode;
-import node.Statements.Expression.LiteralValues.LiteralValueNode;
 import node.Statements.Expression.MultiExprNode;
 import node.Statements.LogicalExpression.ComparisonExprNode;
 import node.Statements.ReturnNode;
 import node.Statements.Wait.WaitNode;
 import node.TimeNodes.DateNode;
+import node.TimeNodes.LocalTimeNode;
 import node.TimeNodes.NowNode;
 import node.TimeNodes.TimeNode;
 import node.VarDeclNode;
-import node.base.Node;
 import semantics.*;
 
 import java.util.Optional;
@@ -188,9 +185,10 @@ public class TypeCheckerVisitor extends ASTBaseVisitor<Void>{
             }
             return super.visit(node);
         }
-        // If the left node is a Timenode (nownode, timenode or datenode) and the right child is not.
-        if((node.getLeftChild() instanceof NowNode || node.getLeftChild() instanceof TimeNode || node.getLeftChild() instanceof DateNode) &&
-            !(node.getRightChild() instanceof NowNode || node.getRightChild() instanceof TimeNode || node.getRightChild() instanceof DateNode)){
+
+
+        // Cannot compare to TimeNodes. For example 14:00 < 10d05m2019y
+        if(node.getLeftChild() instanceof TimeNode && node.getRightChild() instanceof TimeNode){
             throw new DifferentTypesComparisonException("Cannot compare type '" +
                     node.getLeftChild().getClass().getSimpleName().replace("Node", "") +
                     "' with type '" +
@@ -198,9 +196,20 @@ public class TypeCheckerVisitor extends ASTBaseVisitor<Void>{
                     "'",
                     node.getLineNumber());
         }
-        // If the left child is not a time node, but the right child is.
-        if(!(node.getLeftChild() instanceof NowNode || node.getLeftChild() instanceof TimeNode || node.getLeftChild() instanceof DateNode) &&
-                (node.getRightChild() instanceof NowNode || node.getRightChild() instanceof TimeNode || node.getRightChild() instanceof DateNode)){
+
+        // If the left node is a NowNode and the right child is a TimeNode, throw.
+        if((node.getLeftChild() instanceof NowNode) &&
+            !(node.getRightChild() instanceof TimeNode)){
+            throw new DifferentTypesComparisonException("Cannot compare type '" +
+                    node.getLeftChild().getClass().getSimpleName().replace("Node", "") +
+                    "' with type '" +
+                    node.getRightChild().getClass().getSimpleName().replace("Node", "") +
+                    "'",
+                    node.getLineNumber());
+        }
+        // If the right child is a NowNode, but the left child is not a TimeNode.
+        if(node.getRightChild() instanceof NowNode &&
+                !(node.getLeftChild() instanceof TimeNode)){
             throw new DifferentTypesComparisonException("Cannot compare type '" +
                     node.getLeftChild().getClass().getSimpleName().replace("Node", "") +
                     "' with type '" +

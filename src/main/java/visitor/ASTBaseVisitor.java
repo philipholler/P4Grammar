@@ -9,7 +9,6 @@ import node.Function.FunctionNode;
 import node.Function.InputParamNode;
 import node.Statements.*;
 import node.Statements.Expression.AddExprNode;
-import node.Statements.Expression.ExpressionNode;
 import node.Statements.Expression.FunctionCall.FuncCallNode;
 import node.Statements.Expression.FunctionCall.GetFuncNode;
 import node.Statements.Expression.FunctionCall.SetFuncNode;
@@ -23,8 +22,8 @@ import node.Statements.LogicalExpression.LogicalAndExprNode;
 import node.Statements.LogicalExpression.LogicalOrExprNode;
 import node.Statements.Wait.WaitNode;
 import node.TimeNodes.DateNode;
+import node.TimeNodes.LocalTimeNode;
 import node.TimeNodes.NowNode;
-import node.TimeNodes.TimeNode;
 import node.base.Node;
 import node.define_nodes.Device.DefDeviceNode;
 import node.define_nodes.Signal.DefSignalNode;
@@ -194,7 +193,7 @@ public abstract class ASTBaseVisitor<T> {
         return visitChildren(node);
     }
 
-    public T visit(TimeNode node) {
+    public T visit(LocalTimeNode node) {
         return visitChildren(node);
     }
 

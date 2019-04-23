@@ -1,6 +1,6 @@
 // Define signals
 define Signal Toggle: On = 1, Off = 0, yo = 3;
-define Signal Celsius:  1.0..60.0;
+define Signal Celsius:  1..60;
 define Signal Open:  0.0..100.0;
 define Signal Percentage: 0.0..100.0;
 define Signal PercentInt: 0..100;
@@ -23,31 +23,47 @@ init(){
 }
 
 when frontDoorLight Toggle : On{
-    print "hey";
-    if(get frontDoorLight2 Toggle == 0){
-        printFunction("light two  off");
-    }else{
-        printFunction("light two  on");
-    }
+    printFunction("bulb1 has been turned on");
 }
 
 when frontDoorLight2 Toggle : Off{
     printFunction("bulb2 has been turned off");
 }
 
-when frontDoorLight2 Toggle : On{
-    printFunction("bulb2 has been turned on");
-}
-
-when 21:39 18d04m{
+when 09:05 22d04m{
     printFunction("MAGICAL");
 }
 
-every 25 seconds starting 21:45 18d04m2019y{
-    printFunction("25 Seconds passed");
+every 10 seconds starting 10:45 19d04m2019y{
+    printFunction("10 Seconds passed");
+
+    if(now < 24d04m2019y){
+        printFunction("Virker1");
+    }
+
+    if(now < 24d04m){
+        printFunction("Virker2");
+    }
+
+    if(now > 21d){
+        printFunction("Virker3");
+    }
+
+    if(now < 11:10){
+        printFunction("Virker4");
+    }
+
+    if(11:10 < now && now == 23d && 23d04m == now && 23d04m2019y == now){
+        print "virker5";
+    }
+
+    while(now <= 11:35){
+        print "while koerer";
+        wait 1 seconds;
+    }
 }
 
-when kitchenTherm Celsius: exceeds 31.0{
+when kitchenTherm Celsius: exceeds 31{
     printFunction("Its too hot in the kitchen");
 }
 

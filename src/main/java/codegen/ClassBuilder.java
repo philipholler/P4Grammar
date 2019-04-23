@@ -1,7 +1,17 @@
 package codegen;
 
+import default_classes.Utils;
 import exceptions.compilerside.CodeGenerationError;
 import exceptions.compilerside.MismatchedBracketException;
+import jdk.jshell.execution.Util;
+import node.Statements.LogicalExpression.ComparisonOperator;
+import node.TimeNodes.DateNode;
+import node.TimeNodes.LocalTimeNode;
+import node.TimeNodes.NowNode;
+import node.TimeNodes.TimeNode;
+import utils.TimeUtils;
+
+import java.time.*;
 import java.util.Stack;
 
 public class ClassBuilder {
@@ -226,6 +236,39 @@ public class ClassBuilder {
     public ClassBuilder appendReturnStatement(String val){
         codeBuilder.append("return ").append(val).append(LINE_END);
         return this;
+    }
+
+    public ClassBuilder appendTimeComparisonText(TimeNode timeNode, ComparisonOperator op, boolean flipOperator){
+        String s = null;
+
+        if(timeNode instanceof DateNode){
+            DateNode n = (DateNode)timeNode;
+            if(n.hasDate()){
+                LocalDate t = n.getDate();
+                s = "LocalDate.of(" + t.getYear() + ", " + t.getMonthValue() + ", " + t.getDayOfMonth() + ")";
+            } else if(n.hasMonthDay()){
+                MonthDay m = n.getMonthDay();
+                s = "MonthDay.of(" + m.getMonthValue() + ", " + m.getDayOfMonth() + ")";
+            } else if (n.hasday()){
+                s = "" + n.getDay();
+            }
+        } else if(timeNode instanceof LocalTimeNode){
+            LocalTime t = ((LocalTimeNode) timeNode).getTime();
+            s = "LocalTime.of(" + t.getHour() + ", " + t.getMinute() + ")";
+        }
+
+
+        codeBuilder.append("Utils.isComparisonTrue(LocalDateTime.now(), ComparisonOperator." + op.name() + ", " + s + ", "+ flipOperator + ")");
+        return this;
+    }
+
+    public ClassBuilder appendTimeComparison(NowNode nowNode, TimeNode timeNode, ComparisonOperator op){
+        return appendTimeComparisonText(timeNode, op, false);
+    }
+
+
+    public ClassBuilder appendTimeComparison(TimeNode timeNode, NowNode nowNode, ComparisonOperator op){
+        return appendTimeComparisonText(timeNode, op, true);
     }
 
     // Asserts that a statement is not placed outside a method body

@@ -4,20 +4,23 @@ import antlr.PivotLexer;
 import antlr.PivotParser;
 import node.ProgramNode;
 import node.base.Node;
-import visitor.*;
-import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.CharStream;
+import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.ParseTree;
+import visitor.*;
 import visitor.codegen.ClassGenerationVisitor;
 import visitor.codegen.EventInitializationVisitor;
 import visitor.codegen.MainGenerationVisitor;
+
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.PrintWriter;
 
 import static org.antlr.v4.runtime.CharStreams.fromFileName;
 
 public class Compiler {
 
-    public static final String SOURCE_FILE = "EventTestProgram.pvt";
+    public static final String SOURCE_FILE = "ByteCodeTestProgram.pvt";
     public static final boolean COMPILER_DEBUG_MODE = true;
 
     public static void main(String[] args) {
@@ -35,10 +38,8 @@ public class Compiler {
             // Visit with AstBuilderVisitor to create ast
             AstBuilderVisitor astVisitor = new AstBuilderVisitor();
             Node ast = astVisitor.visit(tree);
-
             // Print ast. Use the Node.getTreeString() to pretty-print the AST.
             System.out.println(ast.getTreeString(0));
-
             // Decorate AST using all visitors
             decorateAST(ast);
 
@@ -58,7 +59,6 @@ public class Compiler {
             mainGenVisitor.visit(ast);
             EventInitializationVisitor eventInitGen = new EventInitializationVisitor();
             eventInitGen.visit(ast);
-
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -77,5 +77,16 @@ public class Compiler {
 
     private static void optimiseExpr(Node ast){
         ast.accept(new OptimiseExprVisitor());
+    }
+    private static void generateByteCode(Node ast){
+        JasminVisitor jv = new JasminVisitor();
+        //System.out.println(jv.visit(ast));
+        try {
+            PrintWriter pw = new PrintWriter("PivotClass.j");
+            pw.write(jv.visit(ast).toString());
+            pw.flush();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
     }
 }

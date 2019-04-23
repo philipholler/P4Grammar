@@ -3,14 +3,18 @@ package node.TimeNodes;
 import node.Statements.LogicalExpression.LogicalExprNode;
 import org.antlr.v4.runtime.ParserRuleContext;
 import utils.StringUtils;
+import utils.TimeUtils;
 import visitor.ASTBaseVisitor;
 
-import java.time.LocalDateTime;
+import java.sql.Time;
+import java.time.LocalTime;
 
-public class NowNode extends LogicalExprNode {
+public class LocalTimeNode extends TimeNode {
+    LocalTime time;
 
-    public NowNode(ParserRuleContext context) {
-        super(context);
+    public LocalTimeNode(ParserRuleContext ctx, int hours, int minutes) {
+        super(ctx);
+        this.time = TimeUtils.getTime(hours, minutes);
     }
 
     @Override
@@ -19,16 +23,18 @@ public class NowNode extends LogicalExprNode {
                 this.toString() + "\n";
     }
 
+    public LocalTime getTime() {
+        return time;
+    }
+
     @Override
     public String toString() {
-        return "NowNode()";
+        return "LocalTimeNode(" +
+                "time=" + time +
+                ')';
     }
 
     public <T> T accept(ASTBaseVisitor<? extends T> astBaseVisitor) {
     return astBaseVisitor.visit(this);
 }
-
-    public LocalDateTime getNow(){
-        return LocalDateTime.now();
-    }
 }
