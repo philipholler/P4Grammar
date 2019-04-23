@@ -1,0 +1,14 @@
+init(){
+    int a = 10;
+    if(1 == 2){
+        print(a);
+    }else{
+        print(2);
+    }
+    int c = a+10;
+    if(c != a){
+        print c;
+    }else{
+        print a;
+    }
+}
