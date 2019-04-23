@@ -1,0 +1,58 @@
+// Define signals
+define Signal toggle: on = 1, off = 0;
+define Signal openWindow: 0..100;
+define Signal celsius: -50..70;
+
+// Define devices
+define Device Bulb input: toggle;
+define Device Window input: openWindow;
+define Device LawnMower input: toggle;
+//define sensor devices
+define Device MovementSensor output: toggle;
+define Device Thermometer output: celsius;
+
+// Variable declarations of every device in the house
+Bulb frontDoorLightOne = "129.67.198.1:12565";
+Bulb frontDoorLightTwo = "129.67.198.3:12565";
+Window bedRoomWindow = "129.67.198.65:12565";
+LawnMower GardenMower = "129.67.198.62:12565";
+
+Thermometer mainThermometer = "129.67.198.65:12565";
+MovementSensor frontDoorSensor = "129.67.198.65:12565";
+
+init(){
+    // Code for initialisation. Runs before events.
+}
+
+// Turn on the light if someone is at the door in the evening.
+when frontDoorSensor toggle: on{
+    if(now > 17:00 && now < 23:00){
+        set frontDoorLightOne toggle: on;
+        set frontDoorLightTwo toggle: on;
+    }
+
+    wait 60 seconds;
+
+    set frontDoorLightOne toggle: off;
+    set frontDoorLightTwo toggle: off;
+}
+
+when 14:00{
+    if(get mainThermometer celsius > 25 ){
+        // Open window completely
+        setBedroomWindowsOpen(100);
+    }
+}
+
+// Function
+void setBedroomWindowsOpen(int percentage){
+    set bedRoomWindow openWindow: percentage;
+}
+
+// Turn on lawn mower every 2 weeks at 11:00 every summer.
+every 2 weeks starting 11:00 01d04m2019y{
+    if(01d04m < now && now < 30d09m){
+        set GardenMower toggle: on;
+    }
+}
+

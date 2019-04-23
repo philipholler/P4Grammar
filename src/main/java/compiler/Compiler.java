@@ -20,7 +20,8 @@ import static org.antlr.v4.runtime.CharStreams.fromFileName;
 
 public class Compiler {
 
-    public static final String SOURCE_FILE = "testProgram";
+    public static final String SOURCE_FILE_DIR = "testProgramsPivot/";
+    public static final String SOURCE_FILE = SOURCE_FILE_DIR + "testProgram.pvt";
     public static final boolean COMPILER_DEBUG_MODE = true;
 
     public static void main(String[] args) {
@@ -38,8 +39,10 @@ public class Compiler {
             // Visit with AstBuilderVisitor to create ast
             AstBuilderVisitor astVisitor = new AstBuilderVisitor();
             Node ast = astVisitor.visit(tree);
+
             // Print ast. Use the Node.getTreeString() to pretty-print the AST.
             System.out.println(ast.getTreeString(0));
+
             // Decorate AST using all visitors
             decorateAST(ast);
 
@@ -52,17 +55,21 @@ public class Compiler {
             // Print new AST
             System.out.println(ast.getTreeString(0));
 
-            // Generate java classes corresponding to the (device and signal) type definitions// Todo move to seperate function
-            ClassGenerationVisitor classGenVisitor = new ClassGenerationVisitor();
-            classGenVisitor.visit(ast);
-            MainGenerationVisitor mainGenVisitor = new MainGenerationVisitor();
-            mainGenVisitor.visit(ast);
-            EventInitializationVisitor eventInitGen = new EventInitializationVisitor();
-            eventInitGen.visit(ast);
+            // Generate code
+            generateJavaCode(ast);
+
         } catch (IOException e) {
             e.printStackTrace();
         }
 
+    }
+
+    private static void generateJavaCode(Node ast){
+        ast.accept(new ClassGenerationVisitor());
+
+        ast.accept(new MainGenerationVisitor());
+
+        ast.accept(new EventInitializationVisitor());
     }
 
     private static void decorateAST(Node ast){
@@ -78,6 +85,8 @@ public class Compiler {
     private static void optimiseExpr(Node ast){
         ast.accept(new OptimiseExprVisitor());
     }
+
+
     private static void generateByteCode(Node ast){
         JasminVisitor jv = new JasminVisitor();
         //System.out.println(jv.visit(ast));
