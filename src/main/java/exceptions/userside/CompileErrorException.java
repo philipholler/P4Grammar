@@ -17,7 +17,7 @@ public class CompileErrorException extends RuntimeException {
 
     public CompileErrorException(String msg, int lineNumber) {
         super();
-        this.msg = msg + "\n" + "at " + getLineReference(Compiler.SOURCE_FILE, lineNumber);
+        this.msg = msg + "\n" + "at " + getLineReference( Compiler.SOURCE_FILE, lineNumber);
         this.lineNumber = lineNumber;
     }
 

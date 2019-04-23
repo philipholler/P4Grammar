@@ -2,7 +2,10 @@ package visitor;
 
 import exceptions.userside.*;
 import node.*;
+import node.Events.EventEveryNode;
 import node.Events.WhenNodes.EventInputNode;
+import node.Events.WhenNodes.EventRangeInputNode;
+import node.Events.WhenNodes.EventWhenTimeNode;
 import node.Function.FunctionNode;
 import node.Function.InputParamNode;
 import node.Statements.AssignmentNode;
@@ -161,8 +164,17 @@ public class DeclarationVisitor extends ASTBaseVisitor<Void> {
         return null;
     }
 
+    // when frontDoorSensor Toggle: On
     @Override
     public Void visit(EventInputNode node) {
+        // fetch the device
+        Optional<Symbol> dev = st.getSymbol(node.getDeviceID());
+        //Check that it is present and of the type Field symbol
+        if(!(dev.isPresent() && dev.get() instanceof FieldSymbol)){
+            throw new VariableNotInitialisedException("Variable '" + node.getDeviceID() + "' not declared", node.getLineNumber());
+        }
+
+        // check that the literal is declared.
         if(!st.isSignalLiteral(node.getEnumID())){
             throw new SignalLiteralNotDeclaredException("Signal literal '" +
                     node.getEnumID() +
@@ -170,6 +182,26 @@ public class DeclarationVisitor extends ASTBaseVisitor<Void> {
                     node.getLineNumber()
             );
         }
+        return super.visit(node);
+    }
+
+    // when mainThermometer Celsius: exceeds 22
+    @Override
+    public Void visit(EventRangeInputNode node) {
+        // fetch the device
+        Optional<Symbol> dev = st.getSymbol(node.getDeviceID());
+        //Check that it is present and of the type Field symbol
+        if(!(dev.isPresent() && dev.get() instanceof FieldSymbol)){
+            throw new VariableNotInitialisedException("Variable '" + node.getDeviceID() + "' not declared", node.getLineNumber());
+        }
+
+        // fetch the signal
+        Optional<Symbol> sig = st.getSymbol(node.getSignalID());
+        // Check that the signal is declared
+        if(!(sig.isPresent() && sig.get() instanceof SignalTypeSymbol)){
+            throw new NoSuchSignalCompileError(node.getSignalID(), node.getLineNumber());
+        }
+
         return super.visit(node);
     }
 }

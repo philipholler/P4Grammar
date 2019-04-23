@@ -275,24 +275,57 @@ public class TypeCheckerVisitor extends ASTBaseVisitor<Void>{
         return super.visit(node);
     }
 
+    // when frontDoorSensor Toggle: On
     @Override
     public Void visit(EventInputNode node) {
+        // Fetch the device from the symbol table
+        Optional<Symbol> dev = st.getSymbol(node.getDeviceID());
+        if(dev.isPresent() && dev.get() instanceof FieldSymbol){
+            // get the type of the device
+            Optional<Symbol> devType = st.getSymbol(((FieldSymbol) dev.get()).getTypeID());
+            if(devType.isPresent() && devType.get() instanceof DeviceTypeSymbol){
+                // Check that the signal is contained within the device type as output
+                if(!(((DeviceTypeSymbol) devType.get()).hasOutputSignal(node.getSignalID()))){
+                    throw new DeviceHasNoSuchSignalException("Device '" +
+                        node.getDeviceID() +
+                        "' has no such signal '" +
+                        node.getSignalID() + "'",
+                        node.getLineNumber());
+                }
+            }
+        }
+
+
         lastFunctionVisitedReturnType = node.getReturnType();
         return super.visit(node);
     }
 
     @Override
     public Void visit(EventRangeInputNode node) {
-        // Fetch device from symbol table
+        // Check that the device is present and also has the signal in it's type
         Optional<Symbol> dev = st.getSymbol(node.getDeviceID());
-
-        // Check that the device is present in the symbol table
         if(dev.isPresent() && dev.get() instanceof FieldSymbol){
-            FieldSymbol device = (FieldSymbol) dev.get();
+            // Get the type of the device
+            Optional<Symbol> devType = st.getSymbol(((FieldSymbol) dev.get()).getTypeID());
+            if(devType.isPresent() && devType.get() instanceof DeviceTypeSymbol){
+                // Check that the device also has the signal in use
+                if(!(((DeviceTypeSymbol) devType.get()).hasOutputSignal(node.getSignalID()))){
+                    throw new CompileErrorException("Device '" +
+                            node.getDeviceID() +
+                            "' of type '" +
+                            devType.get().getID() +
+                            "' does not have the signal '" +
+                            node.getSignalID() +
+                            "'",
+                            node.getLineNumber()
+                            );
+                }
+            } else {
+                throw new TypeUndefinedCompileError(((FieldSymbol) dev.get()).getTypeID(), node.getLineNumber());
+            }
         } else {
             throw new TypeUndefinedCompileError(node.getDeviceID(), node.getLineNumber());
         }
-
 
         // Fetch signal from symbol table
         Optional<Symbol> sym = st.getSymbol(node.getSignalID());

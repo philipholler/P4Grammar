@@ -13,7 +13,6 @@ import java.util.ArrayList;
 import java.util.Optional;
 
 public class SignalTypeSymbol extends Symbol{
-
     /**
      * A custom signal definition can contain only one of these 3 kinds of values:
      *      Integer range   (ie. 0.5 to 6.3)

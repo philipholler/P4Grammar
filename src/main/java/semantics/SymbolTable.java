@@ -56,6 +56,16 @@ public class SymbolTable {
             enterSymbol(s);
     }
 
+    public boolean deviceHasSignal(String deviceID, String signalID){
+        // Fetch signal
+        Optional<Symbol> sig = getSymbol(signalID);
+
+        //
+        Optional<Symbol> dev = getSymbol(deviceID);
+
+        return true;
+    }
+
     /** Adds the given symbol to the currently opened scope */
     public void enterSymbol(Symbol s){
         if(s instanceof FunctionSymbol) enterFunctionSymbol((FunctionSymbol) s);
