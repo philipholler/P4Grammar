@@ -3,103 +3,94 @@ package default_classes;
 import java.time.*;
 
 public class Utils {
-    /**
-     *
-     * @return 1 if now is bigger than monthday, 0 if they are equal and -1 if monthDay is bigger.
-     */
-    public static int compareMonthToNow(MonthDay monthDay){
-        int month = monthDay.getMonth().getValue();
-        int day = monthDay.getDayOfMonth();
+    public static final int UNDEFINED = -1;
 
-        // If they are identical
-        if(month == MonthDay.now().getMonthValue() && day == MonthDay.now().getDayOfMonth()){
-            return 0;
+    public static boolean isComparisonTrue(LocalDateTime now, ComparisonOperator operator, Object time, boolean shouldBeFlipped){
+        int result = nowComparedTo(time, now);
+
+        if(shouldBeFlipped){
+            operator = flipOperator(operator);
         }
 
-
-        // If localDate month smaller than now
-        if(month < MonthDay.now().getMonthValue()){
-            return 1;
+        switch (operator){
+            case GREATERTHAN:
+                return result > 0;
+            case GREANTHANEQUAL:
+                return result >= 0;
+            case SMALLERTHAN:
+                return result < 0;
+            case SMALLERTHANEQUAL:
+                return result <= 0;
+            case EQUALTO:
+                return result == 0;
+            case NOTEQUAL:
+                return result != 0;
         }
 
-        // If localDate month is the same, but the day is smaller
-        if(month == MonthDay.now().getMonthValue() && day < MonthDay.now().getDayOfMonth()){
-            return 1;
-        }
-
-        // Else monthDay must be bigger
-        return -1;
+        return true;
     }
 
-
-    /**
-     * @return 1 if now is bigger than localDateTime, 0 if equal and -1 if localDateTime is bigger.
-     */
-    public static int compareDateToNow(LocalDateTime localDateTime){
-        int day = localDateTime.getDayOfMonth();
-        int month = localDateTime.getMonthValue();
-        int year = localDateTime.getYear();
-
-        // If both day, month and year are the same. They are considered equal
-        if(year == LocalDateTime.now().getYear() && month == LocalDateTime.now().getMonthValue() && day == LocalDateTime.now().getDayOfMonth()){
-            return 0;
+    private static ComparisonOperator flipOperator(ComparisonOperator op){
+        switch (op) {
+            case GREATERTHAN:
+                return ComparisonOperator.SMALLERTHAN;
+            case GREANTHANEQUAL:
+                return ComparisonOperator.SMALLERTHANEQUAL;
+            case SMALLERTHAN:
+                return ComparisonOperator.GREATERTHAN;
+            case SMALLERTHANEQUAL:
+                return ComparisonOperator.GREANTHANEQUAL;
+            case EQUALTO:
+                return ComparisonOperator.EQUALTO;
+            case NOTEQUAL:
+                return ComparisonOperator.NOTEQUAL;
         }
 
-        // If now has a higher year, it is obviously bigger
-        if(year < LocalDateTime.now().getYear()){
-            return 1;
-        }
-
-        // If year is the same, but now has a bigger month
-        if(year == LocalDateTime.now().getYear() && month < LocalDateTime.now().getMonthValue()){
-            return 1;
-        }
-
-        // If year and month are the same, but day of localDateTime is smaller than now's
-        if(year == LocalDateTime.now().getYear() && month == LocalDateTime.now().getMonthValue() && day < LocalDateTime.now().getDayOfMonth()){
-            return 1;
-        }
-
-        return -1;
+        throw new RuntimeException("Could not flip operater '" + op.opString + "'");
     }
 
-    /**
-     * Compares a LocalTime to now.
-     * @return If the localTime is smaller, it returns 1. If they are equal, it returns 0, else -1.
-     */
-    public static int compareTimeToNow(LocalTime localTime){
-        int hour = localTime.getHour();
-        int minute = localTime.getMinute();
+    private static int nowComparedTo(Object o, LocalDateTime now){
+        // For 22d04m2019y
+        if(o instanceof LocalDate){
+            LocalDate t = (LocalDate) o;
+            return nowComparedToDate(UNDEFINED, UNDEFINED, t.getDayOfMonth(), t.getMonthValue(), t.getYear(), now);
+        }
+        // For 22d04m
+        if(o instanceof MonthDay){
+            MonthDay m = (MonthDay) o;
+            return nowComparedToDate(UNDEFINED, UNDEFINED, m.getDayOfMonth(), m.getMonthValue(), UNDEFINED, now);
+        }
+        // for 22d
+        if(o instanceof Integer){
+            int i = (Integer) o;
+            return nowComparedToDate(UNDEFINED, UNDEFINED, i, UNDEFINED, UNDEFINED, now);
+        }
+        // For 14:00
+        if(o instanceof LocalTime){
+            LocalTime t = (LocalTime) o;
+            return nowComparedToDate(t.getMinute(), t.getHour(), UNDEFINED, UNDEFINED, UNDEFINED, now);
+        }
 
-        // If identical return 0;
-        if (hour == LocalTime.now().getHour() && minute == LocalTime.now().getMinute()){
-            return 0;
-        }
-        // If now's hour is bigger, or the hours are identical, but now's minutes are bigger, return 1.
-        else if(hour < LocalTime.now().getHour() || (hour == LocalTime.now().getHour() && minute < LocalTime.now().getMinute())){
-            return 1;
-        }
-        // Else localTime must be bigger. return -1
-        else {
-            return -1;
-        }
+        // Else throw exception
+        throw new RuntimeException("Could now determine object to compare time to. Tried to compare '" +
+                o.getClass().getSimpleName() +
+                "' to '" +
+                "LocalDateTime, Monthday, DayOfWeek and LocalTime'");
     }
 
-    /**
-     * @return 1 if now is bigger, 0 if identical and -1 if day is bigger than now.
-     */
-    public static int compareDayToNow(int day){
-        // If they are identical, return 0;
-        if (day == LocalDate.now().getDayOfMonth()){
-            return 0;
-        }
-        // If now's day is bigger, return 1
-        else if(day < LocalDate.now().getDayOfMonth()){
-            return 1;
-        }
-        // Else day must be bigger
-        else {
-            return -1;
-        }
+    private static int nowComparedToDate(int minutes, int hours, int day, int month, int year, LocalDateTime now){
+        LocalDateTime filledInTime = fillInMissing(minutes, hours, day, month, year, now);
+
+        return now.compareTo(filledInTime);
+    }
+
+    private static LocalDateTime fillInMissing(int minutes, int hours, int day, int month, int year, LocalDateTime now){
+        if(minutes == UNDEFINED) minutes = now.getMinute();
+        if(hours == UNDEFINED) hours = now.getHour();
+        if(day == UNDEFINED) day = now.getDayOfMonth();
+        if(month == UNDEFINED) month = now.getMonthValue();
+        if(year == UNDEFINED) year = now.getYear();
+
+        return LocalDateTime.of(year, month, day, hours, minutes, now.getSecond(), now.getNano());
     }
 }

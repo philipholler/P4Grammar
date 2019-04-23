@@ -35,39 +35,31 @@ when 09:05 22d04m{
 }
 
 every 10 seconds starting 10:45 19d04m2019y{
-    printFunction("25 Seconds passed");
+    printFunction("10 Seconds passed");
 
-    if(now < 13:10){
-        printFunction("virker2");
+    if(now < 24d04m2019y){
+        printFunction("Virker1");
     }
 
-    if(13:10 > now){
-        printFunction("Virker2 ny");
+    if(now < 24d04m){
+        printFunction("Virker2");
     }
 
-    if(23d04m2019y > now){
-        printFunction("Endnu en");
+    if(now > 21d){
+        printFunction("Virker3");
     }
 
-    if(now < 14:15){
-        printFunction("New");
+    if(now < 11:10){
+        printFunction("Virker4");
     }
 
-    if(now < 28d04m2020y){
-        printFunction("virker3");
+    if(11:10 < now && now == 23d && 23d04m == now && 23d04m2019y == now){
+        print "virker5";
     }
 
-    if(now == 22d){
-        printFunction("virker4");
-    }
-
-    while(14:45 > now){
-        printFunction("YOOO");
+    while(now <= 11:35){
+        print "while koerer";
         wait 1 seconds;
-    }
-
-    if(now > 28d04m2019y){
-        printFunction("Should not print");
     }
 }
 

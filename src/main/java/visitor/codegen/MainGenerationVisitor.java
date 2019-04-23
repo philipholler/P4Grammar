@@ -498,7 +498,7 @@ public class MainGenerationVisitor extends ASTBaseVisitor<Void> {
     @Override
     public Void visit(ComparisonExprNode node) {
         if(node.getLeftChild() instanceof NowNode && node.getRightChild() instanceof TimeNode){
-            classBuilder.appendTimeComparison((NowNode) node.getLeftChild(), (TimeNode) node.getRightChild() ,node.getOp());
+            classBuilder.appendTimeComparison((NowNode) node.getLeftChild(), (TimeNode) node.getRightChild(), node.getOp());
             return null;
         }
         if(node.getLeftChild() instanceof TimeNode && node.getRightChild() instanceof NowNode){
