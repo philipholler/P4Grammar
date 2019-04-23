@@ -87,6 +87,7 @@ public class MainGenerationVisitor extends ASTBaseVisitor<Void> {
         classBuilder = new ClassBuilder();
         eventListBuilder = new ClassBuilder();
 
+        classBuilder.appendPackage(ClassBuilder.SERVER_PACKAGE);
         addImports();
 
         classBuilder.appendClassDef(MAIN_CLASS_NAME);
@@ -118,6 +119,11 @@ public class MainGenerationVisitor extends ASTBaseVisitor<Void> {
         classBuilder.appendImportAllFrom(ClassBuilder.DEFAULT_DEVICE_PACKAGE);
         classBuilder.appendImport(ClassBuilder.ARRAYLIST_PACKAGE);
         classBuilder.appendImportAllFrom(ClassBuilder.DEFAULT_CLASSES_PACKAGE).appendNewLine();
+        classBuilder.appendImport("java.time.LocalDate");
+        classBuilder.appendImport("java.time.LocalTime");
+        classBuilder.appendImport("java.time.MonthDay");
+        classBuilder.appendImport("java.time.LocalDateTime");
+
     }
 
     private void addStandardVars(){
