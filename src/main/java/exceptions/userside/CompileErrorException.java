@@ -27,7 +27,8 @@ public class CompileErrorException extends RuntimeException {
     }
 
     protected static String getLineReference(String fileName, int lineNumber){
-        return "Pivot.("+ fileName + ":" + lineNumber + ")";
+        int i = fileName.indexOf('/');
+        return "Pivot.("+ fileName.substring(i+1) + ":" + lineNumber + ")";
     }
 
     @Override

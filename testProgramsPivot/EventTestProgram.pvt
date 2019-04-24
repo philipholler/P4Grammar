@@ -56,11 +56,6 @@ every 10 seconds starting 10:45 19d04m2019y{
     if(11:10 < now && now == 23d && 23d04m == now && 23d04m2019y == now){
         print "virker5";
     }
-
-    while(now <= 11:35){
-        print "while koerer";
-        wait 1 seconds;
-    }
 }
 
 when kitchenTherm Celsius: exceeds 31{
