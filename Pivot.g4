@@ -61,7 +61,7 @@ timeFrame: (MONTHS | WEEKS | DAYS | HOURS | MINUTES | SECONDS | MS);
 block: BLCKBEG stmts BLCKEND;
 
 // The SEMCOL after the funcCall has to be there in the stmts, since it will not be needed if the funcCall is used in a variable decl.
-stmts: (waitStmt | assignment | ifstmt | whilestmt | funcCall SEMCOL | printStmt | declVar | brk | rtn)*;
+stmts: (waitStmt | assignment | ifstmt | whilestmt | funcCall SEMCOL | printStmt | declVar | rtn)*;
 
 printStmt: PRINT expr SEMCOL;
 

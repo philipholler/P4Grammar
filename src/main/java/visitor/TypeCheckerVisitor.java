@@ -22,6 +22,7 @@ import node.TimeNodes.LocalTimeNode;
 import node.TimeNodes.NowNode;
 import node.TimeNodes.TimeNode;
 import node.VarDeclNode;
+import node.base.Node;
 import semantics.*;
 
 import java.util.Optional;
@@ -63,10 +64,18 @@ public class TypeCheckerVisitor extends ASTBaseVisitor<Void>{
                                 funcSym.getParameters().get(i).getTypeID() +
                                 "' got: '" +
                                 ((ExpressionNode) node.getArguments().get(i)).getType() +
-                                "'"
-                                , node.getLineNumber());
+                                "' at argument number '" + (i+1) + "'",
+                                node.getLineNumber());
                     }
                 }
+            } else{
+                throw new IncorrectArgumentAmountException("Incorrect amount of arguments. Expected '" +
+                        funcSym.getParameters().size() +
+                        "', got '" +
+                        node.getArguments().size() +
+                        "'",
+                        node.getLineNumber()
+                );
             }
         } else {
             // if the function is not present in the symbol table, throw exception.

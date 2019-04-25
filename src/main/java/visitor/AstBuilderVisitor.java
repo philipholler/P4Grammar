@@ -323,13 +323,16 @@ public class AstBuilderVisitor extends PivotBaseVisitor<Node> {
         updateLineNumber(ctx);
         ArrayList<InputParamNode> params = new ArrayList<>();
 
-        if(ctx.getChildCount() != 0){
-            for(ParseTree tree : ctx.params.children){
-                if(!isSeparatorSymbol(tree)){
-                    params.add((InputParamNode) visit(tree));
+        if(ctx.params.children != null){
+            if(ctx.getChildCount() != 0){
+                for(ParseTree tree : ctx.params.children){
+                    if(!isSeparatorSymbol(tree)){
+                        params.add((InputParamNode) visit(tree));
+                    }
                 }
             }
         }
+
 
         return params;
     }
@@ -653,12 +656,6 @@ public class AstBuilderVisitor extends PivotBaseVisitor<Node> {
             }
         }
         return arguments;
-    }
-
-    @Override
-    public Node visitBrk(PivotParser.BrkContext ctx) {
-        updateLineNumber(ctx);
-        return new BreakNode(ctx);
     }
 
     @Override

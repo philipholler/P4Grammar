@@ -33,8 +33,6 @@ init(){
 
     string hejhej = "hej" + "hej";
 
-    break;
-
     if(5 < 12 && 3 < 10 || (5 < 8 && 22 < (22 + 1))){
         a = 5;
     }
@@ -53,10 +51,12 @@ string setBedroomWindowsOpen(int percent, float faa, string see){
     while(get frontDoorSensor toggle != On){
         set frontDoorLight toggle: On;
     }
+
+    return see;
 }
 
 when mainThermometer celsius: exceeds 22{
-    setBedroomWindowsOpen(50); // Calling function defined further down
+    setBedroomWindowsOpen(50, 50.0, "s"); // Calling function defined further down
 }
 
 // Events

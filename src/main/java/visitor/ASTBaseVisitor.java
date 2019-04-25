@@ -168,10 +168,6 @@ public abstract class ASTBaseVisitor<T> {
         return visitChildren(node);
     }
 
-    public T visit(BreakNode node) {
-        return visitChildren(node);
-    }
-
     public T visit(IfStmtNode node) {
         return visitChildren(node);
     }

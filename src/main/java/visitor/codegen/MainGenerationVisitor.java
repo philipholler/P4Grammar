@@ -559,12 +559,6 @@ public class MainGenerationVisitor extends ASTBaseVisitor<Void> {
     }
 
     @Override
-    public Void visit(BreakNode node) {
-        classBuilder.append(BREAK_KEYWORD + ";");
-        return super.visit(node);
-    }
-
-    @Override
     public Void visit(WaitNode node) {
         classBuilder.append("sleep(");
         visit(node.getExpr());
