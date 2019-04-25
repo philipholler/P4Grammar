@@ -153,8 +153,15 @@ public class TypeCheckerVisitor extends ASTBaseVisitor<Void>{
             // Since ambiguity could not be avoided between Signal literal ID and expr, the signal literal is passed as an IDNode expr.
             if(signal.getTYPE() == SignalType.LITERALS){
                 String signalLiteral = ((IDNode)node.getExpr()).getID();
+                // Check that the signal contains the singal literal
                 if(!signal.containsSymbol(signalLiteral)) {
-                    throw new SignalLiteralNotDeclaredException("Signal literal '" + signalLiteral + "' not declared", node.getLineNumber());
+                    throw new SignalLiteralNotDeclaredException("Signal literal '" +
+                            signalLiteral +
+                            "' not declared for signal '" +
+                            node.getSignalID() +
+                            "'"
+                            ,
+                            node.getLineNumber());
                 }
             }
         }
@@ -292,6 +299,19 @@ public class TypeCheckerVisitor extends ASTBaseVisitor<Void>{
                         node.getSignalID() + "'",
                         node.getLineNumber());
                 }
+            }
+        }
+
+        // Check that the signal has the signal literal
+        Optional<Symbol> sig = st.getSymbol(node.getSignalID());
+        if(sig.isPresent() && sig.get() instanceof SignalTypeSymbol){
+            if(!((SignalTypeSymbol) sig.get()).containsSymbol(node.getEnumID())){
+                throw new SignalLiteralWrongTypeException("Signal '" +
+                        node.getSignalID() +
+                        "' does not contain literal '" +
+                        node.getEnumID() +
+                        "'",
+                        node.getLineNumber());
             }
         }
 
