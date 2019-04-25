@@ -77,15 +77,17 @@ public class Compiler {
 
         // Remove all generated files
         for (File f: Objects.requireNonNull(generatedFiles.listFiles())) {
-            if(f.isDirectory()){
-                try {
-                    FileUtils.deleteDirectory(f);
-                } catch (IOException e) {
-                    e.printStackTrace();
+            if(!f.getName().equals("TempToDelete")){
+                if(f.isDirectory()){
+                    try {
+                        FileUtils.deleteDirectory(f);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                 }
-            }
-            if(f.isFile()){
-                f.delete();
+                if(f.isFile()){
+                    f.delete();
+                }
             }
         }
     }
