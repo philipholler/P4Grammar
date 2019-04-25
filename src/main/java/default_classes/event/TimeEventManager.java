@@ -15,32 +15,40 @@ public class TimeEventManager extends Thread {
 
     @Override
     public void run(){
-        if(eventExecutions.isEmpty()) return; // No time events in the program
-
         while (true){
-            LocalDateTime now;
+            if(eventExecutions.isEmpty()) return; // Return if there's no more events left to be executed
+
             TimeEvent nextEvent = eventExecutions.first();
 
             // Sleep until the next event is ready to be executed
-            while((now = LocalDateTime.now()).compareTo(nextEvent.getNextExecutionTime()) < 0){
-                long timeDifference = ChronoUnit.MILLIS.between(now, eventExecutions.first().getNextExecutionTime());
+            waitUntil(nextEvent.getNextExecutionTime());
 
-                try {
-                    Thread.sleep(timeDifference);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-
-            // Execute the event action
+            // Execute the event action and remove it from the queue
             nextEvent.executeEventThread();
-
-            // Remove the event from the set and update the next execution time
             eventExecutions.remove(nextEvent);
-            nextEvent.rescheduleEvent();
 
-            // Add the event back in
-            eventExecutions.add(nextEvent);
+            // Reschedule event and add it back in if it's repeatable
+            if(nextEvent.isRepeated()){
+                nextEvent.rescheduleEvent();
+                eventExecutions.add(nextEvent);
+            }
+        }
+    }
+
+    // Sleeps the current thread
+    private void waitUntil(LocalDateTime timePoint){
+        LocalDateTime now;
+
+        while((now = LocalDateTime.now()).compareTo(timePoint) < 0){
+
+            // Calculate time difference and sleep thread until the timePoint is reached
+            long timeDifference = ChronoUnit.MILLIS.between(now, timePoint);
+
+            try {
+                Thread.sleep(timeDifference);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         }
     }
 

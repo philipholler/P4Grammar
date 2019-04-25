@@ -87,4 +87,9 @@ public class TimeIntervalEvent implements TimeEvent {
         return nextExecutionTime;
     }
 
+    @Override
+    public boolean isRepeated() {
+        return true;
+    }
+
 }

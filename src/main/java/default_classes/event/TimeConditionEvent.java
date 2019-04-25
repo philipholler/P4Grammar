@@ -13,6 +13,7 @@ public class TimeConditionEvent implements TimeEvent{
     public static final int UNSPECIFIED = -1;
     private final int year, month, day, hour, minute;
 
+    private final boolean repeated;
 
     private boolean atomEvent = false; // Will this event only be executed one time?
 
@@ -23,6 +24,10 @@ public class TimeConditionEvent implements TimeEvent{
         this.hour = hour;
         this.minute = minute;
         this.eventAction = eventAction;
+
+        // The events is only repeatable if the year is unspecified
+        repeated = year == UNSPECIFIED;
+
         initNextExecutionTime();
     }
 
@@ -69,6 +74,10 @@ public class TimeConditionEvent implements TimeEvent{
 
         // Todo : Might need to update definition of the DateNode class. Should the user be able
         // Todo : to do something on the 1st of every month?
+    }
+
+    public boolean isRepeated() {
+        return repeated;
     }
 
     @Override

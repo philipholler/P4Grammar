@@ -20,4 +20,6 @@ public interface TimeEvent extends Comparable<TimeEvent> {
         }
         return result;
     }
+
+    boolean isRepeated();
 }
