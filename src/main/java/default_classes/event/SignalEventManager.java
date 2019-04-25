@@ -9,19 +9,21 @@ import java.util.concurrent.LinkedBlockingQueue;
 
 public class SignalEventManager extends Thread {
 
-    // Queue of signals that should be parsed
+    // Thread safe unbounded blocking queue containing signals to be parsed by this manager
     private LinkedBlockingQueue<SignalData> signalQueue = new LinkedBlockingQueue<>();
+    // ^ When polling using take() on this queue the current thread will be blocked until an element is available
+    // ^ This means that this thread will only be running when there are signals to parse
+
 
     private ArrayList<SignalEvent> signalEvents = new ArrayList<>();
     private ArrayList<Device> devices = new ArrayList<>();
-
 
     public SignalEventManager(ArrayList<SignalEvent> signalEvents, ArrayList<Device> devices){
         this.signalEvents.addAll(signalEvents);
         this.devices.addAll(devices);
     }
 
-    public LinkedBlockingQueue<SignalData> getEventsQueue(){
+    public synchronized LinkedBlockingQueue<SignalData> getEventsQueue(){
         return signalQueue;
     }
 
@@ -33,16 +35,18 @@ public class SignalEventManager extends Thread {
             } catch (InterruptedException e) {
                 e.printStackTrace(); // todo : exception handling lol
             }
+
+            // Check if the current signal triggers any events
             parseSignal(signalData);
-            //updateCurrentValue(signalData);
+            // Update the current value variable to correspond to the received signal
+            updateCurrentValue(signalData);
         }
     }
 
     private void parseSignal(SignalData signalData){
-        for(SignalEvent event : signalEvents){
+        for(SignalEvent event : signalEvents)
             if(event.satisfiesCondition(signalData))
                 event.executeEvent();
-        }
     }
 
     // Update the current value variable inside the device signal object
@@ -50,15 +54,13 @@ public class SignalEventManager extends Thread {
         for(Device dev : devices){
             if(dev.getNetworkID().equals(signalData.hardwareId)){
                 Signal signal = dev.getSignal(signalData.signalType);
-                if(signal != null){
+
+                // Update the signal value if the device contains this signal type
+                if(signal != null)
                     signal.setCurrentValue(signalData.value);
-                }
             }
         }
-
-
     }
-
 
     public void addSignal(SignalData signalData) {
         getEventsQueue().add(signalData);

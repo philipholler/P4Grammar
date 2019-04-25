@@ -722,7 +722,6 @@ public class AstBuilderVisitor extends PivotBaseVisitor<Node> {
     public Node visitComOperandDate(PivotParser.ComOperandDateContext ctx) {
         updateLineNumber(ctx);
         String day, month, year;
-        System.out.println(ctx.getStart().getLine());
 
         // If the date has year also for one time events.
         if(ctx.DATE() != null){

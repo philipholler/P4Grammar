@@ -5,6 +5,12 @@ import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.TreeSet;
 
+/**
+ * This class manages time events;
+ * starting events threads at the appropriate time
+ * and rescheduling them after execution
+ */
+
 public class TimeEventManager extends Thread {
 
     private TreeSet<TimeEvent> eventExecutions = new TreeSet<>();
@@ -13,7 +19,7 @@ public class TimeEventManager extends Thread {
         this.eventExecutions.addAll(events);
     }
 
-    @Override
+    @Override // The main loop responsible for executing and rescheduling events when needed
     public void run(){
         while (true){
             if(eventExecutions.isEmpty()) return; // Return if there's no more events left to be executed
@@ -35,7 +41,7 @@ public class TimeEventManager extends Thread {
         }
     }
 
-    // Sleeps the current thread
+    // Sleeps the current thread until the given timePoint
     private void waitUntil(LocalDateTime timePoint){
         LocalDateTime now;
 

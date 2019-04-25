@@ -32,7 +32,6 @@ public class TimeUtils {
     }
 
     public static MonthDay getMonthDay(int day, int month){
-        System.out.println("day: " + day + " month" + month);
         String stringDay = "" + day;
         String stringMonth = "" + month;
 
