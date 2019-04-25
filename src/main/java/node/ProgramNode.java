@@ -2,7 +2,6 @@ package node;
 
 import node.base.Node;
 import node.base.UnaryNode;
-import org.antlr.v4.codegen.model.decl.Decl;
 import org.antlr.v4.runtime.ParserRuleContext;
 import semantics.SymbolTable;
 import visitor.ASTBaseVisitor;
