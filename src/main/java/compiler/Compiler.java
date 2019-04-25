@@ -7,22 +7,27 @@ import node.base.Node;
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.ParseTree;
+import org.apache.commons.io.FileUtils;
 import visitor.*;
 import visitor.codegen.ClassGenerationVisitor;
 import visitor.codegen.EventInitializationVisitor;
 import visitor.codegen.MainGenerationVisitor;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.nio.file.Paths;
+import java.util.Objects;
 
 import static org.antlr.v4.runtime.CharStreams.fromFileName;
 
 public class Compiler {
 
     public static final String SOURCE_FILE_DIR = "testProgramsPivot/";
-    public static final String SOURCE_FILE = SOURCE_FILE_DIR + "declSignal.pvt";
+    public static final String SOURCE_FILE = SOURCE_FILE_DIR + "EventTestProgram.pvt";
     public static final boolean COMPILER_DEBUG_MODE = true;
+    public static final String GENERATED_FILES_DIR = "GeneratedModule/src/main/java/";
 
     public static void main(String[] args) {
 
@@ -55,6 +60,9 @@ public class Compiler {
             // Print new AST
             System.out.println(ast.getTreeString(0));
 
+            // Delete old generated program
+            deleteOldGeneratedFiles();
+
             // Generate code
             generateJavaCode(ast);
 
@@ -62,6 +70,24 @@ public class Compiler {
             e.printStackTrace();
         }
 
+    }
+
+    private static void deleteOldGeneratedFiles(){
+        File generatedFiles = new File(GENERATED_FILES_DIR);
+
+        // Remove all generated files
+        for (File f: Objects.requireNonNull(generatedFiles.listFiles())) {
+            if(f.isDirectory()){
+                try {
+                    FileUtils.deleteDirectory(f);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            if(f.isFile()){
+                f.delete();
+            }
+        }
     }
 
     private static void generateJavaCode(Node ast){

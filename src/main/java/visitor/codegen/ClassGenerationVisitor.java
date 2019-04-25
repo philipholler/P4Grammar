@@ -57,6 +57,7 @@ public class ClassGenerationVisitor extends ASTBaseVisitor<ClassBuilder> {
 
     @Override
     public ClassBuilder visit(ProgramNode node) {
+
         // Create all the default classes.
         String sourceLocation = System.getProperty("user.dir");
         File sourceFile= new File(sourceLocation + "/src/main/java/default_classes/");
