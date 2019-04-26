@@ -18,6 +18,11 @@ Bulb frontDoorLight = "bulb1";
 Bulb frontDoorLight2 = "bulb2";
 Thermometer kitchenTherm = "therm1";
 
+int hey = 5;
+float spider = 5.0;
+string spoil = "Endgame spoiler : ";
+
+
 init(){
 
 }

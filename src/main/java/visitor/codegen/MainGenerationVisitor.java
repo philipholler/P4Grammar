@@ -206,7 +206,7 @@ public class MainGenerationVisitor extends ASTBaseVisitor<Void> {
         JavaType type = JavaCodeUtils.correspondingJavaType(node.getVarType());
 
         // Generates : "type x = "
-        classBuilder.appendWord(type.keyword).append(node.getID()).appendEquals();
+        classBuilder.append(type.keyword).appendSpace().append(node.getID()).appendEquals();
         // visit children to append value that is assigned to the variable
         visit(node.getExpr());
         classBuilder.endLine();
@@ -593,4 +593,8 @@ public class MainGenerationVisitor extends ASTBaseVisitor<Void> {
 
         return null;
     }
+
+
+
+
 }
