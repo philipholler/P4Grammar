@@ -1,27 +1,34 @@
 # P4Grammar
 
-MAKE THE PROGRAM WORK
-1. Import libraries to projekt from the libs folder
-2. Chose the Pivot file in compiler class under String SOURCE_FILE
-3. Run the /P4Grammar/src/main/java/compiler/Main.java class
+CREATORS:
 
+Philip Holler
+
+Magnus Kirkegaard
+
+Mads Faber
+
+Mads Bau
+
+Asger Bertel
+
+Hannah Lockey
+_________________________________________________
+
+MAKE THE PROGRAM WORK
+1. Install the IntelliJ ANTLR plugin called 'ANTLR v4 Grammar Plugin, v1.9'
+1. Use the Maven build 'Generate files' to generate antlr files needed to compile
 _________________________________________________________________________
 
 CHANGE THE GRAMMAR
 
-If you want to change anything in the grammar, you need to download the following ANTLR plugins for intellij:
-1. ANTLR v4 grammar plugin (version 1.9)
-2. ANTLRWorks (version 1.3.1)
-
-Also make sure to configure ANTLR. This is done by right clicking the grammarfile (.g4) and click configure ANTLR.
-This should open up a new window.
-
-Inside this window make sure, that the following options are checked:
-1. Auto-generate parsers upon save
-2. Generate Parse-tree visitor
-
-Also inside the window fill out the following textboxes:
-1. Output directory where all output is generated -> ".../P4Grammar/gen src/"
-2. Package/namespace for the generated code -> "antlr"
+Every time a the grammar is changed, the Maven build called 'Generate files' must be run.
 ________________________________________________
+COMPILE PIVOT CODE
+
+1. Set the file to be compiled in the Compiler class under SOURCE_FILE (The file to be compiled must be located in the testProgramsPivot directory)
+
+2. Run the Compiler.main class to compile a file
+_____________________________
+
 HAVE FUN!
