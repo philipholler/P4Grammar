@@ -1,13 +1,13 @@
 package compiler;
 
-import antlr.PivotLexer;
-import antlr.PivotParser;
 import node.ProgramNode;
 import node.base.Node;
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.apache.commons.io.FileUtils;
+import pivot.PivotLexer;
+import pivot.PivotParser;
 import visitor.*;
 import visitor.codegen.ClassGenerationVisitor;
 import visitor.codegen.EventInitializationVisitor;
@@ -17,7 +17,6 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.nio.file.Paths;
 import java.util.Objects;
 
 import static org.antlr.v4.runtime.CharStreams.fromFileName;
