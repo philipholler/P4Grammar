@@ -15,7 +15,7 @@
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
-      <module name="P4_Pivot" options="" />
+      <module name="P4_Pivot" options="-verbose -Xlint:all,-options,-path" />
     </option>
   </component>
 </project>
