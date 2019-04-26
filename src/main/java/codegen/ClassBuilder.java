@@ -78,6 +78,10 @@ public class ClassBuilder {
         return this.append("final ");
     }
 
+    public ClassBuilder appendSynchronized() {
+        return this.append("synchronized ");
+    }
+
     public enum BlockType{
         CLASS, METHOD, WHILE, IF, ELSE, FOR, TRY, CATCH;
     }

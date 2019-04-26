@@ -206,7 +206,7 @@ public class MainGenerationVisitor extends ASTBaseVisitor<Void> {
         JavaType type = JavaCodeUtils.correspondingJavaType(node.getVarType());
 
         // Generates : "type x = "
-        classBuilder.append(type.keyword).appendSpace().append(node.getID()).appendEquals();
+        classBuilder.appendSynchronized().append(type.keyword).appendSpace().append(node.getID()).appendEquals();
         // visit children to append value that is assigned to the variable
         visit(node.getExpr());
         classBuilder.endLine();
