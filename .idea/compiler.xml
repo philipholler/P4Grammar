@@ -7,9 +7,11 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="P4_Pivot" />
+        <module name="GeneratedModule" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
+      <module name="GeneratedModule" target="1.5" />
       <module name="P4_Pivot" target="11" />
     </bytecodeTargetLevel>
   </component>
