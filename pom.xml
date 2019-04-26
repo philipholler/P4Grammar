@@ -59,16 +59,22 @@
                         <goals>
                             <goal>antlr4</goal>
                         </goals>
+                        <configuration>
+                            <source>11</source>
+                            <target>11</target>
+                            <compilerArgs>
+                                <arg>-verbose</arg>
+                                <arg>-Xlint:all,-options,-path</arg>
+                            </compilerArgs>
+                            <transformers>
+                                <transformer
+                                        implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+                                    <mainClass>compiler.Compiler</mainClass>
+                                </transformer>
+                            </transformers>
+                        </configuration>
                     </execution>
                 </executions>
-                <configuration>
-                    <source>11</source>
-                    <target>11</target>
-                    <compilerArgs>
-                        <arg>-verbose</arg>
-                        <arg>-Xlint:all,-options,-path</arg>
-                    </compilerArgs>
-                </configuration>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -90,7 +96,5 @@
             </plugin>
         </plugins>
     </build>
-
-
 
 </project>
