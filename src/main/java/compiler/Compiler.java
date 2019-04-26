@@ -1,13 +1,13 @@
 package compiler;
 
-import antlr.PivotLexer;
-import antlr.PivotParser;
 import node.ProgramNode;
 import node.base.Node;
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.apache.commons.io.FileUtils;
+import pivot.PivotLexer;
+import pivot.PivotParser;
 import visitor.*;
 import visitor.codegen.ClassGenerationVisitor;
 import visitor.codegen.EventInitializationVisitor;
@@ -75,19 +75,25 @@ public class Compiler {
     private static void deleteOldGeneratedFiles(){
         File generatedFiles = new File(GENERATED_FILES_DIR);
 
-        // Remove all generated files
-        for (File f: Objects.requireNonNull(generatedFiles.listFiles())) {
-            if(f.isDirectory()){
-                try {
-                    FileUtils.deleteDirectory(f);
-                } catch (IOException e) {
-                    e.printStackTrace();
+
+        if(generatedFiles.exists()){
+            // Remove all generated files
+            for (File f: Objects.requireNonNull(generatedFiles.listFiles())) {
+                if(!f.getName().equals("TempToDelete") ){
+                    if(f.isDirectory()){
+                        try {
+                            FileUtils.deleteDirectory(f);
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                    if(f.isFile()){
+                        f.delete();
+                    }
                 }
             }
-            if(f.isFile()){
-                f.delete();
-            }
         }
+
     }
 
     private static void generateJavaCode(Node ast){

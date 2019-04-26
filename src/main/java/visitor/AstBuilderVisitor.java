@@ -1,7 +1,5 @@
 package visitor;
 
-import antlr.PivotBaseVisitor;
-import antlr.PivotParser;
 import exceptions.userside.CompileErrorException;
 import node.*;
 import node.Events.EventEveryNode;
@@ -36,6 +34,8 @@ import node.define_nodes.Signal.EnumNode;
 import node.define_nodes.Signal.RangeNode;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.TerminalNode;
+import pivot.PivotBaseVisitor;
+import pivot.PivotParser;
 import semantics.*;
 import org.antlr.v4.runtime.ParserRuleContext;
 
