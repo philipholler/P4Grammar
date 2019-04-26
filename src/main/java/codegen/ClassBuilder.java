@@ -74,6 +74,10 @@ public class ClassBuilder {
         return this;
     }
 
+    public ClassBuilder appendFinal() {
+        return this.append("final ");
+    }
+
     public enum BlockType{
         CLASS, METHOD, WHILE, IF, ELSE, FOR, TRY, CATCH;
     }
