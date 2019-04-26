@@ -14,21 +14,28 @@ Asger Bertel
 
 Hannah Lockey
 _________________________________________________
-
-MAKE THE PROGRAM WORK
+BEFORE GETTING STARTED
 1. Install the IntelliJ ANTLR plugin called 'ANTLR v4 Grammar Plugin, v1.9'
-1. Use the Maven build 'Generate files' to generate antlr files needed to compile
+
+2. Have Java 11 installed
 _________________________________________________________________________
 
-CHANGE THE GRAMMAR
+BUILD THE COMPILER
 
-Every time a the grammar is changed, the Maven build called 'Generate files' must be run.
+1. Use the Maven build "GenerateFiles and Compile"
 ________________________________________________
-COMPILE PIVOT CODE
+COMPILE PIVOT CODE TO JAVA IN GENERATEDMODULE
 
 1. Set the file to be compiled in the Compiler class under SOURCE_FILE (The file to be compiled must be located in the testProgramsPivot directory)
 
 2. Run the Compiler.main class to compile a file
 _____________________________
+BUILD AND RUN GENERATED MODULE
+
+1. Use the Maven build "Compile GeneratedCode" to build the newly generated code.
+2. Run the Main.main inside the server package
+
+_________________________________
+
 
 HAVE FUN!
