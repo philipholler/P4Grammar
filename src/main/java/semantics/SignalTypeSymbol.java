@@ -58,13 +58,13 @@ public class SignalTypeSymbol extends Symbol{
         if(declarationNode.getRangeNode() != null){
             if(declarationNode.getRangeNode().getType().equals(SymbolTable.FLOAT_TYPE_ID)){
                 this.TYPE = SignalType.FLOAT_RANGE;
-                if(declarationNode.getRangeNode().getLeftChild() instanceof FloatNode && declarationNode.getRangeNode().getLeftChild() instanceof FloatNode){
+                if(declarationNode.getRangeNode().getLeftChild() instanceof FloatNode && declarationNode.getRangeNode().getRightChild() instanceof FloatNode){
                     this.floatLowerBound = ((FloatNode) declarationNode.getRangeNode().getLeftChild()).getVal();
                     this.floatUpperBound = ((FloatNode) declarationNode.getRangeNode().getRightChild()).getVal();
                 }
             } else if (declarationNode.getRangeNode().getType().equals(SymbolTable.INT_TYPE_ID)){
                 this.TYPE = SignalType.INT_RANGE;
-                if(declarationNode.getRangeNode().getLeftChild() instanceof IntegerNode && declarationNode.getRangeNode().getLeftChild() instanceof IntegerNode){
+                if(declarationNode.getRangeNode().getLeftChild() instanceof IntegerNode && declarationNode.getRangeNode().getRightChild() instanceof IntegerNode){
                     this.floatLowerBound = ((IntegerNode) declarationNode.getRangeNode().getLeftChild()).getVal();
                     this.floatUpperBound = ((IntegerNode) declarationNode.getRangeNode().getRightChild()).getVal();
                 }

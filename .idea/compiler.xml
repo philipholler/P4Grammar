@@ -11,7 +11,7 @@
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
-      <module name="GeneratedModule" target="1.5" />
+      <module name="GeneratedModule" target="11" />
       <module name="P4_Pivot" target="11" />
     </bytecodeTargetLevel>
   </component>
