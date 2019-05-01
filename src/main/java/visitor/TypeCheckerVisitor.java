@@ -9,11 +9,9 @@ import node.Events.WhenNodes.EventWhenTimeNode;
 import node.Function.FunctionNode;
 import node.ProgramNode;
 import node.Statements.AssignmentNode;
-import node.Statements.Expression.ExpressionNode;
+import node.Statements.Expression.*;
 import node.Statements.Expression.FunctionCall.FuncCallNode;
 import node.Statements.Expression.FunctionCall.SetFuncNode;
-import node.Statements.Expression.IDNode;
-import node.Statements.Expression.MultiExprNode;
 import node.Statements.LogicalExpression.ComparisonExprNode;
 import node.Statements.ReturnNode;
 import node.Statements.Wait.WaitNode;
@@ -405,6 +403,14 @@ public class TypeCheckerVisitor extends ASTBaseVisitor<Void>{
     @Override
     public Void visit(EventEveryNode node) {
         lastFunctionVisitedReturnType = node.getReturnType();
+        return super.visit(node);
+    }
+
+    @Override
+    public Void visit(AddExprNode node) {
+        if(node.getType().equals(SymbolTable.STRING_TYPE_ID) && node.getOperator() == Operator.MINUS){
+            throw new SubtractStringException(node.getLineNumber());
+        }
         return super.visit(node);
     }
 }

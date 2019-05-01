@@ -1,7 +1,7 @@
 // Define signals
 define Signal toggle: on = 1, off = 0;
-define Signal openWindow: 0..100;
-define Signal celsius: -50..70;
+define Signal openWindow: 0.0..100.0;
+define Signal celsius:  -50..70;
 
 // Define devices
 define Device Bulb input: toggle;
@@ -21,7 +21,7 @@ Thermometer mainThermometer = "129.67.198.65:12565";
 MovementSensor frontDoorSensor = "129.67.198.65:12565";
 
 init(){
-    // Code for initialisation. Runs before events.
+    // Code for initial start up of program
 }
 
 // Turn on the light if someone is at the door in the evening.
@@ -40,19 +40,18 @@ when frontDoorSensor toggle: on{
 when 14:00{
     if(get mainThermometer celsius > 25 ){
         // Open window completely
-        setBedroomWindowsOpen(100);
+        setBedroomWindowsOpen(100.0);
     }
 }
 
 // Function
-void setBedroomWindowsOpen(int percentage){
+void setBedroomWindowsOpen(float percentage){
     set bedRoomWindow openWindow: percentage;
 }
 
-// Turn on lawn mower every 2 weeks at 11:00 every summer.
+// // Turn on lawn mower every 2 weeks at 11:00 every summer.
 every 2 weeks starting 11:00 01d04m2019y{
     if(01d04m < now && now < 30d09m){
         set GardenMower toggle: on;
     }
 }
-
