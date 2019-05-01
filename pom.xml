@@ -45,12 +45,20 @@
             <version>2.6</version>
         </dependency>
 
+        <!-- Enables running of tests through Maven -->
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-engine</artifactId>
+            <version>5.4.2</version>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 
 
     <build>
         <plugins>
             <plugin>
+                <!-- Enables building of ANTLR grammar files at every build -->
                 <groupId>org.antlr</groupId>
                 <artifactId>antlr4-maven-plugin</artifactId>
                 <version>4.2</version>
@@ -80,6 +88,13 @@
                     <target>11</target>
                 </configuration>
             </plugin>
+            <!-- Enables running of tests through Maven -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>2.22.1</version>
+            </plugin>
+
         </plugins>
     </build>
 

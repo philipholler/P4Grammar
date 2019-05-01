@@ -22,12 +22,15 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import static org.antlr.v4.runtime.CharStreams.fromFileName;
 
+@SuppressWarnings("Duplicates")
 public class Compiler {
 
     public static String SOURCE_FILE_DIR = "testProgramsPivot/";
     public static String SOURCE_FILE = SOURCE_FILE_DIR + "kodeEksempelRapport.pvt";
     public static boolean COMPILER_DEBUG_MODE = true;
     public static String GENERATED_FILES_DIR = "GeneratedModule/src/main/java/";
+
+    public static String DEFAULT_CLASSES_DIR = "/src/main/java/default_classes/";
 
 
     public static void main(String[] args) {
@@ -73,6 +76,28 @@ public class Compiler {
 
     }
 
+    private static void generateJavaCode(Node ast){
+        ast.accept(new ClassGenerationVisitor());
+
+        ast.accept(new MainGenerationVisitor());
+
+        ast.accept(new EventInitializationVisitor());
+    }
+
+    private static void decorateAST(Node ast){
+        ast.accept(new FunctionVisitor());
+
+        ast.accept(new DeclarationVisitor());
+
+        ast.accept(new TypeAssignmentVisitor());
+
+        ast.accept(new TypeCheckerVisitor());
+    }
+
+    private static void optimiseExpr(Node ast){
+        ast.accept(new OptimiseExprVisitor());
+    }
+
     public static void deleteOldGeneratedFiles(){
         File generatedFiles = new File(GENERATED_FILES_DIR);
 
@@ -96,28 +121,6 @@ public class Compiler {
 
     }
 
-    private static void generateJavaCode(Node ast){
-        ast.accept(new ClassGenerationVisitor());
-
-        ast.accept(new MainGenerationVisitor());
-
-        ast.accept(new EventInitializationVisitor());
-    }
-
-    private static void decorateAST(Node ast){
-        ast.accept(new FunctionVisitor());
-
-        ast.accept(new DeclarationVisitor());
-
-        ast.accept(new TypeAssignmentVisitor());
-
-        ast.accept(new TypeCheckerVisitor());
-    }
-
-    private static void optimiseExpr(Node ast){
-        ast.accept(new OptimiseExprVisitor());
-    }
-
 
     private static void generateByteCode(Node ast){
         JasminVisitor jv = new JasminVisitor();
@@ -129,6 +132,37 @@ public class Compiler {
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
+    }
+
+    public static void compileCodeWithoutPrint(){
+        CharStream cs = null;
+        try {
+            cs = fromFileName(SOURCE_FILE);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        PivotLexer lexer = new PivotLexer(cs);
+        CommonTokenStream token = new CommonTokenStream(lexer);
+        PivotParser parser = new PivotParser(token);
+
+        // Create parse tree with parser
+        ParseTree tree = parser.program();
+
+        // Visit with AstBuilderVisitor to create ast
+        AstBuilderVisitor astVisitor = new AstBuilderVisitor();
+        Node ast = astVisitor.visit(tree);
+
+        // Decorate AST using all visitors
+        decorateAST(ast);
+
+        // Optimise expressions
+        optimiseExpr(ast);
+
+        // Delete old generated program
+        deleteOldGeneratedFiles();
+
+        // Generate code
+        generateJavaCode(ast);
     }
 
     public static void setSourceFileDir(String sourceFileDir) {
@@ -145,21 +179,5 @@ public class Compiler {
 
     public static void setGeneratedFilesDir(String generatedFilesDir) {
         GENERATED_FILES_DIR = generatedFilesDir;
-    }
-
-    public static String getSourceFileDir() {
-        return SOURCE_FILE_DIR;
-    }
-
-    public static String getSourceFile() {
-        return SOURCE_FILE;
-    }
-
-    public static boolean isCompilerDebugMode() {
-        return COMPILER_DEBUG_MODE;
-    }
-
-    public static String getGeneratedFilesDir() {
-        return GENERATED_FILES_DIR;
     }
 }

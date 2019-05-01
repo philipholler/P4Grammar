@@ -11,32 +11,32 @@ class CompilerTest {
     public static final String TEST_SOURCE_FILE_DIR = "src/test/res/ProgramsforTestsPivot/";
 
     @Test
-    void testVariableError() {
+    void TestVariableError() {
         Compiler.setCompilerDebugMode(true);
         Compiler.setGeneratedFilesDir(TEST_GENERATED_DIR);
         Compiler.setSourceFileDir(TEST_SOURCE_FILE_DIR);
         Compiler.setSourceFile("wrongTypeException.pvt");
-        assertThrows(CompileErrorException.class, () -> Compiler.main(new String[0]));
+        assertThrows(CompileErrorException.class, Compiler::compileCodeWithoutPrint);
         Compiler.deleteOldGeneratedFiles();
     }
 
     @Test
-    void testdeclSignalProgram(){
+    void TestdeclSignalProgram(){
         Compiler.setCompilerDebugMode(true);
         Compiler.setGeneratedFilesDir(TEST_GENERATED_DIR);
         Compiler.setSourceFileDir(TEST_SOURCE_FILE_DIR);
         Compiler.setSourceFile("declSignal.pvt");
-        Compiler.main(new String[0]);
+        Compiler.compileCodeWithoutPrint();
         Compiler.deleteOldGeneratedFiles();
     }
 
     @Test
-    void testEventTestProgram(){
+    void TestEventTestProgram(){
         Compiler.setCompilerDebugMode(true);
         Compiler.setGeneratedFilesDir(TEST_GENERATED_DIR);
         Compiler.setSourceFileDir(TEST_SOURCE_FILE_DIR);
         Compiler.setSourceFile("EventTestProgram.pvt");
-        Compiler.main(new String[0]);
+        Compiler.compileCodeWithoutPrint();
         Compiler.deleteOldGeneratedFiles();
     }
 
@@ -46,7 +46,7 @@ class CompilerTest {
         Compiler.setGeneratedFilesDir(TEST_GENERATED_DIR);
         Compiler.setSourceFileDir(TEST_SOURCE_FILE_DIR);
         Compiler.setSourceFile("kodeEksempelRapport.pvt");
-        Compiler.main(new String[0]);
+        Compiler.compileCodeWithoutPrint();
         Compiler.deleteOldGeneratedFiles();
     }
 
@@ -56,7 +56,7 @@ class CompilerTest {
         Compiler.setGeneratedFilesDir(TEST_GENERATED_DIR);
         Compiler.setSourceFileDir(TEST_SOURCE_FILE_DIR);
         Compiler.setSourceFile("testProgram.pvt");
-        Compiler.main(new String[0]);
+        Compiler.compileCodeWithoutPrint();
         Compiler.deleteOldGeneratedFiles();
     }
 }
