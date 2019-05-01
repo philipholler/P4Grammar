@@ -1,0 +1,109 @@
+// Define signals
+define Signal toggle: On = 1, off = 0;
+define Signal testToggle: turnOn = 1;
+define Signal celsius:  1..60;
+define Signal percentage:  0.0..100.0;
+define Signal open : 0.0..100.0;
+
+// Define device types
+define Device Bulb input: toggle, celsius;
+define Device Window input: open;
+// Define sensors
+define Device MovementSensor output: toggle input: celsius, toggle;
+define Device Thermometer output: celsius;
+
+// Variable definitions of every device in the house
+Bulb frontDoorLight = "id1654";
+Window bedRoomWindow = "id6584";
+
+MovementSensor frontDoorSensor = "Google.com";
+
+Thermometer mainThermometer = "129.67.198.65:12565";
+
+int a = 5 * 5;
+
+float f = 5.1 - 5.2;
+
+init(){
+    // Optional code for initialization
+    // Automatically run when the program is run for the first time
+    a = 1 + 2 * 3 - (3 / 5);
+
+    string hej = "hej";
+
+    string hejhej = "hej" + "hej";
+
+    if(5 < 12 && 3 < 10 || (5 < 8 && 22 < (22 + 1))){
+        a = 5;
+    }
+}
+
+string setBedroomWindowsOpen(int percent, float faa, string see){
+
+    set bedRoomWindow open: faa;
+
+    wait 30 seconds;
+
+    if(now > 01d04m2019y){
+        set frontDoorLight toggle: On;
+    }
+
+    while(get frontDoorSensor toggle != On){
+        set frontDoorLight toggle: On;
+    }
+
+    return see;
+}
+
+when mainThermometer celsius: exceeds 22{
+    setBedroomWindowsOpen(50, 50.0, "s"); // Calling function defined further down
+}
+
+// Events
+when frontDoorSensor toggle: On {
+
+}
+
+when 14:00{
+
+}
+
+when 01d01m2000y{
+
+}
+
+when 01d01m{
+
+}
+
+when 14:00 01d01m2000y{
+
+}
+
+when 14:00 01d01m{
+
+}
+
+every 2 hours starting 14:00{
+
+}
+
+every 2 hours starting 01d01m2000y{
+
+}
+
+every 2 hours starting 01d01m{
+
+}
+
+every 2 hours starting 14:00 01d01m2000y{
+
+}
+
+every 2 hours starting 14:00 01d01m{
+
+}
+
+every 2 hours{
+
+}

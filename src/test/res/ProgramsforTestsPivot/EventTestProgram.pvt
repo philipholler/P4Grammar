@@ -1,0 +1,73 @@
+// Define signals
+define Signal Toggle: On = 1, Off = 0, yo = 3;
+define Signal Celsius:  1..60;
+define Signal Open:  0.0..100.0;
+define Signal Percentage: 0.0..100.0;
+define Signal PercentInt: 0..100;
+
+// Define device types
+define Device Bulb output: Toggle;
+define Device Window input: Open;
+define Device IntWindow input: PercentInt;
+// Define sensors
+define Device MovementSensor output: Toggle input: Celsius, Toggle;
+define Device Thermometer output: Celsius;
+define Device LawnMower input: Toggle;
+
+Bulb frontDoorLight = "bulb1";
+Bulb frontDoorLight2 = "bulb2";
+Thermometer kitchenTherm = "therm1";
+
+int hey = 5;
+float spider = 5.0;
+string spoil = "Endgame spoiler : ";
+
+
+init(){
+
+}
+
+when frontDoorLight Toggle : On{
+    printFunction("bulb1 has been turned on");
+}
+
+when frontDoorLight2 Toggle : Off{
+    printFunction("bulb2 has been turned off");
+}
+
+when 09:05 22d04m{
+    printFunction("MAGICAL");
+}
+
+every 10 seconds starting 10:45 19d04m2019y{
+    printFunction("10 Seconds passed");
+
+    if(now < 24d04m2019y){
+        printFunction("Virker1");
+    }
+
+    if(now < 24d04m){
+        printFunction("Virker2");
+    }
+
+    if(now > 21d){
+        printFunction("Virker3");
+    }
+
+    if(now < 11:10){
+        printFunction("Virker4");
+    }
+
+    if(11:10 < now && now == 23d && 23d04m == now && 23d04m2019y == now){
+        print "virker5";
+    }
+}
+
+when kitchenTherm Celsius: exceeds 31{
+    printFunction("Its too hot in the kitchen");
+}
+
+void printFunction(string s){
+    print s;
+}
+

@@ -4,6 +4,7 @@ import codegen.ClassBuilder;
 import codegen.JavaFileWriter;
 import codegen.JavaInputParameter;
 import codegen.JavaType;
+import compiler.Compiler;
 import default_classes.signal.Signal;
 import exceptions.compilerside.CodeGenerationError;
 import node.DeclsNode;
@@ -60,8 +61,9 @@ public class ClassGenerationVisitor extends ASTBaseVisitor<ClassBuilder> {
 
         // Create all the default classes.
         String sourceLocation = System.getProperty("user.dir");
-        File sourceFile= new File(sourceLocation + "/src/main/java/default_classes/");
-        File targetFile = new File(sourceLocation + "/GeneratedModule/src/main/java/default_classes/");
+        File sourceFile = new File(sourceLocation + "/src/main/java/default_classes/");
+        File targetFile = new File(sourceLocation + "/" + Compiler.getGeneratedFilesDir() +  "/default_classes/");
+
 
         try {
             FileUtils.copyDirectory(sourceFile, targetFile);

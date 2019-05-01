@@ -24,10 +24,11 @@ import static org.antlr.v4.runtime.CharStreams.fromFileName;
 
 public class Compiler {
 
-    public static final String SOURCE_FILE_DIR = "testProgramsPivot/";
-    public static final String SOURCE_FILE = SOURCE_FILE_DIR + "kodeEksempelRapport.pvt";
-    public static final boolean COMPILER_DEBUG_MODE = true;
-    public static final String GENERATED_FILES_DIR = "GeneratedModule/src/main/java/";
+    public static String SOURCE_FILE_DIR = "testProgramsPivot/";
+    public static String SOURCE_FILE = SOURCE_FILE_DIR + "kodeEksempelRapport.pvt";
+    public static boolean COMPILER_DEBUG_MODE = true;
+    public static String GENERATED_FILES_DIR = "GeneratedModule/src/main/java/";
+
 
     public static void main(String[] args) {
 
@@ -72,7 +73,7 @@ public class Compiler {
 
     }
 
-    private static void deleteOldGeneratedFiles(){
+    public static void deleteOldGeneratedFiles(){
         File generatedFiles = new File(GENERATED_FILES_DIR);
 
         if(generatedFiles.exists()){
@@ -128,5 +129,37 @@ public class Compiler {
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
+    }
+
+    public static void setSourceFileDir(String sourceFileDir) {
+        SOURCE_FILE_DIR = sourceFileDir;
+    }
+
+    public static void setSourceFile(String sourceFile) {
+        SOURCE_FILE = SOURCE_FILE_DIR + sourceFile;
+    }
+
+    public static void setCompilerDebugMode(boolean compilerDebugMode) {
+        COMPILER_DEBUG_MODE = compilerDebugMode;
+    }
+
+    public static void setGeneratedFilesDir(String generatedFilesDir) {
+        GENERATED_FILES_DIR = generatedFilesDir;
+    }
+
+    public static String getSourceFileDir() {
+        return SOURCE_FILE_DIR;
+    }
+
+    public static String getSourceFile() {
+        return SOURCE_FILE;
+    }
+
+    public static boolean isCompilerDebugMode() {
+        return COMPILER_DEBUG_MODE;
+    }
+
+    public static String getGeneratedFilesDir() {
+        return GENERATED_FILES_DIR;
     }
 }

@@ -13,6 +13,7 @@ import node.Statements.Expression.*;
 import node.Statements.Expression.FunctionCall.FuncCallNode;
 import node.Statements.Expression.FunctionCall.SetFuncNode;
 import node.Statements.LogicalExpression.ComparisonExprNode;
+import node.Statements.PrintNode;
 import node.Statements.ReturnNode;
 import node.Statements.Wait.WaitNode;
 import node.TimeNodes.DateNode;
@@ -412,5 +413,10 @@ public class TypeCheckerVisitor extends ASTBaseVisitor<Void>{
             throw new SubtractStringException(node.getLineNumber());
         }
         return super.visit(node);
+    }
+
+    @Override
+    public Void visit(PrintNode node) {
+        return null;
     }
 }
