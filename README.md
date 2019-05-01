@@ -38,6 +38,8 @@ BUILD AND RUN GENERATED MODULE
 2. Run the Main.main inside the server package
 
 _________________________________
+BUILD AND RUN TESTS
+1. Use the Maven build "Build and run tests" (this also builds the compiler)
 
 
 HAVE FUN!
