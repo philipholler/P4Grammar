@@ -41,5 +41,10 @@ _________________________________
 BUILD AND RUN TESTS
 1. Use the Maven build "Build and run tests" (this also builds the compiler)
 
+____________________________
+TEST COVERAGE
+
+1. Use the Maven build "Build and run tests"
+2. Go to analyze -> Show Code Coverage Data -> + -> Select the /target/coverage-reports/jacoco-unit.exec 
 
 HAVE FUN!

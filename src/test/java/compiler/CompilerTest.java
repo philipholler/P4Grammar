@@ -1,6 +1,7 @@
 package compiler;
 
 import exceptions.userside.CompileErrorException;
+import exceptions.userside.ExpressionWrongTypeException;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -16,7 +17,7 @@ class CompilerTest {
         Compiler.setGeneratedFilesDir(TEST_GENERATED_DIR);
         Compiler.setSourceFileDir(TEST_SOURCE_FILE_DIR);
         Compiler.setSourceFile("wrongTypeException.pvt");
-        assertThrows(CompileErrorException.class, Compiler::compileCodeWithoutPrint);
+        assertThrows(ExpressionWrongTypeException.class, Compiler::compileCodeWithoutPrint);
         Compiler.deleteOldGeneratedFiles();
     }
 

@@ -16,12 +16,9 @@ import node.Statements.LogicalExpression.ComparisonExprNode;
 import node.Statements.PrintNode;
 import node.Statements.ReturnNode;
 import node.Statements.Wait.WaitNode;
-import node.TimeNodes.DateNode;
-import node.TimeNodes.LocalTimeNode;
 import node.TimeNodes.NowNode;
 import node.TimeNodes.TimeNode;
 import node.VarDeclNode;
-import node.base.Node;
 import semantics.*;
 
 import java.util.Optional;
@@ -94,7 +91,7 @@ public class TypeCheckerVisitor extends ASTBaseVisitor<Void>{
         if(optSymbol.isPresent()){
             FieldSymbol symbol = (FieldSymbol) optSymbol.get();
             if(!symbol.getTypeID().equals(node.getExpr().getType())){
-                throw new ExpressionTypeException("Assigning expr to variable with different type. Expected '" +
+                throw new ExpressionWrongTypeException("Assigning expr to variable with different type. Expected '" +
                         symbol.getTypeID() +
                         "' got '" +
                         node.getExpr().getType() +
@@ -112,7 +109,7 @@ public class TypeCheckerVisitor extends ASTBaseVisitor<Void>{
     public Void visit(VarDeclNode node) {
         // If the expression does not have the same type as the variable being declared, throw exception.
         if(!node.getExpr().getType().equals(node.getVarType())){
-            throw new ExpressionTypeException("Expression has more types in it or doesn't match variable type.", node.getLineNumber());
+            throw new ExpressionWrongTypeException("Expression has more types in it or doesn't match variable type.", node.getLineNumber());
         }
 
         return super.visit(node);
@@ -137,7 +134,7 @@ public class TypeCheckerVisitor extends ASTBaseVisitor<Void>{
             SignalTypeSymbol signal = (SignalTypeSymbol) symbol.get();
             // If the signal is an int range and got an expression of the type int.
             if(signal.getTYPE() == SignalType.INT_RANGE && !node.getExpr().getType().equals(SymbolTable.INT_TYPE_ID)){
-                throw new ExpressionTypeException("Expression does not match range type. Expected '" +
+                throw new ExpressionWrongTypeException("Expression does not match range type. Expected '" +
                         SymbolTable.INT_TYPE_ID +
                         "' got: '" +
                         node.getExpr().getType() +
@@ -147,7 +144,7 @@ public class TypeCheckerVisitor extends ASTBaseVisitor<Void>{
             }
             // Check if the node has a float range and the expr also evaluates a float
             if(signal.getTYPE() == SignalType.FLOAT_RANGE && !node.getExpr().getType().equals(SymbolTable.FLOAT_TYPE_ID)){
-                throw new ExpressionTypeException("Expression does not match range type. Expected '" +
+                throw new ExpressionWrongTypeException("Expression does not match range type. Expected '" +
                         SymbolTable.FLOAT_TYPE_ID +
                         "' got: '" +
                         node.getExpr().getType() +
@@ -250,7 +247,7 @@ public class TypeCheckerVisitor extends ASTBaseVisitor<Void>{
     public Void visit(WaitNode node) {
         // Wait can only be used with integers.
         if(!node.getExpr().getType().equals(SymbolTable.INT_TYPE_ID)){
-            throw new ExpressionTypeException("Wait node can only take '" + SymbolTable.INT_TYPE_ID + "' as input.", node.getLineNumber());
+            throw new ExpressionWrongTypeException("Wait node can only take '" + SymbolTable.INT_TYPE_ID + "' as input.", node.getLineNumber());
         }
         return super.visit(node);
     }

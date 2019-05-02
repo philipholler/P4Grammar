@@ -1,6 +1,6 @@
 package visitor;
 
-import exceptions.userside.ExpressionTypeException;
+import exceptions.userside.ExpressionWrongTypeException;
 import exceptions.userside.FunctionNotDeclaredException;
 import exceptions.userside.TypeUndefinedCompileError;
 import exceptions.userside.VariableNotInitialisedException;
@@ -16,7 +16,6 @@ import node.Statements.Expression.LiteralValues.IntegerNode;
 import node.Statements.Expression.LiteralValues.StringNode;
 import node.Statements.Expression.MultiExprNode;
 import node.Statements.PrintNode;
-import node.base.Node;
 import semantics.*;
 
 import java.util.Optional;
@@ -139,7 +138,7 @@ public class TypeAssignmentVisitor extends ASTBaseVisitor<String> {
         String rightNodeType = visit(node.getRightChild());
 
         if(!leftNodeType.equals(rightNodeType)){
-            throw new ExpressionTypeException("Type mismatch expected: '" +
+            throw new ExpressionWrongTypeException("Type mismatch expected: '" +
                     leftNodeType +
                     "' got: '" +
                     rightNodeType +
@@ -159,7 +158,7 @@ public class TypeAssignmentVisitor extends ASTBaseVisitor<String> {
         String rightNodeType = visit(node.getRightChild());
 
         if(!leftNodeType.equals(rightNodeType)){
-            throw new ExpressionTypeException("Type mismatch. Cannot divide or multiply '" +
+            throw new ExpressionWrongTypeException("Type mismatch. Cannot divide or multiply '" +
                     leftNodeType +
                     "' with '" +
                     rightNodeType +
