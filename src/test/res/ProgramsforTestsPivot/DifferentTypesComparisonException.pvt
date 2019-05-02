@@ -1,8 +1,7 @@
-
-
 init(){
     int a = 5;
     float b = 5.0;
+    // Should throw DifferentTypesComparisonException, since 'a' is int and 'b' is a float
     if(a < b){
         print "Hej";
     }

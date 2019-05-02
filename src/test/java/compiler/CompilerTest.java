@@ -36,7 +36,6 @@ class CompilerTest {
     void TestWrongReturnTypeException(){
         Compiler.setSourceFile("WrongReturnTypeException.pvt");
         assertThrows(WrongReturnTypeException.class, Compiler::compileCodeWithoutPrint);
-
     }
 
     @Test
