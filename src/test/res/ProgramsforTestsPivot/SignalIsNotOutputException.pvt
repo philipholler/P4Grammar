@@ -1,0 +1,10 @@
+define Signal toggle: 1..2;
+
+define Device Bulb input: toggle;
+
+Bulb frontDoorLightOne = "129.67.198.1:12565";
+
+init(){
+    // Should throw SignalIsNotInputException, since the toggle is an output
+    get output frontDoorLightOne toggle;
+}

@@ -1,0 +1,10 @@
+define Signal toggle: on = 1, off = 0;
+
+define Device Bulb input: toggle;
+
+Bulb frontDoorLightOne = "129.67.198.1:12565";
+
+init(){
+    // notASignal is not declared and should throw a DeviceHasNoSuchSignalException
+    set Bulb notASignal: on;
+}

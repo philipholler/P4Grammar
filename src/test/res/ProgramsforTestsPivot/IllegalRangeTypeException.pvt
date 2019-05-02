@@ -1,0 +1,10 @@
+define Signal toggle: 1..2;
+
+define Device Bulb output: toggle;
+
+Bulb frontDoorLightOne = "129.67.198.1:12565";
+
+// Should throw IllegalRangeTypeException, since a float range cannot exceed an int '22'
+when frontDoorLightOne toggle: exceeds 22.0{
+
+}

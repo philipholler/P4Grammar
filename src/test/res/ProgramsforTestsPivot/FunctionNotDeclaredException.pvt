@@ -1,0 +1,4 @@
+init(){
+    // Function not declared. Should throw FunctionNotDeclaredException
+    funcCall();
+}

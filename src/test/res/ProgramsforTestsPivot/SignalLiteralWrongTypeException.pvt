@@ -1,0 +1,2 @@
+// Should throw SignalLiteralWrongTypeException, since 'On' is an int and 'yo' is a string
+define Signal Toggle: On = 1, yo = "hej";

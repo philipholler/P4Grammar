@@ -1,0 +1,3 @@
+// Should throw ReturnStatementMissingException, since it has not return statement
+string func(){
+}

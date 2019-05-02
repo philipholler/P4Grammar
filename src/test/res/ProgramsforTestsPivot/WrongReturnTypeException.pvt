@@ -1,0 +1,4 @@
+string func(){
+    // Should throw WrongReturnTypeException, since it tries to return an int in a string function.
+    return 5;
+}

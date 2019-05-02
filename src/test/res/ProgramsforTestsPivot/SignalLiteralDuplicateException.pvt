@@ -1,0 +1,2 @@
+// Should throw SignalLiteralDuplicateException, since On is declared twice
+define Signal Toggle: On = 1, On = 3;

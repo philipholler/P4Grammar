@@ -1,0 +1,2 @@
+// Should throw TypeUndefinedException, since LawnMower has not been defined.
+LawnMower gardenMower = "129.10.10:10210";

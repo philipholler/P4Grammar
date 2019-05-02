@@ -169,6 +169,9 @@ public class TypeCheckerVisitor extends ASTBaseVisitor<Void>{
                             node.getLineNumber());
                 }
             }
+        } else {
+            throw new DeviceHasNoSuchSignalException("'" + node.getDeviceID() + "' has no such signal '" + node.getSignalID() + "'",
+                    node.getLineNumber());
         }
 
         return super.visit(node);
@@ -177,7 +180,7 @@ public class TypeCheckerVisitor extends ASTBaseVisitor<Void>{
     @Override
     public Void visit(MultiExprNode node) {
         if(node.getType().equals(SymbolTable.STRING_TYPE_ID)){
-            throw new DivideOrMultiStringExpection("Cannot divide or multiply strings", node.getLineNumber());
+            throw new DivideOrMultiStringException("Cannot divide or multiply strings", node.getLineNumber());
         }
         return super.visit(node);
     }

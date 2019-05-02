@@ -1,0 +1,4 @@
+init(){
+    // Should throw VariableNotInitialisedException, since a is not initialised.
+    a = 5;
+}

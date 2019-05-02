@@ -1,0 +1,5 @@
+init(){
+    int a = 5;
+    // Should throw error, since the name is 'a' is already taken
+    float a = 5.0;
+}

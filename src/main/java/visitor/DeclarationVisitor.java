@@ -152,7 +152,7 @@ public class DeclarationVisitor extends ASTBaseVisitor<Void> {
 
                 // if the node getter is configured as input, but the type doesn't have that input signal. throw.
                 if(!node.isOutput() && !deviceType.hasInputSignal(node.getSignalID())){
-                    throw new SignalIsNotOutputException("The signal '" + node.getSignalID() + "' is not defined in device '" + node.getDeviceID()  + "' as input", node.getLineNumber());
+                    throw new SignalIsNotInputException("The signal '" + node.getSignalID() + "' is not defined in device '" + node.getDeviceID()  + "' as input", node.getLineNumber());
                 }
 
             } else {

@@ -1,0 +1,7 @@
+init(){
+    printFunction(2);
+}
+
+void printFunction(string s){
+    print s;
+}

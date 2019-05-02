@@ -1,0 +1,5 @@
+init(){
+    // Expression has both float and int, should throw ExpressionWrongTypeException
+    if(5 + 5.2 < 3){
+    }
+}

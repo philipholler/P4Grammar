@@ -1,0 +1,9 @@
+init(){
+    // Should throw IncorrectArgumentAmountException, since the function func has only 1 formal parameter
+    func(2, 2);
+}
+
+
+void func(string hej){
+    return;
+}

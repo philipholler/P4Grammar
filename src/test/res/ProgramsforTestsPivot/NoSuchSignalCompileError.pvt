@@ -1,0 +1,10 @@
+define Signal toggle: 1..2;
+
+define Device Bulb output: toggle;
+
+Bulb frontDoorLightOne = "129.67.198.1:12565";
+
+// Should throw NoSuchSignalCompileError since 'wrongSignal' has not been declared
+when frontDoorLightOne wrongSignal: exceeds 22.0{
+
+}

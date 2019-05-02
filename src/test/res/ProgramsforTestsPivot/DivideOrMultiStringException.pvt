@@ -1,0 +1,4 @@
+init(){
+    // You can divide a string, therefor this should thrown an DivideOrMultiStringException
+    string s = "hej" / "hej";
+}

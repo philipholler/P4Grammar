@@ -1,0 +1,4 @@
+init(){
+    // Should throw SubtractStringException, since you cannot subtract a string from a string
+    string s = "hej" - "hej";
+}
