@@ -83,8 +83,6 @@ funcCall: id=ID PARANBEG arguments PARANEND                         #funCall
 
 declVar: varType ID EQUALS expr SEMCOL;
 
-brk: BREAK SEMCOL;
-
 rtn : (RETURN expr? SEMCOL);
 
 litVal: INTEGER #intVal

@@ -28,13 +28,21 @@ public class Compiler {
     public static String SOURCE_FILE_DIR = "testProgramsPivot/";
     public static String SOURCE_FILE = SOURCE_FILE_DIR + "EventTestProgram.pvt";
     public static boolean COMPILER_DEBUG_MODE = true;
+    public static boolean OPTIMISE_CODE_MODE = true;
     public static String GENERATED_FILES_DIR = "GeneratedModule/src/main/java/";
 
     public static String DEFAULT_CLASSES_DIR = "/src/main/java/default_classes/";
 
 
     public static void main(String[] args) {
+        // Compile to java with print of AST and symbol table.
+        compileToJavaWithPrint();
 
+        // Simply compile to java
+        // compileToJava();
+    }
+
+    public static void compileToJavaWithPrint(){
         try{
             // Input test file name. The rest creates the lexer and parser.
             CharStream cs = fromFileName(SOURCE_FILE);
@@ -46,8 +54,7 @@ public class Compiler {
             ParseTree tree = parser.program();
 
             // Visit with AstBuilderVisitor to create ast
-            AstBuilderVisitor astVisitor = new AstBuilderVisitor();
-            Node ast = astVisitor.visit(tree);
+            Node ast = tree.accept(new AstBuilderVisitor());
 
             // Print ast. Use the Node.getTreeString() to pretty-print the AST.
             System.out.println(ast.getTreeString(0));
@@ -58,8 +65,10 @@ public class Compiler {
             // Print the symbol table, which is found inside the first node of type ProgramNode
             System.out.println(((ProgramNode)ast).getSt());
 
-            // Optimise expressions
-            optimiseExpr(ast);
+            if(OPTIMISE_CODE_MODE){
+                // Optimise expressions
+                optimiseExpr(ast);
+            }
 
             // Print new AST
             System.out.println(ast.getTreeString(0));
@@ -73,7 +82,39 @@ public class Compiler {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
 
+    public static void compileToJava(){
+        CharStream cs = null;
+        try {
+            cs = fromFileName(SOURCE_FILE);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        PivotLexer lexer = new PivotLexer(cs);
+        CommonTokenStream token = new CommonTokenStream(lexer);
+        PivotParser parser = new PivotParser(token);
+
+        // Create parse tree with parser
+        ParseTree tree = parser.program();
+
+        // Visit with AstBuilderVisitor to create ast
+        AstBuilderVisitor astVisitor = new AstBuilderVisitor();
+        Node ast = astVisitor.visit(tree);
+
+        // Decorate AST using all visitors
+        decorateAST(ast);
+
+        if(OPTIMISE_CODE_MODE){
+            // Optimise expressions
+            optimiseExpr(ast);
+        }
+
+        // Delete old generated program
+        deleteOldGeneratedFiles();
+
+        // Generate code
+        generateJavaCode(ast);
     }
 
     private static void generateJavaCode(Node ast){
@@ -121,7 +162,6 @@ public class Compiler {
 
     }
 
-
     private static void generateByteCode(Node ast){
         JasminVisitor jv = new JasminVisitor();
         //System.out.println(jv.visit(ast));
@@ -132,37 +172,6 @@ public class Compiler {
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
-    }
-
-    public static void compileCodeWithoutPrint(){
-        CharStream cs = null;
-        try {
-            cs = fromFileName(SOURCE_FILE);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        PivotLexer lexer = new PivotLexer(cs);
-        CommonTokenStream token = new CommonTokenStream(lexer);
-        PivotParser parser = new PivotParser(token);
-
-        // Create parse tree with parser
-        ParseTree tree = parser.program();
-
-        // Visit with AstBuilderVisitor to create ast
-        AstBuilderVisitor astVisitor = new AstBuilderVisitor();
-        Node ast = astVisitor.visit(tree);
-
-        // Decorate AST using all visitors
-        decorateAST(ast);
-
-        // Optimise expressions
-        optimiseExpr(ast);
-
-        // Delete old generated program
-        deleteOldGeneratedFiles();
-
-        // Generate code
-        generateJavaCode(ast);
     }
 
     public static void setSourceFileDir(String sourceFileDir) {
@@ -179,5 +188,9 @@ public class Compiler {
 
     public static void setGeneratedFilesDir(String generatedFilesDir) {
         GENERATED_FILES_DIR = generatedFilesDir;
+    }
+
+    public static void setOptimiseCodeMode(boolean optimiseCodeMode) {
+        OPTIMISE_CODE_MODE = optimiseCodeMode;
     }
 }
