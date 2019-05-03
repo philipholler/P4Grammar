@@ -41,33 +41,40 @@ public class    OptimiseExprVisitor extends ASTBaseVisitor<Object> {
         ExpressionNode newNode;
 
         // Check if both are integer
-        if(visit(node.getLeftChild()) instanceof IntegerNode && visit(node.getRightChild()) instanceof IntegerNode){
+        if(visit(node.getLeftChild()) instanceof IntegerNode &&
+           visit(node.getRightChild()) instanceof IntegerNode){
             // Call recursively until a new IntegerNode is returned.
             if(node.getOperator() == Operator.MINUS){
-                Integer newValue = (((IntegerNode) visit(node.getLeftChild())).getVal() - ((IntegerNode) visit(node.getRightChild())).getVal());
+                Integer newValue = (((IntegerNode) visit(node.getLeftChild())).getVal() -
+                                    ((IntegerNode) visit(node.getRightChild())).getVal());
                 newNode = new IntegerNode(node.getContext(), newValue.toString());
                 return newNode;
             } else if(node.getOperator() == Operator.PLUS){
-                Integer newValue = (((IntegerNode) visit(node.getLeftChild())).getVal() + ((IntegerNode) visit(node.getRightChild())).getVal());
+                Integer newValue = (((IntegerNode) visit(node.getLeftChild())).getVal() +
+                                    ((IntegerNode) visit(node.getRightChild())).getVal());
                 newNode = new IntegerNode(node.getContext(), newValue.toString());
                 return newNode;
             }
         }
         // Check if both are float
-        if(visit(node.getLeftChild()) instanceof FloatNode && visit(node.getRightChild()) instanceof FloatNode){
+        if(visit(node.getLeftChild()) instanceof FloatNode &&
+           visit(node.getRightChild()) instanceof FloatNode){
             // Call recursively until a new FloatNode is returned.
             if(node.getOperator() == Operator.MINUS){
-                Float newValue = (((FloatNode) visit(node.getLeftChild())).getVal() - ((FloatNode) visit(node.getRightChild())).getVal());
+                Float newValue = (((FloatNode) visit(node.getLeftChild())).getVal() -
+                                  ((FloatNode) visit(node.getRightChild())).getVal());
                 newNode = new FloatNode(node.getContext(), newValue.toString());
                 return newNode;
             } else if (node.getOperator() == Operator.PLUS){
-                Float newValue = (((FloatNode) visit(node.getLeftChild())).getVal() + ((FloatNode) visit(node.getRightChild())).getVal());
+                Float newValue = (((FloatNode) visit(node.getLeftChild())).getVal() +
+                                  ((FloatNode) visit(node.getRightChild())).getVal());
                 newNode = new FloatNode(node.getContext(), newValue.toString());
                 return newNode;
             }
         }
         //Check if both are string
-        if(visit(node.getLeftChild()) instanceof StringNode && visit(node.getRightChild()) instanceof StringNode){
+        if(visit(node.getLeftChild()) instanceof StringNode &&
+           visit(node.getRightChild()) instanceof StringNode){
             // Call recursively until a new StringNode is returned.
             String newValue = "\"" +
                     ((StringNode) visit(node.getLeftChild())).getStringVal() +
