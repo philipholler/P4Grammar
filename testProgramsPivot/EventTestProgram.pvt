@@ -24,7 +24,7 @@ string spoil = "Endgame spoiler : ";
 
 
 init(){
-
+    int yoo = 5 - 5 * 5;
 }
 
 when frontDoorLight Toggle : On{

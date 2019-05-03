@@ -1,5 +1,5 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="Build Compiler" type="MavenRunConfiguration" factoryName="Maven">
+  <configuration default="false" name="Build and run Generated Module" type="MavenRunConfiguration" factoryName="Maven">
     <MavenSettings>
       <option name="myGeneralSettings" />
       <option name="myRunnerSettings" />
@@ -13,6 +13,8 @@
               <option value="clean" />
               <option value="validate" />
               <option value="compile" />
+              <option value="package" />
+              <option value="-e" />
             </list>
           </option>
           <option name="pomFileName" value="pom.xml" />
@@ -20,7 +22,7 @@
             <map />
           </option>
           <option name="resolveToWorkspace" value="false" />
-          <option name="workingDirPath" value="$PROJECT_DIR$" />
+          <option name="workingDirPath" value="$PROJECT_DIR$/GeneratedModule" />
         </MavenRunnerParameters>
       </option>
     </MavenSettings>

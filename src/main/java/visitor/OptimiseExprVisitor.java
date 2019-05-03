@@ -40,45 +40,43 @@ public class    OptimiseExprVisitor extends ASTBaseVisitor<Object> {
     public Object visit(AddExprNode node) {
         ExpressionNode newNode;
 
+        // Visit both sides
+        var left = visit(node.getLeftChild());
+        var right = visit(node.getRightChild());
+
         // Check if both are integer
-        if(visit(node.getLeftChild()) instanceof IntegerNode &&
-           visit(node.getRightChild()) instanceof IntegerNode){
-            // Call recursively until a new IntegerNode is returned.
+        if(left instanceof IntegerNode && right instanceof IntegerNode){
             if(node.getOperator() == Operator.MINUS){
-                Integer newValue = (((IntegerNode) visit(node.getLeftChild())).getVal() -
-                                    ((IntegerNode) visit(node.getRightChild())).getVal());
+                Integer newValue = ((IntegerNode) left).getVal() -
+                                   ((IntegerNode) right).getVal();
                 newNode = new IntegerNode(node.getContext(), newValue.toString());
                 return newNode;
             } else if(node.getOperator() == Operator.PLUS){
-                Integer newValue = (((IntegerNode) visit(node.getLeftChild())).getVal() +
-                                    ((IntegerNode) visit(node.getRightChild())).getVal());
+                Integer newValue = (((IntegerNode) left).getVal() +
+                                    ((IntegerNode) right).getVal());
                 newNode = new IntegerNode(node.getContext(), newValue.toString());
                 return newNode;
             }
         }
         // Check if both are float
-        if(visit(node.getLeftChild()) instanceof FloatNode &&
-           visit(node.getRightChild()) instanceof FloatNode){
-            // Call recursively until a new FloatNode is returned.
+        if(left instanceof FloatNode && right instanceof FloatNode){
             if(node.getOperator() == Operator.MINUS){
-                Float newValue = (((FloatNode) visit(node.getLeftChild())).getVal() -
-                                  ((FloatNode) visit(node.getRightChild())).getVal());
+                Float newValue = (((FloatNode) left).getVal() -
+                                  ((FloatNode) right).getVal());
                 newNode = new FloatNode(node.getContext(), newValue.toString());
                 return newNode;
             } else if (node.getOperator() == Operator.PLUS){
-                Float newValue = (((FloatNode) visit(node.getLeftChild())).getVal() +
-                                  ((FloatNode) visit(node.getRightChild())).getVal());
+                Float newValue = (((FloatNode) left).getVal() +
+                                  ((FloatNode) right).getVal());
                 newNode = new FloatNode(node.getContext(), newValue.toString());
                 return newNode;
             }
         }
         //Check if both are string
-        if(visit(node.getLeftChild()) instanceof StringNode &&
-           visit(node.getRightChild()) instanceof StringNode){
-            // Call recursively until a new StringNode is returned.
+        if(left instanceof StringNode && right instanceof StringNode){
             String newValue = "\"" +
-                    ((StringNode) visit(node.getLeftChild())).getStringVal() +
-                    ((StringNode) visit(node.getRightChild())).getStringVal() +
+                    ((StringNode) left).getStringVal() +
+                    ((StringNode) right).getStringVal() +
                     "\"";
             newNode = new StringNode(node.getContext(), newValue);
             return newNode;
@@ -95,35 +93,34 @@ public class    OptimiseExprVisitor extends ASTBaseVisitor<Object> {
     public Object visit(MultiExprNode node) {
         ExpressionNode newNode;
 
+        var left = visit(node.getLeftChild());
+        var right = visit(node.getRightChild());
+
         // Check if both are integer
-        if(visit(node.getLeftChild()) instanceof IntegerNode &&
-           visit(node.getRightChild()) instanceof IntegerNode){
-            // Call recursively until a new IntegerNode is returned.
+        if(left instanceof IntegerNode && right instanceof IntegerNode){
             if(node.getOperator() == Operator.MULTPLY){
-                Integer newValue = (((IntegerNode) visit(node.getLeftChild())).getVal() *
-                                    ((IntegerNode) visit(node.getRightChild())).getVal());
-                newNode = new IntegerNode(node.getContext(), newValue.toString());
+                int newVal = (((IntegerNode) left).getVal() *
+                              ((IntegerNode) right).getVal());
+                newNode = new IntegerNode(node.getContext(), String.valueOf(newVal));
                 return newNode;
             } else if (node.getOperator() == Operator.DIVIDE){
-                Integer newValue = (((IntegerNode) visit(node.getLeftChild())).getVal() /
-                                    ((IntegerNode) visit(node.getRightChild())).getVal());
-                newNode = new IntegerNode(node.getContext(), newValue.toString());
+                int newVal = (((IntegerNode) left).getVal() /
+                              ((IntegerNode) right).getVal());
+                newNode = new IntegerNode(node.getContext(), String.valueOf(newVal));
                 return newNode;
             }
         }
         // Check if both are float
-        if(visit(node.getLeftChild()) instanceof FloatNode &&
-           visit(node.getRightChild()) instanceof FloatNode){
-            // Call recursively until a new FloatNode is returned.
+        if(left instanceof FloatNode && right instanceof FloatNode){
             if(node.getOperator() == Operator.MULTPLY){
-                Float newValue = (((FloatNode) visit(node.getLeftChild())).getVal() *
-                                  ((FloatNode) visit(node.getRightChild())).getVal());
-                newNode = new FloatNode(node.getContext(), newValue.toString());
+                float newVal = (((FloatNode) left).getVal() *
+                                ((FloatNode) right).getVal());
+                newNode = new FloatNode(node.getContext(), String.valueOf(newVal));
                 return newNode;
             } else if(node.getOperator() == Operator.DIVIDE){
-                Float newValue = (((FloatNode) visit(node.getLeftChild())).getVal() /
-                                  ((FloatNode) visit(node.getRightChild())).getVal());
-                newNode = new FloatNode(node.getContext(), newValue.toString());
+                float newVal = (((FloatNode) left).getVal() /
+                                ((FloatNode) right).getVal());
+                newNode = new FloatNode(node.getContext(), String.valueOf(newVal));
                 return newNode;
             }
         }
@@ -186,7 +183,7 @@ public class    OptimiseExprVisitor extends ASTBaseVisitor<Object> {
 
         // Check if the optimiser found a node and replace
         if(newLeftChild instanceof ExpressionNode){
-            node.setLeftChild((ExpressionNode)newLeftChild);
+            node.setLeftChild((ExpressionNode) newLeftChild);
         }
         if(newRightChild instanceof ExpressionNode){
             node.setRightChild((ExpressionNode) newRightChild);
@@ -214,7 +211,6 @@ public class    OptimiseExprVisitor extends ASTBaseVisitor<Object> {
                 node.setArgument(i, (Node)visit(node.getArguments().get(i)));
             }
         }
-
         return super.visit(node);
     }
 

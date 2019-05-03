@@ -19,9 +19,9 @@ public class SymbolTable {
     public final ArrayList<String> definedTypeIDs = new ArrayList<>();
 
     // The outermost block (Where global variables and type declarations reside)
-    Block globalBlock;
+    private Block globalBlock;
     // The currently opened block
-    Block currentBlock;
+    private Block currentBlock;
 
     // Functions can have the same name as other symbols and are therefore kept in a seperate list
     // Additionally, functions can only be defined globally and are therefore listed here instead of within a block

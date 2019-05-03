@@ -17,6 +17,7 @@
         <!-- Set Java Version to 11 -->
         <maven.compiler.source>11</maven.compiler.source>
         <maven.compiler.target>11</maven.compiler.target>
+        <exec.mainClass>compiler.Compiler</exec.mainClass>
     </properties>
 
     <dependencies>
@@ -59,11 +60,36 @@
             <artifactId>jacoco-maven-plugin</artifactId>
             <version>0.8.3</version>
         </dependency>
+
+        <!-- Enable running the compiler when building -->
+        <dependency>
+            <groupId>org.codehaus.mojo</groupId>
+            <artifactId>exec-maven-plugin</artifactId>
+            <version>1.6.0</version>
+        </dependency>
     </dependencies>
 
 
     <build>
         <plugins>
+            <!-- Enables running of the Compiler in the compile phase. -->
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
+                <version>1.6.0</version>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>java</goal>
+                        </goals>
+                    </execution>
+
+                </executions>
+                <configuration>
+                    <mainClass>compiler.Compiler</mainClass>
+                </configuration>
+            </plugin>
             <plugin>
                 <!-- Enables building of ANTLR grammar files at every build -->
                 <groupId>org.antlr</groupId>
@@ -99,6 +125,11 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <phase>test</phase>
+                    </execution>
+                </executions>
                 <version>2.22.1</version>
             </plugin>
 
@@ -114,13 +145,14 @@
                 <executions>
                     <execution>
                         <id>jacoco-initialize</id>
+                        <phase>test</phase>
                         <goals>
                             <goal>prepare-agent</goal>
                         </goals>
                     </execution>
                     <execution>
                         <id>jacoco-site</id>
-                        <phase>package</phase>
+                        <phase>test</phase>
                         <goals>
                             <goal>report</goal>
                         </goals>

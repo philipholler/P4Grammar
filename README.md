@@ -20,22 +20,12 @@ BEFORE GETTING STARTED
 2. Have Java 11 installed
 _________________________________________________________________________
 
-BUILD THE COMPILER
-
-1. Use the Maven build "Build Compiler"
-________________________________________________
-RUN THE COMPILER
-
-This will translate the source file from Pivot language to Java.
-
-1. Set the file to be compiled in the Compiler class under SOURCE_FILE (The file to be compiled must be located in the testProgramsPivot directory)
-
-2. Run the Compiler.main class to compile a file
+BUILD AND RUN THE COMPILER
+1. Set the file to be compiled in the Compiler class.
+2. Use the Maven build 'Build and run compiler'
 _____________________________
 BUILD AND RUN GENERATED MODULE
-
-1. Use the Maven build "Build Generated Module" to build the newly generated code.
-2. Run the Main.main inside the server package
+1. Use the Maven build 'Build and run Generated Module'
 
 _________________________________
 BUILD AND RUN TESTS

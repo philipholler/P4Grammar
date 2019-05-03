@@ -7,11 +7,35 @@
     <groupId>D410F19</groupId>
     <artifactId>GeneratedModule</artifactId>
     <version>1.0-SNAPSHOT</version>
+    <build>
+        <plugins>
+            <!-- Enables running of the Compiler in the compile phase. -->
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
+                <version>1.6.0</version>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>java</goal>
+                        </goals>
+                    </execution>
+
+                </executions>
+                <configuration>
+                    <mainClass>server.Main</mainClass>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 
     <properties>
         <!-- Set Java Version to 11 -->
         <maven.compiler.source>11</maven.compiler.source>
         <maven.compiler.target>11</maven.compiler.target>
     </properties>
+
+
 
 </project>
