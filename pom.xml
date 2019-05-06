@@ -145,13 +145,13 @@
                 <executions>
                     <execution>
                         <id>jacoco-initialize</id>
-                        <phase>test</phase>
+                        <phase>compile</phase>
                         <goals>
                             <goal>prepare-agent</goal>
                         </goals>
                     </execution>
                     <execution>
-                        <id>jacoco-site</id>
+                        <id>jacoco-report</id>
                         <phase>test</phase>
                         <goals>
                             <goal>report</goal>
