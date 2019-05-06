@@ -8,7 +8,7 @@ import java.io.PrintWriter;
 
 public class JavaFileWriter { // todo very very temporary implementation
 
-    private static final String outDir = System.getProperty("user.dir") + Compiler.GENERATED_OUTPUT_FILES_DIR;
+    private static final String outDir = System.getProperty("user.dir") + File.separator + Compiler.GENERATED_OUTPUT_FILES_DIR;
 
 
     public static void writeClass(ClassBuilder classBuilder){
