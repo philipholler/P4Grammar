@@ -18,7 +18,6 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Objects;
-import java.util.concurrent.atomic.AtomicInteger;
 
 import static org.antlr.v4.runtime.CharStreams.fromFileName;
 
@@ -29,7 +28,7 @@ public class Compiler {
     public static String SOURCE_FILE = SOURCE_FILE_DIR + "EventTestProgram.pvt";
     public static boolean COMPILER_DEBUG_MODE = true;
     public static boolean OPTIMISE_CODE_MODE = true;
-    public static String GENERATED_FILES_DIR = "GeneratedModule/src/main/java/";
+    public static String GENERATED_OUTPUT_FILES_DIR = "GeneratedModule/src/main/java/";
 
     public static String DEFAULT_CLASSES_DIR = "/src/main/java/default_classes/";
 
@@ -140,7 +139,7 @@ public class Compiler {
     }
 
     public static void deleteOldGeneratedFiles(){
-        File generatedFiles = new File(GENERATED_FILES_DIR);
+        File generatedFiles = new File(GENERATED_OUTPUT_FILES_DIR);
 
         if(generatedFiles.exists()){
             // Remove all generated files
@@ -186,8 +185,8 @@ public class Compiler {
         COMPILER_DEBUG_MODE = compilerDebugMode;
     }
 
-    public static void setGeneratedFilesDir(String generatedFilesDir) {
-        GENERATED_FILES_DIR = generatedFilesDir;
+    public static void setGeneratedOutputFilesDir(String generatedOutputFilesDir) {
+        GENERATED_OUTPUT_FILES_DIR = generatedOutputFilesDir;
     }
 
     public static void setOptimiseCodeMode(boolean optimiseCodeMode) {

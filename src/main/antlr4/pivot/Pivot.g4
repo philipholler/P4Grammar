@@ -185,7 +185,6 @@ DECEEDS : 'deceeds';
 NOW : 'now';
 ELSE : 'else';
 RETURN : 'return';
-BREAK : 'break';
 STARTING: 'starting';
 PRINT : 'print';
 

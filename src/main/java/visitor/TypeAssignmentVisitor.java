@@ -51,7 +51,7 @@ public class TypeAssignmentVisitor extends ASTBaseVisitor<String> {
                     );
         }
 
-        // Make sure to visit all children to assign types to them as well.
+        // Make sure to visit all arguments to assign types to them as well.
         super.visit(node);
 
         return node.getType();

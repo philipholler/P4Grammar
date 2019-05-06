@@ -1,14 +1,14 @@
 package codegen;
 
+import compiler.Compiler;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
-import java.time.LocalDateTime;
 
 public class JavaFileWriter { // todo very very temporary implementation
 
-    private static final String outDir = System.getProperty("user.dir") +
-            "/GeneratedModule/src/main/java/";
+    private static final String outDir = System.getProperty("user.dir") + Compiler.GENERATED_OUTPUT_FILES_DIR;
 
 
     public static void writeClass(ClassBuilder classBuilder){

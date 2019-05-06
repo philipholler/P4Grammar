@@ -16,7 +16,7 @@ class CompilerTest {
     @BeforeEach
     void setup() {
         Compiler.setCompilerDebugMode(true);
-        Compiler.setGeneratedFilesDir(TEST_GENERATED_DIR);
+        Compiler.setGeneratedOutputFilesDir(TEST_GENERATED_DIR);
         Compiler.setSourceFileDir(TEST_SOURCE_FILE_DIR);
     }
 
