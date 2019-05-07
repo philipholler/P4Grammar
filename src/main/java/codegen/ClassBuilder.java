@@ -22,6 +22,7 @@ public class ClassBuilder {
     public static final String RANGE_SIGNAL_CLASS = "RangeSignal";
     public static final String LITERAL_SIGNAL_CLASS = "Signal";
     public static final String GET_METHOD_PREFIX = "get";
+    public static final String SET_METHOD_PREFIX = "set";
 
     public static final String DEVICE_SUPER_CLASS = "Device";
 
@@ -82,8 +83,9 @@ public class ClassBuilder {
         return this.append("synchronized ");
     }
 
+
     public enum BlockType{
-        CLASS, METHOD, WHILE, IF, ELSE, FOR, TRY, CATCH;
+        CLASS, METHOD, WHILE, IF, ELSE, FOR, TRY, CATCH, SYNCHRONIZED;
     }
 
     public ClassBuilder appendPackage(String packageString){
@@ -138,6 +140,10 @@ public class ClassBuilder {
         return this;
     }
 
+    public void startSyncBlock(String varName) {
+        appendSynchronized().startParan().append(varName).endParan();
+        openBlock(BlockType.SYNCHRONIZED);
+    }
 
     // Open a block by pushing the type to the block stack and appending a starting bracket
     public void openBlock(BlockType blockType){
@@ -207,7 +213,6 @@ public class ClassBuilder {
      * @param inputs Zero or more formal parameters
      */
     public ClassBuilder appendMethod(String methodName, String returnType, JavaInputParameter...inputs){
-        codeBuilder.newLine();
         codeBuilder.append("public ").append(returnType).append(" ").append(methodName);
 
         codeBuilder.append(" (");

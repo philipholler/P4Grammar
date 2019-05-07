@@ -77,7 +77,6 @@ public class MainGenerationVisitor extends ASTBaseVisitor<Void> {
 
     SymbolTable st;
 
-
     @Override
     public Void visit(ProgramNode node) {
         st = node.getSt();
@@ -99,6 +98,10 @@ public class MainGenerationVisitor extends ASTBaseVisitor<Void> {
         addDeviceListFill();
         classBuilder.appendGetMethod("ArrayList<Device>", DEVICE_LIST_NAME);
 
+        // Add synchronized methods
+        SynchronizedVisitor synchronizedVisitor = new SynchronizedVisitor(classBuilder);
+        synchronizedVisitor.visit(node.getDeclsNode());
+
         classBuilder.closeBlock(ClassBuilder.BlockType.CLASS);
         JavaFileWriter.writeClass(classBuilder);
         return null;
@@ -111,7 +114,7 @@ public class MainGenerationVisitor extends ASTBaseVisitor<Void> {
         classBuilder.closeBlock(ClassBuilder.BlockType.METHOD);
     }
 
-    private void addImports(){
+    private void addImports() {
         classBuilder.appendImportAllFrom(ClassBuilder.SIGNAL_PACKAGE);
         classBuilder.appendImportAllFrom(ClassBuilder.DEVICE_PACKAGE);
         classBuilder.appendImportAllFrom(ClassBuilder.EVENT_PACKAGE);
@@ -125,18 +128,18 @@ public class MainGenerationVisitor extends ASTBaseVisitor<Void> {
         classBuilder.appendImport("java.time.LocalDateTime");
     }
 
-    private void addStandardVars(){
+    private void addStandardVars() {
         classBuilder.appendFinal().appendObjectDecl(Server.class.getSimpleName(), SERVER_VAR_NAME);
         classBuilder.appendFinal().appendNewObjectDecl("ArrayList<Device>", DEVICE_LIST_NAME);
     }
 
-    private void addMainMethod(DeclsNode node){
+    private void addMainMethod(DeclsNode node) {
         classBuilder.appendMainMethod();
         classBuilder.appendFinal().appendNewObjectDecl(MAIN_CLASS_NAME, "main");
         classBuilder.closeBlock(ClassBuilder.BlockType.METHOD);
     }
 
-    private void addConstructor(DeclsNode node){
+    private void addConstructor(DeclsNode node) {
         classBuilder.appendConstructor();
 
         // Add call to add all method a list
@@ -146,7 +149,7 @@ public class MainGenerationVisitor extends ASTBaseVisitor<Void> {
         // afasfsadfsd
 
         // Call user-defined init function if it's defined
-        if(node.hasInitNode()) classBuilder.appendMethodCall(INIT_FUNC_NAME);
+        if (node.hasInitNode()) classBuilder.appendMethodCall(INIT_FUNC_NAME);
 
         addEventInitStatements();
 
@@ -169,20 +172,20 @@ public class MainGenerationVisitor extends ASTBaseVisitor<Void> {
     @Override
     public Void visit(BlockNode node) {
         st.openScope(node);
-        for(Node statement : node.getChildren()){
+        for (Node statement : node.getChildren()) {
             // Get functions can stand alone, therefor remove.
-            if(statement instanceof GetFuncNode)
+            if (statement instanceof GetFuncNode)
                 continue;
             else
                 visit(statement);
 
-            if(statement instanceof ReturnNode){
+            if (statement instanceof ReturnNode) {
                 classBuilder.endLine().appendNewLine();
                 st.closeScope();
                 return null;
             }
-            if(statement instanceof FuncCallNode) classBuilder.endLine().appendNewLine();
-            if(statement instanceof SetFuncNode) classBuilder.endLine().appendNewLine();
+            if (statement instanceof FuncCallNode) classBuilder.endLine().appendNewLine();
+            if (statement instanceof SetFuncNode) classBuilder.endLine().appendNewLine();
         }
 
         st.closeScope();
@@ -206,7 +209,7 @@ public class MainGenerationVisitor extends ASTBaseVisitor<Void> {
         JavaType type = JavaCodeUtils.correspondingJavaType(node.getVarType());
 
         // Generates : "type x = "
-        classBuilder.appendSynchronized().append(type.keyword).appendSpace().append(node.getID()).appendEquals();
+        classBuilder.append(type.keyword).appendSpace().append(node.getID()).appendEquals();
         // visit children to append value that is assigned to the variable
         visit(node.getExpr());
         classBuilder.endLine();
@@ -216,17 +219,35 @@ public class MainGenerationVisitor extends ASTBaseVisitor<Void> {
 
     @Override
     public Void visit(AssignmentNode node) {
-        classBuilder.append(node.getID()).appendEquals();
+        boolean isGlobalVar = st.isGlobalVariable(node.getID());
+        if (isGlobalVar) {
+            classBuilder.append(setterMethodName(node.getID())).startParan();
+        } else {
+            classBuilder.append(node.getID()).appendEquals();
+        }
+
         visit(node.getExpr());
+
+        if (isGlobalVar) classBuilder.endParan();
         classBuilder.endLine();
+
         return null;
+    }
+
+    private String getterMethodName(String id) {
+        return ClassBuilder.GET_METHOD_PREFIX + id;
+    }
+
+
+    private String setterMethodName(String id) {
+        return ClassBuilder.SET_METHOD_PREFIX + id;
     }
 
     @Override
     public Void visit(ReturnNode node) {
         classBuilder.append("return");
 
-        if(node.getReturnVal() != null){
+        if (node.getReturnVal() != null) {
             classBuilder.appendSpace();
             visit(node.getReturnVal());
         }
@@ -277,7 +298,7 @@ public class MainGenerationVisitor extends ASTBaseVisitor<Void> {
     }
 
     // Default init behaviour - Initialize events and server + and run event managers
-    private void addEventInitStatements(){
+    private void addEventInitStatements() {
         String eventInitName = "eventInit";
 
         // "EventInitializer eventInit = "
@@ -308,9 +329,9 @@ public class MainGenerationVisitor extends ASTBaseVisitor<Void> {
     @Override
     public Void visit(GetFuncNode node) {
         // Make sure to cast the value to the correct type
-        if(node.getType().equals(SymbolTable.INT_TYPE_ID)){
+        if (node.getType().equals(SymbolTable.INT_TYPE_ID)) {
             classBuilder.append("(Integer)");
-        } else if (node.getType().equals(SymbolTable.FLOAT_TYPE_ID)){
+        } else if (node.getType().equals(SymbolTable.FLOAT_TYPE_ID)) {
             classBuilder.append("(Float");
         }
 
@@ -320,7 +341,7 @@ public class MainGenerationVisitor extends ASTBaseVisitor<Void> {
 
         // device.getInputSignalID() || device.getOutputSignalID()
         classBuilder.append(GET_KEYWORD);
-        if(node.isOutput()){
+        if (node.isOutput()) {
             classBuilder.append(OUTPUT_KEYWORD);
         } else {
             classBuilder.append(INPUT_KEYWORD);
@@ -382,15 +403,23 @@ public class MainGenerationVisitor extends ASTBaseVisitor<Void> {
 
     @Override
     public Void visit(IDNode node) {
-        if(st.isSignalLiteral(node.getID())){
+        // If the id is a signal literal then replace the id with the actual value
+        if (st.isSignalLiteral(node.getID())) {
             Optional<Symbol> sigLit = st.getSymbol(node.getID());
-            if(sigLit.isPresent()){
+            if (sigLit.isPresent()) {
                 FieldSymbol signalLiteral = (FieldSymbol) sigLit.get();
                 EnumNode enumNode = (EnumNode) signalLiteral.getDelcarationNode();
-                classBuilder.append("" + ((IntegerNode)enumNode.getLiteralValue()).getVal());
+                classBuilder.append("" + ((IntegerNode) enumNode.getLiteralValue()).getVal());
             }
         } else {
-            classBuilder.append(node.getID());
+            // Else if the ID Node represents a global variable then access it through a synchronized getter method
+            // for thread safety()
+            if(st.isGlobalVariable(node.getID())){
+                classBuilder.append(getterMethodName(node.getID())).startParan().endParan();
+            }else{
+                // Otherwise just reference it normally
+                classBuilder.append(node.getID());
+            }
         }
 
         return null;
@@ -412,7 +441,7 @@ public class MainGenerationVisitor extends ASTBaseVisitor<Void> {
             inputParams[i] = new JavaInputParameter(type, inNode.getId());
         }
 
-        if(node.getReturnType().equals("string")){
+        if (node.getReturnType().equals("string")) {
             classBuilder.appendMethod(node.getId(), "String", inputParams);
         } else {
             classBuilder.appendMethod(node.getId(), node.getReturnType(), inputParams);
@@ -486,7 +515,7 @@ public class MainGenerationVisitor extends ASTBaseVisitor<Void> {
         visit(node.getIfBlock());
         classBuilder.closeBlock(ClassBuilder.BlockType.IF);
 
-        if(node.getElseBlock() != null){
+        if (node.getElseBlock() != null) {
             classBuilder.append(ELSE_PREFIX);
             classBuilder.openBlock(ClassBuilder.BlockType.ELSE);
             visit(node.getElseBlock());
@@ -499,13 +528,22 @@ public class MainGenerationVisitor extends ASTBaseVisitor<Void> {
     @Override
     public Void visit(WhileNode node) {
         classBuilder.append(WHILE_PREFIX);
+
+        // Loop condition
         classBuilder.startParan();
         visit(node.getLeftChild());
         classBuilder.endParan();
+
         classBuilder.openBlock(ClassBuilder.BlockType.WHILE);
+
+        appendInterruptCheck();
         visit(node.getRightChild());
         classBuilder.closeBlock(ClassBuilder.BlockType.WHILE);
         return null;
+    }
+
+    private void appendInterruptCheck() {
+        classBuilder.append("Utils.").appendMethodCall("interruptCheck");
     }
 
     @Override
@@ -538,11 +576,11 @@ public class MainGenerationVisitor extends ASTBaseVisitor<Void> {
 
     @Override
     public Void visit(ComparisonExprNode node) {
-        if(node.getLeftChild() instanceof NowNode && node.getRightChild() instanceof TimeNode){
+        if (node.getLeftChild() instanceof NowNode && node.getRightChild() instanceof TimeNode) {
             classBuilder.appendTimeComparison((NowNode) node.getLeftChild(), (TimeNode) node.getRightChild(), node.getOp());
             return null;
         }
-        if(node.getLeftChild() instanceof TimeNode && node.getRightChild() instanceof NowNode){
+        if (node.getLeftChild() instanceof TimeNode && node.getRightChild() instanceof NowNode) {
             classBuilder.appendTimeComparison((TimeNode) node.getLeftChild(), (NowNode) node.getRightChild(), node.getOp());
             return null;
         }
@@ -565,7 +603,7 @@ public class MainGenerationVisitor extends ASTBaseVisitor<Void> {
         visit(node.getExpr());
 
         long i = 1L;
-        switch(node.getTimeframe()){
+        switch (node.getTimeframe()) {
             case MONTH:
                 i = 2592000000L;//MS in a month
                 break;
@@ -593,8 +631,6 @@ public class MainGenerationVisitor extends ASTBaseVisitor<Void> {
 
         return null;
     }
-
-
 
 
 }

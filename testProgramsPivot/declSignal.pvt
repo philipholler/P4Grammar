@@ -8,6 +8,7 @@ define Signal open : 0.0..100.0;
 // Define device types
 define Device Bulb input: toggle, celsius;
 define Device Window input: open;
+
 // Define sensors
 define Device MovementSensor output: toggle input: celsius, toggle;
 define Device Thermometer output: celsius;
@@ -15,13 +16,10 @@ define Device Thermometer output: celsius;
 // Variable definitions of every device in the house
 Bulb frontDoorLight = "id1654";
 Window bedRoomWindow = "id6584";
-
 MovementSensor frontDoorSensor = "Google.com";
-
 Thermometer mainThermometer = "129.67.198.65:12565";
 
 int a = 5 * 5;
-
 float f = 5.1 - 5.2;
 
 init(){

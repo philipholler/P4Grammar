@@ -21,14 +21,16 @@ Thermometer kitchenTherm = "therm1";
 int hey = 5;
 float spider = 5.0;
 string spoil = "Endgame spoiler : ";
-
+int yoo = -10;
 
 init(){
-    int yoo = 5 - 5 * 5;
+    hey = 5;
 }
 
 when frontDoorLight Toggle : On{
     printFunction("bulb1 has been turned on");
+    spoil = spoil + spoil;
+
 }
 
 when frontDoorLight2 Toggle : Off{
@@ -61,6 +63,14 @@ every 10 seconds starting 10:45 19d04m2019y{
     if(11:10 < now && now == 23d && 23d04m == now && 23d04m2019y == now){
         print "virker5";
     }
+
+    wait 11 seconds;
+
+    while (yoo < 10){
+        print "looping";
+    }
+
+
 }
 
 when kitchenTherm Celsius: exceeds 31{

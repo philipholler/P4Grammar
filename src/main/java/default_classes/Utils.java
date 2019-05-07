@@ -93,4 +93,11 @@ public class Utils {
 
         return LocalDateTime.of(year, month, day, hours, minutes, now.getSecond(), now.getNano());
     }
+
+    public static void interruptCheck(){
+        if(Thread.interrupted()){
+            System.out.println("Thread STOPPING");
+            throw new ThreadDeath();
+        }
+    }
 }

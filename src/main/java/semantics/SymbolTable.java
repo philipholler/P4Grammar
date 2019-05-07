@@ -137,6 +137,13 @@ public class SymbolTable {
         return currentBlock.idExistsInScope(id);
     }
 
+    /** Checks if the current scope (or any parent scopes) contains any symbol with the given idString */
+    public boolean isGlobalVariable (String id){
+        Optional<Symbol> symbol = globalBlock.getSymbol(id);
+        return symbol.isPresent() && symbol.get() instanceof FieldSymbol;
+    }
+
+
 
     /**
      * Opens a scope corresponding to the current node
