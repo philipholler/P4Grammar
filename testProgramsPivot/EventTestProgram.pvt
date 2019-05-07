@@ -21,7 +21,7 @@ Thermometer kitchenTherm = "therm1";
 int hey = 5;
 float spider = 5.0;
 string spoil = "Endgame spoiler : ";
-int yoo = -10;
+int yoo = 5;
 
 init(){
     hey = 5;
@@ -64,10 +64,9 @@ every 10 seconds starting 10:45 19d04m2019y{
         print "virker5";
     }
 
-    wait 11 seconds;
-
     while (yoo < 10){
         print "looping";
+        yoo = yoo + 1
     }
 
 
