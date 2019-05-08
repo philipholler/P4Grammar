@@ -3,7 +3,9 @@ package visitor.codegen;
 
 import node.Function.FunctionNode;
 import node.Statements.Expression.FunctionCall.FuncCallNode;
+import node.Statements.Expression.FunctionCall.SetFuncNode;
 import node.Statements.Expression.IDNode;
+import node.Statements.IfStmtNode;
 import node.Statements.WhileNode;
 import node.base.Node;
 import semantics.FieldSymbol;
@@ -47,6 +49,11 @@ public class SynchronizationVisitor extends ASTBaseVisitor<TreeSet<FieldSymbol>>
         return visit(node.getLogicalExprNode());
     }
 
+    @Override // Finds all global variables used in the if condition (the boolean expression)
+    public TreeSet<FieldSymbol> visit(IfStmtNode node) {
+        return visit(node.getLogicalExprNode());
+    }
+
     @Override // Finds all global variables used as input parameters and used in the function that is being called
     public TreeSet<FieldSymbol> visit(FuncCallNode node) {
         TreeSet<FieldSymbol> globalVars = new TreeSet<>(symbolComparator);
@@ -60,6 +67,27 @@ public class SynchronizationVisitor extends ASTBaseVisitor<TreeSet<FieldSymbol>>
         }
 
         return globalVars;
+    }
+
+    @Override
+    public TreeSet<FieldSymbol> visit(SetFuncNode node) {
+        TreeSet<FieldSymbol> globalVars = new TreeSet<>(symbolComparator);
+
+        // Add the device variable to the global vars
+        globalVars.add(findDeviceSymbol(node.getDeviceID()));
+        // Add any global variables used in the set expression
+        globalVars.addAll(visit(node.getExpr()));
+
+        return globalVars;
+    }
+
+    private FieldSymbol findDeviceSymbol(String id){
+        Optional<Symbol> foundSymbol = symbolTable.getSymbol(id);
+
+        if (!symbolTable.isGlobalVariable(id) || foundSymbol.isPresent())
+            throw new RuntimeException("Could not find device symbol in global scope : " + id);
+
+        return (FieldSymbol) foundSymbol.get();
     }
 
     private FunctionNode findFunctionNode(String id){
