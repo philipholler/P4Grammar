@@ -47,7 +47,13 @@ public class GlobalVarVisitor extends ASTBaseVisitor<TreeSet<FieldSymbol>> {
 
     @Override // Finds all global variables used in the while condition (the boolean expression)
     public TreeSet<FieldSymbol> visit(WhileNode node) {
-        return visit(node.getLogicalExprNode());
+        TreeSet<FieldSymbol> globalSymbols = new TreeSet<>(symbolComparator);
+
+        for(Node n : node.getChildren()){
+            globalSymbols.addAll(visit(n));
+        }
+
+        return globalSymbols;
     }
 
     @Override // Finds all global variables used in the if condition (the boolean expression)
