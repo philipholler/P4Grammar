@@ -66,7 +66,7 @@ every 10 seconds starting 10:45 19d04m2019y{
 
     while (yoo < 10){
         print "looping";
-        yoo = yoo + 1
+        yoo = yoo + 1;
     }
 
 

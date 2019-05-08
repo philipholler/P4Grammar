@@ -45,10 +45,20 @@ public abstract class ASTBaseVisitor<T> {
     }
 
     public T visitChildren(Node node) {
+        T result = defaultResult();
         for (Node n : node.getChildren()) {
-            n.accept(this);
+            T newResult = n.accept(this);
+            result = this.aggregateResult(result, newResult);
         }
 
+        return null;
+    }
+
+    protected T aggregateResult(T aggregate, T nextResult) {
+        return nextResult;
+    }
+
+    protected T defaultResult(){
         return null;
     }
 
