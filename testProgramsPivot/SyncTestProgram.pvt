@@ -51,8 +51,21 @@ when frontDoorLight Toggle : On{
 }
 
 when frontDoorLight Toggle : On{
-    bat = cat + dat;
+    while(a <= 5){
+        a = a + 1;
+        b = b + 1;
+    }
+
+    catFunction(spoil);
 }
+
+
+void catFunction(string s){
+    while(cat <= 5){
+        cat = cat + 1;
+    }
+}
+
 
 
 

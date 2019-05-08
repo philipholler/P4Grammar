@@ -63,9 +63,7 @@ public class GlobalVarVisitor extends ASTBaseVisitor<TreeSet<FieldSymbol>> {
             globalVars.addAll(visit(n));
 
         FunctionNode fnode = findFunctionNode(node.getID());
-        for(Node n : fnode.getBlock().getChildren()){
-            globalVars.addAll(visit(n));
-        }
+        globalVars.addAll(visit(fnode.getBlock()));
 
         return globalVars;
     }

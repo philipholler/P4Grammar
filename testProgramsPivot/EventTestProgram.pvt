@@ -83,6 +83,6 @@ when kitchenTherm Celsius: exceeds 31{
 }
 
 void printFunction(string s){
-    print s;
+    print s
 }
 

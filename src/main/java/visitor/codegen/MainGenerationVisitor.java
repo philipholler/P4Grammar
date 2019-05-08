@@ -16,6 +16,7 @@ import node.Function.FunctionNode;
 import node.Function.InputParamNode;
 import node.Statements.*;
 import node.Statements.Expression.AddExprNode;
+import node.Statements.Expression.ExpressionNode;
 import node.Statements.Expression.FunctionCall.FuncCallNode;
 import node.Statements.Expression.FunctionCall.GetFuncNode;
 import node.Statements.Expression.FunctionCall.SetFuncNode;
@@ -473,7 +474,10 @@ public class MainGenerationVisitor extends ASTBaseVisitor<Void> {
             TreeSet<FieldSymbol> globalVars = globalVarVisitor.visit(n);
             openSyncBlocks(globalVars);
             visit(n);// Add statement logic
-            classBuilder.endLine();
+
+            // If an expression constitues the whole line the add ';' and newline
+            if(n instanceof ExpressionNode)
+                classBuilder.endLine();
             closeSyncBlocks(globalVars.size());
         }
     }
