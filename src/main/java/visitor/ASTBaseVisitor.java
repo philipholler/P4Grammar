@@ -48,10 +48,10 @@ public abstract class ASTBaseVisitor<T> {
         T result = defaultResult();
         for (Node n : node.getChildren()) {
             T newResult = n.accept(this);
-            result = this.aggregateResult(result, newResult);
+            result = aggregateResult(result, newResult);
         }
 
-        return null;
+        return result;
     }
 
     protected T aggregateResult(T aggregate, T nextResult) {

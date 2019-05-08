@@ -101,10 +101,6 @@ public class MainGenerationVisitor extends ASTBaseVisitor<Void> {
         addDeviceListFill();
         classBuilder.appendGetMethod("ArrayList<Device>", DEVICE_LIST_NAME);
 
-        // Add synchronized methods
-        SynchronizedVisitor synchronizedVisitor = new SynchronizedVisitor(classBuilder);
-        synchronizedVisitor.visit(node.getDeclsNode());
-
         classBuilder.closeBlock(ClassBuilder.BlockType.CLASS);
         JavaFileWriter.writeClass(classBuilder);
         return null;
@@ -212,7 +208,7 @@ public class MainGenerationVisitor extends ASTBaseVisitor<Void> {
         JavaType type = JavaCodeUtils.correspondingJavaType(node.getVarType());
 
         // Generates : "type x = "
-        classBuilder.append(type.keyword).appendSpace().append(node.getID()).appendEquals();
+        classBuilder.append(type.objectType).appendSpace().append(node.getID()).appendEquals();
         // visit children to append value that is assigned to the variable
         visit(node.getExpr());
         classBuilder.endLine();
@@ -222,28 +218,10 @@ public class MainGenerationVisitor extends ASTBaseVisitor<Void> {
 
     @Override
     public Void visit(AssignmentNode node) {
-        boolean isGlobalVar = st.isGlobalVariable(node.getID());
-        if (isGlobalVar) {
-            classBuilder.append(setterMethodName(node.getID())).startParan();
-        } else {
-            classBuilder.append(node.getID()).appendEquals();
-        }
-
+        classBuilder.append(node.getID()).appendEquals();
         visit(node.getExpr());
-
-        if (isGlobalVar) classBuilder.endParan();
         classBuilder.endLine();
-
         return null;
-    }
-
-    private String getterMethodName(String id) {
-        return ClassBuilder.GET_METHOD_PREFIX + id;
-    }
-
-
-    private String setterMethodName(String id) {
-        return ClassBuilder.SET_METHOD_PREFIX + id;
     }
 
     @Override
@@ -414,17 +392,10 @@ public class MainGenerationVisitor extends ASTBaseVisitor<Void> {
                 EnumNode enumNode = (EnumNode) signalLiteral.getDelcarationNode();
                 classBuilder.append("" + ((IntegerNode) enumNode.getLiteralValue()).getVal());
             }
-        } else {
-            // Else if the ID Node represents a global variable then access it through a synchronized getter method
-            // for thread safety()
-            if(st.isGlobalVariable(node.getID())){
-                classBuilder.append(getterMethodName(node.getID())).startParan().endParan();
-            }else{
-                // Otherwise just reference it normally
-                classBuilder.append(node.getID());
-            }
-        }
 
+        } else {
+            classBuilder.append(node.getID());
+        }
         return null;
     }
 
@@ -487,42 +458,36 @@ public class MainGenerationVisitor extends ASTBaseVisitor<Void> {
 
         classBuilder.appendMethod(methodName, JavaType.VOID.keyword);
 
-        for(Node n : node.getBlockNode().getChildren()){
+        visitEventBlock(node.getBlockNode());
 
-        }
 //        visit(node.getBlockNode());
         classBuilder.appendNewLine().closeBlock(ClassBuilder.BlockType.METHOD);
     }
 
     // Event blocks are different than regular block because all statements inside an event
     // must be preceded by synchronization locking all used global variables
-    private void visitEventBlock(BlockNode blockNode){
-        classBuilder.openBlock(ClassBuilder.BlockType.METHOD);
+    private void visitEventBlock(BlockNode blockNode) {
 
         // Synchronize all used variables before each statement
-        for(Node n : blockNode.getChildren()){
+        for (Node n : blockNode.getChildren()) {
             TreeSet<FieldSymbol> globalVars = globalVarVisitor.visit(n);
             openSyncBlocks(globalVars);
-            visit(n); // Add statement logic
+            visit(n);// Add statement logic
+            classBuilder.endLine();
             closeSyncBlocks(globalVars.size());
         }
-
-        classBuilder.closeBlock(ClassBuilder.BlockType.METHOD);
     }
 
     private void openSyncBlocks(TreeSet<FieldSymbol> globalVars) {
-        for(Symbol field : globalVars)
+        for (Symbol field : globalVars)
             classBuilder.startSyncBlock(field.getID());
-
-
     }
 
 
     private void closeSyncBlocks(int blocksToClose) {
-        for(int i = 0; i < blocksToClose; i++)
+        for (int i = 0; i < blocksToClose; i++)
             classBuilder.closeBlock(ClassBuilder.BlockType.SYNCHRONIZED);
     }
-
 
 
     @Override

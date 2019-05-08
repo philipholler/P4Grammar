@@ -18,6 +18,11 @@ Bulb frontDoorLight = "bulb1";
 Bulb frontDoorLight2 = "bulb2";
 Thermometer kitchenTherm = "therm1";
 
+int abe = 1;
+int bat = 2;
+int cat = 3;
+int dat = 4;
+
 int hey = 5;
 float spider = 5.0;
 string spoil = "Endgame spoiler : ";
@@ -35,6 +40,7 @@ when frontDoorLight Toggle : On{
 
 when frontDoorLight2 Toggle : Off{
     printFunction("bulb2 has been turned off");
+
 }
 
 when 09:05 22d04m{

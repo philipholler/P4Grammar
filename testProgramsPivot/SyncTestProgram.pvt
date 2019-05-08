@@ -1,0 +1,59 @@
+// Define signals
+define Signal Toggle: On = 1, Off = 0, yo = 3;
+define Signal Celsius:  1..60;
+define Signal Open:  0.0..100.0;
+define Signal Percentage: 0.0..100.0;
+define Signal PercentInt: 0..100;
+
+// Define device types
+define Device Bulb output: Toggle;
+define Device Window input: Open;
+define Device IntWindow input: PercentInt;
+// Define sensors
+define Device MovementSensor output: Toggle input: Celsius, Toggle;
+define Device Thermometer output: Celsius;
+define Device LawnMower input: Toggle;
+
+Bulb frontDoorLight = "bulb1";
+Bulb frontDoorLight2 = "bulb2";
+Thermometer kitchenTherm = "therm1";
+
+
+int a = 1;
+int b = 2;
+int c = 3;
+int d = 4;
+
+int abe = 1;
+int bat = 2;
+int cat = 3;
+int dat = 4;
+
+int hey = 5;
+float spider = 5.0;
+string spoil = "Endgame spoiler : ";
+int yoo = 5;
+
+init(){
+    hey = 5;
+}
+
+when frontDoorLight Toggle : On{
+    abe = bat + cat + dat;
+}
+
+when frontDoorLight Toggle : On{
+    bat = cat + dat;
+}
+
+when frontDoorLight Toggle : On{
+    abe = bat + cat + dat + a + b + c + d;
+}
+
+when frontDoorLight Toggle : On{
+    bat = cat + dat;
+}
+
+
+
+

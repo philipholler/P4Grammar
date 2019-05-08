@@ -2,6 +2,7 @@ package visitor.codegen;
 
 
 import node.Function.FunctionNode;
+import node.Statements.Expression.AddExprNode;
 import node.Statements.Expression.FunctionCall.FuncCallNode;
 import node.Statements.Expression.FunctionCall.SetFuncNode;
 import node.Statements.Expression.IDNode;
@@ -32,6 +33,7 @@ public class GlobalVarVisitor extends ASTBaseVisitor<TreeSet<FieldSymbol>> {
         this.symbolTable = symbolTable;
     }
 
+
     @Override // Returns a hashset with the fieldsymbol corresponding to the id node if it's a global variable
     public TreeSet<FieldSymbol> visit(IDNode node) {
         TreeSet<FieldSymbol> globalSymbols = new TreeSet<>(symbolComparator);
@@ -39,7 +41,6 @@ public class GlobalVarVisitor extends ASTBaseVisitor<TreeSet<FieldSymbol>> {
 
         if(symbol.isPresent() && symbol.get() instanceof FieldSymbol)
             globalSymbols.add((FieldSymbol) symbol.get());
-
 
         return globalSymbols;
     }
@@ -108,7 +109,7 @@ public class GlobalVarVisitor extends ASTBaseVisitor<TreeSet<FieldSymbol>> {
             return nextResult;
 
         aggregate.addAll(nextResult);
-        return nextResult;
+        return aggregate;
     }
 
     @Override
