@@ -20,7 +20,7 @@ import java.util.*;
  * This class is responsible for finding all uses of global variables in a given node and its children
  * A visit mmethod returns a list of all global variables used in that node and in the children of that node
  */
-public class SynchronizationVisitor extends ASTBaseVisitor<TreeSet<FieldSymbol>> {
+public class GlobalVarVisitor extends ASTBaseVisitor<TreeSet<FieldSymbol>> {
 
     private final SymbolTable symbolTable;
 
@@ -28,7 +28,7 @@ public class SynchronizationVisitor extends ASTBaseVisitor<TreeSet<FieldSymbol>>
     private final Comparator<FieldSymbol> symbolComparator =
             Comparator.comparingInt(fieldSymbol -> fieldSymbol.getDelcarationNode().getLineNumber());
 
-    public SynchronizationVisitor(SymbolTable symbolTable) {
+    public GlobalVarVisitor(SymbolTable symbolTable) {
         this.symbolTable = symbolTable;
     }
 

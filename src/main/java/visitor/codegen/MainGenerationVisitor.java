@@ -44,6 +44,7 @@ import visitor.ASTBaseVisitor;
 
 import java.time.LocalDateTime;
 import java.util.Optional;
+import java.util.TreeSet;
 
 public class MainGenerationVisitor extends ASTBaseVisitor<Void> {
 
@@ -75,11 +76,13 @@ public class MainGenerationVisitor extends ASTBaseVisitor<Void> {
 
     public static final String THREAD_DEATH_ERROR_NAME = "ThreadDeath";
 
-    SymbolTable st;
+    private SymbolTable st;
+    private GlobalVarVisitor globalVarVisitor;
 
     @Override
     public Void visit(ProgramNode node) {
         st = node.getSt();
+        globalVarVisitor = new GlobalVarVisitor(st);
         st.resetScope();
 
         classBuilder = new ClassBuilder();
@@ -483,9 +486,44 @@ public class MainGenerationVisitor extends ASTBaseVisitor<Void> {
         assert !methodName.isEmpty(); // Sanity check
 
         classBuilder.appendMethod(methodName, JavaType.VOID.keyword);
-        visit(node.getBlockNode());
+
+        for(Node n : node.getBlockNode().getChildren()){
+
+        }
+//        visit(node.getBlockNode());
         classBuilder.appendNewLine().closeBlock(ClassBuilder.BlockType.METHOD);
     }
+
+    // Event blocks are different than regular block because all statements inside an event
+    // must be preceded by synchronization locking all used global variables
+    private void visitEventBlock(BlockNode blockNode){
+        classBuilder.openBlock(ClassBuilder.BlockType.METHOD);
+
+        // Synchronize all used variables before each statement
+        for(Node n : blockNode.getChildren()){
+            TreeSet<FieldSymbol> globalVars = globalVarVisitor.visit(n);
+            openSyncBlocks(globalVars);
+            visit(n); // Add statement logic
+            closeSyncBlocks(globalVars.size());
+        }
+
+        classBuilder.closeBlock(ClassBuilder.BlockType.METHOD);
+    }
+
+    private void openSyncBlocks(TreeSet<FieldSymbol> globalVars) {
+        for(Symbol field : globalVars)
+            classBuilder.startSyncBlock(field.getID());
+
+
+    }
+
+
+    private void closeSyncBlocks(int blocksToClose) {
+        for(int i = 0; i < blocksToClose; i++)
+            classBuilder.closeBlock(ClassBuilder.BlockType.SYNCHRONIZED);
+    }
+
+
 
     @Override
     public Void visit(PrintNode node) {
