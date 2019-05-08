@@ -33,13 +33,29 @@ int hey = 5;
 float spider = 5.0;
 string spoil = "Endgame spoiler : ";
 int yoo = 5;
+int common = 0;
 
 init(){
     hey = 5;
 }
 
-when frontDoorLight Toggle : On{
-    abe = bat + cat + dat;
+
+every 15 seconds{
+    int i = 0;
+    while(i < 2000){
+        print "thread 1 : " + common + "     i: " + i;
+        i = 1 + i;
+        common = 1 + common;
+    }
+}
+
+every 20 seconds{
+    int i = 0;
+    while(i < 2000){
+        print "thread 2 : " + common + "    i: " + i;
+        i = 1 + i;
+        common = 1 + common;
+    }
 }
 
 when frontDoorLight Toggle : On{
