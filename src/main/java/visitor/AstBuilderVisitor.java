@@ -146,12 +146,17 @@ public class AstBuilderVisitor extends PivotBaseVisitor<Node> {
     @Override
     public Node visitPlusExpr(PivotParser.PlusExprContext ctx) {
         updateLineNumber(ctx);
-        if(ctx.op.getText().equals("+")){
-            return new AddExprNode(ctx, (ExpressionNode) visit(ctx.leftChild), (ExpressionNode) visit(ctx.rightChild), Operator.PLUS);
+        var left = visit(ctx.leftChild);
+        var right = visit(ctx.rightChild);
+        if(ctx.op.getText().equals("+") && left instanceof ExpressionNode && right instanceof ExpressionNode){
+            return new AddExprNode(ctx, (ExpressionNode) left, (ExpressionNode) right, Operator.PLUS);
         } else if(ctx.op.getText().equals("-")){
-            return new AddExprNode(ctx, (ExpressionNode) visit(ctx.leftChild), (ExpressionNode) visit(ctx.rightChild), Operator.MINUS);
+            return new AddExprNode(ctx, (ExpressionNode) left, (ExpressionNode) right, Operator.MINUS);
         } else{
-            throw new CompileErrorException("Error in visitPlusExpr", getCurrentLineNumber());
+            throw new CompileErrorException("Error in visitPlusExpr. Could not add types '" +
+                    left.getClass().getSimpleName() + "' to '" +
+                    right.getClass().getSimpleName() + "'"
+                    , getCurrentLineNumber());
         }
     }
 
