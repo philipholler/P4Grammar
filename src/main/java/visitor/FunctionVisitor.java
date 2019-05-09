@@ -26,7 +26,7 @@ public class FunctionVisitor extends ASTBaseVisitor<Object> {
     @Override
     public Object visit(FunctionNode node) {
         // Check that if the function is not of the type void, it must have a return statement.
-        // Return statements can be nested inside if and while as well. But we can't know the run time value
+        // Return statements can be nested inside if and while as well. But we can't know the run time data
         // of the booleans triggering the if and while, therefor we require one in the outer scope of the function
         if(!node.getReturnType().equals("void")){
             boolean hasReturnNode = false;

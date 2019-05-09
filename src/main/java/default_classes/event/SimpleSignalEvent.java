@@ -20,7 +20,7 @@ public class SimpleSignalEvent<T> implements SignalEvent {
         this.value = value;
         this.eventAction = eventAction;
 
-        // The value that will trigger this event
+        // The data that will trigger this event
         expectedData = new SignalData(device.getNetworkID(), signal.getClass().getSimpleName(), String.valueOf(value));
     }
 

@@ -34,7 +34,7 @@ public class    OptimiseExprVisitor extends ASTBaseVisitor<Object> {
 
     /**
      * Tries to evaluate expressions if no variable is involved.
-     * @return a new node with the evaluated value inside or null if the nodes contained variables.
+     * @return a new node with the evaluated data inside or null if the nodes contained variables.
      */
     @Override
     public Object visit(AddExprNode node) {
@@ -87,7 +87,7 @@ public class    OptimiseExprVisitor extends ASTBaseVisitor<Object> {
 
     /**
      * Tries to evaluate expressions if no variable is involved.
-     * @return a new node with the evaluated value inside or null if the nodes contained variables.
+     * @return a new node with the evaluated data inside or null if the nodes contained variables.
      */
     @Override
     public Object visit(MultiExprNode node) {

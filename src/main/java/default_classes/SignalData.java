@@ -4,12 +4,12 @@ import java.util.Objects;
 
 public class SignalData {
 
-    public final String hardwareId, signalType, value;
+    public final String hardwareId, signalType, data;
 
-    public SignalData(String hardwareId, String signalType, String value) {
+    public SignalData(String hardwareId, String signalType, String data) {
         this.hardwareId = hardwareId;
         this.signalType = signalType;
-        this.value = value;
+        this.data = data;
     }
 
     @Override
@@ -19,20 +19,15 @@ public class SignalData {
         SignalData that = (SignalData) o;
         return Objects.equals(hardwareId, that.hardwareId) &&
                 Objects.equals(signalType, that.signalType) &&
-                Objects.equals(value, that.value);
+                Objects.equals(data, that.data);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(hardwareId, signalType, value);
+        return Objects.hash(hardwareId, signalType, data);
     }
 
-    @Override
-    public String toString() {
-        return "SignalData{" +
-                "hardwareId='" + hardwareId + '\'' +
-                ", signalType='" + signalType + '\'' +
-                ", value='" + value + '\'' +
-                '}';
+    public String toSignalString() {
+        return hardwareId + " " + signalType + " " + data;
     }
 }

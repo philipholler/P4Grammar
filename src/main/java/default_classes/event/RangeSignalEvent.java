@@ -34,24 +34,24 @@ public class RangeSignalEvent<T extends Number> implements SignalEvent{
         if(device.getNetworkID().equals(data.hardwareId) && signal.getName().equals(data.signalType)){
 
             if(passType.equals("EXCEEDS")){
-                // The 'exceeds' event can only be triggered if the current value is at or below the threshold
-                // and the new value is at or above the threshold
+                // The 'exceeds' event can only be triggered if the current data is at or below the threshold
+                // and the new data is at or above the threshold
                 if(compareSignalValue(previousValue, thresHold) <= 0
-                        && compareSignalValue(data.value, thresHold) > 0){
+                        && compareSignalValue(data.data, thresHold) > 0){
                     result = true;
                 }
 
             }else{
-                // The 'deceeds' event can only be triggered if the current value is at or above the threshold
-                // and the new value is below the threshold
+                // The 'deceeds' event can only be triggered if the current data is at or above the threshold
+                // and the new data is below the threshold
                 if(compareSignalValue(previousValue, thresHold) >= 0
-                        && compareSignalValue(data.value, thresHold) < 0){
+                        && compareSignalValue(data.data, thresHold) < 0){
                     result = true;
                 }
             }
 
-            // Update the current signal value to reflect the newly received value
-            signal.setCurrentValue(data.value);
+            // Update the current signal data to reflect the newly received data
+            signal.setCurrentValue(data.data);
             previousValue = signal.getCurrentValue();
         }
 

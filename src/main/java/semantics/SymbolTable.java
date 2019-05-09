@@ -197,7 +197,7 @@ public class SymbolTable {
         return definedTypeIDs.contains(type);
     }
 
-    // Finds and extracts a string representing the value of the given enumID
+    // Finds and extracts a string representing the data of the given enumID
     public String getEnumStringValue(String enumID) {
         EnumNode enumNode = (EnumNode) (((FieldSymbol) getSymbol(enumID).get()).declarationNode);
         if(enumNode.getType().equals(STRING_TYPE_ID)){

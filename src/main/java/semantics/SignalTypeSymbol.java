@@ -17,7 +17,7 @@ public class SignalTypeSymbol extends Symbol{
      * A custom signal definition can contain only one of these 3 kinds of values:
      *      Integer range   (ie. 0.5 to 6.3)
      *      Float range     (ie. 0 to 100)
-     *      Literals        (A list of IDs translating to a certain value (of any primitive type))
+     *      Literals        (A list of IDs translating to a certain data (of any primitive type))
      *
      *  Note : One SignalType can contain literals of multiple different types (floats, ints and strings)
      */
@@ -100,7 +100,7 @@ public class SignalTypeSymbol extends Symbol{
     }
 
     /**
-     * @return true if the given value is within the defined range for this SignalType. Returns false otherwise.
+     * @return true if the given data is within the defined range for this SignalType. Returns false otherwise.
      */
     public boolean isLegalSignalValue(int val){
         if(TYPE == SignalType.INT_RANGE)
@@ -110,7 +110,7 @@ public class SignalTypeSymbol extends Symbol{
     }
 
     /**
-     * @return true if the given value is within the defined range for this SignalType. Returns false otherwise.
+     * @return true if the given data is within the defined range for this SignalType. Returns false otherwise.
      */
     public boolean isLegalSignalValue(float val){
         if(TYPE == SignalType.FLOAT_RANGE)
@@ -120,7 +120,7 @@ public class SignalTypeSymbol extends Symbol{
     }
 
     /**
-     * @param ID The literal id for the signal value
+     * @param ID The literal id for the signal data
      * @return true if the given SIGNAL_ID is defined for this SignalType. False otherwise.
      */
     public boolean isLegalSignalValue(String ID){

@@ -131,16 +131,16 @@ public class ClassGenerationVisitor extends ASTBaseVisitor<ClassBuilder> {
     private void createSetCurrentSignalMetod(ClassBuilder classBuilder, JavaType type){
         // Creates the setCurrentValue(String val) method
         classBuilder.appendMethod(SET_CURRENT_VALUE_METHOD, JavaType.VOID.keyword,
-                new JavaInputParameter(JavaType.STRING.keyword, "value"));
+                new JavaInputParameter(JavaType.STRING.keyword, "data"));
         classBuilder.append(SET_CURRENT_VALUE_METHOD).startParan();
 
         if(type == JavaType.STRING){
-            // No need to convert value if the signal type is string
-            classBuilder.append("value");
+            // No need to convert data if the signal type is string
+            classBuilder.append("data");
         }else{
-            // Convert value to correct type using Integer.valueOf() og Float.valueOf()
+            // Convert data to correct type using Integer.valueOf() og Float.valueOf()
             classBuilder.append(type.objectType).appendDot()
-                    .append("valueOf").startParan().append("value").endParan();
+                    .append("valueOf").startParan().append("data").endParan();
         }
 
         classBuilder.endParan().endLine().closeBlock(ClassBuilder.BlockType.METHOD);

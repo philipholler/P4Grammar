@@ -13,7 +13,7 @@ public class JavaCodeUtils {
             // String technically isn't a primitive in Java, but is included because it behaves almost identically
             // to other primitives
             default:
-                throw new RuntimeException("The value '" + type + "' is not a primitive in java");
+                throw new RuntimeException("The data '" + type + "' is not a primitive in java");
         }
     }
 
@@ -25,7 +25,7 @@ public class JavaCodeUtils {
             // String technically isn't a primitive in Java, but is included because it behaves almost identically
             // to other primitives
             default:
-                throw new RuntimeException("The value '" + type +
+                throw new RuntimeException("The data '" + type +
                         " does not have a corresponding primitive type in java");
         }
     }

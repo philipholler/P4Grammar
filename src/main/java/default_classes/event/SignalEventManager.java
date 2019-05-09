@@ -27,6 +27,10 @@ public class SignalEventManager extends Thread {
         return signalQueue;
     }
 
+    public synchronized void addSignalToSend(SignalData data){
+
+    }
+
     public void run(){
         while(true){
             SignalData signalData = null;
@@ -38,7 +42,7 @@ public class SignalEventManager extends Thread {
 
             // Check if the current signal triggers any events
             parseSignal(signalData);
-            // Update the current value variable to correspond to the received signal
+            // Update the current data variable to correspond to the received signal
             updateCurrentValue(signalData);
         }
     }
@@ -49,20 +53,20 @@ public class SignalEventManager extends Thread {
                 event.executeEvent();
     }
 
-    // Update the current value variable inside the device signal object
+    // Update the current data variable inside the device signal object
     private void updateCurrentValue(SignalData signalData){
         for(Device dev : devices){
             if(dev.getNetworkID().equals(signalData.hardwareId)){
                 Signal signal = dev.getSignal(signalData.signalType);
 
-                // Update the signal value if the device contains this signal type
+                // Update the signal data if the device contains this signal type
                 if(signal != null)
-                    signal.setCurrentValue(signalData.value);
+                    signal.setCurrentValue(signalData.data);
             }
         }
     }
 
-    public void addSignal(SignalData signalData) {
-        getEventsQueue().add(signalData);
+    public synchronized void addSignal(SignalData signalData) {
+        signalQueue.offer(signalData); // todo maybe use .put() instead
     }
 }

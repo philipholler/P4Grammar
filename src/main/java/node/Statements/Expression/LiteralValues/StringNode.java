@@ -19,12 +19,12 @@ public class StringNode extends LiteralValueNode {
                 this.toString() + "\n";
     }
 
-    // Get value with '"' around string. I.e. "String"
+    // Get data with '"' around string. I.e. "String"
     public String getVal() {
         return val;
     }
 
-    // Get value without '"' around string. i.e. "String" -> String
+    // Get data without '"' around string. i.e. "String" -> String
     public String getStringVal(){
         return val.substring(1, val.length() -1);
     }

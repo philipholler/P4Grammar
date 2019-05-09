@@ -210,7 +210,7 @@ public class MainGenerationVisitor extends ASTBaseVisitor<Void> {
 
         // Generates : "type x = "
         classBuilder.append(type.objectType).appendSpace().append(node.getID()).appendEquals();
-        // visit children to append value that is assigned to the variable
+        // visit children to append data that is assigned to the variable
         visit(node.getExpr());
         classBuilder.endLine();
 
@@ -310,7 +310,7 @@ public class MainGenerationVisitor extends ASTBaseVisitor<Void> {
 
     @Override
     public Void visit(GetFuncNode node) {
-        // Make sure to cast the value to the correct type
+        // Make sure to cast the data to the correct type
         if (node.getType().equals(SymbolTable.INT_TYPE_ID)) {
             classBuilder.append("(Integer)");
         } else if (node.getType().equals(SymbolTable.FLOAT_TYPE_ID)) {
@@ -385,7 +385,7 @@ public class MainGenerationVisitor extends ASTBaseVisitor<Void> {
 
     @Override
     public Void visit(IDNode node) {
-        // If the id is a signal literal then replace the id with the actual value
+        // If the id is a signal literal then replace the id with the actual data
         if (st.isSignalLiteral(node.getID())) {
             Optional<Symbol> sigLit = st.getSymbol(node.getID());
             if (sigLit.isPresent()) {

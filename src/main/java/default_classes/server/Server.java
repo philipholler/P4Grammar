@@ -3,9 +3,20 @@ package default_classes.server;
 import default_classes.SignalData;
 import default_classes.event.SignalEventManager;
 
-import java.util.Scanner;
+import java.io.IOException;
+import java.net.ServerSocket;
+import java.net.Socket;
+import java.util.ArrayList;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
-public class Server extends Thread{
+public class Server extends Thread {
+
+    ConcurrentLinkedQueue<SignalData> signalQueue = new ConcurrentLinkedQueue<>();
+    public ArrayList<ServerThread> listOfThreads = new ArrayList<>();
+    Socket socket = null;
+    ServerSocket serversocket = null;
+
+    private final int serverPort = 8000;
 
     private SignalEventManager signalEventManager;
 
@@ -14,26 +25,71 @@ public class Server extends Thread{
     }
 
     @Override
-    public void run() {
-        Scanner scanner = new Scanner(System.in);
-        while(!Thread.interrupted()){
-            String input = scanner.nextLine();
-            SignalData signalData = parseInput(input);
+    public synchronized void start() {
+        System.out.println("Server starting......");
+        try {
+            serversocket = new ServerSocket(serverPort);
+            System.out.println("Server socket opened on port : " + serverPort);
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.out.println("Server error");
+        }
 
-            if(signalData != null){
-                signalEventManager.addSignal(signalData);
-            }else{
-                System.err.println("SERVER: Invalid input : " + input);
+        super.start();
+    }
+
+    public static void main(String[] args) {
+        Server server = new Server(new SignalEventManager(new ArrayList<>(), new ArrayList<>()));
+        server.start();
+    }
+
+    @Override
+    public void run() {
+        System.out.println("Server now accepting connections");
+
+        while (true) {
+            try {
+                socket = serversocket.accept();
+                System.out.println("\nIncoming connection... ");
+                //a new thread is created to handle the conection with the connecting device
+                ServerThread st = new ServerThread(socket, this);
+                st.start();
+
+                //the thread is added to the list of threads
+                listOfThreads.add(st);
+
+                // Report status
+                System.out.println("Connected to client : '" + st.clientInfo.getDeviceName() + "'");
+                System.out.println("Currently " + listOfThreads.size() + " clients are connected");
+            } catch (IOException e) {
+                System.err.println("Failed to establish connection");
+                e.printStackTrace();
             }
+        }
+
+    }
+
+    //Sends a signal to the device that matches Signalsdata hardware id
+    public void sendSignal(SignalData data) {
+        for (ServerThread thread : listOfThreads) {
+            if (thread.clientInfo.getDeviceName().equals(data.hardwareId))
+                thread.setMessageToBeSent(data.signalType + " " + data.data);
         }
     }
 
-    private SignalData parseInput(String input){
-        if(input.isEmpty()) return null;
+    //returns the first signal in signalqueue and removes it
+    public SignalData pollSignal() {
+        return signalQueue.poll();
+    }
 
-        String[] string = input.split(" ");
-        if(string.length != 3) return null;
-
-        return new SignalData(string[0], string[1], string[2]);
+    public synchronized void addRecievedSignal(SignalData signalData) {
+        System.out.println("heyeyeye");
+        signalEventManager.addSignal(signalData);
+    }
+    public ArrayList<ServerThread> getListOfThreads(){
+        return listOfThreads;
     }
 }
+
+
+

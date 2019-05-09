@@ -258,7 +258,7 @@ public class TypeCheckerVisitor extends ASTBaseVisitor<Void>{
     @Override
     public Void visit(ReturnNode node) {
 
-        // If the return value is not specified, but the function is not void, throw.
+        // If the return data is not specified, but the function is not void, throw.
         if(node.getReturnVal() == null){
             if(!lastFunctionVisitedReturnType.equals("void")){
                 throw new WrongReturnTypeException("Wrong return type. Expected '" +
@@ -270,7 +270,7 @@ public class TypeCheckerVisitor extends ASTBaseVisitor<Void>{
                 );
             }
         }
-        // If the return value is not null, compare the type to the last visited function
+        // If the return data is not null, compare the type to the last visited function
         // (i.e. the current function scope)
         else if(!node.getReturnVal().getType().equals(lastFunctionVisitedReturnType)){
             throw new WrongReturnTypeException("Wrong return type. Expected '" +
@@ -361,7 +361,7 @@ public class TypeCheckerVisitor extends ASTBaseVisitor<Void>{
         // Check that the signal is actually defined...
         if(sym.isPresent() && sym.get() instanceof SignalTypeSymbol){
             SignalType type = ((SignalTypeSymbol) sym.get()).getTYPE();
-            // Check that the type of the signal range is the same as value it should "exceeds" or "deceeds".
+            // Check that the type of the signal range is the same as data it should "exceeds" or "deceeds".
             switch (type){
                 case INT_RANGE:
                     if(!node.getExprNode().getType().equals(SymbolTable.INT_TYPE_ID)){

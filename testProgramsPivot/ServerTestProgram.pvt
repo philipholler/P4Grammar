@@ -1,0 +1,47 @@
+// Define signals
+define Signal toggle: On = 1, off = 0;
+define Signal testToggle: turnOn = 1;
+define Signal celsius:  1..60;
+define Signal percentage:  0.0..100.0;
+define Signal open : 0.0..100.0;
+
+// Define device types
+define Device Bulb input: toggle, celsius;
+define Device Window input: open;
+
+// Define sensors
+define Device MovementSensor output: toggle input: celsius, toggle;
+define Device Thermometer output: celsius;
+
+// Variable definitions of every device in the house
+Bulb frontDoorLight = "id1654";
+Window bedRoomWindow = "id6584";
+MovementSensor frontDoorSensor = "Google.com";
+Thermometer mainThermometer = "therm1";
+
+int a = 5 * 5;
+float f = 5.1 - 5.2;
+
+init(){
+    // Optional code for initialization
+    // Automatically run when the program is run for the first time
+    a = 1 + 2 * 3 - (3 / 5);
+
+    string hej = "hej";
+
+    string hejhej = "hej" + "hej";
+
+    if(5 < 12 && 3 < 10 || (5 < 8 && 22 < (22 + 1))){
+        a = 5;
+    }
+}
+
+
+when mainThermometer celsius: exceeds 25{
+    print "Therm exceeded 25";
+}
+
+when mainThermometer celsius: exceeds 25{
+    print "Therm deceeded 25";
+}
+

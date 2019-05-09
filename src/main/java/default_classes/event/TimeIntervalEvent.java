@@ -28,7 +28,7 @@ public class TimeIntervalEvent implements TimeEvent {
     }
 
     // Set execution time to be the starting time specified in the node
-    // If no time is specified the value defaults to .now()
+    // If no time is specified the data defaults to .now()
     private void initExecutionTime(){
 
         if(startDate == null)
