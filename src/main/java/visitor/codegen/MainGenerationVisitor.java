@@ -482,6 +482,7 @@ public class MainGenerationVisitor extends ASTBaseVisitor<Void> {
                 classBuilder.closeBlock(ClassBuilder.BlockType.WHILE);
                 continue;
             }
+
             TreeSet<FieldSymbol> globalVars = globalVarVisitor.visit(n);
             openSyncBlocks(globalVars);
             visit(n);// Add statement logic

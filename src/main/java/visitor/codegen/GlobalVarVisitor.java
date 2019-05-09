@@ -2,6 +2,7 @@ package visitor.codegen;
 
 
 import node.Function.FunctionNode;
+import node.Statements.AssignmentNode;
 import node.Statements.Expression.AddExprNode;
 import node.Statements.Expression.FunctionCall.FuncCallNode;
 import node.Statements.Expression.FunctionCall.SetFuncNode;
@@ -105,6 +106,15 @@ public class GlobalVarVisitor extends ASTBaseVisitor<TreeSet<FieldSymbol>> {
         return (FunctionNode) functionSymbol.get().getDelcarationNode();
     }
 
+    @Override
+    public TreeSet<FieldSymbol> visit(AssignmentNode node) {
+        TreeSet<FieldSymbol> globalVars = new TreeSet<>(symbolComparator);
+        if(symbolTable.isGlobalVariable(node.getID()))
+            globalVars.add((FieldSymbol) symbolTable.getSymbol(node.getID()).get());
+
+        globalVars.addAll(visitChildren(node));
+        return globalVars;
+    }
 
     @Override
     protected TreeSet<FieldSymbol> aggregateResult(TreeSet<FieldSymbol> aggregate,

@@ -54,6 +54,7 @@ every 20 seconds{
     while(i <= 2000 && common < 5000){
         print "thread 2 : " + common + "    i: " + i;
         i = 1 + i;
+        yoo = 6;
         common = 1 + common;
     }
 }
