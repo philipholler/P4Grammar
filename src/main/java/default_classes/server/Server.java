@@ -70,7 +70,7 @@ public class Server extends Thread {
     }
 
     //Sends a signal to the device that matches Signalsdata hardware id
-    public void sendSignal(SignalData data) {
+    public synchronized void sendSignal(SignalData data) {
         for (ServerThread thread : listOfThreads) {
             if (thread.clientInfo.getDeviceName().equals(data.hardwareId))
                 thread.setMessageToBeSent(data.signalType + " " + data.data);
@@ -83,7 +83,6 @@ public class Server extends Thread {
     }
 
     public synchronized void addRecievedSignal(SignalData signalData) {
-        System.out.println("heyeyeye");
         signalEventManager.addSignal(signalData);
     }
     public ArrayList<ServerThread> getListOfThreads(){

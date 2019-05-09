@@ -35,11 +35,15 @@ public class InputMonitorThread extends Thread {
     }
 
     public void run() {
-        while (true) {
-            message = in.nextLine();
-            System.out.println(message);
-            if (onSignalReceived != null)
-                onSignalReceived.accept(message);
+        try{
+            while (true) {
+                message = in.nextLine();
+
+                if (onSignalReceived != null)
+                    onSignalReceived.accept(message);
+            }
+        }catch (NoSuchElementException e){
+            System.err.println("Client connection terminated");
         }
     }
 

@@ -23,19 +23,12 @@ public class SignalEventManager extends Thread {
         this.devices.addAll(devices);
     }
 
-    public synchronized LinkedBlockingQueue<SignalData> getEventsQueue(){
-        return signalQueue;
-    }
-
-    public synchronized void addSignalToSend(SignalData data){
-
-    }
-
     public void run(){
         while(true){
             SignalData signalData = null;
             try {
                 signalData = signalQueue.take();
+                System.out.println("Took signal" + signalData.toSignalString());
             } catch (InterruptedException e) {
                 e.printStackTrace(); // todo : exception handling lol
             }
@@ -67,6 +60,6 @@ public class SignalEventManager extends Thread {
     }
 
     public synchronized void addSignal(SignalData signalData) {
-        signalQueue.offer(signalData); // todo maybe use .put() instead
+        signalQueue.offer(signalData);
     }
 }

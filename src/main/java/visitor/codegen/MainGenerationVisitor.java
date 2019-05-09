@@ -5,6 +5,7 @@ import codegen.JavaFileWriter;
 import codegen.JavaInputParameter;
 import codegen.JavaType;
 
+import default_classes.event.SignalEventManager;
 import default_classes.server.Server;
 import node.*;
 import node.Events.EventEveryNode;
@@ -72,6 +73,7 @@ public class MainGenerationVisitor extends ASTBaseVisitor<Void> {
     public static final String SERVER_VAR_NAME = "server";
     public static final String EVENT_INIT_METHOD = "eventInit";
     public static final String DEVICE_LIST_NAME = "devices";
+    public static final String SIGNAL_EVENT_MANAGER = "signalEventManager";
     public static final String DEVICE_LIST_FILL_METHOD = "fillDeviceList";
 
 
@@ -120,6 +122,7 @@ public class MainGenerationVisitor extends ASTBaseVisitor<Void> {
         classBuilder.appendImportAllFrom(ClassBuilder.EVENT_PACKAGE);
         classBuilder.appendImportAllFrom(ClassBuilder.DEFAULT_SERVER_PACKAGE);
         classBuilder.appendImportAllFrom(ClassBuilder.DEFAULT_DEVICE_PACKAGE);
+        classBuilder.appendImportAllFrom(ClassBuilder.DEFAULT_EVENT_PACKAGE);
         classBuilder.appendImport(ClassBuilder.ARRAYLIST_PACKAGE);
         classBuilder.appendImportAllFrom(ClassBuilder.DEFAULT_CLASSES_PACKAGE).appendNewLine();
         classBuilder.appendImport("java.time.LocalDate");
@@ -131,6 +134,7 @@ public class MainGenerationVisitor extends ASTBaseVisitor<Void> {
     private void addStandardVars() {
         classBuilder.appendFinal().appendObjectDecl(Server.class.getSimpleName(), SERVER_VAR_NAME);
         classBuilder.appendFinal().appendNewObjectDecl("ArrayList<Device>", DEVICE_LIST_NAME);
+        classBuilder.appendFinal().appendObjectDecl(SignalEventManager.class.getSimpleName(), SIGNAL_EVENT_MANAGER);
     }
 
     private void addMainMethod(DeclsNode node) {
@@ -299,10 +303,16 @@ public class MainGenerationVisitor extends ASTBaseVisitor<Void> {
         classBuilder.append(SERVER_VAR_NAME).appendEquals()
                 .append("new ").append(Server.class.getSimpleName()).startParan();
 
-        // "eventInit.getSignalEventManager());
+        // eventInit.getSignalEventManager());
         classBuilder.append(eventInitName).appendDot().append(ClassBuilder.GET_METHOD_PREFIX)
                 .append(EventInitializationVisitor.SIGNAL_EVENT_MANAGER).startParan().endParan();
         classBuilder.endParan().endLine();
+
+        // signalEventManager = eventInit.getSignalEventManager()
+        classBuilder.append(SIGNAL_EVENT_MANAGER).appendEquals();
+        classBuilder.append(eventInitName).appendDot().append(ClassBuilder.GET_METHOD_PREFIX)
+                .append(EventInitializationVisitor.SIGNAL_EVENT_MANAGER).startParan().endParan();
+        classBuilder.endLine();
 
         //server.start();
         classBuilder.append(SERVER_VAR_NAME).appendDot().appendMethodCall("start");
@@ -341,22 +351,21 @@ public class MainGenerationVisitor extends ASTBaseVisitor<Void> {
     public Void visit(SetFuncNode node) {
         // call dot operator on the device
         // device.
-        classBuilder.append(node.getDeviceID());
-        classBuilder.appendDot();
+        classBuilder.append("Utils.sendSignal").startParan()
+                    .append(SERVER_VAR_NAME).appendComma();
 
-        // device.getInputSignalID().
-        classBuilder.append(GET_KEYWORD);
-        classBuilder.append(INPUT_KEYWORD);
-        classBuilder.append(node.getSignalID() + "()");
-        classBuilder.appendDot();
+        classBuilder.append(node.getDeviceID()).appendComma();
 
-        // Use the set function on the method.
-        // device.getInputSignalID().setCurrentValue( 'expr' )
-        classBuilder.append(SET_METHOD_NAME);
-        classBuilder.startParan();
-        // Find the 'expr'
+        classBuilder.append(node.getDeviceID()).appendDot()
+                    .append(GET_KEYWORD).append(INPUT_KEYWORD)
+                    .append(node.getSignalID()).startParan().endParan().appendComma();
+
+
+        classBuilder.append("String.valueOf").startParan();
         visit(node.getExpr());
         classBuilder.endParan();
+
+        classBuilder.endParan().endLine();
         return null;
     }
 

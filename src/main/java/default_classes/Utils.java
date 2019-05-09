@@ -1,5 +1,10 @@
 package default_classes;
 
+import default_classes.device.Device;
+import default_classes.event.SignalEventManager;
+import default_classes.server.Server;
+import default_classes.signal.Signal;
+
 import java.time.*;
 
 public class Utils {
@@ -119,5 +124,9 @@ public class Utils {
         return month.getValue();
     }
 
+    public static void sendSignal (Server server, Device dev, Signal signal, String val){
+        server.sendSignal(new SignalData(dev.getNetworkID(), signal.getName(), val));
+        signal.setCurrentValue(val);
+    }
 
 }

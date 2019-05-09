@@ -24,7 +24,7 @@ public class ServerThread extends Thread {
     public ServerThread(Socket s, Server server) {
         this.s = s;
         inputMonitorThread = new InputMonitorThread(s,
-                (str) -> server.addRecievedSignal(SignalUtils.parseSignalData(str, clientInfo.getDeviceName())));
+                (str) -> server.addRecievedSignal(SignalUtils.parseSignalData(str)));
         this.server = server;
     }
 
@@ -38,6 +38,7 @@ public class ServerThread extends Thread {
         } catch (IOException e) {
             e.printStackTrace();
         }
+
         //adds the clients information to the hashset listOfClients
         client.setIp(s.getInetAddress());
         client.setPort(s.getPort());
@@ -56,15 +57,8 @@ public class ServerThread extends Thread {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
         }
     }
-
 
     //sets the message that is being sent to the client
     public void setMessageToBeSent(String message) {
