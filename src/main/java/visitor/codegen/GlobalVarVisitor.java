@@ -19,7 +19,7 @@ import java.util.*;
 
 /**
  * This class is responsible for finding all uses of global variables in a given node and its children
- * A visit mmethod returns a list of all global variables used in that node and in the children of that node
+ * A visit method returns a list of all global variables used in that node and in the children of that node
  */
 public class GlobalVarVisitor extends ASTBaseVisitor<TreeSet<FieldSymbol>> {
 

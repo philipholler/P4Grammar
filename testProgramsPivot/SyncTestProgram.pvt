@@ -42,7 +42,7 @@ init(){
 
 every 15 seconds{
     int i = 0;
-    while(i < 2000){
+    while(i <= 2000){
         print "thread 1 : " + common + "     i: " + i;
         i = 1 + i;
         common = 1 + common;
@@ -51,7 +51,7 @@ every 15 seconds{
 
 every 20 seconds{
     int i = 0;
-    while(i < 2000){
+    while(i <= 2000 && common < 5000){
         print "thread 2 : " + common + "    i: " + i;
         i = 1 + i;
         common = 1 + common;
