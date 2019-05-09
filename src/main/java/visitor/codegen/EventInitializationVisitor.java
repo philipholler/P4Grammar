@@ -4,6 +4,7 @@ import codegen.ClassBuilder;
 import codegen.JavaFileWriter;
 import codegen.JavaInputParameter;
 import codegen.JavaType;
+import default_classes.Utils;
 import default_classes.event.*;
 import node.Events.EventEveryNode;
 import node.Events.WhenNodes.EventInputNode;
@@ -296,7 +297,7 @@ public class EventInitializationVisitor extends ASTBaseVisitor<Void> {
             // If this month is not long enough to support the date in dateNode
             // Then find the next suitable month
             if (LocalDate.now().getMonth().maxLength() < dateNode.getDate().getDayOfMonth()) {
-                month = getLongEnoughMonth(day, LocalDate.now());
+                month = Utils.getLongEnoughMonth(day, LocalDate.now());
             }
 
             LocalDate date = // Create a nextSuitableMonth(LocalDate, int minimumDayNumber)
@@ -321,24 +322,6 @@ public class EventInitializationVisitor extends ASTBaseVisitor<Void> {
         classBuilder.appendCommaSeparated(String.valueOf(date.getYear()),
                 String.valueOf(date.getMonthValue()), String.valueOf(date.getDayOfMonth()));
         classBuilder.endParan().endLine();
-    }
-
-    private int getLongEnoughMonth(int minimumDays) {
-        return getLongEnoughMonth(minimumDays, LocalDate.now());
-    }
-
-    private int getLongEnoughMonth(int minimumDays, LocalDate startingPoint) {
-        if (minimumDays > 31 || minimumDays < 0)
-            throw new RuntimeException("Attempted to find month with more than: " + minimumDays + " days");
-
-        LocalDate date = startingPoint;
-        Month month = date.getMonth();
-        while (month.maxLength() > minimumDays) {
-            date = date.plusMonths(1);
-            month = date.getMonth();
-        }
-
-        return month.getValue();
     }
 
     // Delcares a LocalTime and returns the name of the declared variable

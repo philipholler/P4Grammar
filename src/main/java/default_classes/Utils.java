@@ -100,4 +100,24 @@ public class Utils {
             throw new ThreadDeath();
         }
     }
+
+    public static int getLongEnoughMonth(int minimumDays) {
+        return getLongEnoughMonth(minimumDays, LocalDate.now());
+    }
+
+    public static int getLongEnoughMonth(int minimumDays, LocalDate startingPoint) {
+        if (minimumDays > 31 || minimumDays < 0)
+            throw new RuntimeException("Attempted to find month with more than: " + minimumDays + " days");
+
+        LocalDate date = startingPoint;
+        Month month = date.getMonth();
+        while (month.maxLength() > minimumDays) {
+            date = date.plusMonths(1);
+            month = date.getMonth();
+        }
+
+        return month.getValue();
+    }
+
+
 }

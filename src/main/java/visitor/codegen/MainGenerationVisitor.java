@@ -459,7 +459,7 @@ public class MainGenerationVisitor extends ASTBaseVisitor<Void> {
 
         classBuilder.appendMethod(methodName, JavaType.VOID.keyword);
 
-        visitEventBlock(node.getBlockNode());
+        syncVisitBlock(node.getBlockNode());
 
 //        visit(node.getBlockNode());
         classBuilder.appendNewLine().closeBlock(ClassBuilder.BlockType.METHOD);
@@ -467,10 +467,21 @@ public class MainGenerationVisitor extends ASTBaseVisitor<Void> {
 
     // Event blocks are different than regular block because all statements inside an event
     // must be preceded by synchronization locking all used global variables
-    private void visitEventBlock(BlockNode blockNode) {
+    private void syncVisitBlock(BlockNode blockNode) {
 
         // Synchronize all used variables before each statement
         for (Node n : blockNode.getChildren()) {
+            // Optimization : While loops can have their synchronizes inside the block
+            // (if and only if the condition uses no global variables)
+            if(n instanceof WhileNode && globalVarVisitor.visit(((WhileNode) n).getLogicalExprNode()).size() == 0){
+                WhileNode whnode  = (WhileNode) n;
+                classBuilder.append("while(");
+                visit(((WhileNode) n).getLogicalExprNode());
+                classBuilder.append(")").openBlock(ClassBuilder.BlockType.WHILE);
+                syncVisitBlock(((WhileNode) n).getBlockNode());
+                classBuilder.closeBlock(ClassBuilder.BlockType.WHILE);
+                continue;
+            }
             TreeSet<FieldSymbol> globalVars = globalVarVisitor.visit(n);
             openSyncBlocks(globalVars);
             visit(n);// Add statement logic
