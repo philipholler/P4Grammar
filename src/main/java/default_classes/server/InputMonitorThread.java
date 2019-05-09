@@ -12,14 +12,14 @@ public class InputMonitorThread extends Thread {
     Scanner in;
 
     private Consumer<String> onSignalReceived;
-    private Runnable onConnectionLost;
+    private Runnable onconnectionFailed;
 
     private boolean running = false;
 
-    public InputMonitorThread(Socket socket, Consumer<String> onSignalReceived, Runnable onConnectionLost) {
+    public InputMonitorThread(Socket socket, Consumer<String> onSignalReceived, Runnable onconnectionFailed) {
         this.socket = socket;
         this.onSignalReceived = onSignalReceived;
-        this.onConnectionLost = onConnectionLost;
+        this.onconnectionFailed = onconnectionFailed;
     }
 
     public InputMonitorThread(Socket socket, Consumer<String> onSignalReceived) {
@@ -49,6 +49,16 @@ public class InputMonitorThread extends Thread {
     public void run() {
         try{
             while (isRunning()) {
+                while(!in.hasNextLine()){
+                    Thread.sleep(500);
+
+                    // Stop executing if interrupted
+                    if(!isRunning()){
+                        terminate();
+                        return;
+                    }
+                    System.out.println();
+                }
                 message = in.nextLine();
                 System.out.println("Received signal : " + message);
                 if (onSignalReceived != null)
@@ -57,13 +67,16 @@ public class InputMonitorThread extends Thread {
         }catch (NoSuchElementException e){
             // Server connection has been lost
             System.err.println("Client connection terminated");
+            terminate();
 
-            if(onConnectionLost != null)
-                onConnectionLost.run();
+            if(onconnectionFailed != null)
+                onconnectionFailed.run();
+        } catch (InterruptedException e) {
+            System.err.println("InputMonitor thread interrupted");
         }
     }
 
-    protected synchronized void stopThread(){
+    synchronized void terminate(){
         setRunning(false);
     }
 

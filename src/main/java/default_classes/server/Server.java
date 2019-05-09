@@ -61,29 +61,55 @@ public class Server extends Thread {
         st.start();
 
         //the thread is added to the list of threads
-        removeOldConnection(st);
-        clientConnectThreads.add(st);
+        removeDeadConnections();
+        removeIdenticalConnection(st);
+        addNewConnection(st);
 
-        // Report status
         System.out.println("Connected to client : '" + st.clientInfo.getDeviceName() + "'");
+        reportStatus();
+    }
+
+    private synchronized void reportStatus(){
         System.out.println("Currently " + clientConnectThreads.size() + " clients are connected");
     }
 
+    // Removes any dead connections from the list
+    private synchronized void removeDeadConnections() {
+        for(ClientConnection connection : clientConnectThreads){
+            if(!connection.isRunning())
+                removeConnectionThread(connection);
+        }
+
+    }
+
+    // Removes any dead connections from the list
+    private synchronized void addNewConnection(ClientConnection clientConnection) {
+        clientConnectThreads.add(clientConnection);
+    }
     // Looks for an already existing connection with the same hardware id and removes it if it exists
-    private synchronized void removeOldConnection(ClientConnection clientConnection){
+    private synchronized void removeIdenticalConnection(ClientConnection clientConnection){
         for(ClientConnection connection : clientConnectThreads){
             if(connection.clientInfo.getDeviceName().equals(clientConnection.clientInfo.getDeviceName())){
+                System.err.println("Client with id : " + clientConnection.clientInfo.getDeviceName()
+                        + " already connected. Terminating old connection in favor of"
+                        + " newly connected device of with the same id.");
                 removeConnectionThread(connection);
+                connection.terminate();
                 return;
             }
         }
     }
 
+    public synchronized void removeConnectionThread(ClientConnection clientConnection) {
+        clientConnectThreads.remove(clientConnection);
+    }
+
     //Sends a signal to the device that matches SignalData hardware id
     public synchronized void sendSignal(SignalData data) {
+        // Use iterator for thread safety
         for (ClientConnection thread : clientConnectThreads) {
             if (thread.clientInfo.getDeviceName().equals(data.hardwareId))
-                thread.setMessageToBeSent(data.signalType + " " + data.data);
+                thread.sendMessage(data.signalType + " " + data.data);
         }
     }
 
@@ -95,13 +121,8 @@ public class Server extends Thread {
     public synchronized void addRecievedSignal(SignalData signalData) {
         signalEventManager.addSignal(signalData);
     }
-    public ArrayList<ClientConnection> getClientConnectThreads(){
-        return clientConnectThreads;
-    }
 
-    public synchronized void removeConnectionThread(ClientConnection clientConnection) {
-        clientConnectThreads.remove(clientConnection);
-    }
+
 }
 
 

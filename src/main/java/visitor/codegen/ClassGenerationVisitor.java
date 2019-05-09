@@ -50,19 +50,18 @@ public class ClassGenerationVisitor extends ASTBaseVisitor<ClassBuilder> {
 
     ArrayList<ClassBuilder> classes = new ArrayList<>();
 
-    public static String getDefaultSignalValue(JavaType type){
-        if(type == JavaType.FLOAT) return "0.0f";
-        if(type == JavaType.INT) return "0";
+    public static String getDefaultSignalValue(JavaType type) {
+        if (type == JavaType.FLOAT) return "0.0f";
+        if (type == JavaType.INT) return "0";
         else return "\"null\"";
     }
 
     @Override
     public ClassBuilder visit(ProgramNode node) {
-
         // Create all the default classes.
         String sourceLocation = System.getProperty("user.dir");
         File sourceFile = new File(sourceLocation + Compiler.DEFAULT_CLASSES_DIR);
-        File targetFile = new File(sourceLocation + File.separator + Compiler.GENERATED_OUTPUT_FILES_DIR +  "/default_classes/");
+        File targetFile = new File(sourceLocation + File.separator + Compiler.GENERATED_OUTPUT_FILES_DIR + "/default_classes/");
 
 
         try {
@@ -74,7 +73,9 @@ public class ClassGenerationVisitor extends ASTBaseVisitor<ClassBuilder> {
         return super.visit(node);
     }
 
-    /** Generates classes for signal declarations */
+    /**
+     * Generates classes for signal declarations
+     */
     @Override
     public ClassBuilder visit(DeclsNode node) {
         for (Node n : node.getChildren()) {
@@ -128,20 +129,20 @@ public class ClassGenerationVisitor extends ASTBaseVisitor<ClassBuilder> {
         return classBuilder;
     }
 
-    private void createSetCurrentSignalMetod(ClassBuilder classBuilder, JavaType type){
+    private void createSetCurrentSignalMetod(ClassBuilder classBuilder, JavaType type) {
+        // Strings already have a setCurrentSignal(String val) method, so no further action is necessary
+        if (type == JavaType.STRING)
+            return;
+
         // Creates the setCurrentValue(String val) method
         classBuilder.appendMethod(SET_CURRENT_VALUE_METHOD, JavaType.VOID.keyword,
                 new JavaInputParameter(JavaType.STRING.keyword, "data"));
         classBuilder.append(SET_CURRENT_VALUE_METHOD).startParan();
 
-        if(type == JavaType.STRING){
-            // No need to convert data if the signal type is string
-            classBuilder.append("data");
-        }else{
-            // Convert data to correct type using Integer.valueOf() og Float.valueOf()
-            classBuilder.append(type.objectType).appendDot()
-                    .append("valueOf").startParan().append("data").endParan();
-        }
+        // Convert data to correct type using Integer.valueOf() og Float.valueOf()
+        classBuilder.append(type.objectType).appendDot()
+                .append("valueOf").startParan().append("data").endParan();
+
 
         classBuilder.endParan().endLine().closeBlock(ClassBuilder.BlockType.METHOD);
     }
@@ -180,11 +181,11 @@ public class ClassGenerationVisitor extends ASTBaseVisitor<ClassBuilder> {
         }
     }
 
-    private void addEnumVars(ClassBuilder classBuilder, DefSignalNode defSignalNode, JavaType type){
-        for(EnumNode enumNode : defSignalNode.getEnumNodes()){
+    private void addEnumVars(ClassBuilder classBuilder, DefSignalNode defSignalNode, JavaType type) {
+        for (EnumNode enumNode : defSignalNode.getEnumNodes()) {
             String value;
 
-            if(type == JavaType.STRING)
+            if (type == JavaType.STRING)
                 value = ((StringNode) enumNode.getLiteralValue()).getVal();
             else if (type == JavaType.INT)
                 value = String.valueOf(((IntegerNode) enumNode.getLiteralValue()).getVal());
@@ -197,12 +198,14 @@ public class ClassGenerationVisitor extends ASTBaseVisitor<ClassBuilder> {
         classBuilder.appendNewLine();
     }
 
-    private void addEnumVarGetters(ClassBuilder classBuilder, DefSignalNode defSignalNode, JavaType type){
-        for(EnumNode enumNode : defSignalNode.getEnumNodes())
+    private void addEnumVarGetters(ClassBuilder classBuilder, DefSignalNode defSignalNode, JavaType type) {
+        for (EnumNode enumNode : defSignalNode.getEnumNodes())
             classBuilder.appendGetMethod(type.objectType, enumNode.getID());
     }
 
-    /** Generates classes for device declarations */
+    /**
+     * Generates classes for device declarations
+     */
     @Override
     public ClassBuilder visit(DefDeviceNode node) {
         ClassBuilder classBuilder = new ClassBuilder();
@@ -228,51 +231,52 @@ public class ClassGenerationVisitor extends ASTBaseVisitor<ClassBuilder> {
         return classBuilder.closeBlock(ClassBuilder.BlockType.CLASS);
     }
 
-    private void addSignalVariables(ClassBuilder classBuilder, ArrayList<InputNode> inputNodes, ArrayList<OutputNode> outputNodes){
-        for(InputNode inNode : inputNodes)
+    private void addSignalVariables(ClassBuilder classBuilder, ArrayList<InputNode> inputNodes, ArrayList<OutputNode> outputNodes) {
+        for (InputNode inNode : inputNodes)
             classBuilder.appendNewObjectDecl(inNode.SIGNAL_ID, INPUT_SIGNAL_PREFIX + inNode.SIGNAL_ID);
 
-        for(OutputNode outNode : outputNodes)
+        for (OutputNode outNode : outputNodes)
             classBuilder.appendNewObjectDecl(outNode.SIGNAL_ID, OUTPUT_SIGNAL_PREFIX + outNode.SIGNAL_ID);
     }
 
     private void addSignalGetters(ClassBuilder classBuilder, ArrayList<InputNode> inputs, ArrayList<OutputNode> outputs) {
-        for(InputNode inNode : inputs)
+        for (InputNode inNode : inputs)
             classBuilder.appendGetMethod(inNode.SIGNAL_ID, INPUT_SIGNAL_PREFIX + inNode.SIGNAL_ID);
 
-        for(OutputNode outNode : outputs)
+        for (OutputNode outNode : outputs)
             classBuilder.appendGetMethod(outNode.SIGNAL_ID, OUTPUT_SIGNAL_PREFIX + outNode.SIGNAL_ID);
     }
 
     // Adds the getSignal(String hardwareID)
     private void addSignalStringGetter(ClassBuilder classBuilder,
-                                       DefDeviceNode node){
+                                       DefDeviceNode node) {
         String inputString = "id";
 
         classBuilder.appendMethod(GET_SIGNAL_METHOD, Signal.class.getSimpleName(),
                 new JavaInputParameter(JavaType.STRING.keyword, inputString));
 
-        for(String signalID : getAllSignalVarIDs(node)){
+        for (String signalID : getAllSignalVarIDs(node)) {
             String quotedID = '"' + signalID + '"';
             classBuilder.append("if").startParan().append(inputString).append(".equals").startParan()
                     .append(quotedID).endParan().endParan()
                     .openBlock(ClassBuilder.BlockType.IF);
 
             classBuilder.appendReturnStatement(signalID);
-            classBuilder.closeBlock(ClassBuilder.BlockType.IF);;
+            classBuilder.closeBlock(ClassBuilder.BlockType.IF);
+            ;
         }
 
         classBuilder.appendReturnStatement("null");
         classBuilder.closeBlock(ClassBuilder.BlockType.METHOD);
     }
 
-    private ArrayList<String> getAllSignalVarIDs(DefDeviceNode node){
+    private ArrayList<String> getAllSignalVarIDs(DefDeviceNode node) {
         ArrayList<String> allSignals = new ArrayList<>();
 
-        for(InputNode inNode : node.getInputs())
+        for (InputNode inNode : node.getInputs())
             allSignals.add(INPUT_SIGNAL_PREFIX + inNode.SIGNAL_ID);
 
-        for(OutputNode outNode : node.getOutputs())
+        for (OutputNode outNode : node.getOutputs())
             allSignals.add(OUTPUT_SIGNAL_PREFIX + outNode.SIGNAL_ID);
 
         return allSignals;

@@ -12,14 +12,14 @@ import java.util.concurrent.TimeUnit;
 public class ClientConnection extends Thread {
     ClientInformation clientInfo;
 
-    Scanner inputStream;
-    PrintWriter out;
+    private Scanner inputStream;
+    private PrintWriter out;
     private Socket socket;
-    private String message = null;
+
     private LinkedBlockingQueue<String> messagesToBeSent = new LinkedBlockingQueue<>();
     private String messageToBeSent = null;
-    InputMonitorThread inputMonitorThread;
-    Server server;
+    private InputMonitorThread inputMonitorThread;
+    private Server server;
 
     private boolean running = true;
 
@@ -41,47 +41,63 @@ public class ClientConnection extends Thread {
             e.printStackTrace();
         }
 
-        //adds the clients information to the hashset listOfClients
+        //adds the clients information to the ClientInfo
         client.setIp(socket.getInetAddress());
         client.setPort(socket.getPort());
         client.setDeviceName(inputStream.nextLine());
         clientInfo = client;
         System.out.println("Client accepted: " + socket.getRemoteSocketAddress().toString());
         inputMonitorThread.start();
+
         super.start();
     }
 
     public void run() {
-        while (isRunning()) {
-            //send messageToBeSent if its not equal null
-            try {
-                String message = messagesToBeSent.poll(10, TimeUnit.SECONDS);
+        try {
+            while (isRunning()) {
+                // Attempt to retrieve message, waiting for at most 5 seconds
+                String message = messagesToBeSent.poll(5, TimeUnit.SECONDS);
 
                 // Stop running if the connection is lost or the thread is stopped
-                if(socket.isClosed() || !isRunning()){
-                    stopServerThread();
+                if (!isRunning() || socket.getInetAddress().isReachable(6000)) {
+                    terminate();
                     return;
                 }
 
-                if(messageToBeSent != null)
+                // Send message if one was retrievable
+                if (messageToBeSent != null)
                     out.println(messagesToBeSent.poll());
-            } catch (InterruptedException e) {
-                e.printStackTrace();
             }
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            System.err.println("Encountered fatal connection error when attempting to reach(communicate with) client.");
+            System.err.println("Socket might still be open");
+        } finally {
+            closeSocket();
         }
     }
 
-    private synchronized void stopServerThread(){
-        running = false;
-        server.removeConnectionThread(this);
+    private void closeSocket(){
+        try {
+            socket.close();
+        } catch (IOException e) {
+            System.err.println("Failed to close socket for client : " + clientInfo.getDeviceName());
+            System.err.println("Socket status : " + socket.isConnected());
+        }
     }
 
-    private synchronized boolean isRunning(){
+    public synchronized void terminate() {
+        running = false;
+        inputMonitorThread.terminate();
+    }
+
+    public synchronized boolean isRunning() {
         return running;
     }
 
     //sets the message that is being sent to the client
-    public void setMessageToBeSent(String message) {
+    public void sendMessage(String message) {
         messagesToBeSent.add(message);
     }
 
