@@ -48,17 +48,20 @@ public class InputMonitorThread extends Thread {
 
     public void run() {
         try{
-            while (isRunning()) {
-                while(!in.hasNextLine()){
-                    Thread.sleep(500);
+            while (isRunning() && !socket.isClosed()) {
+                message = in.nextLine();
+                if(message == null || !isRunning() || socket.isClosed())
+                    terminate();
 
-                    // Stop executing if interrupted
-                    if(!isRunning()){
-                        terminate();
-                        return;
-                    }
-                    System.out.println();
-                }
+//                while(!in.hasNextLine()){
+//                    Thread.sleep(500);
+//
+                    // Stop executing if the connection is terminated
+//                        return;
+//                    }
+//                    System.out.println();
+//                }
+
                 message = in.nextLine();
                 System.out.println("Received signal : " + message);
                 if (onSignalReceived != null)
@@ -71,13 +74,18 @@ public class InputMonitorThread extends Thread {
 
             if(onconnectionFailed != null)
                 onconnectionFailed.run();
-        } catch (InterruptedException e) {
-            System.err.println("InputMonitor thread interrupted");
         }
     }
 
     synchronized void terminate(){
         setRunning(false);
+        if(!socket.isClosed()) {
+            try {
+                socket.close();
+            } catch (IOException e) {
+                System.err.println("Attempt to close client socket failed");
+            }
+        }
     }
 
     private synchronized void setRunning(boolean running){

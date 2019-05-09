@@ -59,7 +59,7 @@ public class ClientConnection extends Thread {
                 String message = messagesToBeSent.poll(5, TimeUnit.SECONDS);
 
                 // Stop running if the connection is lost or the thread is stopped
-                if (!isRunning() || socket.getInetAddress().isReachable(6000)) {
+                if (!isRunning() || socket.isClosed()) {
                     terminate();
                     return;
                 }
@@ -70,11 +70,9 @@ public class ClientConnection extends Thread {
             }
         } catch (InterruptedException e) {
             e.printStackTrace();
-        } catch (IOException e) {
-            System.err.println("Encountered fatal connection error when attempting to reach(communicate with) client.");
-            System.err.println("Socket might still be open");
-        } finally {
-            closeSocket();
+        }finally {
+            if(!socket.isClosed())
+                closeSocket();
         }
     }
 
