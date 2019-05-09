@@ -39,7 +39,7 @@ public class GlobalVarVisitor extends ASTBaseVisitor<TreeSet<FieldSymbol>> {
         TreeSet<FieldSymbol> globalSymbols = new TreeSet<>(symbolComparator);
         Optional<Symbol> symbol = symbolTable.getSymbol(node.getID());
 
-        if(symbol.isPresent() && symbol.get() instanceof FieldSymbol)
+        if(symbol.isPresent() && symbol.get() instanceof FieldSymbol && !symbolTable.isSignalLiteral(symbol.get().getID()))
             globalSymbols.add((FieldSymbol) symbol.get());
 
         return globalSymbols;
@@ -89,7 +89,7 @@ public class GlobalVarVisitor extends ASTBaseVisitor<TreeSet<FieldSymbol>> {
     private FieldSymbol findDeviceSymbol(String id){
         Optional<Symbol> foundSymbol = symbolTable.getSymbol(id);
 
-        if (!symbolTable.isGlobalVariable(id) || foundSymbol.isPresent())
+        if (!symbolTable.isGlobalVariable(id) || foundSymbol.isEmpty())
             throw new RuntimeException("Could not find device symbol in global scope : " + id);
 
         return (FieldSymbol) foundSymbol.get();

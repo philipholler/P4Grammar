@@ -1,0 +1,45 @@
+// Define signals
+define Signal Toggle: On = 1, Off = 0, yo = 3;
+define Signal Celsius:  1..60;
+define Signal Open:  0.0..100.0;
+define Signal Percentage: 0.0..100.0;
+define Signal PercentInt: 0..100;
+
+// Define device types
+define Device Bulb output: Toggle;
+define Device Window input: Open;
+define Device IntWindow input: PercentInt;
+// Define sensors
+define Device MovementSensor output: Toggle input: Celsius, Toggle;
+define Device Thermometer output: Celsius;
+define Device LawnMower input: Toggle;
+
+Bulb frontDoorLight = "bulb1";
+Bulb frontDoorLight2 = "bulb2";
+Thermometer kitchenTherm = "therm1";
+
+int i = 0;
+
+init(){
+
+}
+
+every 10 hours{
+    int k = 0;
+    while(k < 100){
+        i = i + 1;
+        print "thread 1: " + i;
+        wait 10ms;
+        k = k + 1;
+    }
+}
+
+every 10 hours{
+    int k = 0;
+    while(k < 100){
+        i = i + 1;
+        print "thread 2: " + i;
+        wait 10ms;
+        k = k + 1;
+    }
+}

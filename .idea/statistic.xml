@@ -4,6 +4,7 @@
     <option name="excludedDirectories">
       <list>
         <option value="$PROJECT_DIR$/gen src" />
+        <option value="$PROJECT_DIR$/GeneratedModule" />
       </list>
     </option>
   </component>

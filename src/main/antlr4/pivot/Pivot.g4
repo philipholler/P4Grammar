@@ -135,7 +135,7 @@ varType: (STRINGKW | INTEGERKW | FLOATKW );
 
 WhiteSpace : (' '|'\t') -> skip; // Skip whitespaces
 NewLine : NEWLINE -> skip; // Skip newlines
-LINE_COMMENT : '//' ~[\r\n]* -> skip ; // Skip comments
+LINE_COMMENT : '//' ~[\r\n]* -> skip; // Skip comments
 
 fragment NEWLINE:  ('\r'?'\n'|'\r');
 fragment LOWERCASE  : [a-z] ;
