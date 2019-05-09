@@ -9,7 +9,7 @@ import java.util.Scanner;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.TimeUnit;
 
-public class ServerThread extends Thread {
+public class ClientConnection extends Thread {
     ClientInformation clientInfo;
 
     Scanner inputStream;
@@ -23,7 +23,7 @@ public class ServerThread extends Thread {
 
     private boolean running = true;
 
-    public ServerThread(Socket socket, Server server) {
+    public ClientConnection(Socket socket, Server server) {
         this.socket = socket;
         inputMonitorThread = new InputMonitorThread(socket,
                 (str) -> server.addRecievedSignal(SignalUtils.parseSignalData(str)));
@@ -52,12 +52,13 @@ public class ServerThread extends Thread {
     }
 
     public void run() {
-        while (running) {
+        while (isRunning()) {
             //send messageToBeSent if its not equal null
             try {
                 String message = messagesToBeSent.poll(10, TimeUnit.SECONDS);
 
-                if(socket.isClosed()){
+                // Stop running if the connection is lost or the thread is stopped
+                if(socket.isClosed() || !isRunning()){
                     stopServerThread();
                     return;
                 }
@@ -70,10 +71,13 @@ public class ServerThread extends Thread {
         }
     }
 
-    private void stopServerThread(){
+    private synchronized void stopServerThread(){
         running = false;
         server.removeConnectionThread(this);
+    }
 
+    private synchronized boolean isRunning(){
+        return running;
     }
 
     //sets the message that is being sent to the client

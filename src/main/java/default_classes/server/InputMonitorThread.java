@@ -9,8 +9,18 @@ import java.util.function.Consumer;
 public class InputMonitorThread extends Thread {
     private Socket socket;
     private String message = null;
-    private Consumer<String> onSignalReceived;
     Scanner in;
+
+    private Consumer<String> onSignalReceived;
+    private Runnable onConnectionLost;
+
+    private boolean running = false;
+
+    public InputMonitorThread(Socket socket, Consumer<String> onSignalReceived, Runnable onConnectionLost) {
+        this.socket = socket;
+        this.onSignalReceived = onSignalReceived;
+        this.onConnectionLost = onConnectionLost;
+    }
 
     public InputMonitorThread(Socket socket, Consumer<String> onSignalReceived) {
         this.socket = socket;
@@ -24,27 +34,45 @@ public class InputMonitorThread extends Thread {
 
     @Override
     public synchronized void start() {
+        running = true;
         try {
             in = new Scanner(socket.getInputStream());
-        } catch (NoSuchElementException e) {
-            e.printStackTrace();
         } catch (IOException e) {
+            System.err.println("Failed to start InputListenerThread");
             e.printStackTrace();
+            return;
         }
+
         super.start();
     }
 
     public void run() {
         try{
-            while (true) {
+            while (isRunning()) {
                 message = in.nextLine();
                 System.out.println("Received signal : " + message);
                 if (onSignalReceived != null)
                     onSignalReceived.accept(message);
             }
         }catch (NoSuchElementException e){
+            // Server connection has been lost
             System.err.println("Client connection terminated");
+
+            if(onConnectionLost != null)
+                onConnectionLost.run();
         }
+    }
+
+    protected synchronized void stopThread(){
+        setRunning(false);
+    }
+
+    private synchronized void setRunning(boolean running){
+        this.running = running;
+    }
+
+    public synchronized boolean isRunning() {
+        return running;
     }
 
     public String getMessage() {
