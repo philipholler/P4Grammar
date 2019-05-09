@@ -12,7 +12,7 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 public class Server extends Thread {
 
     ConcurrentLinkedQueue<SignalData> signalQueue = new ConcurrentLinkedQueue<>();
-    public ArrayList<ServerThread> listOfThreads = new ArrayList<>();
+    public ArrayList<ServerThread> clientConnectThreads = new ArrayList<>();
     Socket socket = null;
     ServerSocket serversocket = null;
 
@@ -56,11 +56,11 @@ public class Server extends Thread {
                 st.start();
 
                 //the thread is added to the list of threads
-                listOfThreads.add(st);
+                clientConnectThreads.add(st);
 
                 // Report status
                 System.out.println("Connected to client : '" + st.clientInfo.getDeviceName() + "'");
-                System.out.println("Currently " + listOfThreads.size() + " clients are connected");
+                System.out.println("Currently " + clientConnectThreads.size() + " clients are connected");
             } catch (IOException e) {
                 System.err.println("Failed to establish connection");
                 e.printStackTrace();
@@ -71,7 +71,7 @@ public class Server extends Thread {
 
     //Sends a signal to the device that matches Signalsdata hardware id
     public synchronized void sendSignal(SignalData data) {
-        for (ServerThread thread : listOfThreads) {
+        for (ServerThread thread : clientConnectThreads) {
             if (thread.clientInfo.getDeviceName().equals(data.hardwareId))
                 thread.setMessageToBeSent(data.signalType + " " + data.data);
         }
@@ -85,8 +85,12 @@ public class Server extends Thread {
     public synchronized void addRecievedSignal(SignalData signalData) {
         signalEventManager.addSignal(signalData);
     }
-    public ArrayList<ServerThread> getListOfThreads(){
-        return listOfThreads;
+    public ArrayList<ServerThread> getClientConnectThreads(){
+        return clientConnectThreads;
+    }
+
+    public synchronized void removeConnectionThread(ServerThread serverThread) {
+        clientConnectThreads.remove(serverThread);
     }
 }
 

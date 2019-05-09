@@ -400,7 +400,20 @@ public class MainGenerationVisitor extends ASTBaseVisitor<Void> {
             if (sigLit.isPresent()) {
                 FieldSymbol signalLiteral = (FieldSymbol) sigLit.get();
                 EnumNode enumNode = (EnumNode) signalLiteral.getDelcarationNode();
-                classBuilder.append("" + ((IntegerNode) enumNode.getLiteralValue()).getVal());
+
+                switch (signalLiteral.getTypeID()){
+                    case (SymbolTable.STRING_TYPE_ID):
+                        classBuilder.append(((StringNode) enumNode.getLiteralValue()).getVal());
+                        break;
+                    case(SymbolTable.FLOAT_TYPE_ID):
+                        classBuilder.append("" + ((FloatNode) enumNode.getLiteralValue()).getVal()).append("f");
+                        break;
+                    case(SymbolTable.INT_TYPE_ID):
+                        classBuilder.append("" + ((IntegerNode) enumNode.getLiteralValue()).getVal());
+                        break;
+                }
+
+
             }
 
         } else {
