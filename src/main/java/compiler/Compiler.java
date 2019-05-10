@@ -25,7 +25,7 @@ import static org.antlr.v4.runtime.CharStreams.fromFileName;
 public class Compiler {
 
     public static String SOURCE_FILE_DIR = "testProgramsPivot/";
-    public static String SOURCE_FILE = SOURCE_FILE_DIR + "ServerTestProgram.pvt";
+    public static String SOURCE_FILE = SOURCE_FILE_DIR + "ByteCodeTestProgram.pvt";
     public static boolean COMPILER_DEBUG_MODE = true;
     public static boolean OPTIMISE_CODE_MODE = true;
     public static String GENERATED_OUTPUT_FILES_DIR = "GeneratedModule/src/main/java/";
@@ -39,6 +39,11 @@ public class Compiler {
 
         // Simply compile to java
         // compileToJava();
+
+        // Compile to ByteCode using Jasmin
+        // This only works with ByteCodeTestProgram.pvt
+        // compileToByteCode();
+
     }
 
     public static void compileToJavaWithPrint(){
@@ -161,9 +166,26 @@ public class Compiler {
 
     }
 
-    private static void generateByteCode(Node ast){
+    private static void compileToByteCode(){
+        CharStream cs = null;
+        try {
+            cs = fromFileName(SOURCE_FILE);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        PivotLexer lexer = new PivotLexer(cs);
+        CommonTokenStream token = new CommonTokenStream(lexer);
+        PivotParser parser = new PivotParser(token);
+
+        // Create parse tree with parser
+        ParseTree tree = parser.program();
+
+        // Visit with AstBuilderVisitor to create ast
+        AstBuilderVisitor astVisitor = new AstBuilderVisitor();
+        Node ast = astVisitor.visit(tree);
+
         JasminVisitor jv = new JasminVisitor();
-        //System.out.println(jv.visit(ast));
+
         try {
             PrintWriter pw = new PrintWriter("PivotClass.j");
             pw.write(jv.visit(ast).toString());

@@ -57,6 +57,7 @@ every 20 seconds{
         yoo = 6;
         common = 1 + common;
     }
+
 }
 
 when frontDoorLight Toggle : On{
