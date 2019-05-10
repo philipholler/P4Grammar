@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 public class Server extends Thread {
@@ -75,11 +76,7 @@ public class Server extends Thread {
 
     // Removes any dead connections from the list
     private synchronized void removeDeadConnections() {
-        for(ClientConnection connection : clientConnectThreads){
-            if(!connection.isRunning())
-                removeConnectionThread(connection);
-        }
-
+        clientConnectThreads.removeIf(connection -> !connection.isRunning());
     }
 
     // Removes any dead connections from the list
@@ -88,16 +85,21 @@ public class Server extends Thread {
     }
     // Looks for an already existing connection with the same hardware id and removes it if it exists
     private synchronized void removeIdenticalConnection(ClientConnection clientConnection){
-        for(ClientConnection connection : clientConnectThreads){
+        Iterator<ClientConnection> clientIterator = clientConnectThreads.iterator();
+
+        while (clientIterator.hasNext()){
+            ClientConnection connection = clientIterator.next();
+
             if(connection.clientInfo.getDeviceName().equals(clientConnection.clientInfo.getDeviceName())){
                 System.err.println("Client with id : " + clientConnection.clientInfo.getDeviceName()
                         + " already connected. Terminating old connection in favor of"
                         + " newly connected device of with the same id.");
-                removeConnectionThread(connection);
+                clientIterator.remove();
                 connection.terminate();
                 return;
             }
         }
+
     }
 
     public synchronized void removeConnectionThread(ClientConnection clientConnection) {

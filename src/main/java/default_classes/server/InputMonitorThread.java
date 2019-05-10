@@ -62,7 +62,6 @@ public class InputMonitorThread extends Thread {
 //                    System.out.println();
 //                }
 
-                message = in.nextLine();
                 System.out.println("Received signal : " + message);
                 if (onSignalReceived != null)
                     onSignalReceived.accept(message);
