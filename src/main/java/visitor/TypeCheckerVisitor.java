@@ -19,6 +19,7 @@ import node.Statements.Wait.WaitNode;
 import node.TimeNodes.NowNode;
 import node.TimeNodes.TimeNode;
 import node.VarDeclNode;
+import node.base.Node;
 import semantics.*;
 
 import java.util.Optional;
@@ -119,7 +120,16 @@ public class TypeCheckerVisitor extends ASTBaseVisitor<Void>{
     public Void visit(BlockNode node) {
         st.openScope(node);
 
-        super.visit(node);
+        int rtnStmtCount = 0;
+        for (Node n: node.getChildren()) {
+            if(n instanceof ReturnNode){
+                ++rtnStmtCount;
+            }
+            visit(n);
+            if(rtnStmtCount > 1){
+                throw new UnreachableReturnStmtException(n.getLineNumber());
+            }
+        }
 
         st.closeScope();
 

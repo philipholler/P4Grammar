@@ -480,60 +480,7 @@ public class AstBuilderVisitor extends PivotBaseVisitor<Node> {
         }
 
         return timeAndDate;
-//        // If the date and time are both fully used. For example "when 14:00 21d03m2019y"
-//        if(ctx.DATE() != null && ctx.TIME() != null){
-//            hours = ctx.TIME().getText().substring(0,2);
-//            minutes = ctx.TIME().getText().substring(3,5);
-//            timeAndDate.add(new LocalTimeNode(ctx, Integer.parseInt(hours), Integer.parseInt(minutes)));
 //
-//            day = ctx.DATE().getText().substring(0,2);
-//            month = ctx.DATE().getText().substring(3,5);
-//            year = ctx.DATE().getText().substring(6,10);
-//            timeAndDate.add(new DateNode(ctx, Integer.parseInt(day), Integer.parseInt(month), Integer.parseInt(year)));
-//
-//            return timeAndDate;
-//        }
-//        // If time and date are both used, but no year is given. For example if something is repeated every year.
-//        // An example of this would be: "when 14:00 21d03m
-//        if (ctx.DATEnoYEAR() != null && ctx.TIME() != null){
-//            hours = ctx.TIME().getText().substring(0,2);
-//            minutes = ctx.TIME().getText().substring(3,5);
-//            timeAndDate.add(new LocalTimeNode(ctx, Integer.parseInt(hours), Integer.parseInt(minutes)));
-//
-//            day = ctx.DATEnoYEAR().getText().substring(0,2);
-//            month = ctx.DATEnoYEAR().getText().substring(3,5);
-//            timeAndDate.add(new DateNode(ctx, Integer.parseInt(day), Integer.parseInt(month)));
-//
-//            return timeAndDate;
-//        }
-//
-//        // If just a time is given. For example "when 14:00". This will then trigger every day.
-//        if(ctx.TIME() != null){
-//            hours = ctx.TIME().getText().substring(0,2);
-//            minutes = ctx.TIME().getText().substring(3,5);
-//            timeAndDate.add(new LocalTimeNode(ctx, Integer.parseInt(hours), Integer.parseInt(minutes)));
-//
-//            return timeAndDate;
-//        }
-//
-//        // if only a date i present. For example "when 01d01m2000y"
-//        if(ctx.DATE() != null){
-//            day = ctx.DATE().getText().substring(0,2);
-//            month = ctx.DATE().getText().substring(3,5);
-//            year = ctx.DATE().getText().substring(6,10);
-//            timeAndDate.add(new DateNode(ctx, Integer.parseInt(day), Integer.parseInt(month), Integer.parseInt(year)));
-//
-//            return timeAndDate;
-//        }
-//
-//        // If only a date without year is present. For example "when 01d01m"
-//        if(ctx.DATEnoYEAR() != null){
-//            day = ctx.DATEnoYEAR().getText().substring(0,2);
-//            month = ctx.DATEnoYEAR().getText().substring(3,5);
-//            timeAndDate.add(new DateNode(ctx, Integer.parseInt(day), Integer.parseInt(month)));
-//
-//            return timeAndDate;
-//        }
     }
 
     @Override

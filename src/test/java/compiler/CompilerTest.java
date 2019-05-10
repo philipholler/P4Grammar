@@ -158,6 +158,30 @@ class CompilerTest {
         assertThrows(ExpressionWrongTypeException.class, Compiler::compileToJava);
     }
 
+    @Test
+    void TestUnreachableReturnStmtException00(){
+        Compiler.setSourceFile("UnreachableReturnStmtException.pvt");
+        assertThrows(UnreachableReturnStmtException.class, Compiler::compileToJava);
+    }
+
+    @Test
+    void TestUnreachableReturnStmtException01(){
+        Compiler.setSourceFile("UnreachableReturnStmtException1.pvt");
+        assertThrows(UnreachableReturnStmtException.class, Compiler::compileToJava);
+    }
+
+    @Test
+    void TestUnreachableReturnStmtException02(){
+        Compiler.setSourceFile("UnreachableReturnStmtException2.pvt");
+        assertThrows(UnreachableReturnStmtException.class, Compiler::compileToJava);
+    }
+
+    @Test
+    void TestUnreachableReturnStmtException03(){
+        Compiler.setSourceFile("UnreachableReturnStmtException3.pvt");
+        assertThrows(UnreachableReturnStmtException.class, Compiler::compileToJava);
+    }
+
 
     /** * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
      *              SYSTEM TESTS WITH ENTIRE PROGRAMS                   *

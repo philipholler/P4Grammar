@@ -1,0 +1,10 @@
+init(){
+
+}
+
+string func(){
+    return "hej";
+
+    // This return statement is unreachable, and should throw an UnreachableReturnStmtException
+    return "no";
+}

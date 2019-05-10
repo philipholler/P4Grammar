@@ -101,8 +101,6 @@ string testFunction(int percent){
     set bedRoomWindow Open: procent;
 
     return "";
-
-    return "hej";
 }
 
 every 2 seconds{

@@ -237,6 +237,7 @@ public class MainGenerationVisitor extends ASTBaseVisitor<Void> {
             classBuilder.appendSpace();
             visit(node.getReturnVal());
         }
+        classBuilder.endLine();
         return null;
     }
 
@@ -444,7 +445,17 @@ public class MainGenerationVisitor extends ASTBaseVisitor<Void> {
             classBuilder.appendMethod(node.getId(), node.getReturnType(), inputParams);
         }
 
-        visit(node.getBlock());
+        for (Node n: node.getBlock().getChildren()) {
+            if(n instanceof ReturnNode){
+                if(node.getReturnType().equals(SymbolTable.VOID_TYPE_ID)){
+                    classBuilder.append("return;");
+                } else {
+                    visit(n);
+                }
+            } else {
+                visit(n);
+            }
+        }
         classBuilder.closeBlock(ClassBuilder.BlockType.METHOD);
 
         return null;

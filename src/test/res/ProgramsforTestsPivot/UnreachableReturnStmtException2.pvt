@@ -1,0 +1,14 @@
+init(){
+
+}
+
+string func(){
+    while(2 < 3){
+        return "return";
+
+        // This return statement is unreachable, and should throw an UnreachableReturnStmtException
+        return "NoReturn";
+    }
+
+    return "hej";
+}

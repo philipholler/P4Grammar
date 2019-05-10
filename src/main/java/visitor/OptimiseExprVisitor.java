@@ -82,7 +82,7 @@ public class    OptimiseExprVisitor extends ASTBaseVisitor<Object> {
             return newNode;
         }
 
-        return super.visit(node);
+        return null;
     }
 
     /**
