@@ -68,6 +68,7 @@ public class Server extends Thread {
 
         System.out.println("Connected to client : '" + st.clientInfo.getDeviceName() + "'");
         reportStatus();
+        System.out.println();
     }
 
     private synchronized void reportStatus(){

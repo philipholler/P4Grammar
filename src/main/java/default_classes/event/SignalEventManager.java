@@ -28,7 +28,6 @@ public class SignalEventManager extends Thread {
             SignalData signalData = null;
             try {
                 signalData = signalQueue.take();
-                System.out.println("Took signal" + signalData.toSignalString());
             } catch (InterruptedException e) {
                 e.printStackTrace(); // todo : exception handling lol
             }
