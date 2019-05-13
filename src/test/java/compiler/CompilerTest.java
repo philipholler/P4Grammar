@@ -1,6 +1,7 @@
 package compiler;
 
 import exceptions.userside.*;
+import org.antlr.v4.runtime.misc.ParseCancellationException;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -182,6 +183,17 @@ class CompilerTest {
         assertThrows(UnreachableReturnStmtException.class, Compiler::compileToJava);
     }
 
+    /** * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+     *                        PARSER TEST                               *
+     *  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+     */
+
+    @Test
+    void testParseCancellationException(){
+        Compiler.setSourceFile("ParseCancellationException.pvt");
+        assertThrows(ParseCancellationException.class, Compiler::compileToJava);
+    }
+
 
     /** * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
      *              SYSTEM TESTS WITH ENTIRE PROGRAMS                   *
@@ -190,25 +202,25 @@ class CompilerTest {
 
     @Test
     void TestdeclSignalProgram(){
-        Compiler.setSourceFile("declSignal.pvt");
+        Compiler.setSourceFile("declSignalTest.pvt");
         Compiler.compileToJava();
     }
 
     @Test
     void TestEventTestProgram(){
-        Compiler.setSourceFile("EventTestProgram.pvt");
+        Compiler.setSourceFile("EventTestProgramTest.pvt");
         Compiler.compileToJava();
     }
 
     @Test
     void testKodeEksempelRapport(){
-        Compiler.setSourceFile("kodeEksempelRapport.pvt");
+        Compiler.setSourceFile("kodeEksempelRapportTest.pvt");
         Compiler.compileToJava();
     }
 
     @Test
     void testtestProgram(){
-        Compiler.setSourceFile("testProgram.pvt");
+        Compiler.setSourceFile("testProgramTest.pvt");
         Compiler.compileToJava();
     }
 }

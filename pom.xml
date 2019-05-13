@@ -130,6 +130,9 @@
                         <phase>test</phase>
                     </execution>
                 </executions>
+                <configuration>
+                    <trimStackTrace>false</trimStackTrace>
+                </configuration>
                 <version>2.22.1</version>
             </plugin>
 

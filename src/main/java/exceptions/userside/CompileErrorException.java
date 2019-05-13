@@ -17,7 +17,7 @@ public class CompileErrorException extends RuntimeException {
 
     public CompileErrorException(String msg, int lineNumber) {
         super();
-        this.msg = msg + "\n" + "at " + getLineReference( Compiler.SOURCE_FILE, lineNumber);
+        this.msg = msg + "\n" + "at " + getLineReference( Compiler.getSourceFile(), lineNumber);
         this.lineNumber = lineNumber;
     }
 
@@ -27,8 +27,8 @@ public class CompileErrorException extends RuntimeException {
     }
 
     protected static String getLineReference(String fileName, int lineNumber){
-        int i = fileName.indexOf('/');
-        return "Pivot.("+ fileName.substring(i+1) + ":" + lineNumber + ")";
+        int i = fileName.lastIndexOf('/');
+        return "Pivot.(" + fileName.substring(i + 1) + ":" + lineNumber + ")";
     }
 
     @Override

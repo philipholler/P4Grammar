@@ -1,0 +1,6 @@
+init(){
+}
+
+// Variables in the global scope cannot be declared after the init function
+// This should throw a ParseCancellationException
+int WRONG = 5;

@@ -25,11 +25,10 @@ import static org.antlr.v4.runtime.CharStreams.fromFileName;
 public class Compiler {
 
     public static String SOURCE_FILE_DIR = "testProgramsPivot/";
-    public static String SOURCE_FILE = SOURCE_FILE_DIR + "testProgram.pvt";
+    public static String SOURCE_FILE = SOURCE_FILE_DIR + "EventTestProgram.pvt";
     public static boolean COMPILER_DEBUG_MODE = true;
     public static boolean OPTIMISE_CODE_MODE = true;
     public static String GENERATED_OUTPUT_FILES_DIR = "GeneratedModule/src/main/java/";
-
     public static String DEFAULT_CLASSES_DIR = "/src/main/java/default_classes/";
 
 
@@ -43,7 +42,6 @@ public class Compiler {
         // Compile to ByteCode using Jasmin
         // This only works with ByteCodeTestProgram.pvt
         // compileToByteCode();
-
     }
 
     public static void compileToJavaWithPrint(){
@@ -51,8 +49,16 @@ public class Compiler {
             // Input test file name. The rest creates the lexer and parser.
             CharStream cs = fromFileName(SOURCE_FILE);
             PivotLexer lexer = new PivotLexer(cs);
+            // Add listener for errors
+            lexer.addErrorListener(ParserThrowingErrorListener.INSTANCE);
+
             CommonTokenStream token = new CommonTokenStream(lexer);
+
             PivotParser parser = new PivotParser(token);
+
+            // Remove error listeners and add our own custom
+            parser.removeErrorListeners();
+            parser.addErrorListener(ParserThrowingErrorListener.INSTANCE);
 
             // Create parse tree with parser
             ParseTree tree = parser.program();
@@ -96,8 +102,16 @@ public class Compiler {
             e.printStackTrace();
         }
         PivotLexer lexer = new PivotLexer(cs);
+        // Add listener for errors
+        lexer.addErrorListener(ParserThrowingErrorListener.INSTANCE);
+
         CommonTokenStream token = new CommonTokenStream(lexer);
+
         PivotParser parser = new PivotParser(token);
+
+        // Remove error listeners and add our own custom
+        parser.removeErrorListeners();
+        parser.addErrorListener(ParserThrowingErrorListener.INSTANCE);
 
         // Create parse tree with parser
         ParseTree tree = parser.program();
@@ -174,10 +188,16 @@ public class Compiler {
             e.printStackTrace();
         }
         PivotLexer lexer = new PivotLexer(cs);
+        // Add listener for errors
+        lexer.addErrorListener(ParserThrowingErrorListener.INSTANCE);
+
         CommonTokenStream token = new CommonTokenStream(lexer);
+
         PivotParser parser = new PivotParser(token);
 
-        // Create parse tree with parser
+        // Remove error listeners and add our own custom
+        parser.removeErrorListeners();
+        parser.addErrorListener(ParserThrowingErrorListener.INSTANCE);
         ParseTree tree = parser.program();
 
         // Visit with AstBuilderVisitor to create ast
@@ -213,5 +233,9 @@ public class Compiler {
 
     public static void setOptimiseCodeMode(boolean optimiseCodeMode) {
         OPTIMISE_CODE_MODE = optimiseCodeMode;
+    }
+
+    public static String getSourceFile() {
+        return SOURCE_FILE;
     }
 }
