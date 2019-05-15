@@ -223,6 +223,17 @@ public class ClassBuilder {
         return this;
     }
 
+    public ClassBuilder appendSyncrhonizedMethod(String methodName, String returnType, JavaInputParameter...inputs){
+        codeBuilder.append("public ").append("synchronized ").append(returnType).append(" ").append(methodName);
+
+        codeBuilder.append(" (");
+        appendFormalParameters(inputs);
+        codeBuilder.append(") ");
+
+        openBlock(BlockType.METHOD);
+        return this;
+    }
+
     public ClassBuilder appendGetMethod(String type, String varName){
         codeBuilder.append("public ").append(type).append(" ").append("get").append(varName);
         codeBuilder.append(START_PARAN).append(END_PARAN);

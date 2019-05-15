@@ -4,11 +4,11 @@ public abstract class Signal <T> {
 
     private T currentValue;
 
-    public T getCurrentValue(){
+    public synchronized T getCurrentValue(){
         return currentValue;
     }
 
-    public void setCurrentValue(T newVal){
+    public synchronized void setCurrentValue(T newVal){
         currentValue = newVal;
     }
 

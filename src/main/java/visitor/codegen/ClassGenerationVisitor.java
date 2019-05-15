@@ -135,7 +135,7 @@ public class ClassGenerationVisitor extends ASTBaseVisitor<ClassBuilder> {
             return;
 
         // Creates the setCurrentValue(String val) method
-        classBuilder.appendMethod(SET_CURRENT_VALUE_METHOD, JavaType.VOID.keyword,
+        classBuilder.appendSyncrhonizedMethod(SET_CURRENT_VALUE_METHOD, JavaType.VOID.keyword,
                 new JavaInputParameter(JavaType.STRING.keyword, "data"));
         classBuilder.append(SET_CURRENT_VALUE_METHOD).startParan();
 
