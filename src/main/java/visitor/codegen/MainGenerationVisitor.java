@@ -505,27 +505,53 @@ public class MainGenerationVisitor extends ASTBaseVisitor<Void> {
 
         // Synchronize all used variables before each statement
         for (Node n : blockNode.getChildren()) {
+            // The global variables contained within n
+            TreeSet<FieldSymbol> globalVars = globalVarVisitor.visit(n);
+
             // Optimization : While loops can have their synchronizes inside the block
             // (if and only if the condition uses no global variables)
             if(n instanceof WhileNode && globalVarVisitor.visit(((WhileNode) n).getLogicalExprNode()).size() == 0){
                 WhileNode whnode  = (WhileNode) n;
+
                 classBuilder.append("while(");
-                visit(((WhileNode) n).getLogicalExprNode());
+                visit(whnode.getLogicalExprNode());
                 classBuilder.append(")").openBlock(ClassBuilder.BlockType.WHILE);
-                syncVisitBlock(((WhileNode) n).getBlockNode());
+
+                syncVisitBlock(whnode.getBlockNode());
                 classBuilder.closeBlock(ClassBuilder.BlockType.WHILE);
-                continue;
+            }else if(n instanceof VarDeclNode && !globalVars.isEmpty()){
+                // If a declaration contains global variables then declare the variable outside the sync blocks
+                // first, and then initialize it inside
+                VarDeclNode varDecl = (VarDeclNode) n;
+                addDeclarationOnly(varDecl);
+
+                openSyncBlocks(globalVars);
+                addAssignmentOnly(varDecl);
+                closeSyncBlocks(globalVars.size());
+            }else{
+                openSyncBlocks(globalVars);
+                visit(n);// Add statement logic
+
+                // If an expression constitues the whole line then add ';' and newline
+                // Since visiting an expression note does automatically end the line.
+                if(n instanceof ExpressionNode)
+                    classBuilder.endLine();
+
+                closeSyncBlocks(globalVars.size());
             }
-
-            TreeSet<FieldSymbol> globalVars = globalVarVisitor.visit(n);
-            openSyncBlocks(globalVars);
-            visit(n);// Add statement logic
-
-            // If an expression constitues the whole line the add ';' and newline
-            if(n instanceof ExpressionNode)
-                classBuilder.endLine();
-            closeSyncBlocks(globalVars.size());
         }
+    }
+
+    // Appends only the declaration part (foregoing the assignment part)
+    private void addDeclarationOnly(VarDeclNode node){
+        classBuilder.appendObjectDecl(JavaCodeUtils.correspondingJavaType(node.getVarType()).objectType, node.getID());
+    }
+
+    // Appends only the declaration part (foregoing the assignment part)
+    private void addAssignmentOnly(VarDeclNode node){
+        classBuilder.append(node.getID()).appendEquals();
+        visit(node.getExpr());
+        classBuilder.endLine();
     }
 
     private void openSyncBlocks(TreeSet<FieldSymbol> globalVars) {
