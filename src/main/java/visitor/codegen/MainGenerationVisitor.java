@@ -45,7 +45,6 @@ import utils.JavaCodeUtils;
 import visitor.ASTBaseVisitor;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.Optional;
 import java.util.TreeSet;
 
@@ -149,14 +148,10 @@ public class MainGenerationVisitor extends ASTBaseVisitor<Void> {
 
         // Add call to add all method a list
         classBuilder.appendMethodCall(DEVICE_LIST_FILL_METHOD);
+        
+        addInitStatements(node.hasInitNode());
 
-        // Todo call init server before init (Since the init method can call server-dependant methods)
-        // afasfsadfsd
 
-        // Call user-defined init function if it's defined
-        if (node.hasInitNode()) classBuilder.appendMethodCall(INIT_FUNC_NAME);
-
-        addEventInitStatements();
 
 
         classBuilder.closeBlock(ClassBuilder.BlockType.METHOD);
@@ -286,7 +281,7 @@ public class MainGenerationVisitor extends ASTBaseVisitor<Void> {
     }
 
     // Default init behaviour - Initialize events and server + and run event managers
-    private void addEventInitStatements() {
+    private void addInitStatements(boolean hasCustomInit) {
         String eventInitName = "eventInit";
 
         // "EventInitializer eventInit = "
@@ -319,6 +314,8 @@ public class MainGenerationVisitor extends ASTBaseVisitor<Void> {
         classBuilder.append(eventInitName).appendDot().append(EventInitializationVisitor.START_EVENTMANAGERS_METHOD)
                 .startParan().endParan().endLine();
 
+        // Call user-defined init function if it's defined
+        if (hasCustomInit) classBuilder.appendMethodCall(INIT_FUNC_NAME);
     }
 
     @Override
