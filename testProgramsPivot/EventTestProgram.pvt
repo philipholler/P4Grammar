@@ -69,8 +69,6 @@ every 10 seconds starting 10:45 19d04m2019y{
         print "looping";
         yoo = 1 + yoo;
     }
-
-
 }
 
 when kitchenTherm Celsius: exceeds 31{

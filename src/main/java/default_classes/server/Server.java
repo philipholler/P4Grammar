@@ -11,8 +11,6 @@ import java.util.Iterator;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 public class Server extends Thread {
-
-    ConcurrentLinkedQueue<SignalData> signalQueue = new ConcurrentLinkedQueue<>();
     public ArrayList<ClientConnection> clientConnectThreads = new ArrayList<>();
     Socket socket = null;
     ServerSocket serversocket = null;
@@ -116,16 +114,9 @@ public class Server extends Thread {
         }
     }
 
-    //returns the first signal in signalqueue and removes it
-    public SignalData pollSignal() {
-        return signalQueue.poll();
-    }
-
     public synchronized void addRecievedSignal(SignalData signalData) {
         signalEventManager.addSignal(signalData);
     }
-
-
 }
 
 
