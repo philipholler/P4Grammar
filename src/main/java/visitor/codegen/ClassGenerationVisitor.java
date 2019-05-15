@@ -156,7 +156,8 @@ public class ClassGenerationVisitor extends ASTBaseVisitor<ClassBuilder> {
 
         signalBuilder.appendClassDef(signalNode.getID(), ClassBuilder.LITERAL_SIGNAL_CLASS, signalValueType.objectType);
         signalBuilder.appendConstructor();
-        signalBuilder.appendMethodCall(SET_CURRENT_VALUE_METHOD, getDefaultSignalValue(signalValueType));
+        // Set the default value to be the first value defined in the signal
+        signalBuilder.appendMethodCall(SET_CURRENT_VALUE_METHOD, signalNode.getEnumNodes().get(0).getID());
         signalBuilder.closeBlock(ClassBuilder.BlockType.METHOD);
 
         addEnumVars(signalBuilder, signalNode, signalValueType);
