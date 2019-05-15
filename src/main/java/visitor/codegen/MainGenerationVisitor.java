@@ -297,10 +297,6 @@ public class MainGenerationVisitor extends ASTBaseVisitor<Void> {
         classBuilder.append("new ").append(EventInitializationVisitor.EVENT_INIT_CLASS_NAME)
                 .startParan().append("this").endParan().endLine();
 
-        // eventInit.startEventManagers
-        classBuilder.append(eventInitName).appendDot().append(EventInitializationVisitor.START_EVENTMANAGERS_METHOD)
-                .startParan().endParan().endLine();
-
         // "server = new Server("
         classBuilder.append(SERVER_VAR_NAME).appendEquals()
                 .append("new ").append(Server.class.getSimpleName()).startParan();
@@ -318,6 +314,11 @@ public class MainGenerationVisitor extends ASTBaseVisitor<Void> {
 
         //server.start();
         classBuilder.append(SERVER_VAR_NAME).appendDot().appendMethodCall("start");
+
+        // eventInit.startEventManagers()
+        classBuilder.append(eventInitName).appendDot().append(EventInitializationVisitor.START_EVENTMANAGERS_METHOD)
+                .startParan().endParan().endLine();
+
     }
 
     @Override
