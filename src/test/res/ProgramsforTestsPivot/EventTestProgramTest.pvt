@@ -27,11 +27,11 @@ init(){
 
 }
 
-when frontDoorLight Toggle : On{
+when frontDoorLight Toggle On{
     printFunction("bulb1 has been turned on");
 }
 
-when frontDoorLight2 Toggle : Off{
+when frontDoorLight2 Toggle Off{
     printFunction("bulb2 has been turned off");
 }
 
@@ -63,7 +63,7 @@ every 10 seconds starting 10:45 19d04m2019y{
     }
 }
 
-when kitchenTherm Celsius: exceeds 31{
+when kitchenTherm Celsius exceeds 31{
     printFunction("Its too hot in the kitchen");
 }
 

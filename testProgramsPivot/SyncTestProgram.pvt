@@ -60,15 +60,15 @@ every 20 seconds{
 
 }
 
-when frontDoorLight Toggle : On{
+when frontDoorLight Toggle On{
     bat = cat + dat;
 }
 
-when frontDoorLight Toggle : On{
+when frontDoorLight Toggle On{
     abe = bat + cat + dat + a + b + c + d;
 }
 
-when frontDoorLight Toggle : On{
+when frontDoorLight Toggle On{
     while(a <= 5){
         a = a + 1;
         b = b + 1;

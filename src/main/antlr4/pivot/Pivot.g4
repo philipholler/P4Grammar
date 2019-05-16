@@ -38,8 +38,8 @@ funcDecl : (varType | VOID) id=ID PARANBEG params=fParams PARANEND block; // Fun
 
 event: (atomEvent | repeatEvent);
 
-atomEvent : WHEN deviceID=ID signalID=ID COL (enumID=ID | (EXCEEDS | DECEEDS) number) block     #inputWhenEvent
-          | WHEN timeAndDate block                                                              #timeWhenEvent
+atomEvent : WHEN deviceID=ID signalID=ID (enumID=ID | (EXCEEDS | DECEEDS) number) block     #inputWhenEvent
+          | WHEN timeAndDate block                                                          #timeWhenEvent
           // when 18:00 21d03m2019y // when 14:00 // when 21d03m2019y
           ;
 
@@ -75,7 +75,7 @@ whilestmt: WHILE PARANBEG logical_expr PARANEND block;
 
 funcCall: id=ID PARANBEG arguments PARANEND                         #funCall
         //exprVal can also be an IDNode of a signal literal. This is done, since expr with ID Atom and regular ID cannot be distinguished.
-        | SET deviceID=ID signalID=ID COL exprVal=expr              #setFun
+        | SET deviceID=ID signalID=ID exprVal=expr                  #setFun
         | GET (INPUT | OUTPUT)? deviceID=ID signalID=ID             #getFun
         ;
 

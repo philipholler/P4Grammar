@@ -31,7 +31,6 @@ public class Compiler {
     public static String GENERATED_OUTPUT_FILES_DIR = "GeneratedModule/src/main/java/";
     public static String DEFAULT_CLASSES_DIR = "/src/main/java/default_classes/";
 
-
     public static void main(String[] args) {
         // Compile to java with print of AST and symbol table.
         compileToJavaWithPrint();

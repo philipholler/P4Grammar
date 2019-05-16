@@ -6,5 +6,5 @@ Bulb frontDoorLightOne = "129.67.198.1:12565";
 
 init(){
     // notASignal is not declared and should throw a DeviceHasNoSuchSignalException
-    set Bulb notASignal: on;
+    set Bulb notASignal on;
 }

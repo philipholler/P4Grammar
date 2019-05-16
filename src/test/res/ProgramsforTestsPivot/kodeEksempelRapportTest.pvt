@@ -25,16 +25,16 @@ init(){
 }
 
 // Turn on the light if someone is at the door in the evening.
-when frontDoorSensor toggle: on{
+when frontDoorSensor toggle on{
     if(now > 17:00 && now < 23:00){
-        set frontDoorLightOne toggle: on;
-        set frontDoorLightTwo toggle: on;
+        set frontDoorLightOne toggle on;
+        set frontDoorLightTwo toggle on;
     }
 
     wait 60 seconds;
 
-    set frontDoorLightOne toggle: off;
-    set frontDoorLightTwo toggle: off;
+    set frontDoorLightOne toggle off;
+    set frontDoorLightTwo toggle off;
 }
 
 when 14:00{
@@ -46,12 +46,12 @@ when 14:00{
 
 // Function
 void setBedroomWindowsOpen(float percentage){
-    set bedRoomWindow openWindow: percentage;
+    set bedRoomWindow openWindow percentage;
 }
 
 // // Turn on lawn mower every 2 weeks at 11:00 every summer.
 every 2 weeks starting 11:00 01d04m2019y{
     if(01d04m < now && now < 30d09m){
-        set GardenMower toggle: on;
+        set GardenMower toggle on;
     }
 }

@@ -78,7 +78,7 @@ int testFunctionInt(string hej){
 }
 
 // Events
-when frontDoorSensor Toggle: On {
+when frontDoorSensor Toggle On {
     if(now > 17:00 && now < 21:00){
         set frontDoorLight Toggle: On;
     }
@@ -90,7 +90,7 @@ when frontDoorSensor Toggle: On {
     }
 }
 
-when livingRoomTherm Celsius: exceeds 22{
+when livingRoomTherm Celsius exceeds 22{
     setBedroomWindowsOpen(50.0); // Calling function defined further down
 }
 
@@ -139,12 +139,12 @@ every 2 weeks starting 11:00 01d04m2019y{
     }
 }
 
-when livingRoomTherm Celsius: exceeds 22{
+when livingRoomTherm Celsius exceeds 22{
     setBedroomWindowsOpen(50.0); // Calling function defined further down
 }
 
 // Events
-when frontDoorSensor Toggle: On {
+when frontDoorSensor Toggle On {
 
 }
 

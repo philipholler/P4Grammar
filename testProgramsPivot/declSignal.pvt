@@ -38,7 +38,7 @@ init(){
 
 string setBedroomWindowsOpen(int percent, float faa, string see){
 
-    set bedRoomWindow open: faa;
+    set bedRoomWindow open faa;
 
     wait 30 seconds;
 
@@ -53,12 +53,12 @@ string setBedroomWindowsOpen(int percent, float faa, string see){
     return see;
 }
 
-when mainThermometer celsius: exceeds 22{
+when mainThermometer celsius exceeds 22{
     setBedroomWindowsOpen(50, 50.0, "s"); // Calling function defined further down
 }
 
 // Events
-when frontDoorSensor toggle: On {
+when frontDoorSensor toggle On {
 
 }
 

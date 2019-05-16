@@ -5,6 +5,6 @@ define Device MovementSensor output: Toggle input: Toggle;
 MovementSensor frontDoorSensor = "Google.com";
 
 // Should throw an SignalLiteralNotDeclaredException, since 'off' is not declared
-when frontDoorSensor Toggle: off{
+when frontDoorSensor Toggle off{
 
 }
