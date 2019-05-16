@@ -1,0 +1,57 @@
+// Part 1
+define Signal toggle: on = 1, off = 0;
+define Signal openWindow: 0.0..100.0;
+define Signal celsius: -50..70;
+
+define Device Bulb input: toggle;
+define Device Window input: openWindow;
+define Device LawnMower input: toggle;
+
+define Device MovementSensor output: toggle;
+define Device Thermometer output: celsius;
+
+
+// Part 2
+Bulb frontDoorLightOne = "frontDoorLightOne";
+Bulb frontDoorLightTwo = "frontDoorLightTwo";
+Window bedRoomWindow = "bedRoomWindow";
+LawnMower GardenMower = "GardenMower";
+
+Thermometer mainThermometer = "mainThermometer";
+MovementSensor frontDoorSensor = "frontDoorSensor";
+
+
+// Part 3
+init(){
+    print "Starting up...";
+}
+
+// Part 4
+every 2 weeks starting 11:00 01d04m2019y{
+    if(01d04m < now && now < 30d09m){
+        set GardenMower toggle on;
+    }
+}
+
+when frontDoorSensor toggle on{
+    if(now > 17:00 && now < 23:00){
+        set frontDoorLightOne toggle on;
+        set frontDoorLightTwo toggle on;
+    }
+
+    wait 60 seconds;
+
+    set frontDoorLightOne toggle off;
+    set frontDoorLightTwo toggle off;
+}
+
+// Part 5
+when 14:00{
+    if(get mainThermometer celsius > 25){
+        setBedroomWindowsOpen(100.0);
+    }
+}
+
+void setBedroomWindowsOpen(float percentage){
+    set bedRoomWindow openWindow percentage;
+}

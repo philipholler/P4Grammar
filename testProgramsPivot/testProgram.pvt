@@ -33,7 +33,7 @@ float testFloat = 6.0;
 
 init(){
     print "hej " + "hej " + "Hej " + "Yooo " + "Magnus small bicep";
-    set myIntWindow PercentInt: 10 + 15;
+    set myIntWindow PercentInt 10 + 15;
 
     get input frontDoorSensor Toggle;
     get output frontDoorSensor Toggle;
@@ -64,7 +64,7 @@ init(){
     // Not written by Philip
     print "Philip Bicep = " + 100 + "cm";
 
-    set myIntWindow PercentInt: 10 + man;
+    set myIntWindow PercentInt 10 + man;
 
     // Optional code for initialization
     // Automatically run when the program is run for the first time
@@ -80,13 +80,13 @@ int testFunctionInt(string hej){
 // Events
 when frontDoorSensor Toggle On {
     if(now > 17:00 && now < 21:00){
-        set frontDoorLight Toggle: On;
+        set frontDoorLight Toggle On;
     }
 
     wait 5 weeks;
 
     while(get frontDoorSensor Toggle == On){
-        set frontDoorLight Toggle: Off;
+        set frontDoorLight Toggle Off;
     }
 }
 
@@ -98,7 +98,7 @@ when livingRoomTherm Celsius exceeds 22{
 string testFunction(int percent){
     string test = " ";
     float procent = 15.0;
-    set bedRoomWindow Open: procent;
+    set bedRoomWindow Open procent;
 
     return "";
 }
@@ -109,7 +109,7 @@ every 2 seconds{
 
 // Function
 void setBedroomWindowsOpen(float percent){
-    set bedRoomWindow Open: percent;
+    set bedRoomWindow Open percent;
 }
 
 // Repeating event
@@ -130,7 +130,7 @@ every 2 hours{
 // // Turn on lawn mower every 2 weeks at 11:00 every summer.
 every 2 weeks starting 11:00 01d04m2019y{
     if(01d04m < now && now < 30d09m){
-        set gardenMower Toggle: yo;
+        set gardenMower Toggle yo;
     }
 
     int b = 3;

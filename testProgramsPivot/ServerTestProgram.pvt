@@ -29,10 +29,10 @@ init(){
 
 
 when asger celsius exceeds 25{
-    set magnus toggle : on;
+    set magnus toggle on;
 }
 
 
 when asger celsius deceeds 20{
-    set magnus toggle : off;
+    set magnus toggle off;
 }

@@ -65,10 +65,14 @@ public class AstBuilderVisitor extends PivotBaseVisitor<Node> {
         updateLineNumber(ctx);
         DeclsNode node = new DeclsNode(ctx);
 
-        if(!ctx.children.isEmpty()){
-            for (ParseTree tree : ctx.children) {
-                node.addChild(visit(tree));
-            }
+        // Return if program is empty
+        // defs=define* (vars=declVar | devVars=declDevice)* inFunc=init? (funcDecl | event)*;
+        if(ctx.define().isEmpty() && ctx.declVar().isEmpty() && ctx.declDevice().isEmpty() && ctx.init() == null && ctx.funcDecl().isEmpty() && ctx.event().isEmpty()){
+            return node;
+        }
+
+        for (ParseTree tree : ctx.children) {
+            node.addChild(visit(tree));
         }
 
         return node;

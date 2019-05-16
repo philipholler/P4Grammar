@@ -194,6 +194,12 @@ class CompilerTest {
         assertThrows(ParseCancellationException.class, Compiler::compileToJava);
     }
 
+    @Test
+    void testEmptyProgram(){
+        Compiler.setSourceFile("EmptyProgram.pvt");
+        Compiler.compileToJava();
+    }
+
 
     /** * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
      *              SYSTEM TESTS WITH ENTIRE PROGRAMS                   *

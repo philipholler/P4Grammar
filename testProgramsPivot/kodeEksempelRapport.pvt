@@ -38,7 +38,7 @@ when frontDoorSensor toggle on{
 }
 
 when 14:00{
-    if(get mainThermometer celsius > 25 ){
+    if(get mainThermometer celsius > 25){
         // Open window completely
         setBedroomWindowsOpen(100.0);
     }

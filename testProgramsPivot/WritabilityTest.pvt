@@ -1,0 +1,17 @@
+define Signal toggle: on = 1, off = 0;
+
+define Device Light input: toggle;
+define Device MovementSensor output: toggle;
+define Device Door input: toggle;
+
+Light bulb = "bulb";
+MovementSensor doorSensor = "door sensor";
+Door door = "door";
+
+every 2hours {
+    set bulb toggle on;
+}
+
+when doorSensor toggle on {
+    set door toggle on;
+}
