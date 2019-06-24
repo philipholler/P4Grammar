@@ -8,7 +8,6 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.concurrent.ConcurrentLinkedQueue;
 
 public class Server extends Thread {
     public ArrayList<ClientConnection> clientConnectThreads = new ArrayList<>();
@@ -110,7 +109,7 @@ public class Server extends Thread {
         // Use iterator for thread safety
         for (ClientConnection thread : clientConnectThreads) {
             if (thread.clientInfo.getDeviceName().equals(data.hardwareId))
-                thread.sendMessage(data.signalType + " " + data.data);
+                thread.sendMessage(thread.clientInfo.getDeviceName() + " " + data.signalType + " " + data.data);
         }
     }
 

@@ -66,9 +66,9 @@ public class ClientConnection extends Thread {
 
                 // Send message if one was retrievable
                 if (message != null){
-                    System.out.println("Sent message : " + messageToBeSent +
+                    System.out.println("Sent message : " + message +
                             "\nTo device : " + clientInfo.getDeviceName());
-                    out.println(messageToBeSent);
+                    out.println(message);
                 }
             }
         } catch (InterruptedException e) {
