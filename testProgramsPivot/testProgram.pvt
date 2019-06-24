@@ -24,7 +24,7 @@ LawnMower gardenMower = "129.10.10:10210";
 
 MovementSensor frontDoorSensor = "Google.com";
 
-Thermometer livingRoomTherm = "THERM";
+Thermometer livingRoomTherm = "therm";
 
 int a = 5;
 string aString = "Hej";

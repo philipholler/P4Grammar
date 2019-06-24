@@ -8,10 +8,10 @@ Light bulb = "bulb";
 MovementSensor doorSensor = "door sensor";
 Door door = "door";
 
-every 2hours {
-    set bulb toggle on;
+every 5 seconds {
+    set bulb toggle off;
 }
 
 when doorSensor toggle on {
-    set door toggle on;
+    set bulb toggle on;
 }

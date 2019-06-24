@@ -25,7 +25,7 @@ import static org.antlr.v4.runtime.CharStreams.fromFileName;
 public class Compiler {
 
     public static String SOURCE_FILE_DIR = "testProgramsPivot/";
-    public static String SOURCE_FILE = SOURCE_FILE_DIR + "testProgram.pvt";
+    public static String SOURCE_FILE = SOURCE_FILE_DIR + "WritabilityTest.pvt";
     public static boolean COMPILER_DEBUG_MODE = true;
     public static boolean OPTIMISE_CODE_MODE = true;
     public static String GENERATED_OUTPUT_FILES_DIR = "GeneratedModule/src/main/java/";
