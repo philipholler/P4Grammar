@@ -1,0 +1,37 @@
+//Define signals
+define Signal toggle: on = "on", off = "off";
+define Signal celsius: 1..60;
+
+//Define device types
+define Device Bulb input: toggle;
+define Device Thermometer output: celsius;
+
+//Variable definitions of devices
+//Create three lamps and one thermometer
+Bulb lamp1 ="lamp1";
+Bulb lamp2 ="lamp2";
+Bulb lamp3 ="lamp3";
+Thermometer thermo = "thermo";
+
+//Define events
+
+when thermo celsius exceeds 25{
+    set lamp1 toggle on;
+}
+when thermo celsius deceeds 20{
+    set lamp1 toggle off;
+}
+
+every 2 seconds{
+    set lamp3 toggle on;
+    wait 1 seconds;
+    set lamp3 toggle off;
+}
+
+every 4 seconds{
+    set lamp2 toggle on;
+    wait 2 seconds;
+    set lamp2 toggle off;
+}
+
+
